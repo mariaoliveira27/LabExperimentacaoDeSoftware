@@ -1,0 +1,101 @@
+Repositorio,Criado Em,Estrelas,Linguagem Primaria,Linguagens
+codecrafters-io/build-your-own-x,2018-05-09T12:03:18Z,538092,Markdown,Markdown
+sindresorhus/awesome,2014-07-11T13:42:37Z,494007,Sem linguagem,Sem linguagem
+public-apis/public-apis,2016-03-20T23:49:42Z,455210,Python,"Python, Shell"
+freeCodeCamp/freeCodeCamp,2014-12-24T17:49:19Z,453714,TypeScript,"TypeScript, JavaScript, CSS, Dockerfile, HCL"
+EbookFoundation/free-programming-books,2013-10-11T06:50:37Z,394038,Python,"Python, HTML"
+openclaw/openclaw,2025-11-24T10:16:47Z,385689,TypeScript,"TypeScript, Swift, Kotlin, JavaScript, Shell"
+nilbuild/developer-roadmap,2017-03-15T13:45:52Z,364007,TypeScript,"TypeScript, JavaScript"
+donnemartin/system-design-primer,2017-02-26T16:15:28Z,362669,Python,"Python, Shell"
+jwasham/coding-interview-university,2016-06-06T02:34:12Z,358275,Sem linguagem,Sem linguagem
+vinta/awesome-python,2014-06-27T21:00:06Z,313058,Python,"Python, HTML, CSS, JavaScript, Makefile"
+awesome-selfhosted/awesome-selfhosted,2015-06-01T02:33:17Z,311594,Sem linguagem,Sem linguagem
+practical-tutorials/project-based-learning,2017-04-12T05:07:46Z,277571,Python,Python
+996icu/996.ICU,2019-03-26T07:31:14Z,276589,Sem linguagem,Sem linguagem
+obra/superpowers,2025-10-09T19:45:18Z,269668,Shell,"Shell, JavaScript, TypeScript, HTML, Python"
+react/react,2013-05-24T16:15:54Z,247145,JavaScript,"JavaScript, Rust, TypeScript, HTML, CSS"
+torvalds/linux,2011-09-04T22:48:12Z,242311,C,"C, Assembly, Rust, Shell, Python"
+affaan-m/ECC,2026-01-18T00:51:51Z,238988,JavaScript,"JavaScript, Rust, Python, Shell, TypeScript"
+trimstray/the-book-of-secret-knowledge,2018-06-23T10:43:14Z,237482,Sem linguagem,Sem linguagem
+NousResearch/hermes-agent,2025-07-22T22:22:28Z,227883,Python,"Python, TypeScript, JavaScript, TeX, Shell"
+TheAlgorithms/Python,2016-07-16T09:44:01Z,223597,Python,"Python, Shell, Dockerfile"
+mattpocock/skills,2026-02-03T11:15:53Z,210943,Shell,"Shell, JavaScript"
+vuejs/vue,2013-07-29T03:24:51Z,210245,TypeScript,"TypeScript, JavaScript, HTML, CSS, Shell"
+ossu/computer-science,2014-05-04T00:18:39Z,207807,HTML,HTML
+multica-ai/andrej-karpathy-skills,2026-01-27T03:53:13Z,200865,Sem linguagem,Sem linguagem
+n8n-io/n8n,2019-06-22T09:24:21Z,199959,TypeScript,"TypeScript, Vue, JavaScript, SCSS, Python"
+tensorflow/tensorflow,2015-11-07T01:19:20Z,196948,C++,"C++, Python, MLIR, Starlark, HTML"
+trekhleb/javascript-algorithms,2018-03-24T07:47:04Z,196421,JavaScript,JavaScript
+anomalyco/opencode,2025-04-30T20:08:00Z,195393,TypeScript,"TypeScript, MDX, CSS, HTML, JavaScript"
+ultraworkers/claw-code,2026-03-31T08:58:08Z,195021,Rust,"Rust, Python, Shell, HTML, Dockerfile"
+DigitalPlatDev/FreeDomain,2024-05-30T13:23:00Z,191955,Sem linguagem,Sem linguagem
+ohmyzsh/ohmyzsh,2009-08-28T18:15:37Z,189095,Shell,"Shell, Python, Makefile"
+microsoft/vscode,2015-09-03T20:23:38Z,188542,TypeScript,"TypeScript, CSS, JavaScript, Rust, HTML"
+massgravel/Microsoft-Activation-Scripts,2020-01-12T23:03:34Z,186470,Batchfile,"Batchfile, HTML"
+Significant-Gravitas/AutoGPT,2023-03-16T09:21:07Z,186457,Python,"Python, TypeScript, JavaScript, PLpgSQL, Shell"
+jackfrued/Python-100-Days,2018-03-01T16:05:52Z,185027,Jupyter Notebook,"Jupyter Notebook, Python, HTML, Java"
+CyC2018/CS-Notes,2018-02-13T14:56:24Z,184983,Sem linguagem,Sem linguagem
+getify/You-Dont-Know-JS,2013-11-16T02:37:24Z,184638,Sem linguagem,Sem linguagem
+yt-dlp/yt-dlp,2020-10-26T04:22:55Z,183488,Python,"Python, Makefile, Shell, Dockerfile, Batchfile"
+avelino/awesome-go,2014-07-06T13:42:15Z,180605,Go,Go
+flutter/flutter,2015-03-06T22:54:58Z,178279,Dart,"Dart, C++, Objective-C++, Java, Objective-C"
+ollama/ollama,2023-06-26T19:39:32Z,178137,Go,"Go, C, TypeScript, C++, CMake"
+github/gitignore,2010-11-08T20:17:14Z,175208,Sem linguagem,Sem linguagem
+twbs/bootstrap,2011-07-29T21:19:00Z,174564,MDX,"MDX, JavaScript, Astro, SCSS, CSS"
+microsoft/markitdown,2024-11-13T19:56:40Z,172605,Python,"Python, Dockerfile"
+521xueweihan/HelloGitHub,2016-05-04T06:24:11Z,169998,Python,Python
+anthropics/skills,2025-09-22T15:53:31Z,167210,Python,"Python, HTML, Shell, JavaScript"
+f/prompts.chat,2022-12-05T13:54:13Z,166922,HTML,"HTML, MDX, TypeScript, JavaScript, Shell"
+AUTOMATIC1111/stable-diffusion-webui,2022-08-22T14:05:26Z,164462,Python,"Python, JavaScript, CSS, HTML, Shell"
+firecrawl/firecrawl,2024-04-15T21:02:29Z,164091,TypeScript,"TypeScript, Python, Rust, Java, PHP"
+huggingface/transformers,2018-10-29T13:56:00Z,163502,Python,"Python, Dockerfile, Makefile, Shell, Jsonnet"
+jlevy/the-art-of-command-line,2015-05-20T15:11:03Z,162059,Sem linguagem,Sem linguagem
+Snailclimb/JavaGuide,2018-05-07T13:27:00Z,157634,JavaScript,JavaScript
+langflow-ai/langflow,2023-02-08T22:28:03Z,152982,Python,"Python, TypeScript, JavaScript, CSS, Makefile"
+langgenius/dify,2023-04-12T07:40:24Z,151865,TypeScript,"TypeScript, Python, JavaScript, MDX, CSS"
+open-webui/open-webui,2023-10-06T22:08:27Z,148320,Python,"Python, Svelte, JavaScript, TypeScript, CSS"
+airbnb/javascript,2012-11-01T23:13:50Z,148117,JavaScript,JavaScript
+Genymobile/scrcpy,2017-11-21T18:00:27Z,147298,C,"C, Java, Roff, Shell, Meson"
+langchain-ai/langchain,2022-10-17T02:58:36Z,143809,Python,"Python, Makefile, Shell, XSLT, HTML"
+x1xhlol/system-prompts-and-models-of-ai-tools,2025-03-05T16:38:29Z,142683,Sem linguagem,Sem linguagem
+vercel/next.js,2016-10-05T23:32:51Z,141707,JavaScript,"JavaScript, TypeScript, Rust, MDX, CSS"
+yangshun/tech-interview-handbook,2016-07-05T05:00:48Z,141705,TypeScript,"TypeScript, JavaScript, Python, CSS"
+ytdl-org/youtube-dl,2010-10-31T14:35:07Z,140918,Python,"Python, Shell, Makefile, ActionScript, Batchfile"
+anthropics/claude-code,2025-02-22T17:41:21Z,140820,Python,"Python, Shell, TypeScript, PowerShell, Dockerfile"
+msitarzewski/agency-agents,2025-10-13T12:12:29Z,140513,Shell,"Shell, Python, PowerShell"
+microsoft/PowerToys,2019-05-01T17:44:02Z,137608,C,"C, C#, C++, PowerShell, Python"
+clash-verge-rev/clash-verge-rev,2023-11-21T18:24:03Z,136689,TypeScript,"TypeScript, Rust, JavaScript, NSIS, SCSS"
+golang/go,2014-08-19T04:33:40Z,135713,Go,"Go, Assembly, HTML, C, Shell"
+iptv-org/iptv,2018-11-14T22:00:57Z,135514,TypeScript,"TypeScript, JavaScript"
+labuladong/fucking-algorithm,2020-02-19T09:01:23Z,135287,Markdown,Markdown
+Shubhamsaboo/awesome-llm-apps,2024-04-29T05:30:25Z,131721,Python,"Python, TypeScript, JavaScript, HTML, CSS"
+ripienaar/free-for-dev,2015-03-18T21:06:26Z,131387,HTML,HTML
+krahets/hello-algo,2022-11-04T11:08:34Z,129311,Java,"Java, Swift, C++, JavaScript, Go"
+excalidraw/excalidraw,2020-01-02T01:04:43Z,129222,TypeScript,"TypeScript, SCSS, MDX, JavaScript, HTML"
+Chalarangelo/30-seconds-of-code,2017-11-29T17:35:03Z,128654,JavaScript,"JavaScript, SCSS, Astro, CSS, Shell"
+garrytan/gstack,2026-03-11T21:22:45Z,127153,TypeScript,"TypeScript, Go Template, Shell, JavaScript, CSS"
+react/react-native,2015-01-09T18:10:16Z,126308,C++,"C++, Kotlin, JavaScript, Objective-C++, Objective-C"
+github/spec-kit,2025-08-21T22:54:31Z,125977,Python,"Python, Shell, PowerShell"
+farion1231/cc-switch,2025-08-04T14:16:16Z,125928,Rust,"Rust, TypeScript, HTML, JavaScript, CSS"
+Comfy-Org/ComfyUI,2023-01-17T03:15:56Z,125357,Python,"Python, GLSL, Batchfile, Mako"
+kubernetes/kubernetes,2014-06-06T22:56:04Z,124385,Go,"Go, Shell, PowerShell, Makefile, Dockerfile"
+ggml-org/llama.cpp,2023-03-10T18:58:00Z,123203,C++,"C++, C, Python, Cuda, TypeScript"
+electron/electron,2013-04-12T01:47:36Z,122407,C++,"C++, TypeScript, Objective-C++, JavaScript, Python"
+shadcn-ui/ui,2023-01-04T12:43:27Z,120920,TypeScript,"TypeScript, MDX, CSS, JavaScript, Astro"
+rustdesk/rustdesk,2020-09-28T15:36:08Z,119959,Rust,"Rust, Dart, C++, Python, C"
+nodejs/node,2014-11-26T19:57:11Z,118845,JavaScript,"JavaScript, C++, Python, C, HTML"
+justjavac/free-programming-books-zh_CN,2013-11-04T01:59:19Z,118235,Sem linguagem,Sem linguagem
+Hack-with-Github/Awesome-Hacking,2016-03-30T15:47:10Z,117862,Sem linguagem,Sem linguagem
+microsoft/generative-ai-for-beginners,2023-06-19T16:28:59Z,117167,Jupyter Notebook,"Jupyter Notebook, Python, JavaScript, TypeScript, Shell"
+godotengine/godot,2014-01-04T16:05:36Z,115410,C++,"C++, C#, Java, C, GLSL"
+rust-lang/rust,2010-06-16T20:39:03Z,115383,Rust,"Rust, HTML, Shell, C, JavaScript"
+nextlevelbuilder/ui-ux-pro-max-skill,2025-11-30T11:36:31Z,114957,Python,"Python, JavaScript, TypeScript, HTML, Shell"
+mrdoob/three.js,2010-03-23T18:58:01Z,114380,JavaScript,"JavaScript, HTML, Roff, CSS"
+2dust/v2rayN,2019-07-30T03:47:24Z,113472,C#,"C#, Shell"
+d3/d3,2010-09-27T17:22:42Z,113424,Shell,"Shell, JavaScript"
+microsoft/TypeScript,2014-06-17T15:28:39Z,110113,TypeScript,"TypeScript, JavaScript, Shell"
+immich-app/immich,2022-02-03T15:56:27Z,110068,TypeScript,"TypeScript, Dart, Svelte, Python, Kotlin"
+tauri-apps/tauri,2019-07-13T09:09:37Z,110050,Rust,"Rust, TypeScript, NSIS, Kotlin, JavaScript"
+jaywcjlove/awesome-mac,2016-07-17T15:33:47Z,109636,Swift,"Swift, Dockerfile"
+axios/axios,2014-08-18T22:30:27Z,109241,JavaScript,"JavaScript, TypeScript, HTML"
+fatedier/frp,2015-12-21T15:24:59Z,108661,Go,"Go, Vue, TypeScript, CSS, Shell"

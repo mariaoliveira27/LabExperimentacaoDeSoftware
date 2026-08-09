@@ -1,6 +1,6 @@
 import requests
 import csv
-from datetime import datetime
+from collections import Counter
 
 # Credencias e Endpoints 
 TOKEN = ""  # Token de acceso personal de GitHub
@@ -30,11 +30,6 @@ query ($cursor: String) {
                         name
                     }
                 }
-                issues(first: 10, orderBy: {field: CREATED_AT, direction: DESC}) {
-                    nodes {
-                        createdAt
-                    }
-                }
             }
         }
     }
@@ -47,6 +42,9 @@ lista_resp = []
 # variaveis de paginação
 cursor = None     # página
 TOTAL_REQ = 100   # quantitade total de requisições
+
+# contador de linguagens
+contador_linguagens = Counter()
 
 # Loop para paginar as requisições
 while len(lista_resp) < TOTAL_REQ:
@@ -73,52 +71,33 @@ while len(lista_resp) < TOTAL_REQ:
         
         for repo in repositories:
             if repo is None: 
-                continue # Pula repositórios
+                continue # Pula repositórios invalido
             
             name_with_owner = repo['nameWithOwner']
             created_at = repo['createdAt']
             stargazer_count = repo['stargazerCount']
+            
             languages_nodes = repo.get('languages', {}).get('nodes', [])
             nomes_linguagens = [lang['name'] for lang in languages_nodes if lang is not None and 'name' in lang]  # extrai apenas os nomes das linguagens
             string_linguagens = ", ".join(nomes_linguagens) if nomes_linguagens else "Sem linguagem"
             
-            # extrai as issues
-            issues_nodes = repo.get('issues', {}).get('nodes', [])
-            frequencia_issues = "N/A"
-            # Remove os nós 'None' que a API retorna quando excede o limite
-            issues_validas = [issue for issue in issues_nodes if issue is not None and 'createdAt' in issue]
+            # linguagem primária
+            linguagem_primaria = nomes_linguagens[0] if nomes_linguagens else "Sem linguagem"
             
-            # calcular a frequência das últimas issues
-            if len(issues_validas) > 1:
-                # convertendo as datas para objetos datetime
-                datas = [datetime.fromisoformat(issue['createdAt'].replace("Z", "+00:00")) for issue in issues_validas]
-                dif = datas[0] - datas[-1]  # diferença entre a primeira e a última issue recebidas
-                
-                if dif.days > 0:
-                    # Freq = (Total de issues / Total de dias) * 30 dias
-                    taxa_diaria = len(datas) / dif.days
-                    taxa_mensal = taxa_diaria * 30
-                    taxa_mensal_piso = int(taxa_mensal) # piso
-                    frequencia_issues = f"{taxa_mensal_piso} issues/mês"
-                else:
-                    frequencia_issues = "Múltiplas issues no mesmo dia"
-                    
-            elif len(issues_validas) == 1:
-                frequencia_issues = "Apenas 1 issue"
-            else:
-                frequencia_issues = "Sem issues"
+            # atualiza o contador de linguagens
+            contador_linguagens[linguagem_primaria] += 1
             
             # adiciona os dados à lista
             lista_resp.append({
                 'Repositorio': name_with_owner,
                 'Criado Em': created_at,
                 'Estrelas': stargazer_count,
-                'Linguagens': string_linguagens,
-                'Frequencia issues': frequencia_issues
+                'Linguagem Primaria': linguagem_primaria,
+                'Linguagens': string_linguagens                
             })
             
             # exibe no terminal
-            print(f"[{len(lista_resp)}/{TOTAL_REQ}] Repositório: {name_with_owner} | Freq: {frequencia_issues}")
+            print(f"[{len(lista_resp)}/{TOTAL_REQ}] Repositório: {name_with_owner} | Principal: {linguagem_primaria}")            
             
             # interrompe quando atingir o total de requisições
             if len(lista_resp) >= TOTAL_REQ:
@@ -137,20 +116,31 @@ while len(lista_resp) < TOTAL_REQ:
     
 print(f"Total de repositórios processados: {len(lista_resp)}")
         
-# Gerarndo arquivo CSV
-with open ('frequencia_issues.csv', mode='w', newline='', encoding='utf-8') as csv_file:
-    #colunas do arquivo
-    colunas = ['Repositorio', 'Criado Em', 'Estrelas', 'Linguagens', 'Frequencia issues']
-    
-    # criando o objeto writer
+# Gerarndo arquivo CSV: LISTA DE REPOSITÓRIOS POPULARES E SUAS LINGUAGENS
+with open ('popularidade_linguagem.csv', mode='w', newline='', encoding='utf-8') as csv_file:
+    # colunas do arquivo
+    colunas = ['Repositorio', 'Criado Em', 'Estrelas', 'Linguagem Primaria', 'Linguagens']
     writer = csv.DictWriter(csv_file, fieldnames=colunas)
-    
-    # escreve as colunas no arquivo
     writer.writeheader()
     
-    # escreve os dados no arquivo
     for repo in lista_resp:
         writer.writerow(repo)
 
 # confirmando a criação do arquivo
-print("Arquivo CSV 'frequencia_issues.csv' criado com sucesso!")
+print("Arquivo CSV 'popularidade_linguagem.csv' criado com sucesso!")
+
+# Gerarndo arquivo CSV: LISTA DE RANKING POPULARES E SUAS LINGUAGENS
+with open ('ranking_popularidade.csv', mode='w', newline='', encoding='utf-8') as csv_file:
+    #colunas do arquivo
+    colunas = ['Linguagens', 'Quantidade de Repositorios']
+    writer = csv.DictWriter(csv_file, fieldnames=colunas)
+    writer.writeheader()
+    
+    for lingua, contagem in contador_linguagens.most_common():
+        writer.writerow({
+            'Linguagens': lingua, 
+            'Quantidade de Repositorios': contagem
+        })
+
+# confirmando a criação do arquivo
+print("Arquivo CSV 'ranking_popularidade.csv' criado com sucesso!")
