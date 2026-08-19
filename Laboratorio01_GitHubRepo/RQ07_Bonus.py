@@ -1,11 +1,12 @@
 import requests
 import csv
+import os
 import time
 from datetime import datetime, timezone
 from collections import defaultdict
 
 # Credencias e Endpoints 
-TOKEN = ""  # Token de acceso personal de GitHub
+TOKEN = ""  # Token de acesso pessoal do GitHub
 URL = "https://api.github.com/graphql"              # Endpoint de la API GraphQL de GitHub
 
 # Header
@@ -67,7 +68,7 @@ agrupamento_linguagem = defaultdict(lambda: {
     
 # variaveis de paginação
 cursor = None     # página
-TOTAL_REQ = 100   # quantitade total de requisições
+TOTAL_REQ = 1000  # quantidade total de repositórios
 
 # Loop para paginar as requisições
 while len(lista_resp) < TOTAL_REQ:
@@ -79,7 +80,12 @@ while len(lista_resp) < TOTAL_REQ:
 
 
     # Requisição POST para a API GraphQL do GitHub
-    response = requests.post(URL, json=payload, headers=hearders)
+    for tentativa in range(3):
+        response = requests.post(URL, json=payload, headers=hearders)
+        if response.status_code != 502:
+            break
+        print(f"Erro 502 na página; tentativa {tentativa + 1}/3...")
+        time.sleep(2)
 
     # Tratamento de resposta
     if response.status_code == 200:
@@ -87,6 +93,8 @@ while len(lista_resp) < TOTAL_REQ:
         
         if 'errors' in data:
             print("ERRO: A API retornou algum erro nesta página.")
+            print(data['errors'])
+            raise SystemExit(1)
         
         search_data = data.get('data', {}).get('search', {})  # obtendo os dados da pesquisa
         repositories = search_data.get('nodes', [])           # obtendo os repositórios
@@ -145,7 +153,8 @@ while len(lista_resp) < TOTAL_REQ:
             agrupamento_linguagem[linguagem_primaria]['soma_taxa_issues'] += taxa_mensal_issues
             
             # exibe no terminal
-            print(f"[{len(lista_resp)}/{TOTAL_REQ}] Processado: {name_with_owner} | Linguagem: {linguagem_primaria}")
+            if len(lista_resp) % 100 == 0 or len(lista_resp) == TOTAL_REQ:
+                print(f"[{len(lista_resp)}/{TOTAL_REQ}] Repositórios processados")
             
             # interrompe quando atingir o total de requisições
             if len(lista_resp) >= TOTAL_REQ:
@@ -154,19 +163,20 @@ while len(lista_resp) < TOTAL_REQ:
         # verifica se existe uma próxima página para buscar
         if page_info.get('hasNextPage') and len(lista_resp) < TOTAL_REQ:
             cursor = page_info.get('endCursor') # Atualiza o cursor para a próxima requisição
-            time.sleep(1)  # Pausa de sobrecarga
+            time.sleep(0.1)  # Pequena pausa entre páginas
         else:
             break
     
     else:
         print(f"Erro na requisição: {response.status_code}")
         print(response.text)
-        break
+        raise SystemExit(1)
     
 print(f"Total de repositórios processados: {len(lista_resp)}")
         
 # Gerarndo arquivo CSV: LISTA DE REPOSITÓRIOS POPULARES E SUAS LINGUAGENS
-with open ('bonus.csv', mode='w', newline='', encoding='utf-8') as csv_file:
+CAMINHO_CSV = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bonus.csv')
+with open(CAMINHO_CSV, mode='w', newline='', encoding='utf-8') as csv_file:
     # colunas do arquivo
     colunas = ['Linguagem', 'Total de Repositorios', 'Media PRs', 'Media Releases', 'Media Dias Sem Atualizar', 'Media Frequencia Issues']
     writer = csv.DictWriter(csv_file, fieldnames=colunas)

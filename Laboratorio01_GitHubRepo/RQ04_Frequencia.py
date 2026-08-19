@@ -1,9 +1,10 @@
 import requests
 import csv
+import os
 from datetime import datetime
 
 # Credencias e Endpoints 
-TOKEN = ""  # Token de acceso personal de GitHub
+TOKEN = ""  # Token de acesso pessoal do GitHub
 URL = "https://api.github.com/graphql"              # Endpoint de la API GraphQL de GitHub
 
 # Header
@@ -46,7 +47,7 @@ lista_resp = []
     
 # variaveis de paginação
 cursor = None     # página
-TOTAL_REQ = 100   # quantitade total de requisições
+TOTAL_REQ = 1000  # quantidade total de repositórios
 
 # Loop para paginar as requisições
 while len(lista_resp) < TOTAL_REQ:
@@ -66,6 +67,8 @@ while len(lista_resp) < TOTAL_REQ:
         
         if 'errors' in data:
             print("ERRO: A API retornou algum erro nesta página.")
+            print(data['errors'])
+            raise SystemExit(1)
         
         search_data = data.get('data', {}).get('search', {})  # obtendo os dados da pesquisa
         repositories = search_data.get('nodes', [])           # obtendo os repositórios
@@ -133,12 +136,13 @@ while len(lista_resp) < TOTAL_REQ:
     else:
         print(f"Erro na requisição: {response.status_code}")
         print(response.text)
-        break
+        raise SystemExit(1)
     
 print(f"Total de repositórios processados: {len(lista_resp)}")
         
 # Gerarndo arquivo CSV
-with open ('frequencia_issues.csv', mode='w', newline='', encoding='utf-8') as csv_file:
+CAMINHO_CSV = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'frequencia_issues.csv')
+with open(CAMINHO_CSV, mode='w', newline='', encoding='utf-8') as csv_file:
     #colunas do arquivo
     colunas = ['Repositorio', 'Criado Em', 'Estrelas', 'Linguagens', 'Frequencia issues']
     
