@@ -35,7 +35,7 @@ lista_resp = []
 
 # variáveis de paginação
 cursor = None     # página
-TOTAL_REQ = 100   # quantidade total de requisições desejadas
+TOTAL_REQ = 1000   # quantidade total de requisições desejadas
 
 # Loop para paginar as requisições
 while len(lista_resp) < TOTAL_REQ:

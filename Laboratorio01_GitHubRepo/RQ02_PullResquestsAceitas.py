@@ -38,7 +38,7 @@ lista_resp = []
 
 # variáveis de paginação
 cursor = None     # página inicial
-TOTAL_REQ = 100   # quantidade total de repositórios desejados
+TOTAL_REQ = 1000   # quantidade total de repositórios desejados
 
 # Loop para paginar as requisições
 while len(lista_resp) < TOTAL_REQ:
