@@ -1,9 +1,10 @@
 import requests
 import csv
+import os
 from collections import Counter
 
 # Credencias e Endpoints 
-TOKEN = ""  # Token de acceso personal de GitHub
+TOKEN = ""  # Token de acesso pessoal do GitHub
 URL = "https://api.github.com/graphql"              # Endpoint de la API GraphQL de GitHub
 
 # Header
@@ -15,7 +16,7 @@ hearders = {
 # Consulta GraphQL com paginação 
 query = """
 query ($cursor: String) {
-    search(query: "stars:>5000 sort:stars-desc", type: REPOSITORY, first: 20, after: $cursor) {
+    search(query: "stars:>5000 sort:stars-desc", type: REPOSITORY, first: 100, after: $cursor) {
         pageInfo {
             hasNextPage
             endCursor
@@ -41,7 +42,7 @@ lista_resp = []
     
 # variaveis de paginação
 cursor = None     # página
-TOTAL_REQ = 100   # quantitade total de requisições
+TOTAL_REQ = 1000  # quantidade total de repositórios
 
 # contador de linguagens
 contador_linguagens = Counter()
@@ -64,6 +65,8 @@ while len(lista_resp) < TOTAL_REQ:
         
         if 'errors' in data:
             print("ERRO: A API retornou algum erro nesta página.")
+            print(data['errors'])
+            raise SystemExit(1)
         
         search_data = data.get('data', {}).get('search', {})  # obtendo os dados da pesquisa
         repositories = search_data.get('nodes', [])           # obtendo os repositórios
@@ -97,7 +100,8 @@ while len(lista_resp) < TOTAL_REQ:
             })
             
             # exibe no terminal
-            print(f"[{len(lista_resp)}/{TOTAL_REQ}] Repositório: {name_with_owner} | Principal: {linguagem_primaria}")            
+            if len(lista_resp) % 100 == 0 or len(lista_resp) == TOTAL_REQ:
+                print(f"[{len(lista_resp)}/{TOTAL_REQ}] Repositórios processados")
             
             # interrompe quando atingir o total de requisições
             if len(lista_resp) >= TOTAL_REQ:
@@ -112,12 +116,13 @@ while len(lista_resp) < TOTAL_REQ:
     else:
         print(f"Erro na requisição: {response.status_code}")
         print(response.text)
-        break
+        raise SystemExit(1)
     
 print(f"Total de repositórios processados: {len(lista_resp)}")
         
 # Gerarndo arquivo CSV: LISTA DE REPOSITÓRIOS POPULARES E SUAS LINGUAGENS
-with open ('popularidade_linguagem.csv', mode='w', newline='', encoding='utf-8') as csv_file:
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(BASE_DIR, 'popularidade_linguagem.csv'), mode='w', newline='', encoding='utf-8') as csv_file:
     # colunas do arquivo
     colunas = ['Repositorio', 'Criado Em', 'Estrelas', 'Linguagem Primaria', 'Linguagens']
     writer = csv.DictWriter(csv_file, fieldnames=colunas)
@@ -130,7 +135,7 @@ with open ('popularidade_linguagem.csv', mode='w', newline='', encoding='utf-8')
 print("Arquivo CSV 'popularidade_linguagem.csv' criado com sucesso!")
 
 # Gerarndo arquivo CSV: LISTA DE RANKING POPULARES E SUAS LINGUAGENS
-with open ('ranking_popularidade.csv', mode='w', newline='', encoding='utf-8') as csv_file:
+with open(os.path.join(BASE_DIR, 'ranking_popularidade.csv'), mode='w', newline='', encoding='utf-8') as csv_file:
     #colunas do arquivo
     colunas = ['Linguagens', 'Quantidade de Repositorios']
     writer = csv.DictWriter(csv_file, fieldnames=colunas)

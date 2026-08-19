@@ -1,8 +1,9 @@
 import requests
 import csv
+import os
 
 # Credencias e Endpoints 
-TOKEN = ""  # Token de acceso personal de GitHub
+TOKEN = ""  # Token de acesso pessoal do GitHub
 URL = "https://api.github.com/graphql"              # Endpoint de la API GraphQL de GitHub
 
 # Header
@@ -14,7 +15,7 @@ hearders = {
 # Consulta GraphQL com paginação 
 query = """
 query ($cursor: String) {
-    search(query: "stars:>5000 sort:stars-desc", type: REPOSITORY, first: 20, after: $cursor) {
+    search(query: "stars:>5000 sort:stars-desc", type: REPOSITORY, first: 100, after: $cursor) {
         pageInfo {
             hasNextPage
             endCursor
@@ -41,7 +42,7 @@ lista_resp = []
     
 # variaveis de paginação
 cursor = None     # página
-TOTAL_REQ = 100   # quantitade total de requisições
+TOTAL_REQ = 1000  # quantidade total de repositórios
 
 
 # Loop para paginar as requisições
@@ -62,6 +63,8 @@ while len(lista_resp) < TOTAL_REQ:
         
         if 'errors' in data:
             print("ERRO: A API retornou algum erro nesta página.")
+            print(data['errors'])
+            raise SystemExit(1)
         
         search_data = data.get('data', {}).get('search', {})  # obtendo os dados da pesquisa
         repositories = search_data.get('nodes', [])           # obtendo os repositórios
@@ -97,7 +100,8 @@ while len(lista_resp) < TOTAL_REQ:
             })
             
             # exibe no terminal
-            print(f"[{len(lista_resp)}/{TOTAL_REQ}] Repositório: {name_with_owner} | Criado Em: {created_at} | Estrelas: {stargazer_count} | Percentual de Issues Fechadas: {percentual_fechadas}%")            
+            if len(lista_resp) % 100 == 0 or len(lista_resp) == TOTAL_REQ:
+                print(f"[{len(lista_resp)}/{TOTAL_REQ}] Repositórios processados")
             
             # interrompe quando atingir o total de requisições
             if len(lista_resp) >= TOTAL_REQ:
@@ -112,12 +116,13 @@ while len(lista_resp) < TOTAL_REQ:
     else:
         print(f"Erro na requisição: {response.status_code}")
         print(response.text)
-        break
+        raise SystemExit(1)
     
 print(f"Total de repositórios processados: {len(lista_resp)}")
         
 # Gerarndo arquivo CSV: PERCENTUAL DE ISSUES FECHADAS
-with open ('percentual_issues_fechadas.csv', mode='w', newline='', encoding='utf-8') as csv_file:
+CAMINHO_CSV = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'percentual_issues_fechadas.csv')
+with open(CAMINHO_CSV, mode='w', newline='', encoding='utf-8') as csv_file:
     # colunas do arquivo
     colunas = ['Repositorio', 'Criado Em', 'Estrelas', 'Total de Issues', 'Issues Fechadas', 'Percentual de Issues Fechadas']
     writer = csv.DictWriter(csv_file, fieldnames=colunas)
