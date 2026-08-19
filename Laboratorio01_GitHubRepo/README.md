@@ -63,7 +63,7 @@ Abaixo estão listadas as questões de pesquisa definidas para este laboratório
 ### RQ 05. Sistemas populares são escritos nas linguagens mais populares?
 
 * **Métrica:** Linguagem primária de cada repositório.
-> *Nota: A fonte usada para definir "linguagens mais populares" deve ser referenciada explicitamente (ex.: TIOBE Index, GitHut ou o Octoverse do GitHub) e mantida como padrão ao longo de todo o laboratório.*
+> *Nota: A fonte usada para definir "linguagens mais populares" foi a Octoverse do GitHub.*
 
 **🟢 A favor:**
 * Uma linguagem mais popular é mais acessível por haver mais fontes de estudo.
