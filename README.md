@@ -7,7 +7,7 @@ Descreva o propósito das pastas principais.
 
 ```
 .
-├── /Laboratorio01_GitHubRepo    # 📂 Projeto de Laboratorio 01
+├── /Laboratorio01_GitHubRepo   # 📂 Projeto de Laboratório 01
 │   ├── /CSV-100                # 📄 CSVs gerados pelos códigos de 100 requisições
 │   └── /CSV-1000               # 📄 CSVs gerados pelos códigos de 1000 requisições
 │   └── /Graficos               # 📊 Gráficos gerados pelos CSVs
