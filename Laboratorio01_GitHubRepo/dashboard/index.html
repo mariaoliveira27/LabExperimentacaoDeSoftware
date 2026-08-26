@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102a43">
+    <meta name="description" content="Dashboard interativa dos resultados do Laboratório 01 de Experimentação de Software.">
+    <title>Radar de Repositórios | Lab 01</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegação da dashboard">
+        <a class="brand" href="#visao-geral" aria-label="Ir para a visão geral">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none"><path d="M16 3a13 13 0 1 0 13 13" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="m16 8 3.3 6.7L26 18l-6.7 3.3L16 28l-3.3-6.7L6 18l6.7-3.3L16 8Z" fill="currentColor"/></svg>
+          </span>
+          <span><strong>Repo Radar</strong><small>Lab 01</small></span>
+        </a>
+
+        <nav class="section-nav" aria-label="Seções da dashboard">
+          <p class="nav-label">Explorar</p>
+          <a class="nav-link is-active" href="#visao-geral" data-target="visao-geral" aria-current="location">Visão geral</a>
+          <a class="nav-link" href="#contribuicoes" data-target="contribuicoes">Contribuições</a>
+          <a class="nav-link" href="#lancamentos" data-target="lancamentos">Releases</a>
+          <a class="nav-link" href="#manutencao" data-target="manutencao">Manutenção</a>
+          <a class="nav-link" href="#linguagens" data-target="linguagens">Linguagens</a>
+          <a class="nav-link" href="#repositorios" data-target="repositorios">Repositórios</a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <span class="status-dot" aria-hidden="true"></span>
+          <p id="source-status">Carregando dados…</p>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Mineração de repositórios GitHub</p>
+            <h1>Resultados em perspectiva.</h1>
+          </div>
+          <div class="sample-control">
+            <label for="sample-select">Amostra analisada</label>
+            <select id="sample-select" aria-label="Selecionar amostra de dados">
+              <option value="1000">1.000 repositórios</option>
+              <option value="100">100 repositórios</option>
+            </select>
+          </div>
+        </header>
+
+        <section class="toolbar" aria-label="Filtros da dashboard">
+          <label class="search-control" for="repository-search">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input id="repository-search" type="search" placeholder="Buscar na tabela" autocomplete="off">
+          </label>
+          <label class="select-control" for="language-filter">
+            <span>Linguagem</span>
+            <select id="language-filter"><option value="__all__">Todas as linguagens</option></select>
+          </label>
+          <button class="filter-chip" id="tag-range-chip" type="button" hidden aria-label="Limpar filtro de faixa de tags"></button>
+          <button class="text-button" id="reset-filters" type="button">Limpar filtros</button>
+          <button class="download-button" id="download-results" type="button" title="Baixar os resultados exibidos na tabela como CSV">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 16v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Baixar CSV
+          </button>
+          <p class="result-count" id="result-count"></p>
+          <p class="sr-only" id="interaction-status" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="load-state" id="load-state" aria-live="polite">
+          <div class="loading-orbit" aria-hidden="true"></div>
+          <p>Preparando a leitura dos CSVs…</p>
+        </section>
+
+        <div id="dashboard-content" hidden>
+          <section class="intro-band" aria-labelledby="dashboard-title">
+            <div>
+              <p class="eyebrow">Panorama da coleta</p>
+              <h2 id="dashboard-title">O que caracteriza os projetos mais populares?</h2>
+              <p class="intro-copy">Explore as respostas às sete questões de pesquisa com dados consolidados diretamente dos arquivos CSV do laboratório.</p>
+            </div>
+            <div class="data-badge" id="data-badge">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M12 8v4l2.7 1.6M20 12a8 8 0 1 1-2.34-5.66" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 5v4h-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Dados carregados localmente</span>
+            </div>
+          </section>
+
+          <section class="dashboard-section" id="visao-geral" data-section>
+            <div class="section-heading">
+              <div><p class="eyebrow">Visão geral</p><h2>Escala, popularidade e maturidade</h2></div>
+              <p>RQ01 · Sistemas populares são maduros ou antigos?</p>
+            </div>
+            <div class="kpi-grid" id="kpi-grid"></div>
+            <div class="chart-grid chart-grid--wide">
+              <article class="panel chart-panel">
+                <div class="panel-heading"><div><span class="panel-index">RQ01</span><h3>Distribuição por idade</h3></div><p id="age-summary"></p></div>
+                <div class="chart-area" id="age-chart"></div>
+              </article>
+              <article class="panel chart-panel">
+                <div class="panel-heading"><div><span class="panel-index">RQ05</span><h3>Linguagens predominantes</h3></div><p id="language-chart-summary">clique para filtrar</p></div>
+                <div class="chart-area" id="language-chart"></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="dashboard-section" id="contribuicoes" data-section>
+            <div class="section-heading">
+              <div><p class="eyebrow">Contribuições externas</p><h2>Pull requests aceitas</h2></div>
+              <p>RQ02 · A comunidade contribui ativamente?</p>
+            </div>
+            <div class="chart-grid">
+              <article class="panel chart-panel">
+                <div class="panel-heading"><div><span class="panel-index">RQ02</span><h3>Faixas de PRs aceitas</h3></div><p id="pr-summary"></p></div>
+                <div class="chart-area" id="pr-distribution-chart"></div>
+              </article>
+              <article class="panel chart-panel">
+                <div class="panel-heading"><div><span class="panel-index">DESTAQUES</span><h3>Projetos com mais PRs</h3></div><p id="pr-leaders-summary">clique para inspecionar</p></div>
+                <div class="chart-area" id="pr-leaders-chart"></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="dashboard-section" id="lancamentos" data-section>
+            <div class="section-heading">
+              <div><p class="eyebrow">Ciclo de lançamentos</p><h2>Tags e evolução de produto</h2></div>
+              <p>RQ03 · A coleta usa o total de tags como indicador de releases.</p>
+            </div>
+            <div class="chart-grid">
+              <article class="panel chart-panel">
+                <div class="panel-heading"><div><span class="panel-index">RQ03</span><h3>Distribuição de tags</h3></div><p id="release-summary"></p></div>
+                <div class="chart-area" id="release-distribution-chart"></div>
+              </article>
+              <article class="panel chart-panel">
+                <div class="panel-heading"><div><span class="panel-index">DESTAQUES</span><h3>Mais tags publicadas</h3></div><p id="release-leaders-summary">clique para inspecionar</p></div>
+                <div class="chart-area" id="release-leaders-chart"></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="dashboard-section" id="manutencao" data-section>
+            <div class="section-heading">
+              <div><p class="eyebrow">Saúde do ecossistema</p><h2>Atividade e resolução de issues</h2></div>
+              <p>RQ04 e RQ06 · Sinais de manutenção contínua</p>
+            </div>
+            <div class="chart-grid">
+              <article class="panel chart-panel">
+                <div class="panel-heading"><div><span class="panel-index">RQ04</span><h3>Frequência de issues</h3></div><p id="frequency-summary">proxy de atividade</p></div>
+                <div class="chart-area" id="issue-frequency-chart"></div>
+              </article>
+              <article class="panel issue-panel">
+                <div class="panel-heading"><div><span class="panel-index">RQ06</span><h3>Issues fechadas</h3></div><p id="issue-summary"></p></div>
+                <div class="issue-resolution" id="issue-resolution"></div>
+                <div class="chart-area compact-chart" id="issue-distribution-chart"></div>
+              </article>
+            </div>
+            <p class="method-note"><strong>Nota metodológica:</strong> o CSV de frequência usa a atividade de issues como proxy de atualização. O tempo desde a última atualização aparece agregado por linguagem na RQ07.</p>
+          </section>
+
+          <section class="dashboard-section" id="linguagens" data-section>
+            <div class="section-heading">
+              <div><p class="eyebrow">Influência da linguagem</p><h2>Atividade média por tecnologia</h2></div>
+              <p>RQ07 · Relação entre linguagem, contribuição e manutenção</p>
+            </div>
+            <div class="chart-grid chart-grid--wide">
+              <article class="panel chart-panel">
+                <div class="panel-heading"><div><span class="panel-index">RQ07</span><h3 id="language-metric-title">PRs médias por linguagem</h3></div><p id="language-summary">médias da coleta</p></div>
+                <div class="metric-toggle" role="group" aria-label="Métrica do gráfico por linguagem">
+                  <button class="metric-button is-active" type="button" data-language-metric="pullRequests" aria-pressed="true">PRs</button>
+                  <button class="metric-button" type="button" data-language-metric="releases" aria-pressed="false">Releases</button>
+                  <button class="metric-button" type="button" data-language-metric="issues" aria-pressed="false">Issues/mês</button>
+                  <button class="metric-button" type="button" data-language-metric="inactiveDays" aria-pressed="false">Atualização</button>
+                </div>
+                <div class="chart-area chart-area--with-toggle" id="language-metric-chart"></div>
+              </article>
+              <article class="panel table-panel">
+                <div class="panel-heading"><div><span class="panel-index">RQ07</span><h3>Indicadores por linguagem</h3></div><button class="text-button panel-action" id="toggle-small-languages" type="button">Mostrar todas</button></div>
+                <div class="table-scroll">
+                  <table>
+                    <thead><tr>
+                      <th><button class="sort-button" type="button" data-language-sort="language">Linguagem <span aria-hidden="true">↕</span></button></th>
+                      <th><button class="sort-button" type="button" data-language-sort="repositories">Repos. <span aria-hidden="true">↕</span></button></th>
+                      <th><button class="sort-button" type="button" data-language-sort="pullRequests">PRs <span aria-hidden="true">↕</span></button></th>
+                      <th><button class="sort-button" type="button" data-language-sort="releases">Releases <span aria-hidden="true">↕</span></button></th>
+                      <th><button class="sort-button" type="button" data-language-sort="inactiveDays">Sem atualizar <span aria-hidden="true">↕</span></button></th>
+                    </tr></thead>
+                    <tbody id="language-stats-table"></tbody>
+                  </table>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="dashboard-section" id="repositorios" data-section>
+            <div class="section-heading">
+              <div><p class="eyebrow">Explorador</p><h2>Repositórios da amostra</h2></div>
+              <p>Use os filtros acima para recortar a análise.</p>
+            </div>
+            <div class="repository-spotlight" id="repository-spotlight" hidden aria-live="polite"></div>
+            <article class="panel table-panel repository-panel">
+              <div class="table-scroll">
+                <table>
+                    <thead><tr>
+                      <th><button class="sort-button" type="button" data-repository-sort="name">Repositório <span aria-hidden="true">↕</span></button></th>
+                      <th><button class="sort-button" type="button" data-repository-sort="language">Linguagem <span aria-hidden="true">↕</span></button></th>
+                      <th><button class="sort-button" type="button" data-repository-sort="stars">Estrelas <span aria-hidden="true">↕</span></button></th>
+                      <th><button class="sort-button" type="button" data-repository-sort="pullRequests">PRs <span aria-hidden="true">↕</span></button></th>
+                      <th><button class="sort-button" type="button" data-repository-sort="releases">Tags <span aria-hidden="true">↕</span></button></th>
+                      <th><button class="sort-button" type="button" data-repository-sort="closedIssuePercent">Issues fechadas <span aria-hidden="true">↕</span></button></th>
+                    </tr></thead>
+                  <tbody id="repositories-table"></tbody>
+                </table>
+              </div>
+              <div class="table-footer"><p id="table-caption"></p><button class="text-button" id="show-more" type="button">Mostrar mais</button></div>
+            </article>
+          </section>
+
+          <footer class="dashboard-footer">
+            <p>Fonte: arquivos CSV gerados no Laboratório 01. A dashboard não realiza novas consultas à API do GitHub.</p>
+            <a href="../README.md">Ver documentação do laboratório <span aria-hidden="true">↗</span></a>
+          </footer>
+        </div>
+      </main>
+    </div>
+    <div class="chart-tooltip" id="chart-tooltip" role="tooltip" aria-hidden="true"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
