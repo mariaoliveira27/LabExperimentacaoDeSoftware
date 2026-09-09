@@ -1,0 +1,2 @@
+def incompleta(
+    return 1

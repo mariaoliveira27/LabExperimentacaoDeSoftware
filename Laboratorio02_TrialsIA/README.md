@@ -2,6 +2,8 @@
 
 **Professor:** Danilo Maia  
 
+**Preparação S01 — Áulus (#31):** [coletor de métricas estruturais, instalação, testes e metodologia da RQ3](metricas_estruturais/README.md) · [casos de aceitação K05/K06](casos_de_teste/aceitacao_k05_k06/README.md). Execute os comandos dos guias a partir da raiz do repositório.
+
 ---
 
 ## 📄 Descrição do Experimento

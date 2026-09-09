@@ -1,0 +1,2 @@
+def saudacao():
+    return "Olá!"

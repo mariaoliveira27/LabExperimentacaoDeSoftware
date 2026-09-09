@@ -24,8 +24,17 @@ def comparar_saidas(saida_obtida: str, d_esperada: dict) -> bool:
     # Verifica se oteste exige comparação numérica
     if d_esperada.get("tipo_comparacao") == "float":
         try:
-            return math.isclose(float(saida_norm), float(saida_esperada_norm), abs_tol=1e-4) # Tenta converter ambas para float
-        except ValueError:
+            obtido = float(saida_norm)
+            esperado = float(saida_esperada_norm)
+            if not (math.isfinite(obtido) and math.isfinite(esperado)):
+                return False
+            if "tolerancia_absoluta" in d_esperada:
+                tolerancia = float(d_esperada["tolerancia_absoluta"])
+                if not math.isfinite(tolerancia) or tolerancia < 0:
+                    return False
+                return math.isclose(obtido, esperado, abs_tol=tolerancia, rel_tol=0.0)
+            return math.isclose(obtido, esperado, abs_tol=1e-4)
+        except (TypeError, ValueError):
             return False
     
     # Para comparações de texto comum, verifica se as cadeias são idênticas

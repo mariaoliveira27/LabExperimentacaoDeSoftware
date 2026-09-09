@@ -4,7 +4,7 @@ import re
 from executor import avaliar_solucao
 
 # Configurações do script
-DIRETORIO_SOLUCOES = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../solucoes"))
+DIRETORIO_SOLUCOES = os.path.abspath(os.path.join(os.path.dirname(__file__), "../solucoes_das_Katas"))
 ARQUIVO_SAIDA_CSV = "resultado_bateria_katas.csv"
 
 
