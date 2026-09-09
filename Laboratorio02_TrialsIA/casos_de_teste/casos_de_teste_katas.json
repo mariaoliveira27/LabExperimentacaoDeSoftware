@@ -1,0 +1,74 @@
+{
+  "kata01": [
+    { "entrada": "aeiou\n", "saida_esperada": "SIM NAO NAO NAO", "finalidade": "Apenas vogais minúsculas", "tipo_comparacao": "texto" },
+    { "entrada": "AEIOU\n", "saida_esperada": "SIM NAO NAO NAO", "finalidade": "Apenas vogais maiúsculas", "tipo_comparacao": "texto" },
+    { "entrada": "bcdfg\n", "saida_esperada": "NAO SIM NAO NAO", "finalidade": "Apenas consoantes minúsculas", "tipo_comparacao": "texto" },
+    { "entrada": "BCDFG\n", "saida_esperada": "NAO SIM NAO NAO", "finalidade": "Apenas consoantes maiúsculas", "tipo_comparacao": "texto" },
+    { "entrada": "12345\n", "saida_esperada": "NAO NAO SIM NAO", "finalidade": "Número inteiro positivo", "tipo_comparacao": "texto" },
+    { "entrada": "-987\n", "saida_esperada": "NAO NAO SIM NAO", "finalidade": "Número inteiro negativo", "tipo_comparacao": "texto" },
+    { "entrada": "3.1415\n", "saida_esperada": "NAO NAO NAO SIM", "finalidade": "Número real positivo", "tipo_comparacao": "texto" },
+    { "entrada": "-0.001\n", "saida_esperada": "NAO NAO NAO SIM", "finalidade": "Número real negativo", "tipo_comparacao": "texto" },
+    { "entrada": "a1b2c3\n", "saida_esperada": "NAO NAO NAO NAO", "finalidade": "Alfanumérico misto", "tipo_comparacao": "texto" },
+    { "entrada": "hello world\n", "saida_esperada": "NAO NAO NAO NAO", "finalidade": "Texto com espaços e caracteres mistos", "tipo_comparacao": "texto" }
+  ],
+  "kata02": [
+    { "entrada": "2 0 0 and(A , B)\n", "saida_esperada": "0", "finalidade": "AND com falsos", "tipo_comparacao": "texto" },
+    { "entrada": "2 1 1 and(A , B)\n", "saida_esperada": "1", "finalidade": "AND com verdadeiros", "tipo_comparacao": "texto" },
+    { "entrada": "2 1 0 or(A , B)\n", "saida_esperada": "1", "finalidade": "OR com um verdadeiro", "tipo_comparacao": "texto" },
+    { "entrada": "2 0 0 or(A , B)\n", "saida_esperada": "0", "finalidade": "OR com ambos falsos", "tipo_comparacao": "texto" },
+    { "entrada": "1 0 not(A)\n", "saida_esperada": "1", "finalidade": "NOT sobre falso", "tipo_comparacao": "texto" },
+    { "entrada": "1 1 not(A)\n", "saida_esperada": "0", "finalidade": "NOT sobre verdadeiro", "tipo_comparacao": "texto" },
+    { "entrada": "3 1 0 1 and(A , not(B) , C)\n", "saida_esperada": "1", "finalidade": "Expressão composta com NOT e AND de 3 variáveis", "tipo_comparacao": "texto" },
+    { "entrada": "3 0 0 0 or(A , B , C)\n", "saida_esperada": "0", "finalidade": "OR de 3 variáveis falsas", "tipo_comparacao": "texto" },
+    { "entrada": "2 1 0 and(A , not(B))\n", "saida_esperada": "1", "finalidade": "AND com negação interna", "tipo_comparacao": "texto" },
+    { "entrada": "3 1 1 0 or(and(A , B) , C)\n", "saida_esperada": "1", "finalidade": "Aninhamento AND e OR", "tipo_comparacao": "texto" }
+  ],
+  "kata03": [
+    { "entrada": "abc\n", "saida_esperada": "def", "finalidade": "Ciframento básico sem estouro", "tipo_comparacao": "texto" },
+    { "entrada": "hello\n", "saida_esperada": "khoor", "finalidade": "Palavra simples em minúsculas", "tipo_comparacao": "texto" },
+    { "entrada": "XYZ\n", "saida_esperada": "[\\]", "finalidade": "Caracteres ao fim da tabela ASCII", "tipo_comparacao": "texto" },
+    { "entrada": "123\n", "saida_esperada": "456", "finalidade": "Deslocamento de números por ASCII", "tipo_comparacao": "texto" },
+    { "entrada": "a b c\n", "saida_esperada": "d e f", "finalidade": "Preservação de espaços", "tipo_comparacao": "texto" },
+    { "entrada": "Cesar\n", "saida_esperada": "Fhvdu", "finalidade": "Mistura de maiúsculas e minúsculas", "tipo_comparacao": "texto" },
+    { "entrada": "teste!\n", "saida_esperada": "whvwh$", "finalidade": "Inclusão de pontuação", "tipo_comparacao": "texto" },
+    { "entrada": " \n", "saida_esperada": "#", "finalidade": "Caractere de espaço cifrado", "tipo_comparacao": "texto" },
+    { "entrada": "ALGORITMO\n", "saida_esperada": "DOJRULWPR", "finalidade": "Palavra longa em maiúsculas", "tipo_comparacao": "texto" },
+    { "entrada": "FIM\n", "saida_esperada": "ILP", "finalidade": "Entrada padrão antes do FIM de parada", "tipo_comparacao": "texto" }
+  ],
+  "kata04": [
+    { "entrada": "o rato roeu a roupa do rei de roma\n", "saida_esperada": "o rato roeu q roupq do rei de romq", "finalidade": "Substituição do primeiro par sorteado pela seed 4", "tipo_comparacao": "texto" },
+    { "entrada": "e qwe qwe qwe ewq ewq ewq\n", "saida_esperada": "k qwk qwk qwk kwq kwq kwq", "finalidade": "Substituição do segundo par sorteado pela seed 4", "tipo_comparacao": "texto" },
+    { "entrada": "batata\n", "saida_esperada": "bqtqtq", "finalidade": "Palavra com múltiplas ocorrências da letra sorteada", "tipo_comparacao": "texto" },
+    { "entrada": "banana\n", "saida_esperada": "bqnqnq", "finalidade": "Substituição simples mantendo consoantes", "tipo_comparacao": "texto" },
+    { "entrada": "zzzz\n", "saida_esperada": "zzzz", "finalidade": "Cadeia sem a letra sorteada", "tipo_comparacao": "texto" },
+    { "entrada": "abracadabra\n", "saida_esperada": "qbrqcqdqbrq", "finalidade": "Troca de vogais 'a'", "tipo_comparacao": "texto" },
+    { "entrada": "engenharia de software\n", "saida_esperada": "kngknhqriq dk softwqrk", "finalidade": "Texto com espaços e múltiplas substituições", "tipo_comparacao": "texto" },
+    { "entrada": "aaaaa\n", "saida_esperada": "qqqqq", "finalidade": "Cadeia homogênea", "tipo_comparacao": "texto" },
+    { "entrada": "puc minas\n", "saida_esperada": "puc minqs", "finalidade": "Substituição em frase curta", "tipo_comparacao": "texto" },
+    { "entrada": "python java\n", "saida_esperada": "python jqvq", "finalidade": "Nomes de linguagens com caractere alvo", "tipo_comparacao": "texto" }
+  ],
+  "kata05": [
+    { "entrada": "5\n10 20 30 40 50\n30\n", "saida_esperada": "2", "finalidade": "Elemento presente no meio do vetor", "tipo_comparacao": "texto" },
+    { "entrada": "5\n10 20 30 40 50\n10\n", "saida_esperada": "0", "finalidade": "Elemento na primeira posição (índice 0)", "tipo_comparacao": "texto" },
+    { "entrada": "5\n10 20 30 40 50\n50\n", "saida_esperada": "4", "finalidade": "Elemento na última posição", "tipo_comparacao": "texto" },
+    { "entrada": "5\n10 20 30 40 50\n99\n", "saida_esperada": "-1", "finalidade": "Elemento ausente no vetor", "tipo_comparacao": "texto" },
+    { "entrada": "1\n7\n7\n", "saida_esperada": "0", "finalidade": "Vetor unitário com elemento presente", "tipo_comparacao": "texto" },
+    { "entrada": "1\n7\n3\n", "saida_esperada": "-1", "finalidade": "Vetor unitário com elemento ausente", "tipo_comparacao": "texto" },
+    { "entrada": "4\n-5 -2 0 8\n-2\n", "saida_esperada": "1", "finalidade": "Busca com números negativos", "tipo_comparacao": "texto" },
+    { "entrada": "6\n1 2 3 2 1\n2\n", "saida_esperada": "1", "finalidade": "Primeira ocorrência de elemento duplicado", "tipo_comparacao": "texto" },
+    { "entrada": "3\n100 200 300\n0\n", "saida_esperada": "-1", "finalidade": "Busca pelo valor zero não presente", "tipo_comparacao": "texto" },
+    { "entrada": "4\n0 0 0 0\n0\n", "saida_esperada": "0", "finalidade": "Vetor com todos elementos nulos", "tipo_comparacao": "texto" }
+  ],
+  "kata06": [
+    { "entrada": "1\n", "saida_esperada": "1.0", "finalidade": "1 termo da série (C = 1)", "tipo_comparacao": "float" },
+    { "entrada": "2\n", "saida_esperada": "0.5", "finalidade": "2 termos (1 - 1/2!)", "tipo_comparacao": "float" },
+    { "entrada": "3\n", "saida_esperada": "0.54166666", "finalidade": "3 termos (1 - 1/2! + 1/4!)", "tipo_comparacao": "float" },
+    { "entrada": "4\n", "saida_esperada": "0.54027777", "finalidade": "4 termos", "tipo_comparacao": "float" },
+    { "entrada": "5\n", "saida_esperada": "0.54030257", "finalidade": "5 termos", "tipo_comparacao": "float" },
+    { "entrada": "6\n", "saida_esperada": "0.54030225", "finalidade": "6 termos (alta precisão)", "tipo_comparacao": "float" },
+    { "entrada": "7\n", "saida_esperada": "0.54030230", "finalidade": "7 termos", "tipo_comparacao": "float" },
+    { "entrada": "8\n", "saida_esperada": "0.54030230", "finalidade": "Convergência após 8 termos", "tipo_comparacao": "float" },
+    { "entrada": "9\n", "saida_esperada": "0.54030230", "finalidade": "Estabilidade da série", "tipo_comparacao": "float" },
+    { "entrada": "10\n", "saida_esperada": "0.54030230", "finalidade": "Limite de 10 termos", "tipo_comparacao": "float" }
+  ]
+}

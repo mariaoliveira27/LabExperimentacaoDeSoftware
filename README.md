@@ -9,9 +9,19 @@ Descreva o propósito das pastas principais.
 .
 ├── /Laboratorio01_GitHubRepo   # 📂 Projeto de Laboratório 01
 │   ├── /CSV-100                # 📄 CSVs gerados pelos códigos de 100 requisições
-│   └── /CSV-1000               # 📄 CSVs gerados pelos códigos de 1000 requisições
-│   └── /Graficos               # 📊 Gráficos gerados pelos CSVs
+│   ├── /CSV-1000               # 📄 CSVs gerados pelos códigos de 1000 requisições
+│   ├── /dashboard              # 📄 Dashboard com gráficos e analise das RQs
+│   ├── /Graficos-100           # 📊 CSVs gerados pelos códigos de 100 requisições
+│   └── /Graficos-1000          # 📊 CSVs gerados pelos códigos de 1000 requisições
 │
+├── /Laboratorio02_TrialsIA      # 📂 Projeto de Laboratório 02
+│   ├── /casos_de_testes         # 🎯 Testes automatizados para cada kata (RQ2)
+│   │   └── /src                 # 💻 Código fonte dos testes + JSON dos testes
+│   ├── /cronometro              # ⏱️ Código para cálculo do tempo de execução de atividade (RQ1)
+│   │   └── /src                 # 💻 Código fonte do cronômetro
+│   ├── /Katas                   # 🧩 Katas selecionadas para as trials
+│   └── /solucoes_das_Katas      # 🧩 Soluções das Katas, tanto manuais quanto geradas por IA
+│ 
 └── README.md                    # 📘 Documentação dos projetos
 ```
 
