@@ -17,6 +17,8 @@ Descreva o propósito das pastas principais.
 ├── /Laboratorio02_TrialsIA      # 📂 Projeto de Laboratório 02
 │   ├── /casos_de_teste          # 🎯 Executor e base JSON dos testes (RQ2)
 │   │   └── /aceitacao_k05_k06   # Contratos e validação dos casos de Áulus (#31)
+│   ├── /cronometro              # ⏱️ Código para cálculo do tempo de execução de atividade (RQ1)
+│   │   └── /src                 # 💻 Código fonte do cronômetro
 │   ├── /cronometro              # ⏱️ Coordenador de rodadas, tempo e integração (RQ1, #30)
 │   │   ├── /src                 # 💻 Código fonte do coordenador de rodadas
 │   │   └── /exemplos            # 🧪 Soluções demonstrativas para validação
