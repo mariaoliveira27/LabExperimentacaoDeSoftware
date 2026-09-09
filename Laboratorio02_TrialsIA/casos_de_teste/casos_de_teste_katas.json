@@ -48,27 +48,164 @@
     { "entrada": "python java\n", "saida_esperada": "python jqvq", "finalidade": "Nomes de linguagens com caractere alvo", "tipo_comparacao": "texto" }
   ],
   "kata05": [
-    { "entrada": "5\n10 20 30 40 50\n30\n", "saida_esperada": "2", "finalidade": "Elemento presente no meio do vetor", "tipo_comparacao": "texto" },
-    { "entrada": "5\n10 20 30 40 50\n10\n", "saida_esperada": "0", "finalidade": "Elemento na primeira posição (índice 0)", "tipo_comparacao": "texto" },
-    { "entrada": "5\n10 20 30 40 50\n50\n", "saida_esperada": "4", "finalidade": "Elemento na última posição", "tipo_comparacao": "texto" },
-    { "entrada": "5\n10 20 30 40 50\n99\n", "saida_esperada": "-1", "finalidade": "Elemento ausente no vetor", "tipo_comparacao": "texto" },
-    { "entrada": "1\n7\n7\n", "saida_esperada": "0", "finalidade": "Vetor unitário com elemento presente", "tipo_comparacao": "texto" },
-    { "entrada": "1\n7\n3\n", "saida_esperada": "-1", "finalidade": "Vetor unitário com elemento ausente", "tipo_comparacao": "texto" },
-    { "entrada": "4\n-5 -2 0 8\n-2\n", "saida_esperada": "1", "finalidade": "Busca com números negativos", "tipo_comparacao": "texto" },
-    { "entrada": "6\n1 2 3 2 1\n2\n", "saida_esperada": "1", "finalidade": "Primeira ocorrência de elemento duplicado", "tipo_comparacao": "texto" },
-    { "entrada": "3\n100 200 300\n0\n", "saida_esperada": "-1", "finalidade": "Busca pelo valor zero não presente", "tipo_comparacao": "texto" },
-    { "entrada": "4\n0 0 0 0\n0\n", "saida_esperada": "0", "finalidade": "Vetor com todos elementos nulos", "tipo_comparacao": "texto" }
+    {
+      "id": "K05-01",
+      "entrada": "0\n\n7\n",
+      "saida_esperada": "-1",
+      "finalidade": "Vetor vazio: preservar a segunda linha vazia e retornar -1.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "id": "K05-02",
+      "entrada": "1\n42\n42\n",
+      "saida_esperada": "0",
+      "finalidade": "Um elemento: encontrar o único valor na posição zero.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "id": "K05-03",
+      "entrada": "1\n42\n9\n",
+      "saida_esperada": "-1",
+      "finalidade": "Um elemento: retornar -1 quando o valor é diferente.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "id": "K05-04",
+      "entrada": "5\n3 8 1 9 5\n3\n",
+      "saida_esperada": "0",
+      "finalidade": "Encontrar o valor no início de um vetor com vários elementos.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "id": "K05-05",
+      "entrada": "5\n8 2 7 1 5\n7\n",
+      "saida_esperada": "2",
+      "finalidade": "Encontrar o valor no meio, sem pressupor vetor ordenado.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "id": "K05-06",
+      "entrada": "5\n4 1 9 2 8\n8\n",
+      "saida_esperada": "4",
+      "finalidade": "Encontrar o valor na última posição.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "id": "K05-07",
+      "entrada": "5\n2 4 6 8 10\n5\n",
+      "saida_esperada": "-1",
+      "finalidade": "Valor ausente em vetor com vários elementos.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "id": "K05-08",
+      "entrada": "5\n0 -7 3 -2 8\n-2\n",
+      "saida_esperada": "3",
+      "finalidade": "Encontrar um valor negativo em vetor que também contém zero.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "id": "K05-09",
+      "entrada": "5\n-8 4 2 4 4\n4\n",
+      "saida_esperada": "1",
+      "finalidade": "Valores repetidos: retornar a primeira ocorrência, não a última.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "id": "K05-10",
+      "entrada": "200\n-100 -99 -98 -97 -96 -95 -94 -93 -92 -91 -90 -89 -88 -87 -86 -85 -84 -83 -82 -81 -80 -79 -78 -77 -76 -75 -74 -73 -72 -71 -70 -69 -68 -67 -66 -65 -64 -63 -62 -61 -60 -59 -58 -57 -56 -55 -54 -53 -52 -51 -50 -49 -48 -47 -46 -45 -44 -43 -42 -41 -40 -39 -38 -37 -36 -35 -34 -33 -32 -31 -30 -29 -28 -27 -26 -25 -24 -23 -22 -21 -20 -19 -18 -17 -16 -15 -14 -13 -12 -11 -10 -9 -8 -7 -6 -5 -4 -3 -2 -1 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99\n99\n",
+      "saida_esperada": "199",
+      "finalidade": "Limite de 200 elementos: percorrer até a posição 199.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "id": "K05-11",
+      "entrada": "4\n-5 -1 0 7\n0\n",
+      "saida_esperada": "2",
+      "finalidade": "Encontrar zero sem confundi-lo com ausência do valor.",
+      "tipo_comparacao": "texto"
+    }
   ],
   "kata06": [
-    { "entrada": "1\n", "saida_esperada": "1.0", "finalidade": "1 termo da série (C = 1)", "tipo_comparacao": "float" },
-    { "entrada": "2\n", "saida_esperada": "0.5", "finalidade": "2 termos (1 - 1/2!)", "tipo_comparacao": "float" },
-    { "entrada": "3\n", "saida_esperada": "0.54166666", "finalidade": "3 termos (1 - 1/2! + 1/4!)", "tipo_comparacao": "float" },
-    { "entrada": "4\n", "saida_esperada": "0.54027777", "finalidade": "4 termos", "tipo_comparacao": "float" },
-    { "entrada": "5\n", "saida_esperada": "0.54030257", "finalidade": "5 termos", "tipo_comparacao": "float" },
-    { "entrada": "6\n", "saida_esperada": "0.54030225", "finalidade": "6 termos (alta precisão)", "tipo_comparacao": "float" },
-    { "entrada": "7\n", "saida_esperada": "0.54030230", "finalidade": "7 termos", "tipo_comparacao": "float" },
-    { "entrada": "8\n", "saida_esperada": "0.54030230", "finalidade": "Convergência após 8 termos", "tipo_comparacao": "float" },
-    { "entrada": "9\n", "saida_esperada": "0.54030230", "finalidade": "Estabilidade da série", "tipo_comparacao": "float" },
-    { "entrada": "10\n", "saida_esperada": "0.54030230", "finalidade": "Limite de 10 termos", "tipo_comparacao": "float" }
+    {
+      "id": "K06-01",
+      "entrada": "1\n",
+      "saida_esperada": "1.0",
+      "finalidade": "Soma parcial de 1 termo(s), contando 1 como o primeiro termo.",
+      "tipo_comparacao": "float",
+      "tolerancia_absoluta": 1e-09
+    },
+    {
+      "id": "K06-02",
+      "entrada": "2\n",
+      "saida_esperada": "0.5",
+      "finalidade": "Soma parcial de 2 termo(s), contando 1 como o primeiro termo.",
+      "tipo_comparacao": "float",
+      "tolerancia_absoluta": 1e-09
+    },
+    {
+      "id": "K06-03",
+      "entrada": "3\n",
+      "saida_esperada": "0.5416666666666666",
+      "finalidade": "Soma parcial de 3 termo(s), contando 1 como o primeiro termo.",
+      "tipo_comparacao": "float",
+      "tolerancia_absoluta": 1e-09
+    },
+    {
+      "id": "K06-04",
+      "entrada": "4\n",
+      "saida_esperada": "0.5402777777777777",
+      "finalidade": "Soma parcial de 4 termo(s), contando 1 como o primeiro termo.",
+      "tipo_comparacao": "float",
+      "tolerancia_absoluta": 1e-09
+    },
+    {
+      "id": "K06-05",
+      "entrada": "5\n",
+      "saida_esperada": "0.5403025793650794",
+      "finalidade": "Soma parcial de 5 termo(s), contando 1 como o primeiro termo.",
+      "tipo_comparacao": "float",
+      "tolerancia_absoluta": 1e-09
+    },
+    {
+      "id": "K06-06",
+      "entrada": "6\n",
+      "saida_esperada": "0.5403023037918872",
+      "finalidade": "Soma parcial de 6 termo(s), contando 1 como o primeiro termo.",
+      "tipo_comparacao": "float",
+      "tolerancia_absoluta": 1e-09
+    },
+    {
+      "id": "K06-07",
+      "entrada": "8\n",
+      "saida_esperada": "0.540302305868092",
+      "finalidade": "Soma parcial de 8 termo(s), contando 1 como o primeiro termo.",
+      "tipo_comparacao": "float",
+      "tolerancia_absoluta": 1e-09
+    },
+    {
+      "id": "K06-08",
+      "entrada": "10\n",
+      "saida_esperada": "0.5403023058681398",
+      "finalidade": "Soma parcial de 10 termo(s), contando 1 como o primeiro termo.",
+      "tipo_comparacao": "float",
+      "tolerancia_absoluta": 1e-09
+    },
+    {
+      "id": "K06-09",
+      "entrada": "15\n",
+      "saida_esperada": "0.5403023058681398",
+      "finalidade": "Soma parcial de 15 termo(s), contando 1 como o primeiro termo.",
+      "tipo_comparacao": "float",
+      "tolerancia_absoluta": 1e-09
+    },
+    {
+      "id": "K06-10",
+      "entrada": "20\n",
+      "saida_esperada": "0.5403023058681398",
+      "finalidade": "Soma parcial de 20 termo(s), contando 1 como o primeiro termo.",
+      "tipo_comparacao": "float",
+      "tolerancia_absoluta": 1e-09
+    }
   ]
 }

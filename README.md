@@ -15,10 +15,11 @@ Descreva o propósito das pastas principais.
 │   └── /Graficos-1000          # 📊 CSVs gerados pelos códigos de 1000 requisições
 │
 ├── /Laboratorio02_TrialsIA      # 📂 Projeto de Laboratório 02
-│   ├── /casos_de_testes         # 🎯 Testes automatizados para cada kata (RQ2)
-│   │   └── /src                 # 💻 Código fonte dos testes + JSON dos testes
+│   ├── /casos_de_teste          # 🎯 Executor e base JSON dos testes (RQ2)
+│   │   └── /aceitacao_k05_k06   # Contratos e validação dos casos de Áulus (#31)
 │   ├── /cronometro              # ⏱️ Código para cálculo do tempo de execução de atividade (RQ1)
 │   │   └── /src                 # 💻 Código fonte do cronômetro
+│   ├── /metricas_estruturais    # Coletor Radon, testes e demonstração (RQ3, #31)
 │   ├── /Katas                   # 🧩 Katas selecionadas para as trials
 │   └── /solucoes_das_Katas      # 🧩 Soluções das Katas, tanto manuais quanto geradas por IA
 │ 

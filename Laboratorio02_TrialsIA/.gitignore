@@ -1,0 +1,9 @@
+# Ambientes, caches e saídas locais do Laboratório 02
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+metricas_estruturais/resultados_demo/
+*.tmp
