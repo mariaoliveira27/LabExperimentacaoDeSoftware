@@ -6,4 +6,6 @@ __pycache__/
 .pytest_cache/
 .coverage
 metricas_estruturais/resultados_demo/
+cronometro/resultados_demo/
+cronometro/registro_experimento_demo.csv
 *.tmp
