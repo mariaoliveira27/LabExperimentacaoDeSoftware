@@ -15,8 +15,12 @@ Ferramentas de IA generativa (GitHub Copilot, ChatGPT, Claude, Gemini, etc.) tor
 ## ❓ Questões de Pesquisa (Research Questions)
 
 * **RQ1:** O uso de assistente de IA reduz o tempo necessário para resolver uma tarefa de programação?
+* -> Sim, códigos e funções que levariam horas ou dias podem ser criados em minutos com a IA;
 * **RQ2:** O uso de assistente de IA reduz a quantidade de defeitos (testes que falham) no código produzido?
-* **RQ3:** O uso de assistente de IA altera a complexidade ciclomática ou a duplicação do código produzido? *(Métricas via CK — apenas Java — e/ou PMD; use uma ferramenta equivalente, como Radon, se a linguagem escolhida não for Java)*
+* -> Pode variar com o nível do programador, no cenário de um mais experiente, é possível que aumente a quantidade de defeitos gerados, exigindo revisão constante do programador de todo o código gerado; já para um programador menos experiente o efeito tente a ser o oposto, dado que ele possivelmente não tem o conhecimento necessário para um bom código feito do zero;
+* -> um desenvolvedor mais novo pode ser mais difícil encontrar bugs em um código gerado por ia, pois ele não possui a experiencia necessária para criar prompts e distinguir o que seria um resultado realmente relevante na criação de um código com uma boa arquitetura
+* **RQ3:** O uso de assistente de IA altera a complexidade ciclomática ou a duplicação do código produzido? *(Métricas via Radon, a linguagem escolhida foi python)*
+* -> A IA atualmente ainda tem dificuldade de aplicar corretamente padrões de arquitetura, desrespeitando padrões de organização e duplicando métodos em locais diferentes;
 
 ---
 
