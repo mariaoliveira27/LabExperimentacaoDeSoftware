@@ -19,6 +19,9 @@ Descreva o propósito das pastas principais.
 │   │   └── /aceitacao_k05_k06   # Contratos e validação dos casos de Áulus (#31)
 │   ├── /cronometro              # ⏱️ Código para cálculo do tempo de execução de atividade (RQ1)
 │   │   └── /src                 # 💻 Código fonte do cronômetro
+│   ├── /cronometro              # ⏱️ Coordenador de rodadas, tempo e integração (RQ1, #30)
+│   │   ├── /src                 # 💻 Código fonte do coordenador de rodadas
+│   │   └── /exemplos            # 🧪 Soluções demonstrativas para validação
 │   ├── /metricas_estruturais    # Coletor Radon, testes e demonstração (RQ3, #31)
 │   ├── /Katas                   # 🧩 Katas selecionadas para as trials
 │   └── /solucoes_das_Katas      # 🧩 Soluções das Katas, tanto manuais quanto geradas por IA
