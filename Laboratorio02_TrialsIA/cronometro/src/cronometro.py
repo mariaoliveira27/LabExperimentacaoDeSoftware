@@ -1,3 +1,4 @@
+import time
 """Coordenador de Rodadas e Cronometragem — Laboratório 02 (Issue #30).
 
 Responsável por orquestrar a execução de uma rodada experimental:
@@ -23,16 +24,59 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+ARQUIVO_LOG = "registro_experimento.csv"
+TIMEBOX_MINUTOS = 35
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
+def inicializar_csv():
+    """Cria o arquivo CSV com os cabeçalhos se ele não existir."""
+    if not os.path.exists(ARQUIVO_LOG):
+        with open(ARQUIVO_LOG, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            writer.writerow([
+                "Integrante", "Kata", "Tratamento_IA", "Horario_Inicio", 
+                "Horario_Fim", "Tempo_Decorrido_Min", "Passou_Testes", 
+                "Tempo_Final_Considerado", "Dado_Censurado"
+            ])
 # Adiciona a raiz do repositório ao sys.path para importação dos módulos parceiros
 RAIZ_REPOSITORIO = Path(__file__).resolve().parents[3]
 if str(RAIZ_REPOSITORIO) not in sys.path:
     sys.path.insert(0, str(RAIZ_REPOSITORIO))
 
+def executar_trial():
+    """Conduz a interface visual e registra os dados do trial."""
+    print("="*45)
+    print("⏱️  COLETA DE TEMPO - EXPERIMENTO DE IA ⏱️")
+    print("="*45)
+    
+    integrante = input("1. Nome do Integrante: ")
+    kata = input("2. Nome do Kata: ")
+    com_ia = input("3. Usou IA neste trial? (S/N): ").strip().upper() == 'S'
+    
+    # Início da medição
+    input("\n[ Pressione ENTER para iniciar o cronômetro ]")
+    inicio_ts = time.time()
+    horario_inicio = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"\n▶️ Iniciado em: {horario_inicio}")
+    print(f"⚠️ Lembre-se: O time-box máximo é de {TIMEBOX_MINUTOS} minutos.")
+    
+    # Fim da medição
+    input("\n[ Pressione ENTER quando passar nos testes ou estourar o tempo ]")
+    fim_ts = time.time()
+    horario_fim = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    tempo_decorrido = (fim_ts - inicio_ts) / 60
+    print(f"\n⏹️ Finalizado em: {horario_fim}")
+    print(f"⏳ Tempo real decorrido: {tempo_decorrido:.2f} minutos")
+    
+    passou = input("\nO código passou em TODOS os testes automatizados? (S/N): ").strip().upper() == 'S'
+    
+    # Lógica de Censura (Regra do Experimento)
+    if tempo_decorrido >= TIMEBOX_MINUTOS or not passou:
+        tempo_final = TIMEBOX_MINUTOS
 from Laboratorio02_TrialsIA.casos_de_teste.executor import avaliar_solucao
 from Laboratorio02_TrialsIA.metricas_estruturais.src.coletar_metricas import (
     analisar_arquivo,
@@ -244,6 +288,9 @@ def finalizar_rodada(
     elif status == "LIMITE_ATINGIDO":
         tempo_considerado = float(timebox_minutos)
         censurado = True
+        print(f"\n❌ Status: CENSURADO")
+        print(f"Motivo: " + ("Estourou o time-box." if tempo_decorrido >= TIMEBOX_MINUTOS else "Falhou nos testes."))
+        print(f"Tempo registrado para análise: {TIMEBOX_MINUTOS}.00 min")
         motivo = motivo_interrupcao or f"Timebox máximo de {timebox_minutos} minutos atingido"
     elif status == "INTERRUPCAO":
         # CORREÇÃO CRÍTICA: Não vira 35 minutos! Registra tempo real e motivo.
@@ -251,6 +298,17 @@ def finalizar_rodada(
         censurado = False
         motivo = motivo_interrupcao or "Interrupção solicitada pelo participante"
     else:
+        tempo_final = round(tempo_decorrido, 2)
+        censurado = False
+        print(f"\n✅ Status: SUCESSO")
+        print(f"Tempo registrado para análise: {tempo_final} min")
+        
+    # Salvar no CSV
+    with open(ARQUIVO_LOG, mode='a', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow([
+            integrante, kata, com_ia, horario_inicio, horario_fim, 
+            round(tempo_decorrido, 2), passou, tempo_final, censurado
         raise ValueError(f"Status inválido: '{status}'")
 
     dados_rodada = {
@@ -301,6 +359,8 @@ def finalizar_rodada(
             str(artefatos["metricas_json"]),
             str(artefatos["testes_json"]),
         ])
+        
+    print(f"\n💾 Dados salvos com sucesso em '{ARQUIVO_LOG}'!\n")
 
     dados_rodada["artefatos"] = {k: str(v) for k, v in artefatos.items()}
     return dados_rodada
@@ -527,4 +587,6 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
+    inicializar_csv()
+    executar_trial()
     raise SystemExit(main())
