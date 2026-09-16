@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "trial_id": "maria_K03_ia_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K03_ia_01\\maria_K03_ia_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 2,
+  "complexidade_media": 4.0,
+  "loc": 30,
+  "sloc": 16,
+  "funcoes": [
+    {
+      "nome": "cifrar_recursivo",
+      "linha": 10,
+      "complexidade": 4
+    },
+    {
+      "nome": "main",
+      "linha": 21,
+      "complexidade": 4
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "trial_id": "maria_K02_manual_01",
+  "arquivo_solucao": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K02_manual_01\\maria_K02_manual_01_solucao_final.py",
+  "sha256_solucao": "41d7df41c32f184b1f8c48333579a9aa16099e012d451d6b6dca76d27e6f6e9a",
+  "data_execucao": "2026-09-16 07:37:23",
+  "resultado": {
+    "total_casos": 10,
+    "aprovados": 10,
+    "reprovados": 0,
+    "taxa_sucesso": 100.0,
+    "passou_todos": true,
+    "detalhes": [
+      {
+        "caso_teste": 1,
+        "finalidade": "AND com falsos",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 2,
+        "finalidade": "AND com verdadeiros",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 3,
+        "finalidade": "OR com um verdadeiro",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 4,
+        "finalidade": "OR com ambos falsos",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 5,
+        "finalidade": "NOT sobre falso",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 6,
+        "finalidade": "NOT sobre verdadeiro",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 7,
+        "finalidade": "Expressão composta com NOT e AND de 3 variáveis",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 8,
+        "finalidade": "OR de 3 variáveis falsas",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 9,
+        "finalidade": "AND com negação interna",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 10,
+        "finalidade": "Aninhamento AND e OR",
+        "resultado": "APROVADO"
+      }
+    ]
+  }
+}

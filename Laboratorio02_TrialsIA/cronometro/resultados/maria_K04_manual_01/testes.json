@@ -1,0 +1,65 @@
+{
+  "trial_id": "maria_K04_manual_01",
+  "arquivo_solucao": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K04_manual_01\\maria_K04_manual_01_solucao_final.py",
+  "sha256_solucao": "950c05fde36200d74bc5a31c72345365f0ea5c9f34ea81bac106b39fb8082783",
+  "data_execucao": "2026-09-16 08:36:17",
+  "resultado": {
+    "total_casos": 10,
+    "aprovados": 10,
+    "reprovados": 0,
+    "taxa_sucesso": 100.0,
+    "passou_todos": true,
+    "detalhes": [
+      {
+        "caso_teste": 1,
+        "finalidade": "Substituição do primeiro par sorteado pela seed 4",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 2,
+        "finalidade": "Substituição do segundo par sorteado pela seed 4",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 3,
+        "finalidade": "Palavra com múltiplas ocorrências da letra sorteada",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 4,
+        "finalidade": "Substituição simples mantendo consoantes",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 5,
+        "finalidade": "Cadeia sem a letra sorteada",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 6,
+        "finalidade": "Troca de vogais 'a'",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 7,
+        "finalidade": "Texto com espaços e múltiplas substituições",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 8,
+        "finalidade": "Cadeia homogênea",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 9,
+        "finalidade": "Substituição em frase curta",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 10,
+        "finalidade": "Nomes de linguagens com caractere alvo",
+        "resultado": "APROVADO"
+      }
+    ]
+  }
+}

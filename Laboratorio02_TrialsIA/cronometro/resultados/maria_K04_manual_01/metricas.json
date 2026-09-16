@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "trial_id": "maria_K04_manual_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K04_manual_01\\maria_K04_manual_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 3,
+  "complexidade_media": 3.6666666666666665,
+  "loc": 44,
+  "sloc": 27,
+  "funcoes": [
+    {
+      "nome": "substituir_recursivo",
+      "linha": 10,
+      "complexidade": 3
+    },
+    {
+      "nome": "processar_linha",
+      "linha": 18,
+      "complexidade": 4
+    },
+    {
+      "nome": "main",
+      "linha": 33,
+      "complexidade": 4
+    }
+  ]
+}

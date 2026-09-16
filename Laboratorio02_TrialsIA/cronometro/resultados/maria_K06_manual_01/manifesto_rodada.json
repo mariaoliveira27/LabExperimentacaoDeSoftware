@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "trial_id": "maria_K06_manual_01",
+  "integrante": "maria",
+  "kata": "K06",
+  "tratamento": "manual",
+  "horario_inicio": "2026-09-16 09:15:26",
+  "horario_fim": "2026-09-16 09:35:14",
+  "tempo_decorrido_min": 19.8,
+  "tempo_final_considerado": 19.8,
+  "status": "SUCESSO",
+  "motivo_interrupcao": "",
+  "passou_todos": true,
+  "taxa_sucesso_testes": 100.0,
+  "dado_censurado": false,
+  "artefatos": {
+    "copia_solucao": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K06_manual_01\\maria_K06_manual_01_solucao_final.py",
+    "sha256_copia": "ba420b329184061c488db205fc81471d150b08ae79b90baab14f4f2d46a0212f",
+    "testes_json": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K06_manual_01\\testes.json",
+    "metricas_json": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K06_manual_01\\metricas.json"
+  }
+}

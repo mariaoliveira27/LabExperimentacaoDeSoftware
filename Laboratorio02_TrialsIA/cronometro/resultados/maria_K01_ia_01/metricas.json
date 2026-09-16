@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "trial_id": "maria_K01_ia_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K01_ia_01\\maria_K01_ia_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 7,
+  "complexidade_media": 4.857142857142857,
+  "loc": 86,
+  "sloc": 61,
+  "funcoes": [
+    {
+      "nome": "eh_vogal_recursivo",
+      "linha": 13,
+      "complexidade": 4
+    },
+    {
+      "nome": "eh_consoante_recursivo",
+      "linha": 24,
+      "complexidade": 4
+    },
+    {
+      "nome": "eh_digito_recursivo",
+      "linha": 35,
+      "complexidade": 4
+    },
+    {
+      "nome": "eh_inteiro",
+      "linha": 45,
+      "complexidade": 4
+    },
+    {
+      "nome": "eh_real",
+      "linha": 53,
+      "complexidade": 10
+    },
+    {
+      "nome": "classificar_linha",
+      "linha": 69,
+      "complexidade": 5
+    },
+    {
+      "nome": "main",
+      "linha": 78,
+      "complexidade": 3
+    }
+  ]
+}
