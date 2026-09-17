@@ -60,9 +60,11 @@ relatorio = avaliar_solucao(
 
 A função devolve total, aprovados, reprovados, taxa de sucesso, `passou_todos` e
 detalhes. O executor usa timeout de cinco segundos por caso. O `id` identifica
-o caso na base; o relatório atual usa sua posição (`caso_teste`) e ainda não
-registra `trial_id`. A associação com tempo e métricas RQ3 deve ser mantida
-externamente até essa integração ser implementada.
+o caso na base; o relatório independente usa sua posição (`caso_teste`). A
+[consolidação S02, Issue #37](../consolidacao/README.md) associa esse relatório
+ao `trial_id`, tempo e métricas em `testes.json`, com hash da mesma solução
+final. O parâmetro opcional `deadline` limita a bateria inteira pelo relógio
+monotônico da rodada. Os comandos individuais permanecem disponíveis.
 
 ---
 

@@ -1,0 +1,5 @@
+# Erro proposital; a demonstração copia este conteúdo para uma solução .py.
+def dobro(numero)
+    return 2 * numero
+
+print(dobro(int(input())))
