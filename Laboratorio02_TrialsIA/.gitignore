@@ -8,4 +8,5 @@ __pycache__/
 metricas_estruturais/resultados_demo/
 cronometro/resultados_demo/
 cronometro/registro_experimento_demo.csv
+consolidacao/resultados_demo/
 *.tmp

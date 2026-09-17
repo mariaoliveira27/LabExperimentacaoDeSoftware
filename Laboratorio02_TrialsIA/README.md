@@ -2,6 +2,8 @@
 
 **Professor:** Danilo Maia  
 
+**Sprint 02 — Áulus (#37):** [comando único de rodada, integração, compatibilidade e demonstração](consolidacao/README.md). Reúne cronometragem, aceitação, métricas e preservação da mesma versão final; não inclui as soluções manuais da Issue #38.
+
 **Preparação S01 — Maria (#30):** [coordenador de rodadas, cronometragem e integração de testes/métricas](cronometro/README.md).  
 **Preparação S01 — Áulus (#31):** [coletor de métricas estruturais, instalação, testes e metodologia da RQ3](metricas_estruturais/README.md) · [casos de aceitação K05/K06](casos_de_teste/aceitacao_k05_k06/README.md). Execute os comandos dos guias a partir da raiz do repositório.
 

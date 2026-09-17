@@ -1,0 +1,2 @@
+# Dependência opcional para --gemini; a rodada manual usa somente Radon.
+google-genai==2.23.0

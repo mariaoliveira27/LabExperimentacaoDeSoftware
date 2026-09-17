@@ -1,4 +1,4 @@
-"""Coordenador de Rodadas e Cronometragem — Laboratório 02 (Issue #30).
+"""Coordenador de Rodadas — base S01 (#30), consolidação S02 (#37).
 
 Responsável por orquestrar a execução de uma rodada experimental:
 - Registrar participante, exercício (kata), tratamento (com/sem IA) e arquivo da solução.
@@ -14,10 +14,10 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
-import os
-import shutil
+import math
+import re
+import subprocess
 import sys
 import time
 from datetime import datetime
@@ -33,11 +33,12 @@ RAIZ_REPOSITORIO = Path(__file__).resolve().parents[3]
 if str(RAIZ_REPOSITORIO) not in sys.path:
     sys.path.insert(0, str(RAIZ_REPOSITORIO))
 
-from Laboratorio02_TrialsIA.casos_de_teste.executor import avaliar_solucao
-from Laboratorio02_TrialsIA.metricas_estruturais.src.coletar_metricas import (
-    analisar_arquivo,
-    gravar_resultado,
+from Laboratorio02_TrialsIA.consolidacao.artefatos import (
+    avaliar_copia, conferir_csv, erro_registrado, gravar_json, preservar, registrar_csv,
 )
+from Laboratorio02_TrialsIA.consolidacao.terminal import ler_ate
+
+BASE_TESTES_PADRAO = RAIZ_REPOSITORIO / "Laboratorio02_TrialsIA/casos_de_teste/casos_de_teste_katas.json"
 
 TIMEBOX_MINUTOS_PADRAO = 35.0
 DIRETORIO_CRONOMETRO = Path(__file__).resolve().parents[1]
@@ -83,17 +84,11 @@ def normalizar_kata_codigo(kata: str) -> str:
 
 def chave_kata_executor(kata: str) -> str:
     """Converte para a chave esperada pelo executor do Vinícius (ex: kata01)."""
-    k = kata.strip().lower()
-    if not k.startswith("kata"):
-        if k.startswith("k"):
-            k = "kata" + k[1:]
-        else:
-            try:
-                num = int(k)
-                k = f"kata{num:02d}"
-            except ValueError:
-                pass
-    return k
+    codigo = normalizar_kata_codigo(kata)
+    if re.fullmatch(r"K\d+", codigo):
+        return f"kata{int(codigo[1:]):02d}"
+    return kata.strip().lower()
+
 
 
 def gerar_trial_id(
@@ -146,384 +141,247 @@ def inicializar_csv(caminho_csv: Path | str = ARQUIVO_LOG_PADRAO) -> None:
             escritor.writerow(CABECALHOS_CSV)
 
 
-def salvar_artefatos_rodada(
-    trial_id: str,
-    arquivo_solucao: Path,
-    resultado_testes: dict | None,
-    dados_rodada: dict,
-    diretorio_saida: Path | str = DIRETORIO_RESULTADOS_PADRAO,
-) -> dict[str, Path]:
-    """Preserva a cópia do código final, relatório de testes, métricas do Radon e manifesto."""
-    pasta_trial = Path(diretorio_saida) / trial_id
-    pasta_trial.mkdir(parents=True, exist_ok=True)
-
-    # 1. Cópia congelada do código da solução
-    copia_solucao = pasta_trial / f"{trial_id}_solucao_final.py"
-    shutil.copy2(arquivo_solucao, copia_solucao)
-
-    # 2. Relatório de testes executados
-    caminho_testes_json = pasta_trial / "testes.json"
-    relatorio_testes = {
-        "trial_id": trial_id,
-        "arquivo_solucao": str(copia_solucao),
-        "data_execucao": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "resultado": resultado_testes,
-    }
-    with caminho_testes_json.open("w", encoding="utf-8") as f:
-        json.dump(relatorio_testes, f, ensure_ascii=False, indent=2)
-        f.write("\n")
-
-    # 3. Coleta de métricas Radon (Áulus - RQ3)
-    caminho_metricas_json = pasta_trial / "metricas.json"
-    resultado_metricas = analisar_arquivo(copia_solucao, trial_id=trial_id)
-    gravar_resultado(resultado_metricas, caminho_metricas_json)
-
-    # 4. Manifesto unificado da rodada
-    caminho_manifesto = pasta_trial / "manifesto_rodada.json"
-    manifesto = {
-        "schema_version": 1,
-        "trial_id": trial_id,
-        "integrante": dados_rodada["integrante"],
-        "kata": dados_rodada["kata"],
-        "tratamento": dados_rodada["tratamento"],
-        "horario_inicio": dados_rodada["horario_inicio"],
-        "horario_fim": dados_rodada["horario_fim"],
-        "tempo_decorrido_min": dados_rodada["tempo_decorrido_min"],
-        "tempo_final_considerado": dados_rodada["tempo_final_considerado"],
-        "status": dados_rodada["status"],
-        "motivo_interrupcao": dados_rodada["motivo_interrupcao"],
-        "passou_todos": dados_rodada["passou_todos"],
-        "taxa_sucesso_testes": dados_rodada["taxa_sucesso_testes"],
-        "dado_censurado": dados_rodada["dado_censurado"],
-        "artefatos": {
-            "copia_solucao": str(copia_solucao),
-            "sha256_copia": hashlib.sha256(copia_solucao.read_bytes()).hexdigest(),
-            "testes_json": str(caminho_testes_json),
-            "metricas_json": str(caminho_metricas_json),
-        },
-    }
-    with caminho_manifesto.open("w", encoding="utf-8") as f:
-        json.dump(manifesto, f, ensure_ascii=False, indent=2)
-        f.write("\n")
-
-    return {
-        "copia_solucao": copia_solucao,
-        "testes_json": caminho_testes_json,
-        "metricas_json": caminho_metricas_json,
-        "manifesto": caminho_manifesto,
-    }
+def _validar_id(valor: str) -> None:
+    if not re.fullmatch(r"[\w][\w.-]*", valor) or valor.endswith("."):
+        raise ValueError("Identificadores devem usar letras, números, ponto, hífen ou sublinhado")
 
 
 def finalizar_rodada(
-    status: str,
-    integrante: str,
-    kata: str,
-    tratamento: str,
-    arquivo_solucao: Path,
-    trial_id: str,
-    inicio_ts: float,
-    fim_ts: float,
-    resultado_testes: dict | None,
-    motivo_interrupcao: str = "",
-    timebox_minutos: float = TIMEBOX_MINUTOS_PADRAO,
-    diretorio_saida: Path | str = DIRETORIO_RESULTADOS_PADRAO,
-    caminho_csv: Path | str = ARQUIVO_LOG_PADRAO,
-) -> dict:
-    """Consolida os dados da rodada, salva artefatos e registra no CSV."""
-    horario_inicio = datetime.fromtimestamp(inicio_ts).strftime("%Y-%m-%d %H:%M:%S")
-    horario_fim = datetime.fromtimestamp(fim_ts).strftime("%Y-%m-%d %H:%M:%S")
-    tempo_real = round(max((fim_ts - inicio_ts) / 60.0, 0.0), 2)
-
-    passou_todos = bool(resultado_testes and resultado_testes.get("passou_todos"))
-    taxa_sucesso = float(resultado_testes.get("taxa_sucesso", 0.0)) if resultado_testes else 0.0
-
-    if status == "SUCESSO":
-        tempo_considerado = tempo_real
-        censurado = False
-        motivo = ""
-    elif status == "LIMITE_ATINGIDO":
-        tempo_considerado = float(timebox_minutos)
-        censurado = True
-        motivo = motivo_interrupcao or f"Timebox máximo de {timebox_minutos} minutos atingido"
-    elif status == "INTERRUPCAO":
-        # CORREÇÃO CRÍTICA: Não vira 35 minutos! Registra tempo real e motivo.
-        tempo_considerado = tempo_real
-        censurado = False
-        motivo = motivo_interrupcao or "Interrupção solicitada pelo participante"
-    else:
-        raise ValueError(f"Status inválido: '{status}'")
-
-    dados_rodada = {
-        "trial_id": trial_id,
-        "integrante": integrante,
-        "kata": normalizar_kata_codigo(kata),
-        "tratamento": tratamento.lower(),
-        "horario_inicio": horario_inicio,
-        "horario_fim": horario_fim,
+    status, integrante, kata, tratamento, arquivo_solucao, trial_id, inicio_ts,
+    fim_ts, resultado_testes=None, motivo_interrupcao="", timebox_minutos=TIMEBOX_MINUTOS_PADRAO,
+    diretorio_saida=DIRETORIO_RESULTADOS_PADRAO, caminho_csv=ARQUIVO_LOG_PADRAO,
+    *, arquivo_testes=BASE_TESTES_PADRAO, fonte=None, arquivo_avaliado=None,
+    tempo_decorrido_seg=None, erros=None, pasta_reservada=False, simulada=False,
+):
+    """Finaliza na cópia congelada. Resultado antigo sem origem verificável é refeito."""
+    if status not in {"SUCESSO", "TESTES_REPROVADOS", "LIMITE_ATINGIDO", "INTERRUPCAO", "ERRO"}:
+        raise ValueError(f"Status inválido: {status}")
+    _validar_id(trial_id)
+    pasta = Path(diretorio_saida).resolve() / trial_id
+    if not pasta_reservada:
+        conferir_csv(Path(caminho_csv), CABECALHOS_CSV, trial_id)
+        pasta.mkdir(parents=True, exist_ok=False)
+    # Um chamador legado pode ter testado o arquivo mutável. Só reutilizamos
+    # resultados acompanhados dos bytes e da cópia realmente avaliada.
+    if fonte is None or arquivo_avaliado is None:
+        resultado_testes = None
+    elif Path(arquivo_avaliado).read_bytes() != fonte:
+        raise ValueError("A cópia avaliada não corresponde aos bytes finais")
+    duracao = max(0, fim_ts - inicio_ts) if tempo_decorrido_seg is None else tempo_decorrido_seg
+    tempo_real = round(duracao / 60, 6)
+    dados = {
+        "trial_id": trial_id, "integrante": integrante, "kata": normalizar_kata_codigo(kata),
+        "tratamento": tratamento.lower(), "simulada": simulada,
+        "horario_inicio": datetime.fromtimestamp(inicio_ts).isoformat(timespec="milliseconds"),
+        "horario_fim": datetime.fromtimestamp(fim_ts).isoformat(timespec="milliseconds"),
         "tempo_decorrido_min": tempo_real,
-        "tempo_final_considerado": tempo_considerado,
-        "status": status,
-        "motivo_interrupcao": motivo,
-        "passou_todos": passou_todos,
-        "taxa_sucesso_testes": taxa_sucesso,
-        "dado_censurado": censurado,
+        "tempo_final_considerado": float(timebox_minutos) if status == "LIMITE_ATINGIDO" else tempo_real,
+        "timebox_minutos": timebox_minutos,
+        "status": status, "status_encerramento": status,
+        "motivo_interrupcao": motivo_interrupcao, "dado_censurado": status == "LIMITE_ATINGIDO",
+        "erros": list(erros or []),
     }
-
-    # Salva arquivos da rodada (código congelado, testes, métricas Radon)
-    artefatos = salvar_artefatos_rodada(
-        trial_id=trial_id,
-        arquivo_solucao=arquivo_solucao,
-        resultado_testes=resultado_testes,
-        dados_rodada=dados_rodada,
-        diretorio_saida=diretorio_saida,
-    )
-
-    # Gravação no CSV consolidado
-    inicializar_csv(caminho_csv)
-    with Path(caminho_csv).open("a", newline="", encoding="utf-8") as f:
-        escritor = csv.writer(f)
-        escritor.writerow([
-            trial_id,
-            integrante,
-            normalizar_kata_codigo(kata),
-            tratamento.lower(),
-            horario_inicio,
-            horario_fim,
-            tempo_real,
-            tempo_considerado,
-            status,
-            motivo,
-            passou_todos,
-            taxa_sucesso,
-            censurado,
-            str(arquivo_solucao),
-            str(artefatos["copia_solucao"]),
-            str(artefatos["metricas_json"]),
-            str(artefatos["testes_json"]),
-        ])
-
-    dados_rodada["artefatos"] = {k: str(v) for k, v in artefatos.items()}
-    return dados_rodada
+    base = pasta / "casos_testes.json"
+    if not base.exists():
+        with base.open("xb") as fluxo:
+            fluxo.write(Path(arquivo_testes).read_bytes())
+    preservar(pasta, Path(arquivo_solucao), dados, chave_kata_executor(kata), base,
+              fonte=fonte, avaliacao=resultado_testes, arquivo_avaliado=arquivo_avaliado)
+    registrar_csv(Path(caminho_csv), CABECALHOS_CSV, dados, Path(arquivo_solucao))
+    return dados
 
 
 def coordenar_rodada(
-    integrante: str,
-    kata: str,
-    tratamento: str,
-    arquivo_solucao: Path | str,
-    trial_id: str | None = None,
-    timebox_minutos: float = TIMEBOX_MINUTOS_PADRAO,
+    integrante: str, kata: str, tratamento: str, arquivo_solucao: Path | str,
+    trial_id: str | None = None, timebox_minutos: float = TIMEBOX_MINUTOS_PADRAO,
     diretorio_saida: Path | str = DIRETORIO_RESULTADOS_PADRAO,
-    caminho_csv: Path | str = ARQUIVO_LOG_PADRAO,
-    simulacao: dict | None = None,
+    caminho_csv: Path | str = ARQUIVO_LOG_PADRAO, simulacao: dict | None = None,
+    *, arquivo_testes: Path | str = BASE_TESTES_PADRAO, automatico: bool = False,
+    gemini: bool = False, enunciado: Path | str | None = None,
 ) -> dict:
-    """Executa e coordena a rodada, de forma interativa ou simulada para testes."""
-    caminho_solucao = Path(arquivo_solucao).resolve()
-    if not caminho_solucao.is_file():
-        raise FileNotFoundError(f"Arquivo de solução não encontrado: '{caminho_solucao}'")
-
-    chave_kata = chave_kata_executor(kata)
-
-    if not trial_id:
-        trial_id = obter_proximo_trial_id(
-            integrante=integrante,
-            kata=kata,
-            tratamento=tratamento,
-            diretorio_resultados=diretorio_saida,
-            caminho_csv=caminho_csv,
-        )
-
-    # --- MODO SIMULADO (Para testes automatizados e demonstração) ---
-    if simulacao is not None:
-        tipo_simulacao = simulacao.get("tipo", "sucesso").lower()
-        inicio_ts = simulacao.get("inicio_ts", time.time())
-        duracao_min = float(simulacao.get("duracao_minutos", 5.0))
-        fim_ts = inicio_ts + (duracao_min * 60.0)
-
-        # Executa testes na solução
-        resultado_testes = avaliar_solucao(str(caminho_solucao), chave_kata)
-
-        if tipo_simulacao == "sucesso":
-            status = "SUCESSO"
-            motivo = ""
-        elif tipo_simulacao == "limite":
-            status = "LIMITE_ATINGIDO"
-            motivo = simulacao.get("motivo", f"Timebox máximo de {timebox_minutos} minutos atingido")
-            duracao_min = timebox_minutos
-            fim_ts = inicio_ts + (duracao_min * 60.0)
-        elif tipo_simulacao == "interrupcao":
-            status = "INTERRUPCAO"
-            motivo = simulacao.get("motivo", "Desistência informada pelo participante")
-        else:
-            raise ValueError(f"Tipo de simulação desconhecido: '{tipo_simulacao}'")
-
-        return finalizar_rodada(
-            status=status,
-            integrante=integrante,
-            kata=kata,
-            tratamento=tratamento,
-            arquivo_solucao=caminho_solucao,
-            trial_id=trial_id,
-            inicio_ts=inicio_ts,
-            fim_ts=fim_ts,
-            resultado_testes=resultado_testes,
-            motivo_interrupcao=motivo,
-            timebox_minutos=timebox_minutos,
-            diretorio_saida=diretorio_saida,
-            caminho_csv=caminho_csv,
-        )
-
-    # --- MODO INTERATIVO (Terminal do Participante) ---
-    print("\n" + "=" * 60)
-    print("⏱️  COORDENADOR DE RODADA - EXPERIMENTO DE IA (LAB 02) ⏱️")
-    print("=" * 60)
-    print(f"👤 Integrante : {integrante}")
-    print(f"🧩 Kata       : {normalizar_kata_codigo(kata)} ({chave_kata})")
-    print(f"🤖 Tratamento : {tratamento.upper()}")
-    print(f"🆔 Trial ID   : {trial_id}")
-    print(f"📄 Solução    : {caminho_solucao}")
-    print(f"⏳ Timebox    : {timebox_minutos} minutos")
-    print("=" * 60)
-
-    input("\n[ Pressione ENTER para liberar a rodada e INICIAR o cronômetro ]")
+    """Conduz uma rodada; medições usam relógio monotônico e cópias por tentativa."""
+    if not math.isfinite(timebox_minutos) or not 0 < timebox_minutos <= 35:
+        raise ValueError("O timebox deve ser finito, maior que zero e no máximo 35 minutos")
+    integrante = integrante.strip()
+    tratamento = tratamento.strip().lower()
+    _validar_id(integrante)
+    _validar_id(normalizar_kata_codigo(kata))
+    if tratamento not in {"manual", "ia"}:
+        raise ValueError("Tratamento deve ser manual ou ia")
+    if gemini and (tratamento != "ia" or enunciado is None):
+        raise ValueError("--gemini exige tratamento ia e --enunciado")
+    if gemini and not Path(enunciado).is_file():
+        raise FileNotFoundError(f"Enunciado não encontrado: {enunciado}")
+    solucao = Path(arquivo_solucao).resolve()
+    if solucao.suffix != ".py" or not solucao.is_file():
+        raise ValueError("Informe um arquivo .py existente (pode estar vazio ao iniciar)")
+    saida = Path(diretorio_saida).resolve()
+    csv_path = Path(caminho_csv).resolve()
+    conferir_csv(csv_path, CABECALHOS_CSV)
+    base_fonte = Path(arquivo_testes).resolve()
+    base_bytes = base_fonte.read_bytes()
+    casos = json.loads(base_bytes.decode("utf-8-sig"))
+    chave = chave_kata_executor(kata)
+    if not isinstance(casos, dict) or not casos.get(chave):
+        raise ValueError(f"Base de testes sem casos para '{chave}'")
+    if simulacao is not None and (saida == DIRETORIO_RESULTADOS_PADRAO.resolve()
+                                 or csv_path == ARQUIVO_LOG_PADRAO.resolve()):
+        raise ValueError("Simulação exige diretório e CSV separados dos dados oficiais")
+    if trial_id:
+        _validar_id(trial_id)
+        conferir_csv(csv_path, CABECALHOS_CSV, trial_id)
+        pasta = saida / trial_id
+        pasta.mkdir(parents=True, exist_ok=False)
+    else:
+        while True:
+            trial_id = obter_proximo_trial_id(integrante, kata, tratamento, saida, csv_path)
+            pasta = saida / trial_id
+            try:
+                pasta.mkdir(parents=True, exist_ok=False)
+                break
+            except FileExistsError:
+                continue
+    base = pasta / "casos_testes.json"
+    base.write_bytes(base_bytes)
+    gravar_json(pasta / "inicio_rodada.json", {
+        "trial_id": trial_id, "integrante": integrante, "kata": normalizar_kata_codigo(kata),
+        "tratamento": tratamento, "arquivo_solucao": str(solucao),
+        "arquivo_testes_original": str(base_fonte), "automatico": automatico,
+        "gemini": gemini, "simulada": simulacao is not None,
+    })
+    print(f"Trial {trial_id} | {tratamento} | limite: {timebox_minutos} min")
     inicio_ts = time.time()
-    horario_inicio = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(f"\n▶️ Rodada iniciada em: {horario_inicio}")
-    print("Você já pode programar na solução. Use o menu abaixo para validar seu código.\n")
-
-    ultimo_resultado_testes = None
-
-    while True:
-        agora = time.time()
-        tempo_decorrido = (agora - inicio_ts) / 60.0
-        tempo_restante = timebox_minutos - tempo_decorrido
-
-        # Verificação automática de estouro de timebox
-        if tempo_decorrido >= timebox_minutos:
-            print("\n" + "!" * 60)
-            print(f"🛑 ATENÇÃO: Timebox de {timebox_minutos} minutos esgotado!")
-            print("Executando verificação final dos testes...")
-            print("!" * 60)
-            ultimo_resultado_testes = avaliar_solucao(str(caminho_solucao), chave_kata)
-            return finalizar_rodada(
-                status="LIMITE_ATINGIDO",
-                integrante=integrante,
-                kata=kata,
-                tratamento=tratamento,
-                arquivo_solucao=caminho_solucao,
-                trial_id=trial_id,
-                inicio_ts=inicio_ts,
-                fim_ts=agora,
-                resultado_testes=ultimo_resultado_testes,
-                motivo_interrupcao=f"Tempo esgotado ({timebox_minutos} min)",
-                timebox_minutos=timebox_minutos,
-                diretorio_saida=diretorio_saida,
-                caminho_csv=caminho_csv,
+    inicio_mono = time.monotonic()
+    deadline = inicio_mono + timebox_minutos * 60
+    fonte_final = resultado_final = arquivo_avaliado = None
+    erros = []
+    status, motivo = "INTERRUPCAO", ""
+    tentativa = 0
+    parada = None
+    try:
+        if not automatico and simulacao is None:
+            input("Pressione ENTER para iniciar a rodada: ")
+            inicio_ts = time.time()
+            inicio_mono = time.monotonic()
+            deadline = inicio_mono + timebox_minutos * 60
+        if gemini:
+            destino_ia = pasta / "gemini_gerada.py"
+            processo = subprocess.run(
+                [sys.executable, "-m", "Laboratorio02_TrialsIA.consolidacao.gerar_ia",
+                 str(Path(enunciado).resolve()), str(destino_ia)],
+                cwd=RAIZ_REPOSITORIO, capture_output=True, text=True, encoding="utf-8",
+                errors="replace", timeout=max(0.001, deadline - time.monotonic()),
             )
-
-        print(f"\n[Tempo decorrido: {tempo_decorrido:.1f} min | Restante: {max(tempo_restante, 0.0):.1f} min]")
-        print("Menu da Rodada:")
-        print("  [1] Executar bateria de testes agora")
-        print("  [2] Consultar tempo restante")
-        print("  [3] Interromper rodada antecipadamente (com justificativa)")
-        opcao = input("Escolha uma opção (1/2/3): ").strip()
-
-        if opcao == "1":
-            print("\nExecutando testes automatizados...")
-            ultimo_resultado_testes = avaliar_solucao(str(caminho_solucao), chave_kata)
-            if ultimo_resultado_testes and ultimo_resultado_testes.get("passou_todos"):
-                fim_ts = time.time()
-                print("\n" + "🎉" * 25)
-                print(f"PARABÉNS! Solução aprovada em 100% dos testes dentro do prazo!")
-                print(f"Tempo total (Time-to-green): {((fim_ts - inicio_ts) / 60.0):.2f} minutos.")
-                print("🎉" * 25 + "\n")
-                return finalizar_rodada(
-                    status="SUCESSO",
-                    integrante=integrante,
-                    kata=kata,
-                    tratamento=tratamento,
-                    arquivo_solucao=caminho_solucao,
-                    trial_id=trial_id,
-                    inicio_ts=inicio_ts,
-                    fim_ts=fim_ts,
-                    resultado_testes=ultimo_resultado_testes,
-                    timebox_minutos=timebox_minutos,
-                    diretorio_saida=diretorio_saida,
-                    caminho_csv=caminho_csv,
-                )
-            else:
-                print("Ainda existem testes reprovados. Continue ajustando sua solução!")
-
-        elif opcao == "2":
-            print(f"Tempo restante: {max(timebox_minutos - ((time.time() - inicio_ts) / 60.0), 0.0):.2f} minutos.")
-
-        elif opcao == "3":
-            motivo = input("\nInforme o motivo da interrupção (ex: desistência, bloqueio conceitual): ").strip()
-            if not motivo:
-                motivo = "Interrupção manual sem motivo detalhado"
-            fim_ts = time.time()
-            print("\nExecutando teste final para registrar o estado no momento da parada...")
-            ultimo_resultado_testes = avaliar_solucao(str(caminho_solucao), chave_kata)
-            print(f"Registrando interrupção aos {((fim_ts - inicio_ts) / 60.0):.2f} minutos.")
-            return finalizar_rodada(
-                status="INTERRUPCAO",
-                integrante=integrante,
-                kata=kata,
-                tratamento=tratamento,
-                arquivo_solucao=caminho_solucao,
-                trial_id=trial_id,
-                inicio_ts=inicio_ts,
-                fim_ts=fim_ts,
-                resultado_testes=ultimo_resultado_testes,
-                motivo_interrupcao=motivo,
-                timebox_minutos=timebox_minutos,
-                diretorio_saida=diretorio_saida,
-                caminho_csv=caminho_csv,
-            )
-        else:
-            print("Opção inválida. Digite 1, 2 ou 3.")
+            if processo.returncode:
+                raise RuntimeError(f"Falha no Gemini: {processo.stderr.strip()}")
+            if time.monotonic() >= deadline:
+                raise TimeoutError("Timebox atingido durante geração Gemini")
+            solucao.write_bytes(destino_ia.read_bytes())
+        while True:
+            if time.monotonic() >= deadline:
+                raise TimeoutError("Timebox atingido")
+            opcao = "1" if automatico or simulacao is not None else ler_ate(
+                "[1] Testar [2] Tempo [3] Interromper: ", deadline).strip()
+            if opcao == "3":
+                status = "INTERRUPCAO"
+                parada = (time.monotonic(), time.time())
+                fonte_final = solucao.read_bytes()
+                try:
+                    motivo = ler_ate("Motivo da interrupção: ", deadline).strip() or "Interrupção solicitada"
+                except (TimeoutError, EOFError, KeyboardInterrupt):
+                    motivo = "Interrupção solicitada; justificativa não informada"
+                break
+            if opcao == "2":
+                print(f"Restam {max(0, deadline - time.monotonic()) / 60:.2f} minutos")
+                continue
+            if opcao != "1":
+                print("Opção inválida")
+                continue
+            tentativa += 1
+            fonte = solucao.read_bytes()
+            copia = pasta / f"tentativa_{tentativa:03d}.py"
+            with copia.open("xb") as fluxo:
+                fluxo.write(fonte)
+            resultado = avaliar_copia(copia, chave, base, deadline=deadline)
+            if time.monotonic() >= deadline:
+                raise TimeoutError("Timebox atingido durante os testes")
+            # O arquivo em edição pode ter mudado enquanto a bateria executava.
+            # Uma aprovação antiga nunca encerra uma versão nova como aprovada.
+            if solucao.read_bytes() != fonte:
+                print("Solução alterada durante os testes; avaliando a nova versão")
+                continue
+            if resultado["passou_todos"] or automatico or simulacao is not None:
+                fonte_final, resultado_final, arquivo_avaliado = fonte, resultado, copia
+                status = "SUCESSO" if resultado["passou_todos"] else "TESTES_REPROVADOS"
+                break
+            print("Há testes reprovados. Continue editando a solução.")
+    except (TimeoutError, subprocess.TimeoutExpired) as exc:
+        status, motivo = "LIMITE_ATINGIDO", str(exc)
+    except (KeyboardInterrupt, EOFError) as exc:
+        status, motivo = "INTERRUPCAO", f"Interrupção de terminal ({type(exc).__name__})"
+    except Exception as exc:
+        status, motivo = "ERRO", str(exc)
+        erros.append({"etapa": "rodada", **erro_registrado(exc)})
+    fim_mono, fim_ts = parada or (time.monotonic(), time.time())
+    duracao = fim_mono - inicio_mono
+    if status == "LIMITE_ATINGIDO":
+        # O fim da medição é o deadline; a avaliação final é pós-rodada.
+        duracao = timebox_minutos * 60
+        fim_ts = inicio_ts + duracao
+    if simulacao is not None:
+        tipo = simulacao.get("tipo", "sucesso")
+        if tipo not in {"sucesso", "limite", "interrupcao"}:
+            raise ValueError(f"Tipo de simulação desconhecido: {tipo}")
+        if tipo != "sucesso":
+            status = {"limite": "LIMITE_ATINGIDO", "interrupcao": "INTERRUPCAO"}[tipo]
+        duracao = (timebox_minutos if tipo == "limite" else float(simulacao.get("duracao_minutos", 5))) * 60
+        inicio_ts = simulacao.get("inicio_ts", inicio_ts)
+        fim_ts = inicio_ts + duracao
+        motivo = simulacao.get("motivo", motivo)
+    return finalizar_rodada(
+        status, integrante, kata, tratamento, solucao, trial_id, inicio_ts, fim_ts,
+        resultado_final, motivo, timebox_minutos, saida, csv_path,
+        arquivo_testes=base, fonte=fonte_final, arquivo_avaliado=arquivo_avaliado,
+        tempo_decorrido_seg=duracao, erros=erros, pasta_reservada=True,
+        simulada=simulacao is not None,
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Coordenador de Rodadas e Cronometragem do Lab 02.")
-    parser.add_argument("--integrante", help="Nome do participante (ex: maria, vinicius, aulus).")
-    parser.add_argument("--kata", help="Identificador do kata (ex: kata01 a kata06 ou 1 a 6).")
-    parser.add_argument("--tratamento", choices=["ia", "manual"], help="Tratamento utilizado ('ia' ou 'manual').")
-    parser.add_argument("--solucao", help="Caminho do arquivo Python da solução a ser avaliada.")
-    parser.add_argument("--timebox", type=float, default=TIMEBOX_MINUTOS_PADRAO, help="Timebox máximo em minutos (padrão: 35).")
+    parser = argparse.ArgumentParser(description="Rodada consolidada do Lab02 S02 — Issue #37")
+    parser.add_argument("--integrante", "--participante", dest="integrante")
+    parser.add_argument("--kata", "--exercicio", dest="kata")
+    parser.add_argument("--tratamento", choices=["ia", "manual"])
+    parser.add_argument("--solucao")
+    parser.add_argument("--timebox", type=float, default=TIMEBOX_MINUTOS_PADRAO)
+    parser.add_argument("--trial-id")
+    parser.add_argument("--saida", type=Path, default=DIRETORIO_RESULTADOS_PADRAO)
+    parser.add_argument("--csv", type=Path)
+    parser.add_argument("--testes", type=Path, default=BASE_TESTES_PADRAO)
+    parser.add_argument("--automatico", action="store_true", help="Avalia uma vez, sem tempo de desenvolvimento")
+    parser.add_argument("--gemini", action="store_true", help="Gera no início via cliente existente; exige ia/enunciado")
+    parser.add_argument("--enunciado", type=Path)
     args = parser.parse_args(argv)
-
-    integrante = args.integrante or input("1. Nome do Integrante (maria/vinicius/aulus): ").strip()
-    kata = args.kata or input("2. Nome do Kata (ex: kata01): ").strip()
-    tratamento = args.tratamento or input("3. Usou IA neste trial? (ia/manual): ").strip().lower()
-    
-    caminho_solucao = args.solucao
-    if not caminho_solucao:
-        caminho_solucao = input("4. Caminho do arquivo da solução (.py): ").strip()
-
-    res = coordenar_rodada(
-        integrante=integrante,
-        kata=kata,
-        tratamento=tratamento,
-        arquivo_solucao=caminho_solucao,
-        timebox_minutos=args.timebox,
-    )
-
-    print("\n" + "=" * 60)
-    print("🏁 RODADA CONCLUÍDA E ARTEFATOS PRESERVADOS!")
-    print(f"Trial ID            : {res['trial_id']}")
-    print(f"Status              : {res['status']}")
-    print(f"Tempo Considerado   : {res['tempo_final_considerado']} min")
-    print(f"Dado Censurado      : {res['dado_censurado']}")
-    print(f"Passou Todos        : {res['passou_todos']}")
-    print(f"Taxa de Sucesso     : {res['taxa_sucesso_testes']}%")
-    print(f"Cópia da Solução    : {res['artefatos']['copia_solucao']}")
-    print(f"Relatório de Testes : {res['artefatos']['testes_json']}")
-    print(f"Métricas Radon (RQ3): {res['artefatos']['metricas_json']}")
-    print(f"Manifesto da Rodada : {res['artefatos']['manifesto']}")
-    print("=" * 60 + "\n")
-    return 0
-
+    try:
+        integrante = args.integrante or input("Participante: ").strip()
+        kata = args.kata or input("Exercício: ").strip()
+        tratamento = args.tratamento or input("Tratamento (ia/manual): ").strip()
+        solucao = args.solucao or input("Arquivo .py da solução: ").strip()
+        csv_path = args.csv or (ARQUIVO_LOG_PADRAO if args.saida == DIRETORIO_RESULTADOS_PADRAO
+                               else args.saida / "registro_experimento.csv")
+        res = coordenar_rodada(
+            integrante, kata, tratamento, solucao, trial_id=args.trial_id,
+            timebox_minutos=args.timebox, diretorio_saida=args.saida, caminho_csv=csv_path,
+            arquivo_testes=args.testes, automatico=args.automatico,
+            gemini=args.gemini, enunciado=args.enunciado,
+        )
+    except (Exception, KeyboardInterrupt) as exc:
+        print(f"Falha: {type(exc).__name__}: {exc}", file=sys.stderr)
+        return 2
+    print(f"Trial: {res['trial_id']} | Status: {res['status']} | Tempo: {res['tempo_final_considerado']} min")
+    print(f"Manifesto: {res['artefatos']['manifesto']}")
+    return {"SUCESSO": 0, "TESTES_REPROVADOS": 1, "ERRO": 2,
+            "LIMITE_ATINGIDO": 3, "INTERRUPCAO": 4}[res["status"]]
 
 
 if __name__ == "__main__":

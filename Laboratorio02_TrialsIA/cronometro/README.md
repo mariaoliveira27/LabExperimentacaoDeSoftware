@@ -1,6 +1,14 @@
 # ⏱️ Como usar o Cronômetro do Experimento
 # ⏱️ Cronômetro e Coordenação da Rodada — S01, Maria, Issue #30
 
+**Atualização S02 — Issue #37:** o [guia da consolidação](../consolidacao/README.md)
+documenta o comando único `executar_rodada.py`, estados de erro, cópias por
+tentativa, limite durante espera de entrada/testes, integração Gemini e a
+demonstração atual com exercício separado. O comando deste cronômetro continua
+disponível e utiliza a mesma implementação. O manifesto novo usa schema 2;
+resultados anteriores não foram modificados. As instruções de simulação abaixo
+são o exemplo legado da S01, com tempos simulados explicitamente identificados.
+
 Guia passo a passo para execução e registro dos tempos de desenvolvimento durante os katas.
 Componente de coordenação e medição do tempo completo de resolução do exercício (RQ1) para o experimento de IA do Laboratório 02. Entrega vinculada à [Issue #30](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/30).
 
@@ -14,7 +22,7 @@ O coordenador integra a bateria de testes de aceitação de **Vinícius (#34)** 
 1. **Abra o terminal** na pasta raiz do repositório.
 2. **Execute o script** com o comando abaixo:
    ```bash
-   python cronometro_lab.py
+   python Laboratorio02_TrialsIA/cronometro/src/cronometro.py
    ```
    *(Dependendo da sua configuração de ambiente, pode ser necessário utilizar `python3`)*.
 1. **Tempo Completo de Resolução (RQ1 / Time-to-green):** Mede o tempo desde a liberação da rodada até a aprovação em 100% dos testes de aceitação ou o encerramento da rodada.
