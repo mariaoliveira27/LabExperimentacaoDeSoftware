@@ -1,4 +1,4 @@
-"""Coordenador de Rodadas e Cronometragem — Laboratório 02 (Issue #30).
+"""Coordenador de Rodadas — base S01 (#30), consolidação S02 (#37).
 
 Responsável por orquestrar a execução de uma rodada experimental:
 - Registrar participante, exercício (kata), tratamento (com/sem IA) e arquivo da solução.
@@ -17,7 +17,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import os
 import re
@@ -44,11 +43,12 @@ RAIZ_REPOSITORIO = Path(__file__).resolve().parents[3]
 if str(RAIZ_REPOSITORIO) not in sys.path:
     sys.path.insert(0, str(RAIZ_REPOSITORIO))
 
-from Laboratorio02_TrialsIA.casos_de_teste.executor import avaliar_solucao
-from Laboratorio02_TrialsIA.metricas_estruturais.src.coletar_metricas import (
-    analisar_arquivo,
-    gravar_resultado,
+from Laboratorio02_TrialsIA.consolidacao.artefatos import (
+    avaliar_copia, conferir_csv, erro_registrado, gravar_json, preservar, registrar_csv,
 )
+from Laboratorio02_TrialsIA.consolidacao.terminal import ler_ate
+
+BASE_TESTES_PADRAO = RAIZ_REPOSITORIO / "Laboratorio02_TrialsIA/casos_de_teste/casos_de_teste_katas.json"
 
 TIMEBOX_MINUTOS_PADRAO = 35.0
 DIRETORIO_CRONOMETRO = Path(__file__).resolve().parents[1]
@@ -95,17 +95,11 @@ def normalizar_kata_codigo(kata: str) -> str:
 
 def chave_kata_executor(kata: str) -> str:
     """Converte para a chave esperada pelo executor do Vinícius (ex: kata01)."""
-    k = kata.strip().lower()
-    if not k.startswith("kata"):
-        if k.startswith("k"):
-            k = "kata" + k[1:]
-        else:
-            try:
-                num = int(k)
-                k = f"kata{num:02d}"
-            except ValueError:
-                pass
-    return k
+    codigo = normalizar_kata_codigo(kata)
+    if re.fullmatch(r"K\d+", codigo):
+        return f"kata{int(codigo[1:]):02d}"
+    return kata.strip().lower()
+
 
 
 def gerar_trial_id(
@@ -461,15 +455,12 @@ def finalizar_rodada(
 
 
 def coordenar_rodada(
-    integrante: str,
-    kata: str,
-    tratamento: str,
-    arquivo_solucao: Path | str,
-    trial_id: str | None = None,
-    timebox_minutos: float = TIMEBOX_MINUTOS_PADRAO,
+    integrante: str, kata: str, tratamento: str, arquivo_solucao: Path | str,
+    trial_id: str | None = None, timebox_minutos: float = TIMEBOX_MINUTOS_PADRAO,
     diretorio_saida: Path | str = DIRETORIO_RESULTADOS_PADRAO,
-    caminho_csv: Path | str = ARQUIVO_LOG_PADRAO,
-    simulacao: dict | None = None,
+    caminho_csv: Path | str = ARQUIVO_LOG_PADRAO, simulacao: dict | None = None,
+    *, arquivo_testes: Path | str = BASE_TESTES_PADRAO, automatico: bool = False,
+    gemini: bool = False, enunciado: Path | str | None = None,
 ) -> dict:
     """Executa e coordena a rodada com travas de prazo, timeout no input e controle de IA."""
     caminho_solucao = Path(arquivo_solucao).resolve()

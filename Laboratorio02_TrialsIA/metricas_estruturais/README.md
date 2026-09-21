@@ -171,16 +171,12 @@ também em rodadas sem sucesso funcional, registrando falhas de análise como ta
 Cada rodada gera um JSON próprio. O coletor preserva o ID recebido, mas não
 mantém um cadastro global para detectar IDs repetidos em destinos diferentes.
 
-O [cronômetro da Maria](../cronometro/src/cronometro.py) atualmente grava
-`Integrante`, `Kata`, `Tratamento_IA`, `Horario_Inicio`, `Horario_Fim`,
-`Tempo_Decorrido_Min`, `Passou_Testes`, `Tempo_Final_Considerado` e
-`Dado_Censurado`; **não possui `trial_id`**. Sua interface e seu CSV permanecem
-preservados. Para associar tempo futuramente, manter um manifesto externo por
-rodada com `trial_id` e referência ao CSV arquivado: caminho, SHA-256 da cópia
-arquivada e número da linha de dados (1 = primeira linha após o cabeçalho).
-Conferir também integrante, kata, tratamento e início da linha selecionada.
-Essa associação ainda será feita pelo responsável pela integração; não há
-leitor ou modificador do CSV nesta entrega.
+O [cronômetro da Maria](../cronometro/src/cronometro.py) já registra `trial_id`
+e integra este coletor. A [consolidação S02, Issue #37](../consolidacao/README.md)
+garante que tempo, testes, métricas e solução preservada compartilhem o ID e
+que testes/métricas correspondam aos mesmos bytes finais. Acrescenta o hash
+da solução ao JSON do coletor, preservando seu contrato e comando independente.
+Os resultados anteriores não são reinterpretados nem alterados.
 
 Demonstração completa, executável em processo separado:
 
@@ -210,9 +206,9 @@ respeita `tolerancia_absoluta=1e-9`, com tolerância relativa zero. Os outros ca
 continuam usando a comparação existente.
 
 Cada `entrada` é uma string completa para stdin; preservar a linha vazia do vetor
-vazio. O relatório atual do executor identifica os casos pelo índice e ainda
-não contém `trial_id`. Ao integrar os resultados, associar externamente o `id`
-da base e o `trial_id` da rodada, tal como na referência ao CSV de tempo.
+vazio. O relatório independente do executor identifica os casos pelo índice.
+Na rodada consolidada, `testes.json` o envolve com `trial_id`, caminhos e hashes;
+a base de casos usada também é preservada na pasta da rodada.
 Os testes de integridade abaixo validam os dados preparados,
 não são execuções de soluções dos exercícios. Uso de recursão exige revisão da
 solução e não é demonstrado somente pelas saídas corretas.

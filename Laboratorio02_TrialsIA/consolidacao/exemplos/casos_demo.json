@@ -1,0 +1,22 @@
+{
+  "demo_dobro": [
+    {
+      "entrada": "7\n",
+      "saida_esperada": "14",
+      "finalidade": "Calcular o dobro de um inteiro positivo.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "entrada": "0\n",
+      "saida_esperada": "0",
+      "finalidade": "Calcular o dobro de zero.",
+      "tipo_comparacao": "texto"
+    },
+    {
+      "entrada": "-4\n",
+      "saida_esperada": "-8",
+      "finalidade": "Calcular o dobro de um inteiro negativo.",
+      "tipo_comparacao": "texto"
+    }
+  ]
+}
