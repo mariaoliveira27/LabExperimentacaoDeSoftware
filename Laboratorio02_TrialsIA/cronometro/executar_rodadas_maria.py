@@ -130,3 +130,4 @@ def executar_todas() -> None:
 
 if __name__ == "__main__":
     executar_todas()
+
