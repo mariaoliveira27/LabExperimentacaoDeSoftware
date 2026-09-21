@@ -1,6 +1,10 @@
-"""Solução demonstrativa para Kata 01 - Is recursivo.
-Implementa verificações recursivas de vogais, consoantes, inteiro e real.
-Usada exclusivamente para validação da infraestrutura da Sprint 01.
+"""Solução Kata 01 (Is recursivo) - Maria (Tratamento: IA).
+
+Classifica recursivamente se cadeias são compostas por:
+- Apenas vogais (X1)
+- Apenas consoantes (X2)
+- Número inteiro (X3)
+- Número real (X4)
 """
 
 import sys
@@ -80,4 +84,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

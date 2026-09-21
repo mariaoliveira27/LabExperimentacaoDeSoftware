@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "trial_id": "maria_K05_ia_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K05_ia_01\\maria_K05_ia_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 2,
+  "complexidade_media": 3.5,
+  "loc": 35,
+  "sloc": 21,
+  "funcoes": [
+    {
+      "nome": "busca_linear_recursiva",
+      "linha": 11,
+      "complexidade": 3
+    },
+    {
+      "nome": "main",
+      "linha": 20,
+      "complexidade": 4
+    }
+  ]
+}

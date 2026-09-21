@@ -1,0 +1,70 @@
+{
+  "trial_id": "maria_K05_ia_01",
+  "arquivo_solucao": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K05_ia_01\\maria_K05_ia_01_solucao_final.py",
+  "sha256_solucao": "b42aa4a0347bd69ee8056d852fc02ff80f0000596b77fcdc7350f5ad0760d897",
+  "data_execucao": "2026-09-16 09:00:26",
+  "resultado": {
+    "total_casos": 11,
+    "aprovados": 11,
+    "reprovados": 0,
+    "taxa_sucesso": 100.0,
+    "passou_todos": true,
+    "detalhes": [
+      {
+        "caso_teste": 1,
+        "finalidade": "Vetor vazio: preservar a segunda linha vazia e retornar -1.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 2,
+        "finalidade": "Um elemento: encontrar o único valor na posição zero.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 3,
+        "finalidade": "Um elemento: retornar -1 quando o valor é diferente.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 4,
+        "finalidade": "Encontrar o valor no início de um vetor com vários elementos.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 5,
+        "finalidade": "Encontrar o valor no meio, sem pressupor vetor ordenado.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 6,
+        "finalidade": "Encontrar o valor na última posição.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 7,
+        "finalidade": "Valor ausente em vetor com vários elementos.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 8,
+        "finalidade": "Encontrar um valor negativo em vetor que também contém zero.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 9,
+        "finalidade": "Valores repetidos: retornar a primeira ocorrência, não a última.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 10,
+        "finalidade": "Limite de 200 elementos: percorrer até a posição 199.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 11,
+        "finalidade": "Encontrar zero sem confundi-lo com ausência do valor.",
+        "resultado": "APROVADO"
+      }
+    ]
+  }
+}

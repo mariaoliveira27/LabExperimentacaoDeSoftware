@@ -1,0 +1,65 @@
+{
+  "trial_id": "maria_K06_manual_01",
+  "arquivo_solucao": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K06_manual_01\\maria_K06_manual_01_solucao_final.py",
+  "sha256_solucao": "ba420b329184061c488db205fc81471d150b08ae79b90baab14f4f2d46a0212f",
+  "data_execucao": "2026-09-16 09:35:14",
+  "resultado": {
+    "total_casos": 10,
+    "aprovados": 10,
+    "reprovados": 0,
+    "taxa_sucesso": 100.0,
+    "passou_todos": true,
+    "detalhes": [
+      {
+        "caso_teste": 1,
+        "finalidade": "Soma parcial de 1 termo(s), contando 1 como o primeiro termo.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 2,
+        "finalidade": "Soma parcial de 2 termo(s), contando 1 como o primeiro termo.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 3,
+        "finalidade": "Soma parcial de 3 termo(s), contando 1 como o primeiro termo.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 4,
+        "finalidade": "Soma parcial de 4 termo(s), contando 1 como o primeiro termo.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 5,
+        "finalidade": "Soma parcial de 5 termo(s), contando 1 como o primeiro termo.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 6,
+        "finalidade": "Soma parcial de 6 termo(s), contando 1 como o primeiro termo.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 7,
+        "finalidade": "Soma parcial de 8 termo(s), contando 1 como o primeiro termo.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 8,
+        "finalidade": "Soma parcial de 10 termo(s), contando 1 como o primeiro termo.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 9,
+        "finalidade": "Soma parcial de 15 termo(s), contando 1 como o primeiro termo.",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 10,
+        "finalidade": "Soma parcial de 20 termo(s), contando 1 como o primeiro termo.",
+        "resultado": "APROVADO"
+      }
+    ]
+  }
+}

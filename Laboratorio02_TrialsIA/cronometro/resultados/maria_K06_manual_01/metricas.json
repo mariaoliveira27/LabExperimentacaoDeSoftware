@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "trial_id": "maria_K06_manual_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\maria_K06_manual_01\\maria_K06_manual_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 3,
+  "complexidade_media": 2.6666666666666665,
+  "loc": 40,
+  "sloc": 23,
+  "funcoes": [
+    {
+      "nome": "fatorial_recursivo",
+      "linha": 11,
+      "complexidade": 2
+    },
+    {
+      "nome": "somar_termos_cosseno",
+      "linha": 18,
+      "complexidade": 3
+    },
+    {
+      "nome": "main",
+      "linha": 28,
+      "complexidade": 3
+    }
+  ]
+}
