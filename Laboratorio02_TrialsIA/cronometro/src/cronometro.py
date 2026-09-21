@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import json
 import os
 import re
@@ -144,17 +143,11 @@ def normalizar_kata_codigo(kata: str) -> str:
 
 def chave_kata_executor(kata: str) -> str:
     """Converte para a chave esperada pelo executor do Vinícius (ex: kata01)."""
-    k = kata.strip().lower()
-    if not k.startswith("kata"):
-        if k.startswith("k"):
-            k = "kata" + k[1:]
-        else:
-            try:
-                num = int(k)
-                k = f"kata{num:02d}"
-            except ValueError:
-                pass
-    return k
+    codigo = normalizar_kata_codigo(kata)
+    if re.fullmatch(r"K\d+", codigo):
+        return f"kata{int(codigo[1:]):02d}"
+    return kata.strip().lower()
+
 
 
 def gerar_trial_id(
@@ -600,15 +593,12 @@ def finalizar_rodada(
 
 
 def coordenar_rodada(
-    integrante: str,
-    kata: str,
-    tratamento: str,
-    arquivo_solucao: Path | str,
-    trial_id: str | None = None,
-    timebox_minutos: float = TIMEBOX_MINUTOS_PADRAO,
+    integrante: str, kata: str, tratamento: str, arquivo_solucao: Path | str,
+    trial_id: str | None = None, timebox_minutos: float = TIMEBOX_MINUTOS_PADRAO,
     diretorio_saida: Path | str = DIRETORIO_RESULTADOS_PADRAO,
-    caminho_csv: Path | str = ARQUIVO_LOG_PADRAO,
-    simulacao: dict | None = None,
+    caminho_csv: Path | str = ARQUIVO_LOG_PADRAO, simulacao: dict | None = None,
+    *, arquivo_testes: Path | str = BASE_TESTES_PADRAO, automatico: bool = False,
+    gemini: bool = False, enunciado: Path | str | None = None,
 ) -> dict:
     """Executa e coordena a rodada, de forma interativa ou simulada para testes."""
     """Executa e coordena a rodada com travas de prazo, timeout no input e controle de IA."""

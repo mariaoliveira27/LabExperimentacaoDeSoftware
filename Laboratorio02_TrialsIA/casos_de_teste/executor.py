@@ -3,6 +3,7 @@ import os
 import json
 import math
 import sys
+import time
 
 # Tempo máximo para cada caso de teste pode rodar antes de ser interrompido
 TIMEOUT_SEGUNDOS = 5
@@ -41,8 +42,34 @@ def comparar_saidas(saida_obtida: str, d_esperada: dict) -> bool:
     return saida_norm == saida_esperada_norm
 
 
-def executar_casos_de_teste(comando_exec: list, entrada: str, caso_teste: dict) -> str:
-    """Executa um único caso de teste num processo separado com limite de 5s."""
+def _tempo_restante(deadline):
+    """Retorna o orçamento restante do relógio monotônico da rodada."""
+    if deadline is None:
+        return None
+    if not math.isfinite(deadline):
+        raise ValueError("O deadline deve ser um instante monotônico finito.")
+    restante = deadline - time.monotonic()
+    if restante <= 0:
+        raise TimeoutError("O limite de tempo da rodada foi atingido durante os testes.")
+    return restante
+
+
+def executar_casos_de_teste(
+    comando_exec: list, entrada: str, caso_teste: dict, *, timeout=None,
+    deadline=None,
+) -> str:
+    """Executa um caso, respeitando seu timeout e o deadline global opcional.
+
+    ``deadline`` é um instante absoluto de ``time.monotonic()``. Seu término
+    lança ``TimeoutError``; ``TIMEOUT`` continua indicando apenas o limite do
+    caso. Falhas ao iniciar o executor propagam sua exceção de infraestrutura.
+    """
+    limite_caso = TIMEOUT_SEGUNDOS if timeout is None else timeout
+    if not math.isfinite(limite_caso) or limite_caso <= 0:
+        raise ValueError("O timeout por caso deve ser positivo e finito.")
+    restante = _tempo_restante(deadline)
+    limitado_pela_rodada = restante is not None and restante <= limite_caso
+    limite_execucao = min(limite_caso, restante) if restante is not None else limite_caso
     try:
         # Executa o arquivo Python
         processo = subprocess.run(
@@ -50,26 +77,41 @@ def executar_casos_de_teste(comando_exec: list, entrada: str, caso_teste: dict) 
             input=entrada,             # Entrada enviada para o input
             text=True,                 # Interpreta as entradas e saídas como string
             capture_output=True,       # Captura os print() e mensagens de erro do programa
-            timeout=TIMEOUT_SEGUNDOS   # Encerra se demorar mais que 5s
+            timeout=limite_execucao    # Respeita também o orçamento da rodada
         )
+        _tempo_restante(deadline)
         
         # Verifica se o código fechou com erro
         if processo.returncode != 0:
             return "ERRO_EXECUCAO"
         
         # Se executou sem erros, compara a saída do terminal com o esperado
-        if comparar_saidas(processo.stdout, caso_teste):
+        aprovado = comparar_saidas(processo.stdout, caso_teste)
+        _tempo_restante(deadline)
+        if aprovado:
             return "APROVADO"
         else:
             return "SAIDA_INCORRETA"
         
-    except subprocess.TimeoutExpired:
+    except subprocess.TimeoutExpired as erro:
+        if limitado_pela_rodada:
+            raise TimeoutError(
+                "O limite de tempo da rodada foi atingido durante os testes."
+            ) from erro
+        _tempo_restante(deadline)
         return "TIMEOUT"               # Entrou em loop ou estourou os 5 segundos
-    except Exception:
-        return "ERRO_SINTAXE"
     
     
-def avaliar_solucao(caminho_codigo: str, chave_kata: str, arquivo_testes: str = "casos_de_teste_katas.json"):
+def avaliar_solucao(
+    caminho_codigo: str, chave_kata: str,
+    arquivo_testes: str = "casos_de_teste_katas.json", *, deadline=None,
+):
+    """Avalia a bateria inteira dentro do deadline monotônico, quando informado.
+
+    Em caso de limite global não retorna contagens de testes não executados.
+    As chamadas existentes, sem deadline, mantêm o limite individual de 5s.
+    """
+    _tempo_restante(deadline)
     
     # Procura se o arquivo .py esta no computador
     if not os.path.isfile(caminho_codigo):
@@ -85,8 +127,9 @@ def avaliar_solucao(caminho_codigo: str, chave_kata: str, arquivo_testes: str = 
         arquivo_testes = os.path.join(dir_atual, arquivo_testes)
 
     # Abre e carrega os testes do arquivo JSON
-    with open(arquivo_testes, 'r', encoding='utf-8') as f:
+    with open(arquivo_testes, 'r', encoding='utf-8-sig') as f:
         todos_testes = json.load(f)
+    _tempo_restante(deadline)
     
     # Extrai do JSON apenas a lista de testes correspondente ao Kata solicitado
     casos = todos_testes.get(chave_kata, [])
@@ -104,7 +147,13 @@ def avaliar_solucao(caminho_codigo: str, chave_kata: str, arquivo_testes: str = 
     # Executa os 10 casos de teste do kata
     for idx, caso in enumerate(casos, 1):
         # Executa o teste isolado
-        resultado = executar_casos_de_teste(comando_exec, caso["entrada"], caso)
+        _tempo_restante(deadline)
+        if deadline is None:
+            resultado = executar_casos_de_teste(comando_exec, caso["entrada"], caso)
+        else:
+            resultado = executar_casos_de_teste(
+                comando_exec, caso["entrada"], caso, deadline=deadline,
+            )
         
         # Incrementa o contador
         if resultado == "APROVADO":
@@ -119,6 +168,7 @@ def avaliar_solucao(caminho_codigo: str, chave_kata: str, arquivo_testes: str = 
             "resultado": resultado
         })
     
+    _tempo_restante(deadline)
     # Cálculo das métricas após a conclusão dos testes  
     total = len(casos)
     taxa_sucesso = (aprovados / total) * 100 if total > 0 else 0.0

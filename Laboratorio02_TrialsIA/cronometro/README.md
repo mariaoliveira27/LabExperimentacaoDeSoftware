@@ -5,6 +5,16 @@
 Guia passo a passo para execução e registro dos tempos de desenvolvimento durante os katas.
 Componente de coordenação e medição do tempo completo de resolução do exercício (RQ1) para o experimento de IA do Laboratório 02. Entrega vinculada à [Issue #30](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/30).
 Componente de coordenação da rodada, controle estrito de timebox e medição do tempo completo de resolução do exercício (RQ1) para o experimento do Laboratório 02. Entrega vinculada à [Issue #30](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/30).
+**Atualização S02 — Issue #37:** o [guia da consolidação](../consolidacao/README.md)
+documenta o comando único `executar_rodada.py`, estados de erro, cópias por
+tentativa, limite durante espera de entrada/testes, integração Gemini e a
+demonstração atual com exercício separado. O comando deste cronômetro continua
+disponível e utiliza a mesma implementação. O manifesto novo usa schema 2;
+resultados anteriores não foram modificados. As instruções de simulação abaixo
+são o exemplo legado da S01, com tempos simulados explicitamente identificados.
+
+Guia passo a passo para execução e registro dos tempos de desenvolvimento durante os katas.
+Componente de coordenação e medição do tempo completo de resolução do exercício (RQ1) para o experimento de IA do Laboratório 02. Entrega vinculada à [Issue #30](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/30).
 
 O coordenador integra a bateria de testes de aceitação de **Vinícius (#34)** e o coletor de métricas estruturais com Radon de **Áulus (#31)**, amarrando cada execução sob um identificador único de rodada (**`trial_id`**).
 O coordenador integra a suíte de testes de aceitação de **Vinícius (#34)**, o script de consulta ao Gemini de **Vinícius (#39)** e o coletor de métricas estruturais com Radon de **Áulus (#31)** sob um identificador unificado de rodada (**`trial_id`**).
@@ -185,3 +195,8 @@ O script simula automaticamente e valida os três cenários exigidos pela especi
 3. **Interrupção Antecipada:** Parada manual aos 13.50 minutos com justificativa, registrando `INTERRUPCAO` e duração real de 13.50 min (**sem virar 35 minutos**).
 4. **Verificação de Integridade:** Valida a criação dos arquivos de cada trial e as linhas gravadas no CSV.
 Todos os resultados estão consolidados no arquivo [registro_experimento.csv](registro_experimento.csv) e seus artefatos preservados na pasta `resultados/`.
+O script simula automaticamente e valida os três cenários exigidos pela especificação:
+1. **Sucesso Funcional:** Solução que passa em 100% dos testes antes do limite (ex.: 7.35 min), registrando `SUCESSO` e tempo real.
+2. **Limite Atingido:** Esgotamento do timebox aos 35 minutos sem aprovação, registrando `LIMITE_ATINGIDO` e 35 minutos censurados.
+3. **Interrupção Antecipada:** Parada manual aos 13.50 minutos com justificativa, registrando `INTERRUPCAO` e duração real de 13.50 min (**sem virar 35 minutos**).
+4. **Verificação de Integridade:** Valida a criação dos arquivos de cada trial e as linhas gravadas no CSV.
