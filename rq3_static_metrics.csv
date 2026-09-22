@@ -1,0 +1,15 @@
+file_path,author,loc,avg_cc,max_cc,maintainability_index,duplication_percent
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata01_maria_ia.py,Maria,86,4.86,10,57.07045096150505,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata02_maria_manual.py,Maria,86,9.0,13,52.17213673204366,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata03_maria_ia.py,Maria,30,4.0,4,82.59788608492431,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata04_maria_manual.py,Maria,44,3.67,4,76.679203959812,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata05_maria_ia.py,Maria,35,3.5,4,80.80614062353067,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata06_maria_manual.py,Maria,40,2.67,3,76.55496620668838,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata01_aulus_manual.py,Aulus,79,7.0,10,37.37852254239297,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata02_aulus_ia.py,Aulus,76,7.67,12,39.49304196869374,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata03_aulus_manual.py,Aulus,23,2.5,3,60.90392104875397,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata05_aulus_manual.py,Aulus,25,2.5,3,61.38487057508898,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata06_aulus_ia.py,Aulus,30,2.67,3,54.649170662244536,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata01_vinicius_manual.py,Vinicius,60,4.25,10,39.36030162473708,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata02_vinicius_manual.py,Vinicius,56,5.67,10,62.62489211449933,28.76190476190476
+Laboratorio02_TrialsIA\solucoes_das_Katas\kata06_vinicius_manual.py,Vinicius,21,2.0,3,57.329696004386534,28.76190476190476
