@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "trial_id": "vinicius_K01_manual_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K01_manual_01\\vinicius_K01_manual_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 8,
+  "complexidade_media": 4.25,
+  "loc": 60,
+  "sloc": 51,
+  "funcoes": [
+    {
+      "nome": "e_vogal",
+      "linha": 3,
+      "complexidade": 1
+    },
+    {
+      "nome": "e_consoante",
+      "linha": 6,
+      "complexidade": 2
+    },
+    {
+      "nome": "somente_vogais",
+      "linha": 9,
+      "complexidade": 3
+    },
+    {
+      "nome": "somente_consoantes",
+      "linha": 14,
+      "complexidade": 3
+    },
+    {
+      "nome": "e_inteiro",
+      "linha": 19,
+      "complexidade": 7
+    },
+    {
+      "nome": "e_real",
+      "linha": 30,
+      "complexidade": 10
+    },
+    {
+      "nome": "processar_linha",
+      "linha": 45,
+      "complexidade": 5
+    },
+    {
+      "nome": "main",
+      "linha": 52,
+      "complexidade": 3
+    }
+  ]
+}

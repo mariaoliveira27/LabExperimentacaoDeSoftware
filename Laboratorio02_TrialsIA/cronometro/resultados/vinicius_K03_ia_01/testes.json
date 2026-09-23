@@ -1,0 +1,65 @@
+{
+  "trial_id": "vinicius_K03_ia_01",
+  "arquivo_solucao": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K03_ia_01\\vinicius_K03_ia_01_solucao_final.py",
+  "sha256_solucao": "75a6b5a3b1da4a2894718521005d300c2130ad6eb2a1fc4b94bbf436df021e69",
+  "data_execucao": "2026-09-22 22:20:06",
+  "resultado": {
+    "total_casos": 10,
+    "aprovados": 8,
+    "reprovados": 2,
+    "taxa_sucesso": 80.0,
+    "passou_todos": false,
+    "detalhes": [
+      {
+        "caso_teste": 1,
+        "finalidade": "Ciframento básico sem estouro",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 2,
+        "finalidade": "Palavra simples em minúsculas",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 3,
+        "finalidade": "Caracteres ao fim da tabela ASCII",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 4,
+        "finalidade": "Deslocamento de números por ASCII",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 5,
+        "finalidade": "Preservação de espaços",
+        "resultado": "SAIDA_INCORRETA"
+      },
+      {
+        "caso_teste": 6,
+        "finalidade": "Mistura de maiúsculas e minúsculas",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 7,
+        "finalidade": "Inclusão de pontuação",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 8,
+        "finalidade": "Caractere de espaço cifrado",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 9,
+        "finalidade": "Palavra longa em maiúsculas",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 10,
+        "finalidade": "Entrada padrão antes do FIM de parada",
+        "resultado": "SAIDA_INCORRETA"
+      }
+    ]
+  }
+}

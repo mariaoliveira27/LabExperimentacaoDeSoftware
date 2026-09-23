@@ -1,0 +1,65 @@
+{
+  "trial_id": "vinicius_K01_manual_01",
+  "arquivo_solucao": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K01_manual_01\\vinicius_K01_manual_01_solucao_final.py",
+  "sha256_solucao": "680f8fd1462dd51889abda1cb3a4a00460d9ff1e3854fb6a1436f75c32d55a4c",
+  "data_execucao": "2026-09-22 21:25:24",
+  "resultado": {
+    "total_casos": 10,
+    "aprovados": 8,
+    "reprovados": 2,
+    "taxa_sucesso": 80.0,
+    "passou_todos": false,
+    "detalhes": [
+      {
+        "caso_teste": 1,
+        "finalidade": "Apenas vogais minúsculas",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 2,
+        "finalidade": "Apenas vogais maiúsculas",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 3,
+        "finalidade": "Apenas consoantes minúsculas",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 4,
+        "finalidade": "Apenas consoantes maiúsculas",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 5,
+        "finalidade": "Número inteiro positivo",
+        "resultado": "SAIDA_INCORRETA"
+      },
+      {
+        "caso_teste": 6,
+        "finalidade": "Número inteiro negativo",
+        "resultado": "SAIDA_INCORRETA"
+      },
+      {
+        "caso_teste": 7,
+        "finalidade": "Número real positivo",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 8,
+        "finalidade": "Número real negativo",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 9,
+        "finalidade": "Alfanumérico misto",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 10,
+        "finalidade": "Texto com espaços e caracteres mistos",
+        "resultado": "APROVADO"
+      }
+    ]
+  }
+}

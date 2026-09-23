@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "trial_id": "aulus_K06_ia_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\aulus_K06_ia_01\\aulus_K06_ia_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 3,
+  "complexidade_media": 2.6666666666666665,
+  "loc": 30,
+  "sloc": 19,
+  "funcoes": [
+    {
+      "nome": "fatorial",
+      "linha": 3,
+      "complexidade": 2
+    },
+    {
+      "nome": "cosseno",
+      "linha": 9,
+      "complexidade": 3
+    },
+    {
+      "nome": "main",
+      "linha": 21,
+      "complexidade": 3
+    }
+  ]
+}

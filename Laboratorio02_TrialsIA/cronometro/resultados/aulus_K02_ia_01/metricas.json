@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "trial_id": "aulus_K02_ia_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\aulus_K02_ia_01\\aulus_K02_ia_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 3,
+  "complexidade_media": 7.666666666666667,
+  "loc": 76,
+  "sloc": 57,
+  "funcoes": [
+    {
+      "nome": "separar_argumentos",
+      "linha": 5,
+      "complexidade": 6
+    },
+    {
+      "nome": "avaliar",
+      "linha": 24,
+      "complexidade": 12
+    },
+    {
+      "nome": "main",
+      "linha": 56,
+      "complexidade": 5
+    }
+  ]
+}

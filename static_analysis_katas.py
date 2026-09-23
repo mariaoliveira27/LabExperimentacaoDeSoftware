@@ -110,17 +110,25 @@ def main():
     for participant in PARTICIPANTS:
         pattern = f"*{participant}*.py"
         kata_files.extend(KATA_DIR.rglob(pattern))
+    # Inclui as soluções de IA geradas por Vinícius via Gemini (Issue #39)
+    for arq in sorted(KATA_DIR.rglob("*gemini*.py")):
+        if arq not in kata_files:
+            kata_files.append(arq)
 
     # 2. Compute per‑file metrics
     rows = []
     for file_path in kata_files:
-        author = next((p for p in PARTICIPANTS if p in file_path.name.lower()), "unknown")
+        name_lower = file_path.name.lower()
+        if "gemini" in name_lower:
+            author = "Vinicius"
+        else:
+            author = next((p for p in PARTICIPANTS if p in name_lower), "unknown")
         loc = radon_raw(file_path)
         avg_cc, max_cc = radon_cc(file_path)
         mi = radon_mi(file_path)
         rows.append({
             "file_path": str(file_path.relative_to(BASE_DIR)),
-            "author": author.title(),
+            "author": author.title() if isinstance(author, str) else str(author),
             "loc": loc,
             "avg_cc": avg_cc,
             "max_cc": max_cc,

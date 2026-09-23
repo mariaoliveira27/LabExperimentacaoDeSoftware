@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "trial_id": "aulus_K05_manual_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\aulus_K05_manual_01\\aulus_K05_manual_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 2,
+  "complexidade_media": 2.5,
+  "loc": 25,
+  "sloc": 16,
+  "funcoes": [
+    {
+      "nome": "buscar",
+      "linha": 3,
+      "complexidade": 3
+    },
+    {
+      "nome": "main",
+      "linha": 12,
+      "complexidade": 2
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "trial_id": "aulus_K03_manual_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\aulus_K03_manual_01\\aulus_K03_manual_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 2,
+  "complexidade_media": 2.5,
+  "loc": 23,
+  "sloc": 15,
+  "funcoes": [
+    {
+      "nome": "cifrar",
+      "linha": 4,
+      "complexidade": 2
+    },
+    {
+      "nome": "main",
+      "linha": 13,
+      "complexidade": 3
+    }
+  ]
+}

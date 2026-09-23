@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "trial_id": "aulus_K01_manual_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\aulus_K01_manual_01\\aulus_K01_manual_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 5,
+  "complexidade_media": 7.0,
+  "loc": 79,
+  "sloc": 55,
+  "funcoes": [
+    {
+      "nome": "somente_vogais",
+      "linha": 4,
+      "complexidade": 4
+    },
+    {
+      "nome": "somente_consoantes",
+      "linha": 17,
+      "complexidade": 6
+    },
+    {
+      "nome": "numero_inteiro",
+      "linha": 32,
+      "complexidade": 9
+    },
+    {
+      "nome": "numero_real",
+      "linha": 47,
+      "complexidade": 10
+    },
+    {
+      "nome": "main",
+      "linha": 66,
+      "complexidade": 6
+    }
+  ]
+}

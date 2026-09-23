@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "trial_id": "aulus_K06_ia_01",
+  "integrante": "aulus",
+  "kata": "K06",
+  "tratamento": "ia",
+  "horario_inicio": "2026-09-22 22:52:30",
+  "horario_fim": "2026-09-22 23:12:18",
+  "tempo_decorrido_min": 19.8,
+  "tempo_final_considerado": 19.8,
+  "status": "SUCESSO",
+  "motivo_interrupcao": "",
+  "passou_todos": true,
+  "taxa_sucesso_testes": 100.0,
+  "dado_censurado": false,
+  "artefatos": {
+    "copia_solucao": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\aulus_K06_ia_01\\aulus_K06_ia_01_solucao_final.py",
+    "sha256_copia": "c6c72f626741bfbef6b668a66dc29ffee405e5e62cd087735605f791efdbb4d5",
+    "testes_json": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\aulus_K06_ia_01\\testes.json",
+    "metricas_json": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\aulus_K06_ia_01\\metricas.json"
+  }
+}

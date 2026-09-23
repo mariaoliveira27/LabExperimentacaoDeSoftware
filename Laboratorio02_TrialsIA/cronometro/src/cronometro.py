@@ -25,6 +25,7 @@ import sys
 import threading
 import time
 from datetime import datetime
+import hashlib
 from pathlib import Path
 
 # Suporte a leitura não-bloqueante no Windows
@@ -44,7 +45,7 @@ if str(RAIZ_REPOSITORIO) not in sys.path:
     sys.path.insert(0, str(RAIZ_REPOSITORIO))
 
 from Laboratorio02_TrialsIA.consolidacao.artefatos import (
-    avaliar_copia, conferir_csv, erro_registrado, gravar_json, preservar, registrar_csv,
+    avaliar_copia, conferir_csv, erro_registrado, gravar_json, preservar, registrar_csv, coletar,
 )
 from Laboratorio02_TrialsIA.consolidacao.terminal import ler_ate
 
@@ -328,7 +329,7 @@ def finalizar_rodada(
     # 2. Executar testes diretamente sobre a cópia congelada (se ainda não executados)
     chave_kata = chave_kata_executor(kata)
     if resultado_testes is None:
-        resultado_testes = avaliar_solucao(str(copia_solucao), chave_kata)
+        resultado_testes = avaliar_copia(copia_solucao, chave_kata, BASE_TESTES_PADRAO)
 
     passou_todos = bool(resultado_testes and resultado_testes.get("passou_todos"))
     taxa_sucesso = float(resultado_testes.get("taxa_sucesso", 0.0)) if resultado_testes else 0.0
@@ -374,8 +375,10 @@ def finalizar_rodada(
 
     # 5. Coletar métricas Radon de Áulus (#31) sobre a mesma cópia congelada
     caminho_metricas_json = pasta_trial / "metricas.json"
-    resultado_metricas = analisar_arquivo(copia_solucao, trial_id=trial_id)
-    gravar_resultado(resultado_metricas, caminho_metricas_json)
+    resultado_metricas = coletar(copia_solucao, trial_id)
+    with caminho_metricas_json.open("w", encoding="utf-8") as f:
+        json.dump(resultado_metricas, f, ensure_ascii=False, indent=2)
+        f.write("\n")
 
     # 6. Salvar manifesto da rodada
     caminho_manifesto = pasta_trial / "manifesto_rodada.json"
@@ -488,7 +491,7 @@ def coordenar_rodada(
 
         # Cópia atômica para avaliação
         copia_solucao, sha256_copia = congelar_copia_solucao(caminho_solucao, trial_id, diretorio_saida)
-        resultado_testes = avaliar_solucao(str(copia_solucao), chave_kata)
+        resultado_testes = avaliar_copia(copia_solucao, chave_kata, BASE_TESTES_PADRAO)
 
         if tipo_simulacao == "sucesso":
             status = "SUCESSO"

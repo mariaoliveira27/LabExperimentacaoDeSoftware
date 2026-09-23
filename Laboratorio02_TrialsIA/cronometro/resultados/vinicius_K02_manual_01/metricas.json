@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "trial_id": "vinicius_K02_manual_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K02_manual_01\\vinicius_K02_manual_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 3,
+  "complexidade_media": 5.666666666666667,
+  "loc": 56,
+  "sloc": 41,
+  "funcoes": [
+    {
+      "nome": "avaliar_expressao_rec",
+      "linha": 4,
+      "complexidade": 10
+    },
+    {
+      "nome": "resolver_linha",
+      "linha": 33,
+      "complexidade": 4
+    },
+    {
+      "nome": "main",
+      "linha": 49,
+      "complexidade": 3
+    }
+  ]
+}

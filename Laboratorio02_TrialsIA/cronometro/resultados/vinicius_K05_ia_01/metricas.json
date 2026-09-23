@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "trial_id": "vinicius_K05_ia_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K05_ia_01\\vinicius_K05_ia_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 1,
+  "complexidade_media": 4.0,
+  "loc": 13,
+  "sloc": 10,
+  "funcoes": [
+    {
+      "nome": "busca",
+      "linha": 1,
+      "complexidade": 4
+    }
+  ]
+}

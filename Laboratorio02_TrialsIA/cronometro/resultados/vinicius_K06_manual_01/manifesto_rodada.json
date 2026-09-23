@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "trial_id": "vinicius_K06_manual_01",
+  "integrante": "vinicius",
+  "kata": "K06",
+  "tratamento": "manual",
+  "horario_inicio": "2026-09-22 23:36:39",
+  "horario_fim": "2026-09-22 23:56:27",
+  "tempo_decorrido_min": 19.8,
+  "tempo_final_considerado": 19.8,
+  "status": "SUCESSO",
+  "motivo_interrupcao": "",
+  "passou_todos": false,
+  "taxa_sucesso_testes": 0.0,
+  "dado_censurado": false,
+  "artefatos": {
+    "copia_solucao": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K06_manual_01\\vinicius_K06_manual_01_solucao_final.py",
+    "sha256_copia": "42899950e594f3746e132b17519ee672310ea8299e16ac69f96c4e46d0642023",
+    "testes_json": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K06_manual_01\\testes.json",
+    "metricas_json": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K06_manual_01\\metricas.json"
+  }
+}

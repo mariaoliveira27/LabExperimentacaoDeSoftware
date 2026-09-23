@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "trial_id": "vinicius_K04_ia_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K04_ia_01\\vinicius_K04_ia_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 4,
+  "complexidade_media": 2.25,
+  "loc": 40,
+  "sloc": 27,
+  "funcoes": [
+    {
+      "nome": "JavaRandom.__init__",
+      "linha": 8,
+      "complexidade": 1
+    },
+    {
+      "nome": "JavaRandom.nextInt",
+      "linha": 11,
+      "complexidade": 2
+    },
+    {
+      "nome": "substituir_recursivo",
+      "linha": 22,
+      "complexidade": 3
+    },
+    {
+      "nome": "main",
+      "linha": 29,
+      "complexidade": 3
+    }
+  ]
+}

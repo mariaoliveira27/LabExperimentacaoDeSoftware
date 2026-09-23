@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "trial_id": "vinicius_K03_ia_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K03_ia_01\\vinicius_K03_ia_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 2,
+  "complexidade_media": 2.5,
+  "loc": 18,
+  "sloc": 14,
+  "funcoes": [
+    {
+      "nome": "cifrado",
+      "linha": 5,
+      "complexidade": 2
+    },
+    {
+      "nome": "main",
+      "linha": 10,
+      "complexidade": 3
+    }
+  ]
+}

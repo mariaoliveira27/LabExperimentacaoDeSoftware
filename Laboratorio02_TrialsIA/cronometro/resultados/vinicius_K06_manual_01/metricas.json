@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "trial_id": "vinicius_K06_manual_01",
+  "arquivo": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K06_manual_01\\vinicius_K06_manual_01_solucao_final.py",
+  "status_analise": "ok",
+  "erro": null,
+  "quantidade_funcoes": 3,
+  "complexidade_media": 2.0,
+  "loc": 21,
+  "sloc": 16,
+  "funcoes": [
+    {
+      "nome": "fatorial",
+      "linha": 1,
+      "complexidade": 2
+    },
+    {
+      "nome": "calcular_cosseno_rec",
+      "linha": 6,
+      "complexidade": 3
+    },
+    {
+      "nome": "main",
+      "linha": 15,
+      "complexidade": 1
+    }
+  ]
+}

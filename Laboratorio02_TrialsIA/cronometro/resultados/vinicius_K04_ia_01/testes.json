@@ -1,0 +1,65 @@
+{
+  "trial_id": "vinicius_K04_ia_01",
+  "arquivo_solucao": "C:\\Users\\maria\\Downloads\\LabExperimentacaoDeSoftware\\Laboratorio02_TrialsIA\\cronometro\\resultados\\vinicius_K04_ia_01\\vinicius_K04_ia_01_solucao_final.py",
+  "sha256_solucao": "a36021792a66e02a97d64d5cf8322e2ceae951149014f21891dccf3ac7e1b7a3",
+  "data_execucao": "2026-09-22 22:57:30",
+  "resultado": {
+    "total_casos": 10,
+    "aprovados": 1,
+    "reprovados": 9,
+    "taxa_sucesso": 10.0,
+    "passou_todos": false,
+    "detalhes": [
+      {
+        "caso_teste": 1,
+        "finalidade": "Substituição do primeiro par sorteado pela seed 4",
+        "resultado": "SAIDA_INCORRETA"
+      },
+      {
+        "caso_teste": 2,
+        "finalidade": "Substituição do segundo par sorteado pela seed 4",
+        "resultado": "SAIDA_INCORRETA"
+      },
+      {
+        "caso_teste": 3,
+        "finalidade": "Palavra com múltiplas ocorrências da letra sorteada",
+        "resultado": "SAIDA_INCORRETA"
+      },
+      {
+        "caso_teste": 4,
+        "finalidade": "Substituição simples mantendo consoantes",
+        "resultado": "SAIDA_INCORRETA"
+      },
+      {
+        "caso_teste": 5,
+        "finalidade": "Cadeia sem a letra sorteada",
+        "resultado": "APROVADO"
+      },
+      {
+        "caso_teste": 6,
+        "finalidade": "Troca de vogais 'a'",
+        "resultado": "SAIDA_INCORRETA"
+      },
+      {
+        "caso_teste": 7,
+        "finalidade": "Texto com espaços e múltiplas substituições",
+        "resultado": "SAIDA_INCORRETA"
+      },
+      {
+        "caso_teste": 8,
+        "finalidade": "Cadeia homogênea",
+        "resultado": "SAIDA_INCORRETA"
+      },
+      {
+        "caso_teste": 9,
+        "finalidade": "Substituição em frase curta",
+        "resultado": "SAIDA_INCORRETA"
+      },
+      {
+        "caso_teste": 10,
+        "finalidade": "Nomes de linguagens com caractere alvo",
+        "resultado": "SAIDA_INCORRETA"
+      }
+    ]
+  }
+}
