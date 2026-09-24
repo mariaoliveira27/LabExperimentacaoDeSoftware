@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102a43">
+    <meta name="description" content="Resultados do Laboratório 02: tempo, sucesso nos testes e métricas estáticas nas condições Manual e Com IA.">
+    <title>Manual × Com IA | Laboratório 02</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegação da dashboard">
+        <a class="brand" href="#visao-geral" aria-label="Laboratório 02, visão geral">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M8 7v18M16 14v11M24 4v21" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></span>
+          <span><strong>Experimento em foco</strong><small>Laboratório 02</small></span>
+        </a>
+        <p class="nav-label">Explorar resultados</p>
+        <nav class="section-nav" aria-label="Seções">
+          <a class="nav-link is-active" href="#visao-geral" aria-current="location"><span aria-hidden="true">01</span>Visão geral</a>
+          <a class="nav-link" href="#tempo"><span aria-hidden="true">02</span>Tempo registrado</a>
+          <a class="nav-link" href="#sucesso"><span aria-hidden="true">03</span>Sucesso nos testes</a>
+          <a class="nav-link" href="#qualidade"><span aria-hidden="true">04</span>Métricas estáticas</a>
+          <a class="nav-link" href="#rodadas"><span aria-hidden="true">05</span>Explorar rodadas</a>
+        </nav>
+        <div class="sidebar-study">
+          <span class="small-label">Duas condições</span>
+          <p><span class="treatment-dot manual" aria-hidden="true"></span>Manual</p>
+          <p><span class="treatment-dot ia" aria-hidden="true"></span>Com IA</p>
+          <a href="#metodologia">Como ler estes dados <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="sidebar-footer"><span class="status-dot" id="source-dot" aria-hidden="true"></span><p id="source-status">Preparando os resultados…</p></div>
+      </aside>
+
+      <main id="conteudo" class="main-content">
+        <header class="topbar">
+          <div><p class="eyebrow">Experimentação de software</p><p class="page-context">Comparação entre tratamentos <span aria-hidden="true">/</span> Lab 02</p></div>
+          <a class="quiet-link" href="#metodologia">Sobre os dados <span aria-hidden="true">↗</span></a>
+        </header>
+
+        <section id="load-state" class="load-state" role="status" aria-live="polite">
+          <span class="loading-orbit" aria-hidden="true"></span>
+          <h1>Preparando a dashboard</h1>
+          <p>Carregando os resultados e as visualizações do experimento.</p>
+          <button id="retry-load" class="primary-button" type="button" hidden>Tentar novamente</button>
+        </section>
+
+        <div id="dashboard-content" hidden>
+          <section class="intro" id="visao-geral" data-section aria-labelledby="page-title">
+            <div><p class="eyebrow">Manual × Com IA</p><h1 id="page-title">O experimento,<br><span>sob diferentes perspectivas.</span></h1><p class="intro-copy">Compare o tempo registrado, o desempenho nos testes e a estrutura do código. Explore os resultados por participante e por kata.</p></div>
+            <div class="study-stamp"><strong id="total-trials">—</strong><span>rodadas no experimento</span><small id="study-dimensions">Laboratório 02</small></div>
+          </section>
+
+          <section class="filter-bar" aria-label="Filtros de todas as visualizações">
+            <div class="filter-fields">
+              <label for="participant-filter"><span>Participante</span><select id="participant-filter"></select></label>
+              <label for="kata-filter"><span>Kata</span><select id="kata-filter"></select></label>
+              <button id="reset-filters" class="text-button" type="button">Limpar filtros</button>
+            </div>
+            <a id="download-csv" class="download-button" download><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 16v4h14v-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Baixar CSV do recorte</a>
+          </section>
+          <div class="active-context"><p id="filter-summary" role="status" aria-live="polite" aria-atomic="true"></p><span class="generated-label" id="generated-label"></span></div>
+
+          <aside class="provenance-note" aria-label="Nota sobre a origem dos dados"><span class="note-icon" aria-hidden="true">i</span><p><strong>Uma leitura dos registros disponíveis.</strong> Tempos conforme o CSV: os scripts usam modo de simulação e a origem da cronometragem não foi confirmada. <span id="test-source-note"></span> <a href="#metodologia">Ver critérios de leitura</a>.</p></aside>
+
+          <p id="adjustment-note" class="adjustment-note" hidden></p>
+          <div id="comparison-note" class="comparison-note" role="status" hidden></div>
+          <section class="overview" aria-labelledby="overview-title">
+            <div class="section-heading compact"><div><p class="eyebrow">Panorama do recorte</p><h2 id="overview-title">Dois tratamentos. Os mesmos indicadores.</h2></div><p>Valores descritivos das rodadas selecionadas.</p></div>
+            <div id="kpi-grid" class="kpi-grid"></div>
+          </section>
+
+          <section class="dashboard-section" id="tempo" data-section aria-labelledby="time-title">
+            <div class="section-heading"><div><p class="eyebrow">RQ1 · Tempo</p><h2 id="time-title">Quanto tempo foi registrado?</h2></div><p>Distribuição por tratamento.<br>Cada observação representa uma rodada.</p></div>
+            <article class="panel chart-panel"><div class="panel-heading"><div><h3>Tempo registrado por tratamento</h3><p>Minutos · valores registrados no experimento</p></div><div class="chart-downloads" aria-label="Baixar gráfico de tempo"><a data-download="tempo" data-format="png" download>PNG <span aria-hidden="true">↓</span></a><a data-download="tempo" data-format="svg" download>SVG <span aria-hidden="true">↓</span></a></div></div><div class="chart-frame"><img id="chart-tempo" class="chart-image" alt="" width="1440" height="855"></div><p class="chart-caption">A caixa reúne os 50% centrais dos tempos; a linha marca a mediana. Cada ponto é uma rodada. Com menos de três observações, mostramos apenas os pontos.</p></article>
+          </section>
+
+          <section class="dashboard-section" id="sucesso" data-section aria-labelledby="success-title">
+            <div class="section-heading"><div><p class="eyebrow">RQ2 · Correção</p><h2 id="success-title">Quantos testes passaram?</h2></div><p>Taxa de aprovação por rodada,<br>com a evidência disponível.</p></div>
+            <article class="panel chart-panel"><div class="panel-heading"><div><h3>Sucesso nos testes por kata e tratamento</h3><p>Percentual de testes aprovados · escala de 0 a 100%</p></div><div class="chart-downloads" aria-label="Baixar gráfico de sucesso"><a data-download="sucesso" data-format="png" download>PNG <span aria-hidden="true">↓</span></a><a data-download="sucesso" data-format="svg" download>SVG <span aria-hidden="true">↓</span></a></div></div><div class="chart-frame"><img id="chart-sucesso" class="chart-image" alt="" width="1440" height="855" loading="lazy"></div><p class="chart-caption">Barras: média dos percentuais, com o mesmo peso para cada rodada. Pontos: resultados individuais. O losango vazado indica uma taxa informada no CSV, sem relatório arquivado.</p></article>
+          </section>
+
+          <section class="dashboard-section" id="qualidade" data-section aria-labelledby="quality-title">
+            <div class="section-heading"><div><p class="eyebrow">RQ3 · Estrutura do código</p><h2 id="quality-title">Como as soluções se diferenciam?</h2></div><p>Complexidade e tamanho são medidas<br>complementares, com escalas próprias.</p></div>
+            <div class="chart-grid">
+              <article class="panel chart-panel"><div class="panel-heading"><div><h3>Complexidade ciclomática</h3><p>Complexidade média por solução</p></div><div class="chart-downloads" aria-label="Baixar gráfico de complexidade"><a data-download="complexidade" data-format="png" download>PNG <span aria-hidden="true">↓</span></a><a data-download="complexidade" data-format="svg" download>SVG <span aria-hidden="true">↓</span></a></div></div><div class="chart-frame"><img id="chart-complexidade" class="chart-image" alt="" width="1440" height="855" loading="lazy"></div><p class="chart-caption">Caixas: 50% centrais e mediana. Pontos: complexidade média de cada solução. Ausência de relatório não representa zero.</p></article>
+              <article class="panel chart-panel"><div class="panel-heading"><div><h3>Linhas de código</h3><p>LOC · tamanho de cada solução</p></div><div class="chart-downloads" aria-label="Baixar gráfico de linhas de código"><a data-download="loc" data-format="png" download>PNG <span aria-hidden="true">↓</span></a><a data-download="loc" data-format="svg" download>SVG <span aria-hidden="true">↓</span></a></div></div><div class="chart-frame"><img id="chart-loc" class="chart-image" alt="" width="1440" height="855" loading="lazy"></div><p class="chart-caption">Caixas: 50% centrais e mediana. Pontos: linhas por solução, incluindo comentários e linhas vazias. SLOC está na tabela.</p></article>
+            </div>
+            <article class="panel chart-panel relation-panel"><div class="panel-heading"><div><h3>Tamanho e complexidade, lado a lado</h3><p>Cada ponto corresponde a uma solução</p></div><div class="chart-downloads" aria-label="Baixar gráfico de relação entre LOC e complexidade"><a data-download="relacao" data-format="png" download>PNG <span aria-hidden="true">↓</span></a><a data-download="relacao" data-format="svg" download>SVG <span aria-hidden="true">↓</span></a></div></div><div class="chart-frame"><img id="chart-relacao" class="chart-image" alt="" width="1440" height="855" loading="lazy"></div><p class="chart-caption">Círculos azuis: Manual. Losangos verdes: Com IA. Cada ponto mantém os valores reais de LOC e complexidade; pontos coincidentes podem se sobrepor. A relação é descritiva.</p></article>
+          </section>
+
+          <section class="dashboard-section" id="rodadas" data-section aria-labelledby="trials-title">
+            <div class="section-heading"><div><p class="eyebrow">Rastreabilidade</p><h2 id="trials-title">Da visualização à rodada.</h2></div><p id="table-summary"></p></div>
+            <div class="panel table-panel"><div class="table-scroll" tabindex="0" role="region" aria-label="Tabela de rodadas; role horizontalmente para consultar todas as colunas"><table><caption class="sr-only">Rodadas do recorte selecionado, com tempo, resultados dos testes, métricas estáticas e fonte da evidência.</caption><thead><tr><th scope="col">Participante / rodada</th><th scope="col">Kata</th><th scope="col">Tratamento</th><th scope="col" class="numeric">Tempo <small>min</small></th><th scope="col" class="numeric">Sucesso <small>%</small></th><th scope="col" class="numeric">CC média</th><th scope="col" class="numeric">LOC</th><th scope="col" class="numeric">SLOC</th><th scope="col">Evidência dos testes</th></tr></thead><tbody id="trials-table"></tbody></table></div><div class="table-footnote"><span id="evidence-summary"></span><p>“Não disponível” indica ausência de evidência; não representa zero.</p></div></div>
+          </section>
+
+          <section class="methodology" id="metodologia" aria-labelledby="methodology-title">
+            <div class="section-heading"><div><p class="eyebrow">Notas de leitura</p><h2 id="methodology-title">O que estes resultados permitem observar.</h2></div></div>
+            <div class="method-grid">
+              <details open><summary>Fontes e critérios</summary><div><p>Os dados são consolidados dos registros de rodadas do Lab 02. Quando há relatório de testes arquivado, os resultados desse relatório têm prioridade sobre o status do CSV. Na ausência do relatório, utiliza-se a taxa registrada no CSV e a origem é identificada na tabela.</p><p>As métricas estáticas usam os artefatos disponíveis das soluções. Valores ausentes ficam fora do resumo daquela métrica; o número de observações é informado em cada cartão.</p><p>Pandas prepara os dados e os resumos. Matplotlib e Seaborn geram os gráficos antes da publicação. Os filtros selecionam os recortes previamente calculados.</p></div></details>
+              <details open><summary>Limitações da comparação</summary><div><p>Os tempos são os valores registrados no CSV. Os scripts usam durações fixas em modo de simulação. A origem da cronometragem não foi confirmada; esses valores não são tempos validados até a aprovação de todos os testes.</p><p>O experimento tem poucos participantes e rodadas. Uma combinação de participante e kata pode conter apenas um tratamento; nesse caso, não há comparação entre tratamentos nesse recorte.</p><p>Estes gráficos são descritivos. Diferenças observadas não estabelecem superioridade geral ou efeito causal da IA. Complexidade e tamanho também não resumem, sozinhos, a qualidade de uma solução.</p></div></details>
+            </div>
+          </section>
+          <footer class="page-footer"><p>Laboratório de Experimentação de Software <span aria-hidden="true">·</span> Lab 02</p><a href="#visao-geral">Voltar ao início <span aria-hidden="true">↑</span></a></footer>
+        </div>
+      </main>
+    </div>
+    <dialog id="chart-dialog" class="chart-dialog" aria-labelledby="chart-dialog-title">
+      <div class="dialog-heading"><h2 id="chart-dialog-title">Gráfico ampliado</h2><button id="close-chart-dialog" type="button" autofocus>Fechar <span aria-hidden="true">×</span></button></div>
+      <p class="dialog-hint">Versão para download com o contexto do recorte. No celular, deslize para explorar.</p>
+      <div class="expanded-frame" tabindex="0" role="region" aria-label="Gráfico ampliado; role para explorar"><img id="expanded-chart" alt=""><p id="expanded-error" role="status" hidden>Não foi possível abrir o gráfico ampliado. Consulte os valores na tabela de rodadas.</p></div>
+    </dialog>
+  </body>
+</html>

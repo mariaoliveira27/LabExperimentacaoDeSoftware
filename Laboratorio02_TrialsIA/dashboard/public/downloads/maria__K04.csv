@@ -1,0 +1,2 @@
+﻿trial_id,integrante,kata,tratamento,tempo_min,taxa_sucesso,passou_todos,total_testes,aprovados,reprovados,complexidade_media,loc,sloc,fonte_testes,metricas_disponiveis,status_registrado,status_divergente,tempo_censurado,tratamento_registrado,tratamento_ajustado
+maria_K04_manual_01,maria,K04,manual,22.4,100.0,True,10.0,10.0,0.0,3.6666666666666665,44.0,27.0,relatorio,True,SUCESSO,False,False,manual,False
