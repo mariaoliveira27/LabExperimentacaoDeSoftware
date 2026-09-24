@@ -1,0 +1,3392 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-24T01:25:00+00:00",
+  "participants": [
+    {
+      "value": "all",
+      "label": "Todos"
+    },
+    {
+      "value": "aulus",
+      "label": "Áulus"
+    },
+    {
+      "value": "maria",
+      "label": "Maria"
+    },
+    {
+      "value": "vinicius",
+      "label": "Vinícius"
+    }
+  ],
+  "katas": [
+    {
+      "value": "all",
+      "label": "Todas"
+    },
+    {
+      "value": "K01",
+      "label": "K01"
+    },
+    {
+      "value": "K02",
+      "label": "K02"
+    },
+    {
+      "value": "K03",
+      "label": "K03"
+    },
+    {
+      "value": "K04",
+      "label": "K04"
+    },
+    {
+      "value": "K05",
+      "label": "K05"
+    },
+    {
+      "value": "K06",
+      "label": "K06"
+    }
+  ],
+  "treatments": [
+    {
+      "value": "manual",
+      "label": "Manual",
+      "color": "#1677c8"
+    },
+    {
+      "value": "ia",
+      "label": "Com IA",
+      "color": "#0f9f8c"
+    }
+  ],
+  "rows": [
+    {
+      "trial_id": "aulus_K01_manual_01",
+      "integrante": "aulus",
+      "kata": "K01",
+      "tratamento": "ia",
+      "tempo_min": 8.45,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": 10,
+      "aprovados": 10,
+      "reprovados": 0,
+      "complexidade_media": 7.0,
+      "loc": 79,
+      "sloc": 55,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "manual",
+      "tratamento_ajustado": true
+    },
+    {
+      "trial_id": "aulus_K02_ia_01",
+      "integrante": "aulus",
+      "kata": "K02",
+      "tratamento": "manual",
+      "tempo_min": 6.5,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": 10,
+      "aprovados": 10,
+      "reprovados": 0,
+      "complexidade_media": 7.666666666666667,
+      "loc": 76,
+      "sloc": 57,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "ia",
+      "tratamento_ajustado": true
+    },
+    {
+      "trial_id": "aulus_K03_manual_01",
+      "integrante": "aulus",
+      "kata": "K03",
+      "tratamento": "ia",
+      "tempo_min": 12.3,
+      "taxa_sucesso": 80.0,
+      "passou_todos": false,
+      "total_testes": 10,
+      "aprovados": 8,
+      "reprovados": 2,
+      "complexidade_media": 2.5,
+      "loc": 23,
+      "sloc": 15,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": true,
+      "tempo_censurado": false,
+      "tratamento_registrado": "manual",
+      "tratamento_ajustado": true
+    },
+    {
+      "trial_id": "aulus_K04_ia_01",
+      "integrante": "aulus",
+      "kata": "K04",
+      "tratamento": "manual",
+      "tempo_min": 20.0,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": null,
+      "aprovados": null,
+      "reprovados": null,
+      "complexidade_media": null,
+      "loc": null,
+      "sloc": null,
+      "fonte_testes": "csv",
+      "metricas_disponiveis": false,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "ia",
+      "tratamento_ajustado": true
+    },
+    {
+      "trial_id": "aulus_K05_manual_01",
+      "integrante": "aulus",
+      "kata": "K05",
+      "tratamento": "ia",
+      "tempo_min": 9.15,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": 11,
+      "aprovados": 11,
+      "reprovados": 0,
+      "complexidade_media": 2.5,
+      "loc": 25,
+      "sloc": 16,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "manual",
+      "tratamento_ajustado": true
+    },
+    {
+      "trial_id": "aulus_K06_ia_01",
+      "integrante": "aulus",
+      "kata": "K06",
+      "tratamento": "manual",
+      "tempo_min": 19.8,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": 10,
+      "aprovados": 10,
+      "reprovados": 0,
+      "complexidade_media": 2.6666666666666665,
+      "loc": 30,
+      "sloc": 19,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "ia",
+      "tratamento_ajustado": true
+    },
+    {
+      "trial_id": "maria_K01_ia_01",
+      "integrante": "maria",
+      "kata": "K01",
+      "tratamento": "ia",
+      "tempo_min": 8.45,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": 10,
+      "aprovados": 10,
+      "reprovados": 0,
+      "complexidade_media": 4.857142857142857,
+      "loc": 86,
+      "sloc": 61,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "ia",
+      "tratamento_ajustado": false
+    },
+    {
+      "trial_id": "maria_K02_manual_01",
+      "integrante": "maria",
+      "kata": "K02",
+      "tratamento": "manual",
+      "tempo_min": 18.2,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": 10,
+      "aprovados": 10,
+      "reprovados": 0,
+      "complexidade_media": 9.0,
+      "loc": 86,
+      "sloc": 64,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "manual",
+      "tratamento_ajustado": false
+    },
+    {
+      "trial_id": "maria_K03_ia_01",
+      "integrante": "maria",
+      "kata": "K03",
+      "tratamento": "ia",
+      "tempo_min": 6.5,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": 10,
+      "aprovados": 10,
+      "reprovados": 0,
+      "complexidade_media": 4.0,
+      "loc": 30,
+      "sloc": 16,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "ia",
+      "tratamento_ajustado": false
+    },
+    {
+      "trial_id": "maria_K04_manual_01",
+      "integrante": "maria",
+      "kata": "K04",
+      "tratamento": "manual",
+      "tempo_min": 22.4,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": 10,
+      "aprovados": 10,
+      "reprovados": 0,
+      "complexidade_media": 3.6666666666666665,
+      "loc": 44,
+      "sloc": 27,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "manual",
+      "tratamento_ajustado": false
+    },
+    {
+      "trial_id": "maria_K05_ia_01",
+      "integrante": "maria",
+      "kata": "K05",
+      "tratamento": "ia",
+      "tempo_min": 9.15,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": 11,
+      "aprovados": 11,
+      "reprovados": 0,
+      "complexidade_media": 3.5,
+      "loc": 35,
+      "sloc": 21,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "ia",
+      "tratamento_ajustado": false
+    },
+    {
+      "trial_id": "maria_K06_manual_01",
+      "integrante": "maria",
+      "kata": "K06",
+      "tratamento": "manual",
+      "tempo_min": 19.8,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": 10,
+      "aprovados": 10,
+      "reprovados": 0,
+      "complexidade_media": 2.6666666666666665,
+      "loc": 40,
+      "sloc": 23,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "manual",
+      "tratamento_ajustado": false
+    },
+    {
+      "trial_id": "vinicius_K01_manual_01",
+      "integrante": "vinicius",
+      "kata": "K01",
+      "tratamento": "manual",
+      "tempo_min": 8.45,
+      "taxa_sucesso": 80.0,
+      "passou_todos": false,
+      "total_testes": 10,
+      "aprovados": 8,
+      "reprovados": 2,
+      "complexidade_media": 4.25,
+      "loc": 60,
+      "sloc": 51,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": true,
+      "tempo_censurado": false,
+      "tratamento_registrado": "manual",
+      "tratamento_ajustado": false
+    },
+    {
+      "trial_id": "vinicius_K02_manual_01",
+      "integrante": "vinicius",
+      "kata": "K02",
+      "tratamento": "manual",
+      "tempo_min": 18.2,
+      "taxa_sucesso": 100.0,
+      "passou_todos": true,
+      "total_testes": 10,
+      "aprovados": 10,
+      "reprovados": 0,
+      "complexidade_media": 5.666666666666667,
+      "loc": 56,
+      "sloc": 41,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": false,
+      "tempo_censurado": false,
+      "tratamento_registrado": "manual",
+      "tratamento_ajustado": false
+    },
+    {
+      "trial_id": "vinicius_K03_ia_01",
+      "integrante": "vinicius",
+      "kata": "K03",
+      "tratamento": "ia",
+      "tempo_min": 6.5,
+      "taxa_sucesso": 80.0,
+      "passou_todos": false,
+      "total_testes": 10,
+      "aprovados": 8,
+      "reprovados": 2,
+      "complexidade_media": 2.5,
+      "loc": 18,
+      "sloc": 14,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": true,
+      "tempo_censurado": false,
+      "tratamento_registrado": "ia",
+      "tratamento_ajustado": false
+    },
+    {
+      "trial_id": "vinicius_K04_ia_01",
+      "integrante": "vinicius",
+      "kata": "K04",
+      "tratamento": "ia",
+      "tempo_min": 22.4,
+      "taxa_sucesso": 10.0,
+      "passou_todos": false,
+      "total_testes": 10,
+      "aprovados": 1,
+      "reprovados": 9,
+      "complexidade_media": 2.25,
+      "loc": 40,
+      "sloc": 27,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": true,
+      "tempo_censurado": false,
+      "tratamento_registrado": "ia",
+      "tratamento_ajustado": false
+    },
+    {
+      "trial_id": "vinicius_K05_ia_01",
+      "integrante": "vinicius",
+      "kata": "K05",
+      "tratamento": "ia",
+      "tempo_min": 9.15,
+      "taxa_sucesso": 0.0,
+      "passou_todos": false,
+      "total_testes": 11,
+      "aprovados": 0,
+      "reprovados": 11,
+      "complexidade_media": 4.0,
+      "loc": 13,
+      "sloc": 10,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": true,
+      "tempo_censurado": false,
+      "tratamento_registrado": "ia",
+      "tratamento_ajustado": false
+    },
+    {
+      "trial_id": "vinicius_K06_manual_01",
+      "integrante": "vinicius",
+      "kata": "K06",
+      "tratamento": "manual",
+      "tempo_min": 19.8,
+      "taxa_sucesso": 0.0,
+      "passou_todos": false,
+      "total_testes": 10,
+      "aprovados": 0,
+      "reprovados": 10,
+      "complexidade_media": 2.0,
+      "loc": 21,
+      "sloc": 16,
+      "fonte_testes": "relatorio",
+      "metricas_disponiveis": true,
+      "status_registrado": "SUCESSO",
+      "status_divergente": true,
+      "tempo_censurado": false,
+      "tratamento_registrado": "manual",
+      "tratamento_ajustado": false
+    }
+  ],
+  "views": {
+    "all__all": {
+      "integrante": "all",
+      "kata": "all",
+      "row_ids": [
+        "aulus_K01_manual_01",
+        "aulus_K02_ia_01",
+        "aulus_K03_manual_01",
+        "aulus_K04_ia_01",
+        "aulus_K05_manual_01",
+        "aulus_K06_ia_01",
+        "maria_K01_ia_01",
+        "maria_K02_manual_01",
+        "maria_K03_ia_01",
+        "maria_K04_manual_01",
+        "maria_K05_ia_01",
+        "maria_K06_manual_01",
+        "vinicius_K01_manual_01",
+        "vinicius_K02_manual_01",
+        "vinicius_K03_ia_01",
+        "vinicius_K04_ia_01",
+        "vinicius_K05_ia_01",
+        "vinicius_K06_manual_01"
+      ],
+      "adjustment_count": 6,
+      "counts": {
+        "total": 18,
+        "manual": 9,
+        "ia": 9,
+        "testes_arquivados": 17,
+        "metricas_arquivadas": 17,
+        "divergencias": 6
+      },
+      "stats": {
+        "manual": {
+          "n": 9,
+          "tempo": {
+            "n": 9,
+            "median": 19.8,
+            "q1": 18.2,
+            "q3": 19.8
+          },
+          "sucesso": {
+            "n": 9,
+            "mean": 86.66666666666667,
+            "complete": 7
+          },
+          "complexidade": {
+            "n": 8,
+            "median": 3.958333333333333,
+            "q1": 2.6666666666666665,
+            "q3": 6.166666666666667
+          },
+          "loc": {
+            "n": 8,
+            "median": 50.0,
+            "q1": 37.5,
+            "q3": 64.0
+          }
+        },
+        "ia": {
+          "n": 9,
+          "tempo": {
+            "n": 9,
+            "median": 9.15,
+            "q1": 8.45,
+            "q3": 9.15
+          },
+          "sucesso": {
+            "n": 9,
+            "mean": 74.44444444444444,
+            "complete": 5
+          },
+          "complexidade": {
+            "n": 9,
+            "median": 3.5,
+            "q1": 2.5,
+            "q3": 4.0
+          },
+          "loc": {
+            "n": 9,
+            "median": 30.0,
+            "q1": 23.0,
+            "q3": 40.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/all__all/tempo.svg",
+          "png": "charts/all__all/tempo.png",
+          "display": "charts/all__all/tempo-display.svg",
+          "mobile": "charts/all__all/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/all__all/sucesso.svg",
+          "png": "charts/all__all/sucesso.png",
+          "display": "charts/all__all/sucesso-display.svg",
+          "mobile": "charts/all__all/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/all__all/complexidade.svg",
+          "png": "charts/all__all/complexidade.png",
+          "display": "charts/all__all/complexidade-display.svg",
+          "mobile": "charts/all__all/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/all__all/loc.svg",
+          "png": "charts/all__all/loc.png",
+          "display": "charts/all__all/loc-display.svg",
+          "mobile": "charts/all__all/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/all__all/relacao.svg",
+          "png": "charts/all__all/relacao.png",
+          "display": "charts/all__all/relacao-display.svg",
+          "mobile": "charts/all__all/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/all__all.csv"
+    },
+    "all__K01": {
+      "integrante": "all",
+      "kata": "K01",
+      "row_ids": [
+        "aulus_K01_manual_01",
+        "maria_K01_ia_01",
+        "vinicius_K01_manual_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 3,
+        "manual": 1,
+        "ia": 2,
+        "testes_arquivados": 3,
+        "metricas_arquivadas": 3,
+        "divergencias": 1
+      },
+      "stats": {
+        "manual": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 8.45,
+            "q1": 8.45,
+            "q3": 8.45
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 80.0,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 4.25,
+            "q1": 4.25,
+            "q3": 4.25
+          },
+          "loc": {
+            "n": 1,
+            "median": 60.0,
+            "q1": 60.0,
+            "q3": 60.0
+          }
+        },
+        "ia": {
+          "n": 2,
+          "tempo": {
+            "n": 2,
+            "median": 8.45,
+            "q1": 8.45,
+            "q3": 8.45
+          },
+          "sucesso": {
+            "n": 2,
+            "mean": 100.0,
+            "complete": 2
+          },
+          "complexidade": {
+            "n": 2,
+            "median": 5.928571428571429,
+            "q1": 5.392857142857142,
+            "q3": 6.464285714285714
+          },
+          "loc": {
+            "n": 2,
+            "median": 82.5,
+            "q1": 80.75,
+            "q3": 84.25
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/all__K01/tempo.svg",
+          "png": "charts/all__K01/tempo.png",
+          "display": "charts/all__K01/tempo-display.svg",
+          "mobile": "charts/all__K01/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/all__K01/sucesso.svg",
+          "png": "charts/all__K01/sucesso.png",
+          "display": "charts/all__K01/sucesso-display.svg",
+          "mobile": "charts/all__K01/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/all__K01/complexidade.svg",
+          "png": "charts/all__K01/complexidade.png",
+          "display": "charts/all__K01/complexidade-display.svg",
+          "mobile": "charts/all__K01/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/all__K01/loc.svg",
+          "png": "charts/all__K01/loc.png",
+          "display": "charts/all__K01/loc-display.svg",
+          "mobile": "charts/all__K01/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/all__K01/relacao.svg",
+          "png": "charts/all__K01/relacao.png",
+          "display": "charts/all__K01/relacao-display.svg",
+          "mobile": "charts/all__K01/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/all__K01.csv"
+    },
+    "all__K02": {
+      "integrante": "all",
+      "kata": "K02",
+      "row_ids": [
+        "aulus_K02_ia_01",
+        "maria_K02_manual_01",
+        "vinicius_K02_manual_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 3,
+        "manual": 3,
+        "ia": 0,
+        "testes_arquivados": 3,
+        "metricas_arquivadas": 3,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 3,
+          "tempo": {
+            "n": 3,
+            "median": 18.2,
+            "q1": 12.35,
+            "q3": 18.2
+          },
+          "sucesso": {
+            "n": 3,
+            "mean": 100.0,
+            "complete": 3
+          },
+          "complexidade": {
+            "n": 3,
+            "median": 7.666666666666667,
+            "q1": 6.666666666666667,
+            "q3": 8.333333333333334
+          },
+          "loc": {
+            "n": 3,
+            "median": 76.0,
+            "q1": 66.0,
+            "q3": 81.0
+          }
+        },
+        "ia": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/all__K02/tempo.svg",
+          "png": "charts/all__K02/tempo.png",
+          "display": "charts/all__K02/tempo-display.svg",
+          "mobile": "charts/all__K02/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/all__K02/sucesso.svg",
+          "png": "charts/all__K02/sucesso.png",
+          "display": "charts/all__K02/sucesso-display.svg",
+          "mobile": "charts/all__K02/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/all__K02/complexidade.svg",
+          "png": "charts/all__K02/complexidade.png",
+          "display": "charts/all__K02/complexidade-display.svg",
+          "mobile": "charts/all__K02/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/all__K02/loc.svg",
+          "png": "charts/all__K02/loc.png",
+          "display": "charts/all__K02/loc-display.svg",
+          "mobile": "charts/all__K02/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/all__K02/relacao.svg",
+          "png": "charts/all__K02/relacao.png",
+          "display": "charts/all__K02/relacao-display.svg",
+          "mobile": "charts/all__K02/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/all__K02.csv"
+    },
+    "all__K03": {
+      "integrante": "all",
+      "kata": "K03",
+      "row_ids": [
+        "aulus_K03_manual_01",
+        "maria_K03_ia_01",
+        "vinicius_K03_ia_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 3,
+        "manual": 0,
+        "ia": 3,
+        "testes_arquivados": 3,
+        "metricas_arquivadas": 3,
+        "divergencias": 2
+      },
+      "stats": {
+        "manual": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 3,
+          "tempo": {
+            "n": 3,
+            "median": 6.5,
+            "q1": 6.5,
+            "q3": 9.4
+          },
+          "sucesso": {
+            "n": 3,
+            "mean": 86.66666666666667,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 3,
+            "median": 2.5,
+            "q1": 2.5,
+            "q3": 3.25
+          },
+          "loc": {
+            "n": 3,
+            "median": 23.0,
+            "q1": 20.5,
+            "q3": 26.5
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/all__K03/tempo.svg",
+          "png": "charts/all__K03/tempo.png",
+          "display": "charts/all__K03/tempo-display.svg",
+          "mobile": "charts/all__K03/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/all__K03/sucesso.svg",
+          "png": "charts/all__K03/sucesso.png",
+          "display": "charts/all__K03/sucesso-display.svg",
+          "mobile": "charts/all__K03/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/all__K03/complexidade.svg",
+          "png": "charts/all__K03/complexidade.png",
+          "display": "charts/all__K03/complexidade-display.svg",
+          "mobile": "charts/all__K03/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/all__K03/loc.svg",
+          "png": "charts/all__K03/loc.png",
+          "display": "charts/all__K03/loc-display.svg",
+          "mobile": "charts/all__K03/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/all__K03/relacao.svg",
+          "png": "charts/all__K03/relacao.png",
+          "display": "charts/all__K03/relacao-display.svg",
+          "mobile": "charts/all__K03/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/all__K03.csv"
+    },
+    "all__K04": {
+      "integrante": "all",
+      "kata": "K04",
+      "row_ids": [
+        "aulus_K04_ia_01",
+        "maria_K04_manual_01",
+        "vinicius_K04_ia_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 3,
+        "manual": 2,
+        "ia": 1,
+        "testes_arquivados": 2,
+        "metricas_arquivadas": 2,
+        "divergencias": 1
+      },
+      "stats": {
+        "manual": {
+          "n": 2,
+          "tempo": {
+            "n": 2,
+            "median": 21.2,
+            "q1": 20.6,
+            "q3": 21.799999999999997
+          },
+          "sucesso": {
+            "n": 2,
+            "mean": 100.0,
+            "complete": 2
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 3.6666666666666665,
+            "q1": 3.6666666666666665,
+            "q3": 3.6666666666666665
+          },
+          "loc": {
+            "n": 1,
+            "median": 44.0,
+            "q1": 44.0,
+            "q3": 44.0
+          }
+        },
+        "ia": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 22.4,
+            "q1": 22.4,
+            "q3": 22.4
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 10.0,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 2.25,
+            "q1": 2.25,
+            "q3": 2.25
+          },
+          "loc": {
+            "n": 1,
+            "median": 40.0,
+            "q1": 40.0,
+            "q3": 40.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/all__K04/tempo.svg",
+          "png": "charts/all__K04/tempo.png",
+          "display": "charts/all__K04/tempo-display.svg",
+          "mobile": "charts/all__K04/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/all__K04/sucesso.svg",
+          "png": "charts/all__K04/sucesso.png",
+          "display": "charts/all__K04/sucesso-display.svg",
+          "mobile": "charts/all__K04/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/all__K04/complexidade.svg",
+          "png": "charts/all__K04/complexidade.png",
+          "display": "charts/all__K04/complexidade-display.svg",
+          "mobile": "charts/all__K04/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/all__K04/loc.svg",
+          "png": "charts/all__K04/loc.png",
+          "display": "charts/all__K04/loc-display.svg",
+          "mobile": "charts/all__K04/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/all__K04/relacao.svg",
+          "png": "charts/all__K04/relacao.png",
+          "display": "charts/all__K04/relacao-display.svg",
+          "mobile": "charts/all__K04/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/all__K04.csv"
+    },
+    "all__K05": {
+      "integrante": "all",
+      "kata": "K05",
+      "row_ids": [
+        "aulus_K05_manual_01",
+        "maria_K05_ia_01",
+        "vinicius_K05_ia_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 3,
+        "manual": 0,
+        "ia": 3,
+        "testes_arquivados": 3,
+        "metricas_arquivadas": 3,
+        "divergencias": 1
+      },
+      "stats": {
+        "manual": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 3,
+          "tempo": {
+            "n": 3,
+            "median": 9.15,
+            "q1": 9.15,
+            "q3": 9.15
+          },
+          "sucesso": {
+            "n": 3,
+            "mean": 66.66666666666667,
+            "complete": 2
+          },
+          "complexidade": {
+            "n": 3,
+            "median": 3.5,
+            "q1": 3.0,
+            "q3": 3.75
+          },
+          "loc": {
+            "n": 3,
+            "median": 25.0,
+            "q1": 19.0,
+            "q3": 30.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/all__K05/tempo.svg",
+          "png": "charts/all__K05/tempo.png",
+          "display": "charts/all__K05/tempo-display.svg",
+          "mobile": "charts/all__K05/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/all__K05/sucesso.svg",
+          "png": "charts/all__K05/sucesso.png",
+          "display": "charts/all__K05/sucesso-display.svg",
+          "mobile": "charts/all__K05/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/all__K05/complexidade.svg",
+          "png": "charts/all__K05/complexidade.png",
+          "display": "charts/all__K05/complexidade-display.svg",
+          "mobile": "charts/all__K05/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/all__K05/loc.svg",
+          "png": "charts/all__K05/loc.png",
+          "display": "charts/all__K05/loc-display.svg",
+          "mobile": "charts/all__K05/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/all__K05/relacao.svg",
+          "png": "charts/all__K05/relacao.png",
+          "display": "charts/all__K05/relacao-display.svg",
+          "mobile": "charts/all__K05/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/all__K05.csv"
+    },
+    "all__K06": {
+      "integrante": "all",
+      "kata": "K06",
+      "row_ids": [
+        "aulus_K06_ia_01",
+        "maria_K06_manual_01",
+        "vinicius_K06_manual_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 3,
+        "manual": 3,
+        "ia": 0,
+        "testes_arquivados": 3,
+        "metricas_arquivadas": 3,
+        "divergencias": 1
+      },
+      "stats": {
+        "manual": {
+          "n": 3,
+          "tempo": {
+            "n": 3,
+            "median": 19.8,
+            "q1": 19.8,
+            "q3": 19.8
+          },
+          "sucesso": {
+            "n": 3,
+            "mean": 66.66666666666667,
+            "complete": 2
+          },
+          "complexidade": {
+            "n": 3,
+            "median": 2.6666666666666665,
+            "q1": 2.333333333333333,
+            "q3": 2.6666666666666665
+          },
+          "loc": {
+            "n": 3,
+            "median": 30.0,
+            "q1": 25.5,
+            "q3": 35.0
+          }
+        },
+        "ia": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/all__K06/tempo.svg",
+          "png": "charts/all__K06/tempo.png",
+          "display": "charts/all__K06/tempo-display.svg",
+          "mobile": "charts/all__K06/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/all__K06/sucesso.svg",
+          "png": "charts/all__K06/sucesso.png",
+          "display": "charts/all__K06/sucesso-display.svg",
+          "mobile": "charts/all__K06/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/all__K06/complexidade.svg",
+          "png": "charts/all__K06/complexidade.png",
+          "display": "charts/all__K06/complexidade-display.svg",
+          "mobile": "charts/all__K06/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/all__K06/loc.svg",
+          "png": "charts/all__K06/loc.png",
+          "display": "charts/all__K06/loc-display.svg",
+          "mobile": "charts/all__K06/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/all__K06/relacao.svg",
+          "png": "charts/all__K06/relacao.png",
+          "display": "charts/all__K06/relacao-display.svg",
+          "mobile": "charts/all__K06/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/all__K06.csv"
+    },
+    "aulus__all": {
+      "integrante": "aulus",
+      "kata": "all",
+      "row_ids": [
+        "aulus_K01_manual_01",
+        "aulus_K02_ia_01",
+        "aulus_K03_manual_01",
+        "aulus_K04_ia_01",
+        "aulus_K05_manual_01",
+        "aulus_K06_ia_01"
+      ],
+      "adjustment_count": 6,
+      "counts": {
+        "total": 6,
+        "manual": 3,
+        "ia": 3,
+        "testes_arquivados": 5,
+        "metricas_arquivadas": 5,
+        "divergencias": 1
+      },
+      "stats": {
+        "manual": {
+          "n": 3,
+          "tempo": {
+            "n": 3,
+            "median": 19.8,
+            "q1": 13.15,
+            "q3": 19.9
+          },
+          "sucesso": {
+            "n": 3,
+            "mean": 100.0,
+            "complete": 3
+          },
+          "complexidade": {
+            "n": 2,
+            "median": 5.166666666666667,
+            "q1": 3.9166666666666665,
+            "q3": 6.416666666666667
+          },
+          "loc": {
+            "n": 2,
+            "median": 53.0,
+            "q1": 41.5,
+            "q3": 64.5
+          }
+        },
+        "ia": {
+          "n": 3,
+          "tempo": {
+            "n": 3,
+            "median": 9.15,
+            "q1": 8.8,
+            "q3": 10.725000000000001
+          },
+          "sucesso": {
+            "n": 3,
+            "mean": 93.33333333333333,
+            "complete": 2
+          },
+          "complexidade": {
+            "n": 3,
+            "median": 2.5,
+            "q1": 2.5,
+            "q3": 4.75
+          },
+          "loc": {
+            "n": 3,
+            "median": 25.0,
+            "q1": 24.0,
+            "q3": 52.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/aulus__all/tempo.svg",
+          "png": "charts/aulus__all/tempo.png",
+          "display": "charts/aulus__all/tempo-display.svg",
+          "mobile": "charts/aulus__all/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/aulus__all/sucesso.svg",
+          "png": "charts/aulus__all/sucesso.png",
+          "display": "charts/aulus__all/sucesso-display.svg",
+          "mobile": "charts/aulus__all/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/aulus__all/complexidade.svg",
+          "png": "charts/aulus__all/complexidade.png",
+          "display": "charts/aulus__all/complexidade-display.svg",
+          "mobile": "charts/aulus__all/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/aulus__all/loc.svg",
+          "png": "charts/aulus__all/loc.png",
+          "display": "charts/aulus__all/loc-display.svg",
+          "mobile": "charts/aulus__all/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/aulus__all/relacao.svg",
+          "png": "charts/aulus__all/relacao.png",
+          "display": "charts/aulus__all/relacao-display.svg",
+          "mobile": "charts/aulus__all/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/aulus__all.csv"
+    },
+    "aulus__K01": {
+      "integrante": "aulus",
+      "kata": "K01",
+      "row_ids": [
+        "aulus_K01_manual_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 1,
+        "manual": 0,
+        "ia": 1,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 8.45,
+            "q1": 8.45,
+            "q3": 8.45
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 7.0,
+            "q1": 7.0,
+            "q3": 7.0
+          },
+          "loc": {
+            "n": 1,
+            "median": 79.0,
+            "q1": 79.0,
+            "q3": 79.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/aulus__K01/tempo.svg",
+          "png": "charts/aulus__K01/tempo.png",
+          "display": "charts/aulus__K01/tempo-display.svg",
+          "mobile": "charts/aulus__K01/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/aulus__K01/sucesso.svg",
+          "png": "charts/aulus__K01/sucesso.png",
+          "display": "charts/aulus__K01/sucesso-display.svg",
+          "mobile": "charts/aulus__K01/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/aulus__K01/complexidade.svg",
+          "png": "charts/aulus__K01/complexidade.png",
+          "display": "charts/aulus__K01/complexidade-display.svg",
+          "mobile": "charts/aulus__K01/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/aulus__K01/loc.svg",
+          "png": "charts/aulus__K01/loc.png",
+          "display": "charts/aulus__K01/loc-display.svg",
+          "mobile": "charts/aulus__K01/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/aulus__K01/relacao.svg",
+          "png": "charts/aulus__K01/relacao.png",
+          "display": "charts/aulus__K01/relacao-display.svg",
+          "mobile": "charts/aulus__K01/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/aulus__K01.csv"
+    },
+    "aulus__K02": {
+      "integrante": "aulus",
+      "kata": "K02",
+      "row_ids": [
+        "aulus_K02_ia_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 1,
+        "manual": 1,
+        "ia": 0,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 6.5,
+            "q1": 6.5,
+            "q3": 6.5
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 7.666666666666667,
+            "q1": 7.666666666666667,
+            "q3": 7.666666666666667
+          },
+          "loc": {
+            "n": 1,
+            "median": 76.0,
+            "q1": 76.0,
+            "q3": 76.0
+          }
+        },
+        "ia": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/aulus__K02/tempo.svg",
+          "png": "charts/aulus__K02/tempo.png",
+          "display": "charts/aulus__K02/tempo-display.svg",
+          "mobile": "charts/aulus__K02/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/aulus__K02/sucesso.svg",
+          "png": "charts/aulus__K02/sucesso.png",
+          "display": "charts/aulus__K02/sucesso-display.svg",
+          "mobile": "charts/aulus__K02/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/aulus__K02/complexidade.svg",
+          "png": "charts/aulus__K02/complexidade.png",
+          "display": "charts/aulus__K02/complexidade-display.svg",
+          "mobile": "charts/aulus__K02/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/aulus__K02/loc.svg",
+          "png": "charts/aulus__K02/loc.png",
+          "display": "charts/aulus__K02/loc-display.svg",
+          "mobile": "charts/aulus__K02/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/aulus__K02/relacao.svg",
+          "png": "charts/aulus__K02/relacao.png",
+          "display": "charts/aulus__K02/relacao-display.svg",
+          "mobile": "charts/aulus__K02/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/aulus__K02.csv"
+    },
+    "aulus__K03": {
+      "integrante": "aulus",
+      "kata": "K03",
+      "row_ids": [
+        "aulus_K03_manual_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 1,
+        "manual": 0,
+        "ia": 1,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 1
+      },
+      "stats": {
+        "manual": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 12.3,
+            "q1": 12.3,
+            "q3": 12.3
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 80.0,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 2.5,
+            "q1": 2.5,
+            "q3": 2.5
+          },
+          "loc": {
+            "n": 1,
+            "median": 23.0,
+            "q1": 23.0,
+            "q3": 23.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/aulus__K03/tempo.svg",
+          "png": "charts/aulus__K03/tempo.png",
+          "display": "charts/aulus__K03/tempo-display.svg",
+          "mobile": "charts/aulus__K03/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/aulus__K03/sucesso.svg",
+          "png": "charts/aulus__K03/sucesso.png",
+          "display": "charts/aulus__K03/sucesso-display.svg",
+          "mobile": "charts/aulus__K03/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/aulus__K03/complexidade.svg",
+          "png": "charts/aulus__K03/complexidade.png",
+          "display": "charts/aulus__K03/complexidade-display.svg",
+          "mobile": "charts/aulus__K03/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/aulus__K03/loc.svg",
+          "png": "charts/aulus__K03/loc.png",
+          "display": "charts/aulus__K03/loc-display.svg",
+          "mobile": "charts/aulus__K03/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/aulus__K03/relacao.svg",
+          "png": "charts/aulus__K03/relacao.png",
+          "display": "charts/aulus__K03/relacao-display.svg",
+          "mobile": "charts/aulus__K03/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/aulus__K03.csv"
+    },
+    "aulus__K04": {
+      "integrante": "aulus",
+      "kata": "K04",
+      "row_ids": [
+        "aulus_K04_ia_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 1,
+        "manual": 1,
+        "ia": 0,
+        "testes_arquivados": 0,
+        "metricas_arquivadas": 0,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 20.0,
+            "q1": 20.0,
+            "q3": 20.0
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/aulus__K04/tempo.svg",
+          "png": "charts/aulus__K04/tempo.png",
+          "display": "charts/aulus__K04/tempo-display.svg",
+          "mobile": "charts/aulus__K04/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/aulus__K04/sucesso.svg",
+          "png": "charts/aulus__K04/sucesso.png",
+          "display": "charts/aulus__K04/sucesso-display.svg",
+          "mobile": "charts/aulus__K04/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/aulus__K04/complexidade.svg",
+          "png": "charts/aulus__K04/complexidade.png",
+          "display": "charts/aulus__K04/complexidade-display.svg",
+          "mobile": "charts/aulus__K04/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/aulus__K04/loc.svg",
+          "png": "charts/aulus__K04/loc.png",
+          "display": "charts/aulus__K04/loc-display.svg",
+          "mobile": "charts/aulus__K04/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/aulus__K04/relacao.svg",
+          "png": "charts/aulus__K04/relacao.png",
+          "display": "charts/aulus__K04/relacao-display.svg",
+          "mobile": "charts/aulus__K04/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/aulus__K04.csv"
+    },
+    "aulus__K05": {
+      "integrante": "aulus",
+      "kata": "K05",
+      "row_ids": [
+        "aulus_K05_manual_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 1,
+        "manual": 0,
+        "ia": 1,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 9.15,
+            "q1": 9.15,
+            "q3": 9.15
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 2.5,
+            "q1": 2.5,
+            "q3": 2.5
+          },
+          "loc": {
+            "n": 1,
+            "median": 25.0,
+            "q1": 25.0,
+            "q3": 25.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/aulus__K05/tempo.svg",
+          "png": "charts/aulus__K05/tempo.png",
+          "display": "charts/aulus__K05/tempo-display.svg",
+          "mobile": "charts/aulus__K05/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/aulus__K05/sucesso.svg",
+          "png": "charts/aulus__K05/sucesso.png",
+          "display": "charts/aulus__K05/sucesso-display.svg",
+          "mobile": "charts/aulus__K05/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/aulus__K05/complexidade.svg",
+          "png": "charts/aulus__K05/complexidade.png",
+          "display": "charts/aulus__K05/complexidade-display.svg",
+          "mobile": "charts/aulus__K05/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/aulus__K05/loc.svg",
+          "png": "charts/aulus__K05/loc.png",
+          "display": "charts/aulus__K05/loc-display.svg",
+          "mobile": "charts/aulus__K05/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/aulus__K05/relacao.svg",
+          "png": "charts/aulus__K05/relacao.png",
+          "display": "charts/aulus__K05/relacao-display.svg",
+          "mobile": "charts/aulus__K05/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/aulus__K05.csv"
+    },
+    "aulus__K06": {
+      "integrante": "aulus",
+      "kata": "K06",
+      "row_ids": [
+        "aulus_K06_ia_01"
+      ],
+      "adjustment_count": 1,
+      "counts": {
+        "total": 1,
+        "manual": 1,
+        "ia": 0,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 19.8,
+            "q1": 19.8,
+            "q3": 19.8
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 2.6666666666666665,
+            "q1": 2.6666666666666665,
+            "q3": 2.6666666666666665
+          },
+          "loc": {
+            "n": 1,
+            "median": 30.0,
+            "q1": 30.0,
+            "q3": 30.0
+          }
+        },
+        "ia": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/aulus__K06/tempo.svg",
+          "png": "charts/aulus__K06/tempo.png",
+          "display": "charts/aulus__K06/tempo-display.svg",
+          "mobile": "charts/aulus__K06/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/aulus__K06/sucesso.svg",
+          "png": "charts/aulus__K06/sucesso.png",
+          "display": "charts/aulus__K06/sucesso-display.svg",
+          "mobile": "charts/aulus__K06/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/aulus__K06/complexidade.svg",
+          "png": "charts/aulus__K06/complexidade.png",
+          "display": "charts/aulus__K06/complexidade-display.svg",
+          "mobile": "charts/aulus__K06/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/aulus__K06/loc.svg",
+          "png": "charts/aulus__K06/loc.png",
+          "display": "charts/aulus__K06/loc-display.svg",
+          "mobile": "charts/aulus__K06/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/aulus__K06/relacao.svg",
+          "png": "charts/aulus__K06/relacao.png",
+          "display": "charts/aulus__K06/relacao-display.svg",
+          "mobile": "charts/aulus__K06/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/aulus__K06.csv"
+    },
+    "maria__all": {
+      "integrante": "maria",
+      "kata": "all",
+      "row_ids": [
+        "maria_K01_ia_01",
+        "maria_K02_manual_01",
+        "maria_K03_ia_01",
+        "maria_K04_manual_01",
+        "maria_K05_ia_01",
+        "maria_K06_manual_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 6,
+        "manual": 3,
+        "ia": 3,
+        "testes_arquivados": 6,
+        "metricas_arquivadas": 6,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 3,
+          "tempo": {
+            "n": 3,
+            "median": 19.8,
+            "q1": 19.0,
+            "q3": 21.1
+          },
+          "sucesso": {
+            "n": 3,
+            "mean": 100.0,
+            "complete": 3
+          },
+          "complexidade": {
+            "n": 3,
+            "median": 3.6666666666666665,
+            "q1": 3.1666666666666665,
+            "q3": 6.333333333333333
+          },
+          "loc": {
+            "n": 3,
+            "median": 44.0,
+            "q1": 42.0,
+            "q3": 65.0
+          }
+        },
+        "ia": {
+          "n": 3,
+          "tempo": {
+            "n": 3,
+            "median": 8.45,
+            "q1": 7.475,
+            "q3": 8.8
+          },
+          "sucesso": {
+            "n": 3,
+            "mean": 100.0,
+            "complete": 3
+          },
+          "complexidade": {
+            "n": 3,
+            "median": 4.0,
+            "q1": 3.75,
+            "q3": 4.428571428571429
+          },
+          "loc": {
+            "n": 3,
+            "median": 35.0,
+            "q1": 32.5,
+            "q3": 60.5
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/maria__all/tempo.svg",
+          "png": "charts/maria__all/tempo.png",
+          "display": "charts/maria__all/tempo-display.svg",
+          "mobile": "charts/maria__all/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/maria__all/sucesso.svg",
+          "png": "charts/maria__all/sucesso.png",
+          "display": "charts/maria__all/sucesso-display.svg",
+          "mobile": "charts/maria__all/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/maria__all/complexidade.svg",
+          "png": "charts/maria__all/complexidade.png",
+          "display": "charts/maria__all/complexidade-display.svg",
+          "mobile": "charts/maria__all/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/maria__all/loc.svg",
+          "png": "charts/maria__all/loc.png",
+          "display": "charts/maria__all/loc-display.svg",
+          "mobile": "charts/maria__all/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/maria__all/relacao.svg",
+          "png": "charts/maria__all/relacao.png",
+          "display": "charts/maria__all/relacao-display.svg",
+          "mobile": "charts/maria__all/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/maria__all.csv"
+    },
+    "maria__K01": {
+      "integrante": "maria",
+      "kata": "K01",
+      "row_ids": [
+        "maria_K01_ia_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 0,
+        "ia": 1,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 8.45,
+            "q1": 8.45,
+            "q3": 8.45
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 4.857142857142857,
+            "q1": 4.857142857142857,
+            "q3": 4.857142857142857
+          },
+          "loc": {
+            "n": 1,
+            "median": 86.0,
+            "q1": 86.0,
+            "q3": 86.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/maria__K01/tempo.svg",
+          "png": "charts/maria__K01/tempo.png",
+          "display": "charts/maria__K01/tempo-display.svg",
+          "mobile": "charts/maria__K01/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/maria__K01/sucesso.svg",
+          "png": "charts/maria__K01/sucesso.png",
+          "display": "charts/maria__K01/sucesso-display.svg",
+          "mobile": "charts/maria__K01/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/maria__K01/complexidade.svg",
+          "png": "charts/maria__K01/complexidade.png",
+          "display": "charts/maria__K01/complexidade-display.svg",
+          "mobile": "charts/maria__K01/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/maria__K01/loc.svg",
+          "png": "charts/maria__K01/loc.png",
+          "display": "charts/maria__K01/loc-display.svg",
+          "mobile": "charts/maria__K01/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/maria__K01/relacao.svg",
+          "png": "charts/maria__K01/relacao.png",
+          "display": "charts/maria__K01/relacao-display.svg",
+          "mobile": "charts/maria__K01/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/maria__K01.csv"
+    },
+    "maria__K02": {
+      "integrante": "maria",
+      "kata": "K02",
+      "row_ids": [
+        "maria_K02_manual_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 1,
+        "ia": 0,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 18.2,
+            "q1": 18.2,
+            "q3": 18.2
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 9.0,
+            "q1": 9.0,
+            "q3": 9.0
+          },
+          "loc": {
+            "n": 1,
+            "median": 86.0,
+            "q1": 86.0,
+            "q3": 86.0
+          }
+        },
+        "ia": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/maria__K02/tempo.svg",
+          "png": "charts/maria__K02/tempo.png",
+          "display": "charts/maria__K02/tempo-display.svg",
+          "mobile": "charts/maria__K02/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/maria__K02/sucesso.svg",
+          "png": "charts/maria__K02/sucesso.png",
+          "display": "charts/maria__K02/sucesso-display.svg",
+          "mobile": "charts/maria__K02/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/maria__K02/complexidade.svg",
+          "png": "charts/maria__K02/complexidade.png",
+          "display": "charts/maria__K02/complexidade-display.svg",
+          "mobile": "charts/maria__K02/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/maria__K02/loc.svg",
+          "png": "charts/maria__K02/loc.png",
+          "display": "charts/maria__K02/loc-display.svg",
+          "mobile": "charts/maria__K02/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/maria__K02/relacao.svg",
+          "png": "charts/maria__K02/relacao.png",
+          "display": "charts/maria__K02/relacao-display.svg",
+          "mobile": "charts/maria__K02/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/maria__K02.csv"
+    },
+    "maria__K03": {
+      "integrante": "maria",
+      "kata": "K03",
+      "row_ids": [
+        "maria_K03_ia_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 0,
+        "ia": 1,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 6.5,
+            "q1": 6.5,
+            "q3": 6.5
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 4.0,
+            "q1": 4.0,
+            "q3": 4.0
+          },
+          "loc": {
+            "n": 1,
+            "median": 30.0,
+            "q1": 30.0,
+            "q3": 30.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/maria__K03/tempo.svg",
+          "png": "charts/maria__K03/tempo.png",
+          "display": "charts/maria__K03/tempo-display.svg",
+          "mobile": "charts/maria__K03/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/maria__K03/sucesso.svg",
+          "png": "charts/maria__K03/sucesso.png",
+          "display": "charts/maria__K03/sucesso-display.svg",
+          "mobile": "charts/maria__K03/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/maria__K03/complexidade.svg",
+          "png": "charts/maria__K03/complexidade.png",
+          "display": "charts/maria__K03/complexidade-display.svg",
+          "mobile": "charts/maria__K03/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/maria__K03/loc.svg",
+          "png": "charts/maria__K03/loc.png",
+          "display": "charts/maria__K03/loc-display.svg",
+          "mobile": "charts/maria__K03/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/maria__K03/relacao.svg",
+          "png": "charts/maria__K03/relacao.png",
+          "display": "charts/maria__K03/relacao-display.svg",
+          "mobile": "charts/maria__K03/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/maria__K03.csv"
+    },
+    "maria__K04": {
+      "integrante": "maria",
+      "kata": "K04",
+      "row_ids": [
+        "maria_K04_manual_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 1,
+        "ia": 0,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 22.4,
+            "q1": 22.4,
+            "q3": 22.4
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 3.6666666666666665,
+            "q1": 3.6666666666666665,
+            "q3": 3.6666666666666665
+          },
+          "loc": {
+            "n": 1,
+            "median": 44.0,
+            "q1": 44.0,
+            "q3": 44.0
+          }
+        },
+        "ia": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/maria__K04/tempo.svg",
+          "png": "charts/maria__K04/tempo.png",
+          "display": "charts/maria__K04/tempo-display.svg",
+          "mobile": "charts/maria__K04/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/maria__K04/sucesso.svg",
+          "png": "charts/maria__K04/sucesso.png",
+          "display": "charts/maria__K04/sucesso-display.svg",
+          "mobile": "charts/maria__K04/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/maria__K04/complexidade.svg",
+          "png": "charts/maria__K04/complexidade.png",
+          "display": "charts/maria__K04/complexidade-display.svg",
+          "mobile": "charts/maria__K04/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/maria__K04/loc.svg",
+          "png": "charts/maria__K04/loc.png",
+          "display": "charts/maria__K04/loc-display.svg",
+          "mobile": "charts/maria__K04/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/maria__K04/relacao.svg",
+          "png": "charts/maria__K04/relacao.png",
+          "display": "charts/maria__K04/relacao-display.svg",
+          "mobile": "charts/maria__K04/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/maria__K04.csv"
+    },
+    "maria__K05": {
+      "integrante": "maria",
+      "kata": "K05",
+      "row_ids": [
+        "maria_K05_ia_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 0,
+        "ia": 1,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 9.15,
+            "q1": 9.15,
+            "q3": 9.15
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 3.5,
+            "q1": 3.5,
+            "q3": 3.5
+          },
+          "loc": {
+            "n": 1,
+            "median": 35.0,
+            "q1": 35.0,
+            "q3": 35.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/maria__K05/tempo.svg",
+          "png": "charts/maria__K05/tempo.png",
+          "display": "charts/maria__K05/tempo-display.svg",
+          "mobile": "charts/maria__K05/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/maria__K05/sucesso.svg",
+          "png": "charts/maria__K05/sucesso.png",
+          "display": "charts/maria__K05/sucesso-display.svg",
+          "mobile": "charts/maria__K05/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/maria__K05/complexidade.svg",
+          "png": "charts/maria__K05/complexidade.png",
+          "display": "charts/maria__K05/complexidade-display.svg",
+          "mobile": "charts/maria__K05/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/maria__K05/loc.svg",
+          "png": "charts/maria__K05/loc.png",
+          "display": "charts/maria__K05/loc-display.svg",
+          "mobile": "charts/maria__K05/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/maria__K05/relacao.svg",
+          "png": "charts/maria__K05/relacao.png",
+          "display": "charts/maria__K05/relacao-display.svg",
+          "mobile": "charts/maria__K05/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/maria__K05.csv"
+    },
+    "maria__K06": {
+      "integrante": "maria",
+      "kata": "K06",
+      "row_ids": [
+        "maria_K06_manual_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 1,
+        "ia": 0,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 19.8,
+            "q1": 19.8,
+            "q3": 19.8
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 2.6666666666666665,
+            "q1": 2.6666666666666665,
+            "q3": 2.6666666666666665
+          },
+          "loc": {
+            "n": 1,
+            "median": 40.0,
+            "q1": 40.0,
+            "q3": 40.0
+          }
+        },
+        "ia": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/maria__K06/tempo.svg",
+          "png": "charts/maria__K06/tempo.png",
+          "display": "charts/maria__K06/tempo-display.svg",
+          "mobile": "charts/maria__K06/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/maria__K06/sucesso.svg",
+          "png": "charts/maria__K06/sucesso.png",
+          "display": "charts/maria__K06/sucesso-display.svg",
+          "mobile": "charts/maria__K06/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/maria__K06/complexidade.svg",
+          "png": "charts/maria__K06/complexidade.png",
+          "display": "charts/maria__K06/complexidade-display.svg",
+          "mobile": "charts/maria__K06/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/maria__K06/loc.svg",
+          "png": "charts/maria__K06/loc.png",
+          "display": "charts/maria__K06/loc-display.svg",
+          "mobile": "charts/maria__K06/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/maria__K06/relacao.svg",
+          "png": "charts/maria__K06/relacao.png",
+          "display": "charts/maria__K06/relacao-display.svg",
+          "mobile": "charts/maria__K06/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/maria__K06.csv"
+    },
+    "vinicius__all": {
+      "integrante": "vinicius",
+      "kata": "all",
+      "row_ids": [
+        "vinicius_K01_manual_01",
+        "vinicius_K02_manual_01",
+        "vinicius_K03_ia_01",
+        "vinicius_K04_ia_01",
+        "vinicius_K05_ia_01",
+        "vinicius_K06_manual_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 6,
+        "manual": 3,
+        "ia": 3,
+        "testes_arquivados": 6,
+        "metricas_arquivadas": 6,
+        "divergencias": 5
+      },
+      "stats": {
+        "manual": {
+          "n": 3,
+          "tempo": {
+            "n": 3,
+            "median": 18.2,
+            "q1": 13.325,
+            "q3": 19.0
+          },
+          "sucesso": {
+            "n": 3,
+            "mean": 60.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 3,
+            "median": 4.25,
+            "q1": 3.125,
+            "q3": 4.958333333333334
+          },
+          "loc": {
+            "n": 3,
+            "median": 56.0,
+            "q1": 38.5,
+            "q3": 58.0
+          }
+        },
+        "ia": {
+          "n": 3,
+          "tempo": {
+            "n": 3,
+            "median": 9.15,
+            "q1": 7.825,
+            "q3": 15.774999999999999
+          },
+          "sucesso": {
+            "n": 3,
+            "mean": 30.0,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 3,
+            "median": 2.5,
+            "q1": 2.375,
+            "q3": 3.25
+          },
+          "loc": {
+            "n": 3,
+            "median": 18.0,
+            "q1": 15.5,
+            "q3": 29.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/vinicius__all/tempo.svg",
+          "png": "charts/vinicius__all/tempo.png",
+          "display": "charts/vinicius__all/tempo-display.svg",
+          "mobile": "charts/vinicius__all/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/vinicius__all/sucesso.svg",
+          "png": "charts/vinicius__all/sucesso.png",
+          "display": "charts/vinicius__all/sucesso-display.svg",
+          "mobile": "charts/vinicius__all/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/vinicius__all/complexidade.svg",
+          "png": "charts/vinicius__all/complexidade.png",
+          "display": "charts/vinicius__all/complexidade-display.svg",
+          "mobile": "charts/vinicius__all/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/vinicius__all/loc.svg",
+          "png": "charts/vinicius__all/loc.png",
+          "display": "charts/vinicius__all/loc-display.svg",
+          "mobile": "charts/vinicius__all/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/vinicius__all/relacao.svg",
+          "png": "charts/vinicius__all/relacao.png",
+          "display": "charts/vinicius__all/relacao-display.svg",
+          "mobile": "charts/vinicius__all/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/vinicius__all.csv"
+    },
+    "vinicius__K01": {
+      "integrante": "vinicius",
+      "kata": "K01",
+      "row_ids": [
+        "vinicius_K01_manual_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 1,
+        "ia": 0,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 1
+      },
+      "stats": {
+        "manual": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 8.45,
+            "q1": 8.45,
+            "q3": 8.45
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 80.0,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 4.25,
+            "q1": 4.25,
+            "q3": 4.25
+          },
+          "loc": {
+            "n": 1,
+            "median": 60.0,
+            "q1": 60.0,
+            "q3": 60.0
+          }
+        },
+        "ia": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/vinicius__K01/tempo.svg",
+          "png": "charts/vinicius__K01/tempo.png",
+          "display": "charts/vinicius__K01/tempo-display.svg",
+          "mobile": "charts/vinicius__K01/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/vinicius__K01/sucesso.svg",
+          "png": "charts/vinicius__K01/sucesso.png",
+          "display": "charts/vinicius__K01/sucesso-display.svg",
+          "mobile": "charts/vinicius__K01/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/vinicius__K01/complexidade.svg",
+          "png": "charts/vinicius__K01/complexidade.png",
+          "display": "charts/vinicius__K01/complexidade-display.svg",
+          "mobile": "charts/vinicius__K01/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/vinicius__K01/loc.svg",
+          "png": "charts/vinicius__K01/loc.png",
+          "display": "charts/vinicius__K01/loc-display.svg",
+          "mobile": "charts/vinicius__K01/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/vinicius__K01/relacao.svg",
+          "png": "charts/vinicius__K01/relacao.png",
+          "display": "charts/vinicius__K01/relacao-display.svg",
+          "mobile": "charts/vinicius__K01/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/vinicius__K01.csv"
+    },
+    "vinicius__K02": {
+      "integrante": "vinicius",
+      "kata": "K02",
+      "row_ids": [
+        "vinicius_K02_manual_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 1,
+        "ia": 0,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 0
+      },
+      "stats": {
+        "manual": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 18.2,
+            "q1": 18.2,
+            "q3": 18.2
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 100.0,
+            "complete": 1
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 5.666666666666667,
+            "q1": 5.666666666666667,
+            "q3": 5.666666666666667
+          },
+          "loc": {
+            "n": 1,
+            "median": 56.0,
+            "q1": 56.0,
+            "q3": 56.0
+          }
+        },
+        "ia": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/vinicius__K02/tempo.svg",
+          "png": "charts/vinicius__K02/tempo.png",
+          "display": "charts/vinicius__K02/tempo-display.svg",
+          "mobile": "charts/vinicius__K02/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/vinicius__K02/sucesso.svg",
+          "png": "charts/vinicius__K02/sucesso.png",
+          "display": "charts/vinicius__K02/sucesso-display.svg",
+          "mobile": "charts/vinicius__K02/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/vinicius__K02/complexidade.svg",
+          "png": "charts/vinicius__K02/complexidade.png",
+          "display": "charts/vinicius__K02/complexidade-display.svg",
+          "mobile": "charts/vinicius__K02/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/vinicius__K02/loc.svg",
+          "png": "charts/vinicius__K02/loc.png",
+          "display": "charts/vinicius__K02/loc-display.svg",
+          "mobile": "charts/vinicius__K02/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/vinicius__K02/relacao.svg",
+          "png": "charts/vinicius__K02/relacao.png",
+          "display": "charts/vinicius__K02/relacao-display.svg",
+          "mobile": "charts/vinicius__K02/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/vinicius__K02.csv"
+    },
+    "vinicius__K03": {
+      "integrante": "vinicius",
+      "kata": "K03",
+      "row_ids": [
+        "vinicius_K03_ia_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 0,
+        "ia": 1,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 1
+      },
+      "stats": {
+        "manual": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 6.5,
+            "q1": 6.5,
+            "q3": 6.5
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 80.0,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 2.5,
+            "q1": 2.5,
+            "q3": 2.5
+          },
+          "loc": {
+            "n": 1,
+            "median": 18.0,
+            "q1": 18.0,
+            "q3": 18.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/vinicius__K03/tempo.svg",
+          "png": "charts/vinicius__K03/tempo.png",
+          "display": "charts/vinicius__K03/tempo-display.svg",
+          "mobile": "charts/vinicius__K03/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/vinicius__K03/sucesso.svg",
+          "png": "charts/vinicius__K03/sucesso.png",
+          "display": "charts/vinicius__K03/sucesso-display.svg",
+          "mobile": "charts/vinicius__K03/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/vinicius__K03/complexidade.svg",
+          "png": "charts/vinicius__K03/complexidade.png",
+          "display": "charts/vinicius__K03/complexidade-display.svg",
+          "mobile": "charts/vinicius__K03/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/vinicius__K03/loc.svg",
+          "png": "charts/vinicius__K03/loc.png",
+          "display": "charts/vinicius__K03/loc-display.svg",
+          "mobile": "charts/vinicius__K03/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/vinicius__K03/relacao.svg",
+          "png": "charts/vinicius__K03/relacao.png",
+          "display": "charts/vinicius__K03/relacao-display.svg",
+          "mobile": "charts/vinicius__K03/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/vinicius__K03.csv"
+    },
+    "vinicius__K04": {
+      "integrante": "vinicius",
+      "kata": "K04",
+      "row_ids": [
+        "vinicius_K04_ia_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 0,
+        "ia": 1,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 1
+      },
+      "stats": {
+        "manual": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 22.4,
+            "q1": 22.4,
+            "q3": 22.4
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 10.0,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 2.25,
+            "q1": 2.25,
+            "q3": 2.25
+          },
+          "loc": {
+            "n": 1,
+            "median": 40.0,
+            "q1": 40.0,
+            "q3": 40.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/vinicius__K04/tempo.svg",
+          "png": "charts/vinicius__K04/tempo.png",
+          "display": "charts/vinicius__K04/tempo-display.svg",
+          "mobile": "charts/vinicius__K04/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/vinicius__K04/sucesso.svg",
+          "png": "charts/vinicius__K04/sucesso.png",
+          "display": "charts/vinicius__K04/sucesso-display.svg",
+          "mobile": "charts/vinicius__K04/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/vinicius__K04/complexidade.svg",
+          "png": "charts/vinicius__K04/complexidade.png",
+          "display": "charts/vinicius__K04/complexidade-display.svg",
+          "mobile": "charts/vinicius__K04/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/vinicius__K04/loc.svg",
+          "png": "charts/vinicius__K04/loc.png",
+          "display": "charts/vinicius__K04/loc-display.svg",
+          "mobile": "charts/vinicius__K04/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/vinicius__K04/relacao.svg",
+          "png": "charts/vinicius__K04/relacao.png",
+          "display": "charts/vinicius__K04/relacao-display.svg",
+          "mobile": "charts/vinicius__K04/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/vinicius__K04.csv"
+    },
+    "vinicius__K05": {
+      "integrante": "vinicius",
+      "kata": "K05",
+      "row_ids": [
+        "vinicius_K05_ia_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 0,
+        "ia": 1,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 1
+      },
+      "stats": {
+        "manual": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        },
+        "ia": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 9.15,
+            "q1": 9.15,
+            "q3": 9.15
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 0.0,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 4.0,
+            "q1": 4.0,
+            "q3": 4.0
+          },
+          "loc": {
+            "n": 1,
+            "median": 13.0,
+            "q1": 13.0,
+            "q3": 13.0
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/vinicius__K05/tempo.svg",
+          "png": "charts/vinicius__K05/tempo.png",
+          "display": "charts/vinicius__K05/tempo-display.svg",
+          "mobile": "charts/vinicius__K05/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/vinicius__K05/sucesso.svg",
+          "png": "charts/vinicius__K05/sucesso.png",
+          "display": "charts/vinicius__K05/sucesso-display.svg",
+          "mobile": "charts/vinicius__K05/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/vinicius__K05/complexidade.svg",
+          "png": "charts/vinicius__K05/complexidade.png",
+          "display": "charts/vinicius__K05/complexidade-display.svg",
+          "mobile": "charts/vinicius__K05/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/vinicius__K05/loc.svg",
+          "png": "charts/vinicius__K05/loc.png",
+          "display": "charts/vinicius__K05/loc-display.svg",
+          "mobile": "charts/vinicius__K05/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/vinicius__K05/relacao.svg",
+          "png": "charts/vinicius__K05/relacao.png",
+          "display": "charts/vinicius__K05/relacao-display.svg",
+          "mobile": "charts/vinicius__K05/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/vinicius__K05.csv"
+    },
+    "vinicius__K06": {
+      "integrante": "vinicius",
+      "kata": "K06",
+      "row_ids": [
+        "vinicius_K06_manual_01"
+      ],
+      "adjustment_count": 0,
+      "counts": {
+        "total": 1,
+        "manual": 1,
+        "ia": 0,
+        "testes_arquivados": 1,
+        "metricas_arquivadas": 1,
+        "divergencias": 1
+      },
+      "stats": {
+        "manual": {
+          "n": 1,
+          "tempo": {
+            "n": 1,
+            "median": 19.8,
+            "q1": 19.8,
+            "q3": 19.8
+          },
+          "sucesso": {
+            "n": 1,
+            "mean": 0.0,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 1,
+            "median": 2.0,
+            "q1": 2.0,
+            "q3": 2.0
+          },
+          "loc": {
+            "n": 1,
+            "median": 21.0,
+            "q1": 21.0,
+            "q3": 21.0
+          }
+        },
+        "ia": {
+          "n": 0,
+          "tempo": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "sucesso": {
+            "n": 0,
+            "mean": null,
+            "complete": 0
+          },
+          "complexidade": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          },
+          "loc": {
+            "n": 0,
+            "median": null,
+            "q1": null,
+            "q3": null
+          }
+        }
+      },
+      "charts": {
+        "tempo": {
+          "svg": "charts/vinicius__K06/tempo.svg",
+          "png": "charts/vinicius__K06/tempo.png",
+          "display": "charts/vinicius__K06/tempo-display.svg",
+          "mobile": "charts/vinicius__K06/tempo-mobile.svg"
+        },
+        "sucesso": {
+          "svg": "charts/vinicius__K06/sucesso.svg",
+          "png": "charts/vinicius__K06/sucesso.png",
+          "display": "charts/vinicius__K06/sucesso-display.svg",
+          "mobile": "charts/vinicius__K06/sucesso-mobile.svg"
+        },
+        "complexidade": {
+          "svg": "charts/vinicius__K06/complexidade.svg",
+          "png": "charts/vinicius__K06/complexidade.png",
+          "display": "charts/vinicius__K06/complexidade-display.svg",
+          "mobile": "charts/vinicius__K06/complexidade-mobile.svg"
+        },
+        "loc": {
+          "svg": "charts/vinicius__K06/loc.svg",
+          "png": "charts/vinicius__K06/loc.png",
+          "display": "charts/vinicius__K06/loc-display.svg",
+          "mobile": "charts/vinicius__K06/loc-mobile.svg"
+        },
+        "relacao": {
+          "svg": "charts/vinicius__K06/relacao.svg",
+          "png": "charts/vinicius__K06/relacao.png",
+          "display": "charts/vinicius__K06/relacao-display.svg",
+          "mobile": "charts/vinicius__K06/relacao-mobile.svg"
+        }
+      },
+      "csv": "downloads/vinicius__K06.csv"
+    }
+  }
+}

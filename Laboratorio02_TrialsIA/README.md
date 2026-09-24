@@ -94,6 +94,8 @@ Documento contendo:
 ### 6. Dashboard de Visualização
 Importe os dados do experimento e gere gráficos (Pandas + Matplotlib/Seaborn) comparando tempo, taxa de sucesso e métricas estáticas entre os tratamentos.
 
+**Implementação:** [Dashboard Manual × IA](dashboard/README.md), com filtros por integrante e kata, gráficos gerados em Python, downloads e indicação da origem e disponibilidade dos dados.
+
 ---
 
 ## 🛠️ Processo de Desenvolvimento

@@ -1,0 +1,4 @@
+﻿trial_id,integrante,kata,tratamento,tempo_min,taxa_sucesso,passou_todos,total_testes,aprovados,reprovados,complexidade_media,loc,sloc,fonte_testes,metricas_disponiveis,status_registrado,status_divergente,tempo_censurado,tratamento_registrado,tratamento_ajustado
+aulus_K03_manual_01,aulus,K03,ia,12.3,80.0,False,10.0,8.0,2.0,2.5,23.0,15.0,relatorio,True,SUCESSO,True,False,manual,True
+maria_K03_ia_01,maria,K03,ia,6.5,100.0,True,10.0,10.0,0.0,4.0,30.0,16.0,relatorio,True,SUCESSO,False,False,ia,False
+vinicius_K03_ia_01,vinicius,K03,ia,6.5,80.0,False,10.0,8.0,2.0,2.5,18.0,14.0,relatorio,True,SUCESSO,True,False,ia,False

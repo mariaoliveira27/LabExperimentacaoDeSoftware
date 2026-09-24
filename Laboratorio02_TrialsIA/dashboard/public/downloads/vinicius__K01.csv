@@ -1,0 +1,2 @@
+﻿trial_id,integrante,kata,tratamento,tempo_min,taxa_sucesso,passou_todos,total_testes,aprovados,reprovados,complexidade_media,loc,sloc,fonte_testes,metricas_disponiveis,status_registrado,status_divergente,tempo_censurado,tratamento_registrado,tratamento_ajustado
+vinicius_K01_manual_01,vinicius,K01,manual,8.45,80.0,False,10.0,8.0,2.0,4.25,60.0,51.0,relatorio,True,SUCESSO,True,False,manual,False
