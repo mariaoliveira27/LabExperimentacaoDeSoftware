@@ -19,7 +19,7 @@ api:
   rate_limit_safety_margin_seconds: 5
   max_retries: 5
   backoff_base_seconds: 1.0
-  verify_ssl: false
+  verify_ssl: true
 
 # Caminhos de armazenamento e cache
 storage:

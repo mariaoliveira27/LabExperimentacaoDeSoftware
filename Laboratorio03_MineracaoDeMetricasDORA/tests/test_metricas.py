@@ -80,6 +80,8 @@ def exemplo_secao5_rq04():
             "updated_at": "2024-05-10T11:20:00Z",
         },
     ]
+    for run_id, run in enumerate(runs, start=1):
+        run["id"] = run_id
     return runs
 
 
@@ -157,21 +159,37 @@ def test_cfr_ci_com_conclusoes_e_ignorados():
         {"conclusion": "skipped"},
         {"conclusion": "neutral"},
         {"conclusion": "action_required"},
+        {"conclusion": "stale"},
+        {"conclusion": "unknown_conclusion"},
         {"conclusion": None},
         {"conclusion": ""},
     ]
     # Total validos: 2 sucessos + 3 falhas = 5. CFR = 3 / 5 = 0.60
-    cfr, falhas, sucessos = calcular_cfr_ci(runs)
-    assert cfr == 0.60
-    assert falhas == 3
-    assert sucessos == 2
+    resultado = calcular_cfr_ci(runs)
+    assert resultado.cfr == 0.60
+    assert resultado.falhas == 3
+    assert resultado.sucessos == 2
+    assert resultado.ignorados == 8
 
 
 def test_cfr_ci_vazio():
-    cfr, f, s = calcular_cfr_ci([])
-    assert cfr is None
-    assert f == 0
-    assert s == 0
+    resultado = calcular_cfr_ci([])
+    assert resultado.cfr is None
+    assert resultado.falhas == 0
+    assert resultado.sucessos == 0
+    assert resultado.ignorados == 0
+
+
+def test_cfr_ci_sem_validos_e_diferente_de_zero():
+    indisponivel = calcular_cfr_ci([{}, {"conclusion": None}, {"conclusion": "cancelled"}])
+    sem_falhas = calcular_cfr_ci([{"conclusion": "success"}, {"conclusion": "skipped"}])
+    assert indisponivel.cfr is None
+    assert indisponivel.ignorados == 3
+    assert indisponivel.falhas == indisponivel.sucessos == 0
+    assert sem_falhas.cfr == 0.0
+    assert sem_falhas.sucessos == 1
+    assert sem_falhas.falhas == 0
+    assert sem_falhas.ignorados == 1
 
 
 def test_heuristica_release_corretiva():
@@ -218,22 +236,32 @@ def test_cfr_releases_com_censura():
 # ==============================================================================
 
 def test_tempo_recuperacao_exemplo_secao5(exemplo_secao5_rq04):
-    mediana, tempos, comp, cens = calcular_tempo_recuperacao(exemplo_secao5_rq04)
-    assert comp == 1
-    assert cens == 0
+    resultado = calcular_tempo_recuperacao(exemplo_secao5_rq04)
+    assert resultado.recuperados == 1
+    assert resultado.censurados == 0
+    assert resultado.proporcao_censurada == 0.0
     # 10:00 até 11:20 = 80 minutos = 1.333 horas
-    assert pytest.approx(mediana, 0.01) == 1.333
+    assert pytest.approx(resultado.mediana_horas, 0.01) == 1.333
 
 
 def test_tempo_recuperacao_caso_borda_censurado():
     runs = [
         {
+            "id": 1,
+            "workflow_id": "build",
+            "conclusion": "success",
+            "run_started_at": "2024-05-10T09:00:00Z",
+            "updated_at": "2024-05-10T09:05:00Z",
+        },
+        {
+            "id": 2,
             "workflow_id": "build",
             "conclusion": "failure",
             "run_started_at": "2024-05-10T10:00:00Z",
             "updated_at": "2024-05-10T10:05:00Z",
         },
         {
+            "id": 3,
             "workflow_id": "build",
             "conclusion": "failure",
             "run_started_at": "2024-05-10T11:00:00Z",
@@ -241,10 +269,11 @@ def test_tempo_recuperacao_caso_borda_censurado():
         },
         # Nunca recuperou até o fim da janela
     ]
-    mediana, tempos, comp, cens = calcular_tempo_recuperacao(runs)
-    assert comp == 0
-    assert cens == 1
-    assert mediana is None
+    resultado = calcular_tempo_recuperacao(runs)
+    assert resultado.recuperados == 0
+    assert resultado.censurados == 1
+    assert resultado.mediana_horas is None
+    assert resultado.proporcao_censurada == 1.0
 
 
 # ==============================================================================

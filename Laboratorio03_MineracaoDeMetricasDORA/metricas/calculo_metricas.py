@@ -11,6 +11,7 @@ Implementa as definições operacionais e regras de negócio:
 import math
 import re
 import statistics
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
 
@@ -106,7 +107,17 @@ def calcular_lead_time_repositorio(
 # RQ 03: Change Failure Rate (CFR)
 # ==============================================================================
 
-def calcular_cfr_ci(workflow_runs: List[Dict[str, Any]]) -> Tuple[Optional[float], int, int]:
+@dataclass(frozen=True)
+class ResultadoCFR:
+    """CFR(a) e as contagens que explicam seu denominador."""
+
+    cfr: Optional[float]
+    falhas: int
+    sucessos: int
+    ignorados: int
+
+
+def calcular_cfr_ci(workflow_runs: List[Dict[str, Any]]) -> ResultadoCFR:
     """
     Variante (a): Proxy de CI.
     Fórmula: nº de runs com falha / (nº de falhas + nº de sucessos).
@@ -114,27 +125,32 @@ def calcular_cfr_ci(workflow_runs: List[Dict[str, Any]]) -> Tuple[Optional[float
       - Sucesso: 'success'
       - Falha: 'failure', 'timed_out', 'startup_failure'
       - Ignorar: 'cancelled', 'skipped', 'neutral', 'action_required', 'stale', vazio/None.
-    Retorna (cfr, total_falhas, total_sucessos).
+    Retorna ResultadoCFR com cfr, falhas, sucessos e ignorados.
+    Sem sucessos ou falhas, cfr é None (indisponível), e não zero.
     """
     falhas = 0
     sucessos = 0
+    ignorados = 0
 
     conclusoes_falha = {"failure", "timed_out", "startup_failure"}
     conclusoes_sucesso = {"success"}
 
     for run in workflow_runs:
-        conclusion = (run.get("conclusion") or "").strip().lower()
+        conclusion = run.get("conclusion")
+        conclusion = conclusion.strip().lower() if isinstance(conclusion, str) else ""
         if conclusion in conclusoes_sucesso:
             sucessos += 1
         elif conclusion in conclusoes_falha:
             falhas += 1
+        else:
+            ignorados += 1
 
     total_validos = falhas + sucessos
     if total_validos == 0:
-        return None, 0, 0
+        return ResultadoCFR(None, 0, 0, ignorados)
 
     cfr = float(falhas) / float(total_validos)
-    return cfr, falhas, sucessos
+    return ResultadoCFR(cfr, falhas, sucessos, ignorados)
 
 
 def eh_release_corretiva(
@@ -238,67 +254,108 @@ def calcular_cfr_releases(
 # RQ 04: Tempo de Recuperação (Failed Deployment Recovery Time)
 # ==============================================================================
 
+@dataclass(frozen=True)
+class ResultadoRecuperacao:
+    """Episódios observados e censurados de falha por workflow."""
+
+    mediana_horas: Optional[float]
+    tempos_horas: List[float]
+    recuperados: int
+    censurados: int
+    proporcao_censurada: Optional[float]
+
+
+def _data_run(run: Dict[str, Any], campo: str) -> datetime:
+    """Exige a data usada pela definição operacional, sem fabricar substitutos."""
+    valor = run.get(campo)
+    data = parse_datetime(valor) if isinstance(valor, str) else None
+    if data is None or data.tzinfo is None or data.utcoffset() is None:
+        raise ValueError(f"Run {run.get('id')}: {campo} deve ser uma data ISO 8601 com fuso.")
+    return data.astimezone(timezone.utc)
+
+
+def _id_run(run: Dict[str, Any]) -> int:
+    valor = run.get("id")
+    if isinstance(valor, bool) or not isinstance(valor, (int, str)):
+        raise ValueError("Run válido sem ID inteiro para desempate cronológico.")
+    try:
+        return int(valor)
+    except ValueError as exc:
+        raise ValueError("Run válido sem ID inteiro para desempate cronológico.") from exc
+
+
 def calcular_tempo_recuperacao(
     workflow_runs: List[Dict[str, Any]],
-) -> Tuple[Optional[float], List[float], int, int]:
+    window_end: Optional[datetime] = None,
+) -> ResultadoRecuperacao:
     """
     Calcula o tempo de recuperação (em horas) após uma execução de CI/CD com falha.
     Para cada workflow individual:
-      - Ordena cronologicamente por run_started_at ou created_at.
+      - Ordena cronologicamente por run_started_at e ID numérico como desempate.
       - Um episódio de falha começa na primeira falha após um sucesso e termina
         na próxima execução bem-sucedida desse mesmo workflow.
       - Tempo do episódio: fim da execução bem-sucedida (updated_at) - início da primeira falha (run_started_at).
       - Episódio que nunca termina com sucesso até o fim da janela é censurado.
-    Retorna (mediana_horas, lista_tempos_horas, episodios_completados, episodios_censurados).
+    Falhas anteriores ao primeiro sucesso observado não abrem episódios.
+    Conclusões ignoradas não abrem nem encerram episódios.
+    Retorna ResultadoRecuperacao. Sem recuperados, mediana_horas é None;
+    sem episódios, proporcao_censurada é None. Dados válidos sem os campos
+    necessários ou com datas impossíveis geram ValueError.
+    Se window_end for informado, sucessos concluídos depois do corte não
+    encerram episódios nem estabelecem um sucesso observado dentro da janela.
     """
+    if window_end is not None:
+        if window_end.tzinfo is None or window_end.utcoffset() is None:
+            raise ValueError("window_end deve conter fuso horário.")
+        window_end = window_end.astimezone(timezone.utc)
     conclusoes_falha = {"failure", "timed_out", "startup_failure"}
     conclusoes_sucesso = {"success"}
 
     # Agrupa por workflow_id
-    runs_por_workflow: Dict[str, List[Dict[str, Any]]] = {}
+    runs_por_workflow: Dict[str, List[Tuple[datetime, int, str, Optional[datetime]]]] = {}
     for run in workflow_runs:
-        wf_id = str(run.get("workflow_id") or run.get("name") or "default")
-        conclusion = (run.get("conclusion") or "").strip().lower()
-        if conclusion in conclusoes_falha or conclusion in conclusoes_sucesso:
-            if wf_id not in runs_por_workflow:
-                runs_por_workflow[wf_id] = []
-            runs_por_workflow[wf_id].append(run)
+        conclusion = run.get("conclusion")
+        conclusion = conclusion.strip().lower() if isinstance(conclusion, str) else ""
+        if conclusion not in conclusoes_falha and conclusion not in conclusoes_sucesso:
+            continue
+        if run.get("workflow_id") is None:
+            raise ValueError(f"Run {run.get('id')}: workflow_id ausente.")
+        wf_id = str(run["workflow_id"])
+        run_id = _id_run(run)
+        inicio = _data_run(run, "run_started_at")
+        fim = _data_run(run, "updated_at") if conclusion in conclusoes_sucesso else None
+        if fim is not None and fim < inicio:
+            raise ValueError(f"Run {run_id}: updated_at anterior a run_started_at.")
+        if window_end is not None and (inicio > window_end or (fim is not None and fim > window_end)):
+            continue
+        runs_por_workflow.setdefault(wf_id, []).append((inicio, run_id, conclusion, fim))
 
     todos_tempos_recuperacao_horas: List[float] = []
     total_episodios_completados = 0
     total_episodios_censurados = 0
 
-    for wf_id, runs in runs_por_workflow.items():
-        # Ordena cronologicamente pela data de início
-        runs_ordenados = sorted(
-            runs,
-            key=lambda r: parse_datetime(r.get("run_started_at") or r.get("created_at")),
-        )
+    for wf_id in sorted(runs_por_workflow):
+        # A lista de tempos também é determinística entre workflows.
+        runs_ordenados = sorted(runs_por_workflow[wf_id], key=lambda run: (run[0], run[1]))
 
-        em_episodio_falha = False
+        sucesso_observado = False
         inicio_episodio_falha: Optional[datetime] = None
 
-        for r in runs_ordenados:
-            conc = (r.get("conclusion") or "").strip().lower()
-            t_inicio = parse_datetime(r.get("run_started_at") or r.get("created_at"))
-            t_fim = parse_datetime(r.get("updated_at") or r.get("created_at"))
-
+        for t_inicio, _, conc, t_fim in runs_ordenados:
             if conc in conclusoes_falha:
-                if not em_episodio_falha:
-                    em_episodio_falha = True
+                if sucesso_observado and inicio_episodio_falha is None:
                     inicio_episodio_falha = t_inicio
-                # Se já está em episódio de falha, continua o mesmo episódio
+                # Falhas consecutivas pertencem ao episódio já aberto.
             elif conc in conclusoes_sucesso:
-                if em_episodio_falha and inicio_episodio_falha and t_fim:
-                    # Fim do episódio de falha
+                if inicio_episodio_falha is not None:
                     duracao_segundos = (t_fim - inicio_episodio_falha).total_seconds()
-                    duracao_horas = max(0.0, duracao_segundos / 3600.0)
+                    duracao_horas = duracao_segundos / 3600.0
                     todos_tempos_recuperacao_horas.append(duracao_horas)
                     total_episodios_completados += 1
-                    em_episodio_falha = False
                     inicio_episodio_falha = None
+                sucesso_observado = True
 
-        if em_episodio_falha:
+        if inicio_episodio_falha is not None:
             # Terminou a janela sem sucesso -> Censurado
             total_episodios_censurados += 1
 
@@ -308,11 +365,14 @@ def calcular_tempo_recuperacao(
         else None
     )
 
-    return (
+    total_episodios = total_episodios_completados + total_episodios_censurados
+    proporcao_censurada = total_episodios_censurados / total_episodios if total_episodios else None
+    return ResultadoRecuperacao(
         mediana_horas,
         todos_tempos_recuperacao_horas,
         total_episodios_completados,
         total_episodios_censurados,
+        proporcao_censurada,
     )
 
 
