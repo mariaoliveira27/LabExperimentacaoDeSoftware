@@ -7,26 +7,33 @@ Descreva o propósito das pastas principais.
 
 ```
 .
-├── /Laboratorio01_GitHubRepo   # 📂 Projeto de Laboratório 01
-│   ├── /CSV-100                # 📄 CSVs gerados pelos códigos de 100 requisições
-│   ├── /CSV-1000               # 📄 CSVs gerados pelos códigos de 1000 requisições
-│   ├── /dashboard              # 📄 Dashboard com gráficos e analise das RQs
-│   ├── /Graficos-100           # 📊 CSVs gerados pelos códigos de 100 requisições
-│   └── /Graficos-1000          # 📊 CSVs gerados pelos códigos de 1000 requisições
+├── /Laboratorio01_GitHubRepo              # 📂 Projeto de Laboratório 01
+│   ├── /CSV-100                           # 📄 CSVs gerados pelos códigos de 100 requisições
+│   ├── /CSV-1000                          # 📄 CSVs gerados pelos códigos de 1000 requisições
+│   ├── /dashboard                         # 📄 Dashboard com gráficos e analise das RQs
+│   ├── /Graficos-100                      # 📊 CSVs gerados pelos códigos de 100 requisições
+│   └── /Graficos-1000                     # 📊 CSVs gerados pelos códigos de 1000 requisições
 │
-├── /Laboratorio02_TrialsIA      # 📂 Projeto de Laboratório 02
-│   ├── /casos_de_teste          # 🎯 Executor e base JSON dos testes (RQ2)
-│   │   └── /aceitacao_k05_k06   # Contratos e validação dos casos de Áulus (#31)
-│   ├── /cronometro              # ⏱️ Código para cálculo do tempo de execução de atividade (RQ1)
-│   │   └── /src                 # 💻 Código fonte do cronômetro
-│   ├── /cronometro              # ⏱️ Coordenador de rodadas, tempo e integração (RQ1, #30)
-│   │   ├── /src                 # 💻 Código fonte do coordenador de rodadas
-│   │   └── /exemplos            # 🧪 Soluções demonstrativas para validação
-│   ├── /metricas_estruturais    # Coletor Radon, testes e demonstração (RQ3, #31)
-│   ├── /Katas                   # 🧩 Katas selecionadas para as trials
-│   └── /solucoes_das_Katas      # 🧩 Soluções das Katas, tanto manuais quanto geradas por IA
+├── /Laboratorio02_TrialsIA                # 📂 Projeto de Laboratório 02
+│   ├── /casos_de_teste                    # 🎯 Executor e base JSON dos testes (RQ2)
+│   │   └── /aceitacao_k05_k06             # Contratos e validação dos casos de Áulus (#31)
+│   ├── /consolidacao                      # 📁 Scripts e dados de consolidação dos resultados
+│   ├── /cronometro                        # ⏱️ Coordenador de rodadas, tempo e integração (RQ1)
+│   │   ├── /src                           # 💻 Código fonte do cronômetro e coordenador
+│   │   └── /exemplos                      # 🧪 Soluções demonstrativas para validação
+│   ├── /dashboard                         # 📊 Dashboard web para visualização dos resultados
+│   ├── /graficos                          # 📈 Gráficos gerados para análise
+│   ├── /metricas_estruturais              # 📏 Coletor Radon, testes e demonstração (RQ3, #31)
+│   ├── /Katas                             # 🧩 Katas selecionadas para as trials
+│   └── /solucoes_das_Katas                # 🧩 Soluções das Katas, tanto manuais quanto geradas por IA
 │ 
-└── README.md                    # 📘 Documentação dos projetos
+├── /Laboratorio03_MineracaoDeMetricasDORA # 📂 Projeto de Laboratório 03
+│   ├── /data                              # 🗄️ Dados em cache e saídas geradas pelas análises
+│   ├── /graficos_dora                     # 📈 Gráficos relacionados às métricas DORA
+│   ├── /metricas                          # 📏 Códigos e scripts de extração das métricas
+│   └── /tests                             # 🧪 Testes das implementações
+│
+└── README.md                              # 📘 Documentação dos projetos
 ```
 
 ---
