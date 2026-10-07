@@ -157,21 +157,37 @@ def test_cfr_ci_com_conclusoes_e_ignorados():
         {"conclusion": "skipped"},
         {"conclusion": "neutral"},
         {"conclusion": "action_required"},
+        {"conclusion": "stale"},
+        {"conclusion": "unknown_conclusion"},
         {"conclusion": None},
         {"conclusion": ""},
     ]
     # Total validos: 2 sucessos + 3 falhas = 5. CFR = 3 / 5 = 0.60
-    cfr, falhas, sucessos = calcular_cfr_ci(runs)
-    assert cfr == 0.60
-    assert falhas == 3
-    assert sucessos == 2
+    resultado = calcular_cfr_ci(runs)
+    assert resultado.cfr == 0.60
+    assert resultado.falhas == 3
+    assert resultado.sucessos == 2
+    assert resultado.ignorados == 8
 
 
 def test_cfr_ci_vazio():
-    cfr, f, s = calcular_cfr_ci([])
-    assert cfr is None
-    assert f == 0
-    assert s == 0
+    resultado = calcular_cfr_ci([])
+    assert resultado.cfr is None
+    assert resultado.falhas == 0
+    assert resultado.sucessos == 0
+    assert resultado.ignorados == 0
+
+
+def test_cfr_ci_sem_validos_e_diferente_de_zero():
+    indisponivel = calcular_cfr_ci([{}, {"conclusion": None}, {"conclusion": "cancelled"}])
+    sem_falhas = calcular_cfr_ci([{"conclusion": "success"}, {"conclusion": "skipped"}])
+    assert indisponivel.cfr is None
+    assert indisponivel.ignorados == 3
+    assert indisponivel.falhas == indisponivel.sucessos == 0
+    assert sem_falhas.cfr == 0.0
+    assert sem_falhas.sucessos == 1
+    assert sem_falhas.falhas == 0
+    assert sem_falhas.ignorados == 1
 
 
 def test_heuristica_release_corretiva():

@@ -11,6 +11,7 @@ Implementa as definições operacionais e regras de negócio:
 import math
 import re
 import statistics
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
 
@@ -106,7 +107,17 @@ def calcular_lead_time_repositorio(
 # RQ 03: Change Failure Rate (CFR)
 # ==============================================================================
 
-def calcular_cfr_ci(workflow_runs: List[Dict[str, Any]]) -> Tuple[Optional[float], int, int]:
+@dataclass(frozen=True)
+class ResultadoCFR:
+    """CFR(a) e as contagens que explicam seu denominador."""
+
+    cfr: Optional[float]
+    falhas: int
+    sucessos: int
+    ignorados: int
+
+
+def calcular_cfr_ci(workflow_runs: List[Dict[str, Any]]) -> ResultadoCFR:
     """
     Variante (a): Proxy de CI.
     Fórmula: nº de runs com falha / (nº de falhas + nº de sucessos).
@@ -114,27 +125,32 @@ def calcular_cfr_ci(workflow_runs: List[Dict[str, Any]]) -> Tuple[Optional[float
       - Sucesso: 'success'
       - Falha: 'failure', 'timed_out', 'startup_failure'
       - Ignorar: 'cancelled', 'skipped', 'neutral', 'action_required', 'stale', vazio/None.
-    Retorna (cfr, total_falhas, total_sucessos).
+    Retorna ResultadoCFR com cfr, falhas, sucessos e ignorados.
+    Sem sucessos ou falhas, cfr é None (indisponível), e não zero.
     """
     falhas = 0
     sucessos = 0
+    ignorados = 0
 
     conclusoes_falha = {"failure", "timed_out", "startup_failure"}
     conclusoes_sucesso = {"success"}
 
     for run in workflow_runs:
-        conclusion = (run.get("conclusion") or "").strip().lower()
+        conclusion = run.get("conclusion")
+        conclusion = conclusion.strip().lower() if isinstance(conclusion, str) else ""
         if conclusion in conclusoes_sucesso:
             sucessos += 1
         elif conclusion in conclusoes_falha:
             falhas += 1
+        else:
+            ignorados += 1
 
     total_validos = falhas + sucessos
     if total_validos == 0:
-        return None, 0, 0
+        return ResultadoCFR(None, 0, 0, ignorados)
 
     cfr = float(falhas) / float(total_validos)
-    return cfr, falhas, sucessos
+    return ResultadoCFR(cfr, falhas, sucessos, ignorados)
 
 
 def eh_release_corretiva(
