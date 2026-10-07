@@ -80,6 +80,8 @@ def exemplo_secao5_rq04():
             "updated_at": "2024-05-10T11:20:00Z",
         },
     ]
+    for run_id, run in enumerate(runs, start=1):
+        run["id"] = run_id
     return runs
 
 
@@ -234,22 +236,32 @@ def test_cfr_releases_com_censura():
 # ==============================================================================
 
 def test_tempo_recuperacao_exemplo_secao5(exemplo_secao5_rq04):
-    mediana, tempos, comp, cens = calcular_tempo_recuperacao(exemplo_secao5_rq04)
-    assert comp == 1
-    assert cens == 0
+    resultado = calcular_tempo_recuperacao(exemplo_secao5_rq04)
+    assert resultado.recuperados == 1
+    assert resultado.censurados == 0
+    assert resultado.proporcao_censurada == 0.0
     # 10:00 até 11:20 = 80 minutos = 1.333 horas
-    assert pytest.approx(mediana, 0.01) == 1.333
+    assert pytest.approx(resultado.mediana_horas, 0.01) == 1.333
 
 
 def test_tempo_recuperacao_caso_borda_censurado():
     runs = [
         {
+            "id": 1,
+            "workflow_id": "build",
+            "conclusion": "success",
+            "run_started_at": "2024-05-10T09:00:00Z",
+            "updated_at": "2024-05-10T09:05:00Z",
+        },
+        {
+            "id": 2,
             "workflow_id": "build",
             "conclusion": "failure",
             "run_started_at": "2024-05-10T10:00:00Z",
             "updated_at": "2024-05-10T10:05:00Z",
         },
         {
+            "id": 3,
             "workflow_id": "build",
             "conclusion": "failure",
             "run_started_at": "2024-05-10T11:00:00Z",
@@ -257,10 +269,11 @@ def test_tempo_recuperacao_caso_borda_censurado():
         },
         # Nunca recuperou até o fim da janela
     ]
-    mediana, tempos, comp, cens = calcular_tempo_recuperacao(runs)
-    assert comp == 0
-    assert cens == 1
-    assert mediana is None
+    resultado = calcular_tempo_recuperacao(runs)
+    assert resultado.recuperados == 0
+    assert resultado.censurados == 1
+    assert resultado.mediana_horas is None
+    assert resultado.proporcao_censurada == 1.0
 
 
 # ==============================================================================

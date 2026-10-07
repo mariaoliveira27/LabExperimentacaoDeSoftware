@@ -9,6 +9,8 @@ Atende aos requisitos de cálculo e definições operacionais do Lab03:
 """
 
 from .calculo_metricas import (
+    ResultadoCFR,
+    ResultadoRecuperacao,
     calcular_deployment_frequency,
     calcular_lead_time_release,
     calcular_lead_time_commits,
@@ -23,6 +25,8 @@ from .calculo_metricas import (
 )
 
 __all__ = [
+    "ResultadoCFR",
+    "ResultadoRecuperacao",
     "calcular_deployment_frequency",
     "calcular_lead_time_release",
     "calcular_lead_time_commits",
