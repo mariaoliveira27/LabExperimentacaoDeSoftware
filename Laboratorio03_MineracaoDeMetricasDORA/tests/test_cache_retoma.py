@@ -136,6 +136,14 @@ def test_connection_and_5xx_retry_with_bounded_backoff(client, sleeps):
     assert [call.args[0] for call in sleeps.call_args_list] == [40, 60.0, 60.0]
 
 
+def test_503_respeita_retry_after(client, sleeps):
+    client.session.get = Mock(side_effect=[
+        response(503, headers={"Retry-After": "15"}), response(data=[]),
+    ])
+    assert client.request("/runs")[0] == 200
+    sleeps.assert_called_once_with(18.0)
+
+
 @pytest.mark.parametrize("failure", [response(503), response(429), requests.ConnectionError("offline")])
 def test_exhausted_retries_raise_and_leave_pending(client, sleeps, failure):
     client.session.get = Mock(side_effect=[failure, failure, failure])

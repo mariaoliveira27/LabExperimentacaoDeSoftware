@@ -213,7 +213,7 @@ class GitHubClient:
     def _rate_limit_delay(self, response: requests.Response) -> Optional[float]:
         headers = {key.lower(): value for key, value in response.headers.items()}
         delays = []
-        if response.status_code in (403, 429) and "retry-after" in headers:
+        if "retry-after" in headers:
             retry_after = self._numeric_header(headers, "retry-after")
             if retry_after is None:
                 try:
