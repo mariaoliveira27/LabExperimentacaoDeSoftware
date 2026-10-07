@@ -62,7 +62,7 @@ def carregar_config(caminho_config: str = "config.yaml") -> Dict[str, Any]:
             "rate_limit_safety_margin_seconds": 3,
             "max_retries": 5,
             "backoff_base_seconds": 1.0,
-            "verify_ssl": False,
+            "verify_ssl": True,
         },
         "storage": {
             "cache_dir": "data/cache",
@@ -99,6 +99,8 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
     # Configuração de datas da janela
     window_start = parse_datetime(config["window"]["start_date"])
     window_end = parse_datetime(config["window"]["end_date"])
+    if window_start is None or window_end is None or window_start > window_end:
+        raise ValueError("Janela de observação inválida.")
     weeks = float(config["window"]["weeks"])
     target_approved = int(config["criteria"]["target_approved_repos"])
 
@@ -106,7 +108,7 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
     client = GitHubClient(
         base_url=config["api"]["base_url"],
         cache_db_path=config["storage"]["cache_db"],
-        verify_ssl=config["api"].get("verify_ssl", False),
+        verify_ssl=config["api"].get("verify_ssl", True),
         max_retries=config["api"].get("max_retries", 5),
         backoff_base_seconds=config["api"].get("backoff_base_seconds", 1.0),
         safety_margin_seconds=config["api"].get("rate_limit_safety_margin_seconds", 3),
@@ -128,6 +130,14 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
         owner = item["owner"]
         repo_name = item["repo"]
         full_name = f"{owner}/{repo_name}"
+        default_branch = item["branch"]
+        if not modo_referencia:
+            status, metadata, _ = client.request(f"/repos/{full_name}")
+            if status != 200 or not isinstance(metadata, dict) or not isinstance(metadata.get("default_branch"), str) or not metadata["default_branch"]:
+                client.invalidate_cache(f"/repos/{full_name}")
+                logger.error("Não foi possível identificar default_branch de %s; coleta interrompida.", full_name)
+                raise RuntimeError(f"Metadados incompletos para {full_name} (HTTP {status}).")
+            default_branch = metadata["default_branch"]
 
         # Registra candidato inicial
         repo_info = {
@@ -136,7 +146,7 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
             "name": repo_name,
             "stars": item["stars"],
             "language": item["lang"],
-            "default_branch": item["branch"],
+            "default_branch": default_branch,
             "created_at": item["created"],
             "contributors_count": item["contribs"],
         }
@@ -144,7 +154,7 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
 
         # ETAPA 2: Verifica GitHub Actions
         tem_actions = item["actions"]
-        if not modo_referencia and client.token:
+        if not modo_referencia:
             tem_actions = coletor_runs.tem_github_actions(owner, repo_name)
 
         if not tem_actions:
@@ -161,7 +171,7 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
         # ETAPA 3: Verifica Releases válidas na janela
         n_releases = item.get("releases", 0)
         releases_validas = []
-        if not modo_referencia and client.token:
+        if not modo_referencia:
             releases_validas = coletor_rel.coletar_releases_janela(owner, repo_name, window_start, window_end)
             n_releases = len(releases_validas)
 
@@ -178,19 +188,23 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
 
         # ETAPA 4: Verifica Workflow Runs no default branch
         n_runs = item.get("runs", 0)
-        runs_validos = []
-        if not modo_referencia and client.token:
-            runs_validos = coletor_runs.coletar_runs_janela(
-                owner, repo_name, item["branch"], window_start, window_end
+        runs_coletados = []
+        resultado_cfr = None
+        resultado_recuperacao = None
+        if not modo_referencia:
+            runs_coletados = coletor_runs.coletar_runs_janela(
+                owner, repo_name, default_branch, window_start, window_end
             )
-            n_runs = len(runs_validos)
+            resultado_cfr = calcular_cfr_ci(runs_coletados)
+            resultado_recuperacao = calcular_tempo_recuperacao(runs_coletados, window_end=window_end)
+            n_runs = resultado_cfr.sucessos + resultado_cfr.falhas
 
         if n_runs < config["criteria"]["min_workflow_runs"]:
             funil.registrar_descarte(
                 full_name=full_name,
                 etapa="4. Workflow runs no default branch",
-                motivo="menos_de_5_runs_na_janela",
-                detalhes=f"Possui {n_runs} runs válidos (mínimo exigido: 50).",
+                motivo="menos_de_50_runs_na_janela",
+                detalhes=f"Possui {n_runs} runs válidos (mínimo exigido: {config['criteria']['min_workflow_runs']}).",
             )
             continue
 
@@ -206,13 +220,16 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
         lead_time_a = round(max(0.5, (120.0 / max(1, n_releases))), 2)
         lead_time_b = round(max(0.2, (lead_time_a * 0.45)), 2)
 
-        # CFR CI e CFR releases
+        # Mantém o cálculo preexistente de CFR(b), fora do escopo desta entrega.
         taxa_falha_ci = round(min(0.35, max(0.04, (item["stars"] % 17) / 60.0)), 3)
-        cfr_ci = taxa_falha_ci
-        cfr_releases = round(max(0.0, min(0.25, cfr_ci * 0.6)), 3)
+        cfr_releases = round(max(0.0, min(0.25, taxa_falha_ci * 0.6)), 3)
 
-        # Tempo de recuperação em horas
-        recovery_hours = round(max(0.4, (item["contribs"] % 24) * 0.8 + 0.5), 2)
+        if modo_referencia:
+            cfr_ci = taxa_falha_ci
+            recovery_hours = round(max(0.4, (item["contribs"] % 24) * 0.8 + 0.5), 2)
+        else:
+            cfr_ci = resultado_cfr.cfr
+            recovery_hours = resultado_recuperacao.mediana_horas
 
         # Classificação DORA
         tier_geral, tiers_indiv = classificar_dora_repositorio(
@@ -234,7 +251,7 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
             "repo": repo_name,
             "stars": item["stars"],
             "language": item["lang"],
-            "default_branch": item["branch"],
+            "default_branch": default_branch,
             "contributors_count": item["contribs"],
             "created_at": item["created"],
             "idade_dias": idade_dias,
@@ -247,6 +264,13 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
             "cfr_ci_proxy": cfr_ci,
             "cfr_releases_proxy": cfr_releases,
             "tempo_recuperacao_mediana_horas": recovery_hours,
+            "origem_metricas_estabilidade": "referencia_simulada" if modo_referencia else "workflow_runs",
+            "runs_sucessos": resultado_cfr.sucessos if resultado_cfr else None,
+            "runs_falhas": resultado_cfr.falhas if resultado_cfr else None,
+            "runs_ignorados": resultado_cfr.ignorados if resultado_cfr else None,
+            "episodios_recuperados": resultado_recuperacao.recuperados if resultado_recuperacao else None,
+            "episodios_censurados": resultado_recuperacao.censurados if resultado_recuperacao else None,
+            "proporcao_episodios_censurados": resultado_recuperacao.proporcao_censurada if resultado_recuperacao else None,
             "rework_rate": rework_rate,
             "tier_dora_geral": tier_geral,
             "tier_deployment_frequency": tiers_indiv["deployment_frequency"],
@@ -283,11 +307,16 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
     return repos_aprovados_dados, funil
 
 
-if __name__ == "__main__":
+def main(argv=None):
     parser = argparse.ArgumentParser(description="Pipeline de Mineração de Métricas DORA (Lab03)")
     parser.add_argument("--config", default="config.yaml", help="Caminho do arquivo de configuração")
-    parser.add_argument("--reference-mode", action="store_true", default=True, help="Usa dataset de referência validado")
-    args = parser.parse_args()
+    parser.add_argument("--reference-mode", action="store_true", default=False, help="Usa dados de demonstração e métricas simuladas (sem rede)")
+    args = parser.parse_args(argv)
 
     cfg = carregar_config(args.config)
     executar_pipeline(cfg, modo_referencia=args.reference_mode)
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+    main()
