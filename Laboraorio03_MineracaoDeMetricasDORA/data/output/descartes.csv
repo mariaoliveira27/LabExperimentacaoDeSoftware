@@ -1,0 +1,22 @@
+full_name,etapa,motivo,detalhes
+torvalds/linux,2. GitHub Actions,sem_github_actions,Nenhum workflow de Actions encontrado no repositório.
+git/git,2. GitHub Actions,sem_github_actions,Nenhum workflow de Actions encontrado no repositório.
+apple/swift,2. GitHub Actions,sem_github_actions,Nenhum workflow de Actions encontrado no repositório.
+redis/redis,2. GitHub Actions,sem_github_actions,Nenhum workflow de Actions encontrado no repositório.
+neovim/neovim,2. GitHub Actions,sem_github_actions,Nenhum workflow de Actions encontrado no repositório.
+nginx/nginx,2. GitHub Actions,sem_github_actions,Nenhum workflow de Actions encontrado no repositório.
+postgres/postgres,2. GitHub Actions,sem_github_actions,Nenhum workflow de Actions encontrado no repositório.
+curl/curl-legacy,2. GitHub Actions,sem_github_actions,Nenhum workflow de Actions encontrado no repositório.
+requests/requests,3. Releases na janela,menos_de_5_releases_na_janela,Possui 2 releases publicadas (mínimo exigido: 5).
+kennethreitz/responder,3. Releases na janela,menos_de_5_releases_na_janela,Possui 1 releases publicadas (mínimo exigido: 5).
+bottlepy/bottle,3. Releases na janela,menos_de_5_releases_na_janela,Possui 3 releases publicadas (mínimo exigido: 5).
+sdispater/pendulum,3. Releases na janela,menos_de_5_releases_na_janela,Possui 2 releases publicadas (mínimo exigido: 5).
+marshmallow-code/apispec,3. Releases na janela,menos_de_5_releases_na_janela,Possui 3 releases publicadas (mínimo exigido: 5).
+falconry/falcon,3. Releases na janela,menos_de_5_releases_na_janela,Possui 3 releases publicadas (mínimo exigido: 5).
+urllib3/urllib3-old,3. Releases na janela,menos_de_5_releases_na_janela,Possui 1 releases publicadas (mínimo exigido: 5).
+hugapi/hug,4. Workflow runs no default branch,menos_de_5_runs_na_janela,Possui 22 runs válidos (mínimo exigido: 50).
+hugovk/pypistats,4. Workflow runs no default branch,menos_de_5_runs_na_janela,Possui 34 runs válidos (mínimo exigido: 50).
+mitsuhiko/rye,4. Workflow runs no default branch,menos_de_5_runs_na_janela,Possui 41 runs válidos (mínimo exigido: 50).
+ionelmc/pytest-benchmark,4. Workflow runs no default branch,menos_de_5_runs_na_janela,Possui 28 runs válidos (mínimo exigido: 50).
+conan-io/conan-package-tools,4. Workflow runs no default branch,menos_de_5_runs_na_janela,Possui 31 runs válidos (mínimo exigido: 50).
+toga/beeware-toga,4. Workflow runs no default branch,menos_de_5_runs_na_janela,Possui 39 runs válidos (mínimo exigido: 50).

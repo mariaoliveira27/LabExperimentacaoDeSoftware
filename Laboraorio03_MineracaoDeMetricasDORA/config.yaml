@@ -1,0 +1,32 @@
+# Configurações do Pipeline de Mineração de Métricas DORA (Lab03)
+# Observação: Janela de observação de 12 meses
+window:
+  start_date: "2023-10-01T00:00:00Z"
+  end_date: "2024-09-30T23:59:59Z"
+  weeks: 52.14
+
+# Critérios de inclusão de repositórios
+criteria:
+  min_stars: 1000
+  min_releases: 5
+  min_workflow_runs: 50
+  target_approved_repos: 100
+
+# Configurações do cliente da API GitHub
+api:
+  base_url: "https://api.github.com"
+  per_page: 100
+  rate_limit_safety_margin_seconds: 5
+  max_retries: 5
+  backoff_base_seconds: 1.0
+  verify_ssl: false
+
+# Caminhos de armazenamento e cache
+storage:
+  cache_dir: "data/cache"
+  cache_db: "data/cache/github_cache.db"
+  output_dir: "data/output"
+  repos_csv: "data/output/repositorios_aprovados.csv"
+  funnel_csv: "data/output/funil_selecao.csv"
+  funnel_md: "data/output/funil_selecao.md"
+  discards_csv: "data/output/descartes.csv"

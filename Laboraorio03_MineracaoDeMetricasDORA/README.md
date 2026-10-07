@@ -12,7 +12,46 @@
 
 ---
 
+## Guia de Execução Rápida do Pipeline (Sprint 01)
+
+### 1. Instalação de Dependências
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Configuração de Autenticação (Opcional, mas recomendado para evitar rate limit)
+Defina seu token pessoal do GitHub na variável de ambiente `GITHUB_TOKEN` (ou em um arquivo `.env` local, que é ignorado pelo git):
+```bash
+# Linux/macOS
+export GITHUB_TOKEN="ghp_seu_token_aqui"
+
+# Windows (PowerShell)
+$env:GITHUB_TOKEN="ghp_seu_token_aqui"
+```
+
+### 3. Execução do Pipeline com Comando Único
+Para executar a seleção, funil, coleta e cálculo das métricas DORA dos 100 repositórios aprovados:
+```bash
+python pipeline.py --config config.yaml
+```
+
+### 4. Execução dos Testes Automatizados com Verificação de Cobertura (≥ 80%)
+```bash
+pytest --cov=metricas --cov-report=term-missing --cov-fail-under=80
+```
+
+### 5. Artefatos e Resultados Produzidos
+- **Dataset Principal (100 repositórios):** [`data/output/repositorios_aprovados.csv`](data/output/repositorios_aprovados.csv)
+- **Funil de Seleção:** [`data/output/funil_selecao.md`](data/output/funil_selecao.md) e [`data/output/funil_selecao.csv`](data/output/funil_selecao.csv)
+- **Log de Descartes com Motivos:** [`data/output/descartes.csv`](data/output/descartes.csv)
+- **Dicionário de Dados:** [`dicionario_dados.md`](dicionario_dados.md)
+- **Artigo (Introdução e Hipóteses de RQ03, RQ04 e RQ05):** [`artigo_introducao_e_hipoteses.md`](artigo_introducao_e_hipoteses.md)
+- **CI GitHub Actions:** [`.github/workflows/testes.yml`](.github/workflows/testes.yml)
+
+---
+
 ## Mineração de métricas DORA
+
 
 ### 1. Contexto
 

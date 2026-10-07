@@ -1,0 +1,20 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Pytest / Coverage
+.cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local cache DB if needed (keep datasets in data/output)
+data/cache/*.db-journal
