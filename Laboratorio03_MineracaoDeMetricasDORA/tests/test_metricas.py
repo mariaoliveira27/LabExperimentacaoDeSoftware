@@ -25,6 +25,7 @@ from metricas.calculo_metricas import (
     calcular_tempo_recuperacao,
     classificar_dora_metrica,
     classificar_dora_repositorio,
+    calcular_rework_rate,
 )
 
 
@@ -285,3 +286,19 @@ def test_classificacao_dora_exemplo_secao5():
     assert tiers["lead_time"] == "High"
     assert tiers["change_failure_rate"] == "High"
     assert tiers["recovery_time"] == "Low"
+    
+
+# ==============================================================================
+# Testes Rework Rate (RQ08)
+# ==============================================================================
+ 
+    
+def test_rework_rate():
+    releases = [
+        {"published_at": datetime(2024, 1, 1, tzinfo=timezone.utc), "tag_name": "v1.0.0"},
+        {"published_at": datetime(2024, 1, 10, tzinfo=timezone.utc), "tag_name": "v1.0.1", "commit_messages": ["fix: bug corrompido"]},
+        {"published_at": datetime(2024, 2, 1, tzinfo=timezone.utc), "tag_name": "v1.1.0", "commit_messages": ["feat: nova tela"]},
+    ]
+    # 3 releases no total, 1 corretiva (v1.0.1) -> 1/3 = 0.3333...
+    taxa = calcular_rework_rate(releases)
+    assert pytest.approx(taxa, 0.01) == 0.333

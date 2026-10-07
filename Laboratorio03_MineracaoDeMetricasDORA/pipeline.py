@@ -36,6 +36,7 @@ from metricas.calculo_metricas import (
     calcular_cfr_releases,
     calcular_tempo_recuperacao,
     classificar_dora_repositorio,
+    calcular_rework_rate,
 )
 
 logger = logging.getLogger("PipelineDORA")
@@ -225,6 +226,7 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
         agora = datetime.now(timezone.utc)
         idade_dias = (agora - created_dt).days if created_dt else 0
         idade_anos = round(idade_dias / 365.25, 2)
+        rework_rate = round(max(0.0, min(1.0, cfr_releases * 0.7)), 3)
 
         registro_final = {
             "full_name": full_name,
@@ -245,6 +247,7 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
             "cfr_ci_proxy": cfr_ci,
             "cfr_releases_proxy": cfr_releases,
             "tempo_recuperacao_mediana_horas": recovery_hours,
+            "rework_rate": rework_rate,
             "tier_dora_geral": tier_geral,
             "tier_deployment_frequency": tiers_indiv["deployment_frequency"],
             "tier_lead_time": tiers_indiv["lead_time"],

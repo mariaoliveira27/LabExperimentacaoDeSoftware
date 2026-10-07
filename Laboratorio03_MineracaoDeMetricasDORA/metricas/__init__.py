@@ -19,6 +19,7 @@ from .calculo_metricas import (
     calcular_tempo_recuperacao,
     classificar_dora_metrica,
     classificar_dora_repositorio,
+    calcular_rework_rate,
 )
 
 __all__ = [
@@ -32,4 +33,5 @@ __all__ = [
     "calcular_tempo_recuperacao",
     "classificar_dora_metrica",
     "classificar_dora_repositorio",
+    "calcular_rework_rate",
 ]

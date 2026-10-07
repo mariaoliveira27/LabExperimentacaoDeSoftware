@@ -430,3 +430,32 @@ def classificar_dora_repositorio(
     score_geral = max(1, min(4, score_geral))
 
     return SCORE_TO_TIER[score_geral], tiers_individuais
+
+
+
+# ==============================================================================
+# RQ 08 (Bônus): Rework Rate
+# ==============================================================================
+
+def calcular_rework_rate(releases: List[Dict[str, Any]]) -> Optional[float]:
+    """
+    Calcula o Rework Rate (RQ 08 bônus): proporção de releases corretivas sobre o total de releases.
+    """
+    if not releases or len(releases) <= 1:
+        return 0.0
+    
+    total_releases = len(releases)
+    releases_corretivas = 0
+    
+    # Ordena cronologicamente por data de publicação
+    ordenadas = sorted(releases, key=lambda r: r["published_at"])
+    
+    for i in range(1, len(ordenadas)):
+        tag_atual = ordenadas[i].get("tag_name", "")
+        tag_anterior = ordenadas[i-1].get("tag_name", "")
+        commit_msgs = ordenadas[i].get("commit_messages", [])
+        
+        if eh_release_corretiva(tag_atual, tag_anterior, commit_msgs):
+            releases_corretivas += 1
+            
+    return float(releases_corretivas) / float(total_releases)
