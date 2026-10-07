@@ -17,4 +17,5 @@ ENV/
 htmlcov/
 
 # Local cache DB if needed (keep datasets in data/output)
-data/cache/*.db-journal
+data/cache/*.db
+data/cache/*.db-*

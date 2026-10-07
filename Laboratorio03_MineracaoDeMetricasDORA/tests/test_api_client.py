@@ -44,7 +44,7 @@ def test_api_client_cache_sqlite():
 
 
 def test_api_client_cache_key_generation():
-    client = GitHubClient(token="test")
+    client = GitHubClient(token="test", use_cache=False)
     k1 = client._get_cache_key("https://api.github.com/repos", {"b": 2, "a": 1})
     k2 = client._get_cache_key("https://api.github.com/repos", {"a": 1, "b": 2})
     # Parâmetros ordenados produzem a mesma chave
