@@ -14,6 +14,13 @@
 
 ## Guia de Execução Rápida do Pipeline (Sprint 01)
 
+**Workflows, cache e estabilidade:** consulte [o guia de execução e retomada](WORKFLOWS_ESTABILIDADE.md).
+A execução normal calcula CFR(a) e recuperação a partir dos workflow runs. `--reference-mode`
+é opcional, desativado por padrão e produz dados de demonstração identificados no CSV.
+Os cálculos preexistentes de lead time, CFR(b), rework e classificação ainda precisam da
+integração dos respectivos responsáveis; o CSV completo não deve ser tratado como resultado
+empírico final. A correção da CI permanece com Marias.
+
 ### 1. Instalação de Dependências
 ```bash
 pip install -r requirements.txt
@@ -37,7 +44,7 @@ python pipeline.py --config config.yaml
 
 ### 4. Execução dos Testes Automatizados com Verificação de Cobertura (≥ 80%)
 ```bash
-pytest --cov=metricas --cov-report=term-missing --cov-fail-under=80
+python -m pytest --cov=metricas --cov-report=term-missing --cov-fail-under=80
 ```
 
 ### 5. Artefatos e Resultados Produzidos

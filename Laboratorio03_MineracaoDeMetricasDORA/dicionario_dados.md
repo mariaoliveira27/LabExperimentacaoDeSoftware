@@ -26,6 +26,13 @@ Este documento especifica cada coluna dos arquivos de dados gerados pelo pipelin
 | `cfr_ci_proxy` | Float | proporção [0, 1] | Change failure rate calculado pelo proxy de CI (Variante a da RQ03) | `runs_falha / (runs_falha + runs_sucesso)` |
 | `cfr_releases_proxy` | Float | proporção [0, 1] | Change failure rate calculado pelo proxy de releases corretivas em até 7 dias (Variante b da RQ03) | `releases_corretivas_em_ate_7_dias / releases_avaliadas` (excluindo censura dos últimos 7 dias) |
 | `tempo_recuperacao_mediana_horas` | Float | horas | Tempo de recuperação mediano dos episódios de falha (RQ04) | Mediana de `(fim_sucesso_updated_at - inicio_primeira_falha_run_started_at)` |
+| `origem_metricas_estabilidade` | String | - | Origem de CFR(a) e recuperação | `workflow_runs` na coleta normal; `referencia_simulada` somente com `--reference-mode` |
+| `runs_sucessos` | Inteiro | runs | Quantidade de conclusões `success` | Contagem nos runs coletados |
+| `runs_falhas` | Inteiro | runs | Quantidade de `failure`, `timed_out` e `startup_failure` | Contagem nos runs coletados |
+| `runs_ignorados` | Inteiro | runs | Todas as demais conclusões, incluindo vazias | Não entram no denominador de CFR nem no mínimo de runs válidos |
+| `episodios_recuperados` | Inteiro | episódios | Falhas após sucesso observado encerradas por outro sucesso do mesmo workflow até o corte | Contagem de episódios com duração observada |
+| `episodios_censurados` | Inteiro | episódios | Episódios ainda abertos no fim da janela | Não entram na mediana de recuperação |
+| `proporcao_episodios_censurados` | Float | proporção [0, 1] | Fração de episódios sem recuperação observada | `censurados / (recuperados + censurados)` |
 | `tier_dora_geral` | String (Enum) | - | Categoria DORA consolidada do repositório (`Elite`, `High`, `Medium`, `Low`) | Mediana dos 4 scores DORA (4, 3, 2, 1) arredondada para baixo |
 | `tier_deployment_frequency` | String (Enum) | - | Classificação de frequência de deploy | Elite: ≥ 7/sem; High: 1..6.99/sem; Medium: 0.23..0.99/sem; Low: < 0.23/sem |
 | `tier_lead_time` | String (Enum) | - | Classificação de lead time | Elite: < 1 dia; High: 1..< 7 dias; Medium: 7..< 30 dias; Low: ≥ 30 dias |
@@ -33,6 +40,13 @@ Este documento especifica cada coluna dos arquivos de dados gerados pelo pipelin
 | `tier_recovery_time` | String (Enum) | - | Classificação de tempo de recuperação | Elite: < 1 hora; High: 1..< 24 horas; Medium: 24..< 168 horas; Low: ≥ 168 horas |
 
 ---
+
+Campos vazios de `cfr_ci_proxy` e `tempo_recuperacao_mediana_horas` representam
+indisponibilidade, não zero. A proporção censurada fica vazia quando não há episódios.
+As contagens e proporção ficam vazias no modo de referência, que não possui runs
+observados para justificar esses valores. `total_runs_janela = runs_sucessos + runs_falhas`
+na execução normal. Veja [o guia de estabilidade](WORKFLOWS_ESTABILIDADE.md) para as
+limitações dos demais cálculos preexistentes do pipeline.
 
 ## 2. Dataset de Funil: `funil_selecao.csv`
 
