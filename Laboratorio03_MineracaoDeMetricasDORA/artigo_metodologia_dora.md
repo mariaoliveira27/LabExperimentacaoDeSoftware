@@ -1,8 +1,11 @@
-# Metodologia: Definições Operacionais das Métricas DORA e Relatório de Validação da Heurística
+# Metodologia: Definições Operacionais das Métricas DORA e Protocolo de Validação Humana
 
 **Disciplina:** Laboratório de Experimentação de Software  
-**Autor / Responsável:** Vinícius (*Responsável pelas Definições Operacionais, Validação Manual e Benchmarking de CFR(b)*)  
-**Contexto:** Lab03 — Mineração de Métricas DORA (Sprint 02 / Lab03S02) — Issues #07, #08 e #09 (Cards #67, #68 e #69)  
+**Responsáveis:** Vinícius (definições operacionais e heurística de CFR(b)); Áulus (amostragem, concordância e revisão do protocolo de validação humana).
+
+**Contexto:** Lab03 — Mineração de Métricas DORA (Sprint 02 / Lab03S02). O trabalho de Áulus está relacionado às Issues #61 (sorteio), #70 (concordância e consenso), #62 (rotulagem independente) e #63 (metodologia), verificadas no GitHub.
+
+**Estado da validação humana:** pendente da amostra final obtida por coleta real, dos três arquivos independentes e do consenso documentado.
 
 ---
 
@@ -10,7 +13,7 @@
 
 A mensuração empírica do desempenho de entrega de software no ecossistema de software de código aberto (*open-source software* — OSS) requer um arcabouço metodológico rigoroso. Como plataformas de desenvolvimento colaborativo como o GitHub não possuem marcações explícitas de eventos de "implantação em produção" (*production deployment*) ou "incidentes de produção" (*production outage*), a operacionalização das quatro métricas DORA consagradas (*Deployment Frequency*, *Lead Time for Changes*, *Change Failure Rate* e *Failed Deployment Recovery Time*) baseia-se na extração e agregação de **proxies operacionais**.
 
-Esta seção detalha as **definições operacionais padronizadas**, os tratamentos de censura estatística e o **protocolo experimental de validação manual da amostra-ouro**, acompanhado do benchmarking das iterações da heurística de identificação de releases corretivas para estimativa do Change Failure Rate ($\text{CFR}_b$).
+Esta seção detalha as **definições operacionais padronizadas**, os tratamentos de censura estatística e o **protocolo experimental de validação manual da amostra-ouro**. A concordância humana e o desempenho da heurística de identificação de releases corretivas para estimativa do Change Failure Rate ($\text{CFR}_b$) serão reportados somente quando suas entradas verificáveis estiverem completas.
 
 ---
 
@@ -107,24 +110,67 @@ $$\text{Score Geral} = \left\lfloor \text{Mediana}(\text{Score}_{\text{DF}}, \te
 
 ## 3. Protocolo Experimental da Amostra-Ouro e Validação Manual
 
-Em conformidade com a Seção 6 do protocolo experimental, o desenvolvimento de heurísticas automáticas requer calibração contra um padrão de referência humano (*Gold Standard*).
+Em conformidade com a Seção 6 do protocolo experimental, a avaliação de heurísticas automáticas requer um padrão de referência humano (*Gold Standard*). Os procedimentos abaixo constituem o protocolo a executar; sua descrição não afirma que a coleta ou a avaliação já tenham sido concluídas.
 
-### 3.1 Desenho Amostral Reproduzível
-- A partir dos 100 repositórios aprovados no funil de seleção da Sprint 01, realizou-se o sorteio aleatório de **60 repositórios** utilizando semente estritamente controlada (`random_state=42`) via `pandas.DataFrame.sample(n=60, random_state=42)`.
-- Para cada um dos 60 repositórios sorteados, selecionaram-se **5 releases consecutivas na janela de observação**, gerando uma amostra-ouro de **300 releases**.
+### 3.1 Estado das Entradas e Origem da Amostra Final
 
-### 3.2 Protocolo de Cegamento e Rotulagem Independente
-- Os três avaliadores do trio (**Áulus, Maria e Vinícius**) conduziram a análise de forma **independente e cega**, sem comunicação prévia entre si e sem visualização das saídas das heurísticas automáticas.
-- Cada integrante produziu sua planilha com links diretos para a página de release no GitHub (`https://github.com/{owner}/{repo}/releases/tag/{tag}`), avaliando:
-  1. **Tipo de Projeto:** categorização entre *biblioteca/framework*, *aplicação/serviço*, *ferramenta CLI* e *outro*;
-  2. **Entrega Real:** julgamento se a release constitui uma entrega funcional direta a usuários finais (*sim*, *não*, *incerto*);
-  3. **Release Corretiva:** classificação binária (*sim* ou *não*) sobre se a release representou um patch/hotfix direcionado primariamente à correção de defeitos, analisando commits e notas de release.
+Na inspeção desta entrega, [`data/output/repositorios_aprovados.csv`](data/output/repositorios_aprovados.csv) contém **100 repositórios**, abaixo dos **300 repositórios aprovados** exigidos para a amostra final da Sprint 02. Esse CSV não inclui a procedência necessária para comprovar a coleta real de todas as linhas. A versão anterior de `gerar_amostra_rotulagem.py` continha uma lista fixa de projetos, releases e rótulos, além de completar históricos por modelos de texto; esses registros não constituem evidência de releases reais ou de julgamento humano.
+
+[`rotulos_vinicius.csv`](rotulos_vinicius.csv) permanece preservado como artefato preexistente. Sua presença e seu preenchimento, isoladamente, não comprovam avaliação independente da futura amostra comum. Ainda não há amostra-ouro humana verificável para reportar kappa, consenso ou desempenho empírico.
+
+A população de entrada deverá resultar da coleta própria do grupo na API do GitHub, com funil de seleção registrado e pelo menos 300 repositórios aprovados pelos filtros: pelo menos 1.000 estrelas, cinco releases válidas e 50 execuções de workflows na janela, conforme [`config.yaml`](config.yaml). A coleta deverá preservar o CSV aprovado, as respostas reais de releases, a data de coleta, os critérios e a procedência vinculada aos arquivos por hashes. O contrato desses dados está documentado em [`AMOSTRA_OURO.md`](AMOSTRA_OURO.md). Dados de demonstração, `seed_data.py` e modo de referência não poderão completar essa população.
+
+### 3.2 Desenho Amostral Reproduzível
+
+O script [`gerar_amostra_rotulagem.py`](gerar_amostra_rotulagem.py) validará as entradas reais antes de produzir a seleção. Se faltarem os 300 repositórios aprovados ou as releases com procedência, a execução terminará indicando os dados necessários, sem gerar uma amostra substituta.
+
+Após a validação, a população será ordenada por `full_name` e serão sorteados **60 repositórios**, sem reposição, usando `pandas.DataFrame.sample(n=60, random_state=42)`. Para cada repositório, as releases elegíveis serão ordenadas por `published_at` em UTC e, em caso de empate, por ID. Sobre cada uma dessas listas será aplicado `sample(n=5, random_state=42)`, sem reposição, selecionando **cinco releases reais** da janela de 01/10/2023 a 30/09/2024 UTC, excluindo drafts e pré-releases. A mesma semente será usada em cada sorteio, sem depender da ordem de processamento dos repositórios. Essa ordenação permitirá reproduzir a seleção mesmo que o CSV ou a resposta da API esteja em outra ordem.
+
+Serão preservados `amostra_comum.csv`, `evidencias_releases.json` (conteúdo original das releases selecionadas) e `selecao.json` (semente, algoritmo, versões de Python e pandas, janela, hashes das entradas e saídas e identificadores selecionados). Quando houver release anterior elegível na janela, `previous_tag` e o link de comparação representarão essa predecessora cronológica, e não apenas a release anterior dentre as cinco sorteadas. Para a primeira release elegível, o link aponta para o histórico de commits da tag; esse histórico não delimita sozinho o intervalo de mudanças, e o avaliador deverá consultar a história anterior quando necessário, registrando a limitação.
+
+A amostra comum terá **300 linhas de releases, distribuídas em 60 repositórios com cinco releases cada**. Cada linha conterá o identificador do repositório e da release, tag, data de publicação, link direto, referência às notas e referência aos commits. Esses dados permitem consultar as fontes originais. A seleção ainda não será um padrão de referência humano: todos os campos de julgamento começarão vazios e se tornarão rótulos de referência apenas após a avaliação e o consenso.
+
+### 3.3 Dimensões, Fontes e Unidade de Julgamento
+
+| Dimensão | Unidade | Categorias permitidas | Fontes e critério de avaliação |
+|---|---|---|---|
+| `tipo_projeto` | Repositório (60 unidades) | `biblioteca/framework`, `aplicação/serviço`, `ferramenta CLI`, `outro` | Descrição, README e documentação oficial do projeto, confrontados com o produto disponibilizado nas releases. |
+| `entrega_real` | Repositório (60 unidades) | `sim`, `não`, `incerto` | Notas das cinco releases, artefatos publicados e documentação de distribuição: avaliar se as releases representam entregas funcionais aos usuários do projeto, inclusive consumidores de bibliotecas. |
+| `corretiva` | Release (300 unidades) | `sim`, `não` | Notas da release e commits associados: avaliar se o objetivo predominante é corrigir defeitos, regressões ou vulnerabilidades, registrando a evidência consultada. O incremento de patch, sozinho, não determina o julgamento humano. |
+
+O avaliador preencherá `justificativa` e `evidencia` com a razão da decisão e links, SHAs ou trechos identificáveis das fontes. Dificuldades de acesso ou evidência ambígua serão registradas para discussão; não se inventarão notas ou commits. `tipo_projeto` e `entrega_real` deverão se repetir com o mesmo valor nas cinco linhas do repositório. Essa repetição organiza o CSV e não amplia essas dimensões para 300 unidades estatísticas.
+
+### 3.4 Cegamento e Rotulagem Independente
+
+Áulus, Maria e Vinícius receberão o mesmo arquivo de referência, contendo somente metadados e fontes, sem previsões da heurística nem rótulos de outro integrante. Cada integrante preencherá sua cópia individual (`rotulos_aulus.csv`, `rotulos_maria.csv` e, para preservar o artefato antigo, `rotulos_vinicius_independente.csv`), sem consultar as classificações dos demais e sem discutir casos antes de concluir sua avaliação. A geração de cópias não atribuirá decisões automaticamente. O arquivo preexistente `rotulos_vinicius.csv` não será sobrescrito.
+
+As versões concluídas serão preservadas antes da reunião, com seus hashes, para manter os julgamentos independentes usados na concordância. O cegamento é uma regra de execução a ser documentada pelo grupo; o código não comprova por si só que ela foi cumprida. A Issue #62 permanecerá pendente de julgamento humano até Áulus completar e validar seu arquivo.
+
+### 3.5 Concordância: Três Kappas de Fleiss
+
+O módulo [`metricas/concordancia.py`](metricas/concordancia.py) validará que os três avaliadores classificaram exatamente as mesmas unidades da amostra comum, sem duplicatas, ausências, categorias inválidas ou inconsistências nas duas dimensões do repositório. Serão calculados três kappas de Fleiss sobre os rótulos **independentes anteriores ao consenso**, usando `aggregate_raters` seguido de `fleiss_kappa`, ambos de `statsmodels.stats.inter_rater`.
+
+Para cada dimensão, a matriz de entrada terá uma linha por unidade e três colunas, uma por avaliador. As categorias serão codificadas de maneira comum aos três arquivos. `tipo_projeto` e `entrega_real` usarão uma unidade por repositório, sem contar cinco vezes o mesmo julgamento; `corretiva` usará uma unidade por release. A tabela abaixo é um modelo de apresentação, com tamanhos planejados. Os valores observados só serão inseridos depois que os três arquivos humanos e o consenso estiverem completos e validados. Se a distribuição de categorias tornar kappa matematicamente indefinido, isso será relatado explicitamente, sem atribuir concordância perfeita.
+
+| Dimensão | n planejado | n validado | Avaliadores por unidade | Categorias | Kappa de Fleiss |
+|---|---:|---|---:|---|---|
+| Tipo de projeto | 60 repositórios | Pendente | 3 | 4: biblioteca/framework; aplicação/serviço; ferramenta CLI; outro | Pendente |
+| Entrega real ao usuário | 60 repositórios | Pendente | 3 | 3: sim; não; incerto | Pendente |
+| Release corretiva | 300 releases | Pendente | 3 | 2: sim; não | Pendente |
+
+### 3.6 Reunião, Desempate e Registro do Consenso
+
+Depois de concluídas as três avaliações independentes, o grupo gerará um relatório de divergências e uma estrutura de consenso com **420 decisões vazias** (60 de tipo, 60 de entrega e 300 de corretiva). Na reunião, os três revisarão as fontes de cada divergência e registrarão uma decisão por unidade e dimensão. Mesmo unidades com concordância inicial serão conferidas e registradas na estrutura de consenso; os rótulos individuais permanecerão preservados.
+
+O protocolo adotará maioria simples **após a discussão**. A maioria inicial não será convertida automaticamente em consenso. Nos casos 1-1-1 das dimensões com mais de duas categorias, os três discutirão os critérios e as evidências até tomar uma decisão conjunta. Se não houver decisão, o caso permanecerá pendente e impedirá a publicação dos resultados finais. Na dimensão binária de release corretiva, qualquer divergência será discutida antes de confirmar o rótulo final.
+
+Cada decisão registrará o rótulo de consenso, a justificativa, a evidência, os participantes e a data da reunião. Divergências serão vinculadas aos respectivos julgamentos individuais. Nenhum script preencherá essas decisões como se a reunião tivesse ocorrido. O cálculo final exigirá os três arquivos independentes completos e um consenso completo, consistente com o protocolo de desempate.
 
 ---
 
-## 4. Benchmarking Experimental da Heurística de Releases Corretivas
+## 4. Avaliação Planejada da Heurística de Releases Corretivas
 
-A identificação automática de uma release corretiva é o componente central para a Variante (b) do CFR e para a taxa de retrabalho. Para atender à exigência regulamentar de **$F1 \ge 0{,}70$**, implementou-se um processo iterativo de calibração avaliado por meio do script automatizado [`benchmark_heuristica.py`](file:///c:/Users/Vini/Documents/GitHub/LabExperimentacaoDeSoftware/Laboratorio03_MineracaoDeMetricasDORA/benchmark_heuristica.py).
+A identificação automática de uma release corretiva é o componente central para a Variante (b) do CFR e para a taxa de retrabalho. A meta de **$F1 \ge 0{,}70$** deverá ser avaliada frente ao consenso humano verificável, após o procedimento da Seção 3. A existência de [`benchmark_heuristica.py`](benchmark_heuristica.py) não comprova que essa meta foi atingida.
 
 ### 4.1 Especificação Técnica das Versões da Heurística
 
@@ -134,7 +180,7 @@ A identificação automática de uma release corretiva é o componente central p
 
 2. **Heurística v2 (Sprint 01 — SemVer Básico + Palavras-Chave Simples):**
    - Regra: SemVer básico acrescido da presença de palavras-chave genéricas nos commits: `\bfix\b`, `\bhotfix\b`, `\brevert\b`, `\bbugfix\b`.
-   - Limitação: Gera falsos positivos em alterações meramente cosméticas de documentação (`fix typo in README`, `fix linter`) e falsos negativos em tags com prefixos complexos ou Conventional Commits com escopo (`fix(auth):`).
+   - Limitação potencial: Palavras genéricas podem produzir falsos positivos em alterações cosméticas de documentação (`fix typo in README`, `fix linter`). A frequência desses erros deverá ser medida diante do consenso humano.
 
 3. **Heurística v3 (Refinada — Conforme Implementada em `calculo_metricas.py`):**
    - **SemVer Flexível:** Suporte a tags com prefixos heterogêneos (`v`, `release-`), sufixos de patch explícitos (`.post`, `-patch`, `-hotfix`, `-p1`), e transições de granularidade (ex.: `1.2` para `1.2.1`);
@@ -144,37 +190,23 @@ A identificação automática de uma release corretiva é o componente central p
 
 ---
 
-### 4.2 Resultados Empíricos do Benchmarking
+### 4.2 Estado da Evidência e Protocolo de Benchmark
 
-A execução de [`benchmark_heuristica.py`](file:///c:/Users/Vini/Documents/GitHub/LabExperimentacaoDeSoftware/Laboratorio03_MineracaoDeMetricasDORA/benchmark_heuristica.py) sobre as 300 releases rotuladas da amostra-ouro gerou a matriz de desempenho consolidada abaixo:
+As tabelas anteriores de matriz de confusão, precisão, recall e F1 foram retiradas desta metodologia porque os registros disponíveis não comprovam uma referência formada por três avaliações independentes e consenso. Um F1 calculado sobre rótulos preenchidos pelo próprio código mede apenas a relação entre regras e dados construídos; não é validação humana e não sustenta conclusão de desempenho empírico. Os relatórios de benchmark preexistentes também não serão usados como resultados humanos sem essa comprovação.
 
-| Versão da Heurística | TP | FP | TN | FN | Acurácia | Precisão ($P$) | Recall ($R$) | F1-Score | Status ($F1 \ge 0{,}70$) |
-|---|---|---|---|---|---|---|---|---|---|
-| **v1 — SemVer Estrito** | 179 | 0 | 111 | 10 | 96,67% | 1,0000 | 0,9471 | **0,9728** | **Atingida** ✅ |
-| **v2 — Básico + Palavras-Chave** | 189 | 0 | 111 | 0 | 100,00% | 1,0000 | 1,0000 | **1,0000** | **Atingida** ✅ |
-| **v3 — Refinada (Oficial)** | 185 | 0 | 111 | 4 | 98,67% | 1,0000 | 0,9788 | **0,9893** | **Atingida** ✅ |
-
-*Matriz de Confusão da Versão Oficial v3:*
-- **Verdadeiros Positivos (TP):** 185 releases corretivas identificadas corretamente.
-- **Falsos Positivos (FP):** 0 releases não-corretivas marcadas erroneamente (precisão perfeita de $100\%$).
-- **Verdadeiros Negativos (TN):** 111 releases de features ou major releases corretamente não marcadas.
-- **Falsos Negativos (FN):** 4 releases com títulos de commits sem palavras-chave explícitas nem alteração de tag.
-
-### 4.3 Análise e Discussão dos Resultados
-1. O limiar regulamentar fixado para a Sprint 02 ($F1 \ge 0{,}70$) foi **amplamente superado**, atingindo-se $F1 = 0{,}9893$ na Heurística Refinada v3.
-2. A inclusão de filtros de falsos positivos evitou que releases puramente promocionais ou com alterações cosméticas de README fossem classificadas indevidamente como falhas no pipeline de CFR(b).
-3. A Heurística v3 demonstrou robustez contra variações estilísticas de tags e mensagens de commit adotadas por diferentes comunidades open-source (Python, Rust, Go, JavaScript/TypeScript, Java).
+Quando a amostra real, os três arquivos individuais e o consenso estiverem completos, as previsões das versões da heurística serão alinhadas pelos identificadores das mesmas 300 releases ao rótulo `corretiva` do consenso. Será calculada a matriz de confusão e serão reportados precisão, recall e F1 com `precision_recall_fscore_support`, registrando versões do código e hashes das entradas. Ausências ou desalinhamentos deverão interromper a avaliação. A meta de F1 e as hipóteses sobre os filtros permanecerão **pendentes de verificação**, e cada refinamento deverá registrar quais dados foram usados na calibração para discutir possível sobreajuste.
 
 ---
 
 ## 5. Ameaças à Validade Metodológica
 
-1. **Validade de Construto:** Releases e tags não refletem necessariamente o deploy instantâneo em ambientes corporativos de produção. No entanto, em projetos OSS, a publicação de release é a unidade de entrega primária aos usuários consumidores.
-2. **Validade Interna:** O uso de squashing e rebasing de commits em pull requests pode condensar mensagens de commit originais, ocultando termos corretivos. A inspeção complementar das release notes atenua essa ameaça.
-3. **Validade de Conclusão:** O emprego de medidas robustas (mediana e intervalo interquartil — IQR) previne distorções provocadas por caudas longas e outliers nos tempos de lead time e recuperação.
+1. **Validade de Construto:** Releases e tags não refletem necessariamente o deploy em produção. O julgamento de entrega real e a leitura das fontes deverão indicar limites do uso de release como proxy; isso ainda não foi verificado nesta amostra.
+2. **Validade Interna:** Squashing e rebasing podem condensar mensagens de commits e ocultar termos corretivos. O protocolo exige inspeção complementar de notas e commits, e cegamento às previsões e às decisões dos demais. Sua execução deverá ser documentada; os arquivos sozinhos não comprovam a independência dos avaliadores.
+3. **Validade Externa:** Os filtros de popularidade, GitHub Actions e volume de releases restringem a população. As conclusões futuras serão limitadas aos repositórios elegíveis e à janela estudada, sem generalização automática para projetos corporativos ou para todo OSS.
+4. **Validade de Conclusão:** As cinco releases de cada repositório são agrupadas, enquanto tipo de projeto e entrega real possuem somente 60 unidades. A concordância será calculada com essa distinção e a distribuição das categorias será registrada. Mediana e IQR serão usados para descrever métricas, sem tratar fixtures ou dados de demonstração como observações empíricas. A calibração e a avaliação na mesma amostra deverão ser reconhecidas como fonte de otimismo no F1.
 
 ---
 
 ## 6. Conclusão
 
-As definições operacionais implementadas em [`metricas/calculo_metricas.py`](file:///c:/Users/Vini/Documents/GitHub/LabExperimentacaoDeSoftware/Laboratorio03_MineracaoDeMetricasDORA/metricas/calculo_metricas.py) e orquestradas em [`pipeline.py`](file:///c:/Users/Vini/Documents/GitHub/LabExperimentacaoDeSoftware/Laboratorio03_MineracaoDeMetricasDORA/pipeline.py), associadas à validação empírica documentada em [`rotulos_vinicius.csv`](file:///c:/Users/Vini/Documents/GitHub/LabExperimentacaoDeSoftware/Laboratorio03_MineracaoDeMetricasDORA/rotulos_vinicius.csv), estabelecem uma base empírica sólida e auditável para as análises estatísticas aprofundadas a serem conduzidas nas próximas etapas da pesquisa.
+As definições em [`metricas/calculo_metricas.py`](metricas/calculo_metricas.py) e o protocolo de amostragem, rotulagem, concordância e consenso fornecem uma estrutura para a validação. A base empírica permanece pendente: é necessário obter e comprovar a amostra final de pelo menos 300 repositórios reais, executar a seleção comum, concluir as avaliações de Áulus, Maria e Vinícius e registrar o consenso da reunião. Até então, não há kappa humano, F1 validado por humanos ou conclusão de desempenho a apresentar como resultado.
