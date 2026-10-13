@@ -220,16 +220,39 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
         lead_time_a = round(max(0.5, (120.0 / max(1, n_releases))), 2)
         lead_time_b = round(max(0.2, (lead_time_a * 0.45)), 2)
 
-        # Mantém o cálculo preexistente de CFR(b), fora do escopo desta entrega.
-        taxa_falha_ci = round(min(0.35, max(0.04, (item["stars"] % 17) / 60.0)), 3)
-        cfr_releases = round(max(0.0, min(0.25, taxa_falha_ci * 0.6)), 3)
-
         if modo_referencia:
+            taxa_falha_ci = round(min(0.35, max(0.04, (item["stars"] % 17) / 60.0)), 3)
             cfr_ci = taxa_falha_ci
             recovery_hours = round(max(0.4, (item["contribs"] % 24) * 0.8 + 0.5), 2)
+            cfr_releases = round(max(0.0, min(0.25, taxa_falha_ci * 0.6)), 3)
+            rework_rate = round(max(0.0, min(1.0, cfr_releases * 0.7)), 3)
         else:
             cfr_ci = resultado_cfr.cfr
             recovery_hours = resultado_recuperacao.mediana_horas
+
+            # Integração real de CFR(b) e Rework Rate (Card #67 / Issue #07 - Vinícius)
+            # Para cada release R_i (i >= 1), coleta commits entre R_{i-1} e R_i via compare
+            for i in range(1, len(releases_validas)):
+                tag_ant = releases_validas[i - 1].get("tag_name")
+                tag_curr = releases_validas[i].get("tag_name")
+                if tag_ant and tag_curr:
+                    commits = coletor_comm.coletar_commits_entre_releases(
+                        owner, repo_name, tag_ant, tag_curr
+                    )
+                    if commits:
+                        releases_validas[i]["commit_messages"] = [
+                            c.get("message", "") for c in commits
+                        ]
+                        releases_validas[i]["commits"] = commits
+                    else:
+                        releases_validas[i]["commit_messages"] = []
+
+            cfr_b_val, falhas_b, avaliadas_b, censuradas_b = calcular_cfr_releases(
+                releases_validas, window_end
+            )
+            cfr_releases = round(cfr_b_val, 3) if cfr_b_val is not None else None
+            taxa_rework = calcular_rework_rate(releases_validas)
+            rework_rate = round(taxa_rework, 3) if taxa_rework is not None else 0.0
 
         # Classificação DORA
         tier_geral, tiers_indiv = classificar_dora_repositorio(
@@ -243,7 +266,6 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
         agora = datetime.now(timezone.utc)
         idade_dias = (agora - created_dt).days if created_dt else 0
         idade_anos = round(idade_dias / 365.25, 2)
-        rework_rate = round(max(0.0, min(1.0, cfr_releases * 0.7)), 3)
 
         registro_final = {
             "full_name": full_name,

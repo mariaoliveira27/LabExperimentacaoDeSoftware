@@ -1,0 +1,50 @@
+{
+  "v1": {
+    "codigo": "v1",
+    "nome": "Heurística v1 (SemVer Estrito)",
+    "descricao": "Apenas SemVer no padrão MAJOR.MINOR.PATCH onde apenas o patch é incrementado",
+    "metricas": {
+      "tp": 179,
+      "fp": 0,
+      "tn": 111,
+      "fn": 10,
+      "total": 300,
+      "acuracia": 0.9667,
+      "precisao": 1.0,
+      "recall": 0.9471,
+      "f1": 0.9728
+    }
+  },
+  "v2": {
+    "codigo": "v2",
+    "nome": "Heurística v2 (SemVer Básico + Palavras-Chave)",
+    "descricao": "SemVer básico mais detecção simples de 'fix', 'hotfix', 'revert' em commits",
+    "metricas": {
+      "tp": 189,
+      "fp": 0,
+      "tn": 111,
+      "fn": 0,
+      "total": 300,
+      "acuracia": 1.0,
+      "precisao": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "v3": {
+    "codigo": "v3",
+    "nome": "Heurística v3 (Refinada - Meta F1 >= 0.70)",
+    "descricao": "SemVer flexível, Conventional Commits, filtro de falsos positivos e release notes",
+    "metricas": {
+      "tp": 185,
+      "fp": 0,
+      "tn": 111,
+      "fn": 4,
+      "total": 300,
+      "acuracia": 0.9867,
+      "precisao": 1.0,
+      "recall": 0.9788,
+      "f1": 0.9893
+    }
+  }
+}

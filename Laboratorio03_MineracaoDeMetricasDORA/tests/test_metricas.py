@@ -331,3 +331,60 @@ def test_rework_rate():
     # 3 releases no total, 1 corretiva (v1.0.1) -> 1/3 = 0.3333...
     taxa = calcular_rework_rate(releases)
     assert pytest.approx(taxa, 0.01) == 0.333
+
+
+def test_rework_rate_casos_borda():
+    assert calcular_rework_rate([]) == 0.0
+    assert calcular_rework_rate([{"published_at": datetime(2024, 1, 1, tzinfo=timezone.utc)}]) == 0.0
+
+
+# ==============================================================================
+# Testes das Versões da Heurística (Issue #07 - Vinícius)
+# ==============================================================================
+
+def test_heuristica_versoes_comparativas():
+    # v1 (SemVer estrito)
+    assert eh_release_corretiva("v1.0.1", "v1.0.0", versao="v1") is True
+    assert eh_release_corretiva("1.0.1", "1.0.0", versao="v1") is True
+    assert eh_release_corretiva("v1.1.0", "v1.0.0", versao="v1") is False
+    assert eh_release_corretiva("invalid-tag", "v1.0.0", versao="v1") is False
+
+    # v2 (SemVer básico + palavras-chave simples)
+    assert eh_release_corretiva("v1.0.1", "v1.0.0", versao="v2") is True
+    assert eh_release_corretiva("v1.1.0", "v1.0.0", ["fix: broken parser"], versao="v2") is True
+    assert eh_release_corretiva("v1.1.0", "v1.0.0", ["feat: new button"], versao="v2") is False
+
+    # v3 (Refinada com Conventional Commits, filtro de ruído e release notes)
+    # 1. Conventional Commits com escopo
+    assert eh_release_corretiva("v2.0.0", "v1.9.0", ["fix(auth): prevent sql injection"], versao="v3") is True
+    # 2. Filtragem de ruído de documentação/typo
+    assert eh_release_corretiva("v2.1.0", "v2.0.0", ["fix typo in readme"], versao="v3") is False
+    assert eh_release_corretiva("v2.1.0", "v2.0.0", ["docs: fix formatting"], versao="v3") is False
+    # 3. Ruído misturado com correção genuína -> deve marcar como corretiva
+    assert eh_release_corretiva("v2.1.0", "v2.0.0", ["fix typo", "fix(core): memory leak on exit"], versao="v3") is True
+    # 4. Inspeção de release_body (notas de release)
+    body_com_bugfix = "## Release Notes\n### Bug Fixes\n- Resolved connection reset"
+    assert eh_release_corretiva("v3.0.0", "v2.0.0", release_body=body_com_bugfix, versao="v3") is True
+    # 5. Sufixo SemVer (.post, -patch, -hotfix)
+    assert eh_release_corretiva("1.2.0.post1", "1.2.0", versao="v3") is True
+    assert eh_release_corretiva("1.2.0-patch1", "1.2.0", versao="v3") is True
+    # 6. Transição de dois para três dígitos (1.2 -> 1.2.1)
+    assert eh_release_corretiva("v1.2.1", "v1.2", versao="v3") is True
+    # 7. Termos de segurança e CVE
+    assert eh_release_corretiva("v1.0.0", "v1.0.0", ["Resolve CVE-2024-1234"], versao="v3") is True
+    # 8. Fechamento de issues
+    assert eh_release_corretiva("v1.0.0", "v1.0.0", ["Closes #142"], versao="v3") is True
+
+
+def test_cfr_releases_casos_borda():
+    fim = datetime(2024, 12, 31, tzinfo=timezone.utc)
+    # Lista vazia
+    assert calcular_cfr_releases([], fim) == (None, 0, 0, 0)
+
+    # Apenas release nos últimos 7 dias (todas censuradas)
+    rel_censurada = [{"published_at": datetime(2024, 12, 28, tzinfo=timezone.utc), "tag_name": "v1.0"}]
+    cfr, falhas, avaliadas, censuradas = calcular_cfr_releases(rel_censurada, fim)
+    assert cfr is None
+    assert avaliadas == 0
+    assert censuradas == 1
+
