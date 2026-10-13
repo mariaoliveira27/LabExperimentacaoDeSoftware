@@ -57,6 +57,98 @@ python -m pytest --cov=metricas --cov-report=term-missing --cov-fail-under=80
 
 ---
 
+## Execução da Amostra-Ouro e Rotulagem Independente (Lab03S02)
+
+As tarefas de Áulus correspondem às Issues GitHub **#61** (sorteio), **#70** (kappa e consenso), **#62** (rotulagem independente) e **#63** (metodologia); os números 01, 02 e 03 da divisão de tarefas não são os identificadores do GitHub. O protocolo detalhado e a tabela de kappa pendente estão em [`artigo_metodologia_dora.md`](artigo_metodologia_dora.md).
+
+**Estado dos dados:** o CSV aprovado atual tem somente 100 repositórios e não comprova a procedência de uma amostra final real. As releases e os rótulos fixos da versão anterior do gerador não servem como amostra-ouro. `rotulos_vinicius.csv` está preservado e não constitui, isoladamente, prova de julgamento independente da seleção a produzir. Não há kappa ou F1 humano verificável nesta entrega.
+
+### 1. Obter as entradas reais e gerar a seleção comum
+
+A coleta deverá fornecer **pelo menos 300 repositórios aprovados**, as releases originais da API do GitHub e a procedência vinculada por hashes. Consulte [`AMOSTRA_OURO.md`](AMOSTRA_OURO.md) para o formato das entradas. A procedência deve ser produzida e preservada pela coleta; preencher um manifesto manualmente não comprova a origem dos registros. `seed_data.py` e modo de referência não podem completar a amostra.
+
+Execute os comandos desta seção na pasta `Laboratorio03_MineracaoDeMetricasDORA`, após instalar `requirements.txt`. Com as entradas reais disponíveis:
+
+```bash
+python gerar_amostra_rotulagem.py --config config.yaml --repos data/output/repositorios_aprovados.csv --releases data/coleta/releases.json --proveniencia data/coleta/proveniencia.json --saida data/amostra_ouro
+```
+
+O comando validará a população de entrada, sorteará 60 repositórios com `random_state=42` e cinco releases reais por repositório. Salvará `data/amostra_ouro/amostra_comum.csv`, `evidencias_releases.json` (conteúdo original das releases) e `selecao.json` (semente, algoritmo, versões, janela, hashes e IDs). A população é ordenada por `full_name` e as releases por publicação UTC e ID; cada sorteio usa `random_state=42` sem reposição. A referência incluirá identificadores, datas, tags e links para releases, notas e commits, com julgamentos vazios. Para releases sem predecessora elegível na janela, o link de commits aponta para o histórico da tag; consulte a história anterior quando necessário para identificar as mudanças. Se faltarem a amostra final ou os arquivos reais, a execução terminará com uma mensagem indicando a entrada necessária. **A execução com os dados atuais não gera uma seleção substituta.**
+
+### 2. Gerar, preencher e validar o arquivo de Áulus
+
+Somente após gerar a amostra comum válida:
+
+```bash
+python rotulagem.py gerar --amostra data/amostra_ouro/amostra_comum.csv --saida rotulos_aulus.csv
+```
+
+O arquivo conterá as mesmas 300 releases e campos vazios para `tipo_projeto`, `entrega_real`, `corretiva`, `justificativa` e `evidencia`. O gerador não copia rótulos de Maria ou Vinícius, não inclui previsões da heurística e não sobrescreve arquivos existentes. Áulus deverá ler as notas e os commits e preencher suas próprias decisões sem consultar os demais ou as saídas automáticas. Maria e Vinícius deverão avaliar a mesma referência de forma independente. Para preservar `rotulos_vinicius.csv`, o exemplo abaixo espera a nova avaliação de Vinícius em `rotulos_vinicius_independente.csv`; Maria usará `rotulos_maria.csv`.
+
+Cada um poderá preparar sua cópia vazia com o mesmo gerador neutro:
+
+```bash
+python rotulagem.py gerar --amostra data/amostra_ouro/amostra_comum.csv --saida rotulos_maria.csv
+python rotulagem.py gerar --amostra data/amostra_ouro/amostra_comum.csv --saida rotulos_vinicius_independente.csv
+```
+
+Mantenha as versões antigas de Vinícius na raiz e em `data/` preservadas. As novas avaliações individuais só deverão ser abertas em conjunto depois de os três concluírem seus julgamentos.
+
+| Campo | Valores permitidos / preenchimento |
+|---|---|
+| `tipo_projeto` | `biblioteca/framework`, `aplicação/serviço`, `ferramenta CLI`, `outro` |
+| `entrega_real` | `sim`, `não`, `incerto` |
+| `corretiva` | `sim`, `não` |
+| `justificativa` | Razão do julgamento, preenchida pelo avaliador em cada linha |
+| `evidencia` | Links, SHAs ou referências às fontes consultadas em cada linha |
+
+`tipo_projeto` e `entrega_real` são julgamentos do repositório: repita o mesmo valor nas cinco linhas correspondentes. `corretiva` é um julgamento de cada release. Preserve todas as colunas de metadados e salve o CSV em UTF-8. O validador verifica 60 repositórios, cinco releases por repositório, correspondência com a referência, duplicatas, categorias e consistência. Para verificar um preenchimento em andamento, permitindo campos vazios:
+
+```bash
+python rotulagem.py validar --amostra data/amostra_ouro/amostra_comum.csv --rotulos rotulos_aulus.csv --rascunho
+```
+
+Depois de preencher **todos** os campos humanos, valide sem `--rascunho`:
+
+```bash
+python rotulagem.py validar --amostra data/amostra_ouro/amostra_comum.csv --rotulos rotulos_aulus.csv
+```
+
+**A Issue #62 permanece pendente de julgamento humano de Áulus.** O modo de rascunho não comprova avaliação completa. A infraestrutura não cria decisões humanas nem um CSV real de Áulus enquanto faltar a referência válida.
+
+### 3. Preparar divergências e registrar a reunião
+
+Quando os três arquivos humanos estiverem completos e validados contra a mesma referência:
+
+```bash
+python -m metricas.concordancia preparar --amostra data/amostra_ouro/amostra_comum.csv --aulus rotulos_aulus.csv --maria rotulos_maria.csv --vinicius rotulos_vinicius_independente.csv --divergencias data/amostra_ouro/divergencias.csv --consenso data/amostra_ouro/consenso.csv
+```
+
+Esse comando produzirá o relatório de divergências e **420 decisões de consenso vazias**: 60 de tipo, 60 de entrega e 300 de corretiva. Mesmo unanimidades precisam ser conferidas e registradas pelo grupo. A reunião discutirá as fontes e aplicará maioria simples após a discussão; casos 1-1-1 serão decididos conjuntamente, com registro do desempate. Se não houver decisão, o caso ficará pendente.
+
+No CSV de consenso, o grupo preencherá `rotulo_consenso`, `justificativa`, `evidencia`, `responsaveis` (`aulus;maria;vinicius`), `data_reuniao` (`YYYY-MM-DD`), `protocolo` e, quando houver empate 1-1-1, `desempate`. Preserve as classificações individuais anteriores à reunião. Não há preenchimento automático de consenso ou de atas.
+
+### 4. Calcular os três kappas após completar o consenso
+
+```bash
+python -m metricas.concordancia calcular --amostra data/amostra_ouro/amostra_comum.csv --aulus rotulos_aulus.csv --maria rotulos_maria.csv --vinicius rotulos_vinicius_independente.csv --consenso data/amostra_ouro/consenso.csv --saida data/amostra_ouro/kappas.json
+```
+
+O cálculo exige os três arquivos humanos e as 420 decisões de consenso completas. O kappa usa os julgamentos **independentes anteriores à reunião**, com `aggregate_raters` e `fleiss_kappa` do statsmodels: **60 unidades** para tipo de projeto, **60** para entrega real e **300** para release corretiva. As cinco repetições de campos do repositório não são contadas como cinco unidades. Distribuições que produzam kappa indefinido serão reportadas como tal.
+
+O benchmark de precisão, recall e F1 também depende do consenso humano verificável, das mesmas releases reais e de previsões alinhadas por identificador. Os números de relatórios antigos baseados em rótulos gerados pelo código não constituem validação humana. Essa avaliação deverá ser integrada pelo responsável pela heurística após concluir as entradas humanas.
+
+### 5. Executar os testes
+
+As fixtures são dados construídos exclusivamente para verificar determinismo, contagens, validação e cálculos; não são observações da amostra real. Para os testes desta entrega e depois a suíte completa:
+
+```bash
+python -m pytest tests/test_amostra_ouro.py tests/test_rotulagem.py tests/test_concordancia.py
+python -m pytest
+```
+
+---
+
 ## Mineração de métricas DORA
 
 
