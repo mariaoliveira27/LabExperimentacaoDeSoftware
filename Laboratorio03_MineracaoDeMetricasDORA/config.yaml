@@ -10,7 +10,7 @@ criteria:
   min_stars: 1000
   min_releases: 5
   min_workflow_runs: 50
-  target_approved_repos: 100
+  target_approved_repos: 300
 
 # Configurações do cliente da API GitHub
 api:

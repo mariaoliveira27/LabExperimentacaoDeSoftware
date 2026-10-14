@@ -26,35 +26,61 @@ class ColetorMetadados:
     def buscar_candidatos(
         self,
         min_stars: int = 1000,
-        max_candidatos: int = 200,
+        max_candidatos: int = 500,
         linguagens: Optional[List[str]] = None,
     ) -> List[Dict[str, Any]]:
         """
-        Busca repositórios com mais de min_stars estrelas.
+        Busca repositórios com mais de min_stars estrelas fatiando a busca.
         Se linguagens forem informadas, divide a busca para diversificar a amostra.
+        """
+        return self.buscar_candidatos_particionado(
+            min_stars=min_stars,
+            max_candidatos=max_candidatos,
+            linguagens=linguagens,
+        )
+
+    def buscar_candidatos_particionado(
+        self,
+        min_stars: int = 1000,
+        max_candidatos: int = 500,
+        linguagens: Optional[List[str]] = None,
+    ) -> List[Dict[str, Any]]:
+        """
+        Busca particionada na API do GitHub (GET /search/repositories) fatiando por
+        faixas de estrelas e linguagens (conforme Seção 4 do README) para alimentar
+        o pipeline com candidatos suficientes até alcançar >= 300 repositórios aprovados.
         """
         candidatos: List[Dict[str, Any]] = []
         repos_vistos = set()
 
+        langs_padrao = [
+            "Python", "JavaScript", "TypeScript", "Go", "Rust",
+            "Java", "Kotlin", "C++", "C", "C#", "Ruby", "PHP", "Swift",
+        ]
+        langs_uso = linguagens if linguagens is not None else langs_padrao
+
         queries = []
-        if linguagens:
-            for lang in linguagens:
-                queries.append(f"stars:>{min_stars} language:{lang}")
-        else:
-            # Fatias padrão por faixas de estrelas e linguagens populares
-            queries = [
-                f"stars:>50000",
-                f"stars:20000..50000",
-                f"stars:10000..20000",
-                f"stars:5000..10000",
-                f"stars:1000..5000",
-            ]
+        # Faixas de estrelas globais de topo
+        queries.extend([
+            f"stars:>50000",
+            f"stars:20000..50000",
+            f"stars:10000..20000",
+            f"stars:5000..10000",
+            f"stars:2500..5000",
+            f"stars:{min_stars}..2500",
+        ])
+
+        # Particionamento cruzado por linguagem para garantir diversidade representativa
+        for lang in langs_uso:
+            queries.append(f"stars:>{min_stars} language:{lang}")
+            queries.append(f"stars:5000..20000 language:{lang}")
+            queries.append(f"stars:{min_stars}..5000 language:{lang}")
 
         for q in queries:
             if len(candidatos) >= max_candidatos:
                 break
 
-            logger.info(f"Buscando repositórios candidatos com query: '{q}'...")
+            logger.info(f"Buscando repositórios candidatos com query particionada: '{q}'...")
             page = 1
             while page <= 10 and len(candidatos) < max_candidatos:
                 endpoint = "/search/repositories"
@@ -83,7 +109,7 @@ class ColetorMetadados:
 
                 page += 1
 
-        logger.info(f"Total de {len(candidatos)} repositórios candidatos encontrados na busca inicial.")
+        logger.info(f"Total de {len(candidatos)} repositórios candidatos encontrados na busca particionada.")
         return candidatos
 
     def extrair_metadados_repositorio(self, repo_data: Dict[str, Any]) -> Dict[str, Any]:

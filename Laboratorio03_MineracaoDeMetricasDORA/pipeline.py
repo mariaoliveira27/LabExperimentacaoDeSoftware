@@ -92,7 +92,7 @@ def carregar_config(caminho_config: str = "config.yaml") -> Dict[str, Any]:
     return defaults
 
 
-def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
+def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False, buscar_api: bool = False):
     """Executa o pipeline completo de seleção, coleta, métricas e exportação."""
     logger.info("Iniciando Pipeline de Mineração de Métricas DORA...")
 
@@ -122,6 +122,34 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
 
     # 1. Obtenção dos candidatos
     candidatos_base = REPOSITORIOS_CANDIDATOS_REFERENCIA
+    deve_buscar = buscar_api or config.get("api", {}).get("search_candidates", False)
+    if not modo_referencia and deve_buscar:
+        try:
+            logger.info("Executando busca particionada de candidatos na API do GitHub...")
+            candidatos_api = coletor_meta.buscar_candidatos_particionado(
+                min_stars=config["criteria"]["min_stars"],
+                max_candidatos=max(500, target_approved * 2),
+            )
+            if candidatos_api and len(candidatos_api) >= target_approved:
+                candidatos_formatados = []
+                for cand in candidatos_api:
+                    meta = coletor_meta.extrair_metadados_repositorio(cand)
+                    candidatos_formatados.append({
+                        "owner": meta["owner"],
+                        "repo": meta["name"],
+                        "stars": meta["stars"],
+                        "lang": meta["language"],
+                        "branch": meta["default_branch"],
+                        "created": meta["created_at"],
+                        "contribs": meta["contributors_count"],
+                        "actions": None,
+                        "status": "candidato",
+                    })
+                candidatos_base = candidatos_formatados
+                logger.info(f"{len(candidatos_base)} candidatos obtidos via busca particionada na API do GitHub.")
+        except Exception as e:
+            logger.warning(f"Busca particionada na API não concluída ({e}); utilizando base de candidatos com histórico.")
+
     logger.info(f"Processando candidatos no funil de seleção...")
 
     repos_aprovados_dados: List[Dict[str, Any]] = []
@@ -212,15 +240,12 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
         funil.aprovar_repositorio(repo_info)
 
         # Cálculo das Métricas DORA para o repositório aprovado
-        # Se estamos em modo de referência ou sem chamadas pesadas de compare:
         dep_freq = calcular_deployment_frequency(n_releases, weeks)
 
-        # Simulação controlada e determinística baseada nos metadados reais para os 100 aprovados
-        # Lead time
-        lead_time_a = round(max(0.5, (120.0 / max(1, n_releases))), 2)
-        lead_time_b = round(max(0.2, (lead_time_a * 0.45)), 2)
-
         if modo_referencia:
+            # Simulação determinística baseada nos metadados reais para o modo de referência
+            lead_time_a = round(max(0.5, (120.0 / max(1, n_releases))), 2)
+            lead_time_b = round(max(0.2, (lead_time_a * 0.45)), 2)
             taxa_falha_ci = round(min(0.35, max(0.04, (item["stars"] % 17) / 60.0)), 3)
             cfr_ci = taxa_falha_ci
             recovery_hours = round(max(0.4, (item["contribs"] % 24) * 0.8 + 0.5), 2)
@@ -230,8 +255,9 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
             cfr_ci = resultado_cfr.cfr
             recovery_hours = resultado_recuperacao.mediana_horas
 
-            # Integração real de CFR(b) e Rework Rate (Card #67 / Issue #07 - Vinícius)
-            # Para cada release R_i (i >= 1), coleta commits entre R_{i-1} e R_i via compare
+            # Integração real de Lead Time (RQ02), CFR(b) (RQ03) e Rework Rate (RQ08)
+            # Para cada release R_i (i >= 1), coleta commits entre R_{i-1} e R_i via compare com paginação
+            releases_data_lt = []
             for i in range(1, len(releases_validas)):
                 tag_ant = releases_validas[i - 1].get("tag_name")
                 tag_curr = releases_validas[i].get("tag_name")
@@ -244,8 +270,20 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
                             c.get("message", "") for c in commits
                         ]
                         releases_validas[i]["commits"] = commits
+                        c_dates = [c["author_date"] for c in commits if c.get("author_date")]
+                        if c_dates:
+                            releases_data_lt.append({
+                                "release_date": releases_validas[i]["published_at"],
+                                "commit_dates": c_dates,
+                            })
                     else:
                         releases_validas[i]["commit_messages"] = []
+                        releases_validas[i]["commits"] = []
+
+            # Cálculo empírico real de Lead Time for Changes (RQ02 - Variantes a e b)
+            lt_a_med, lt_b_med, _ = calcular_lead_time_repositorio(releases_data_lt)
+            lead_time_a = round(lt_a_med, 2) if lt_a_med is not None else None
+            lead_time_b = round(lt_b_med, 2) if lt_b_med is not None else None
 
             cfr_b_val, falhas_b, avaliadas_b, censuradas_b = calcular_cfr_releases(
                 releases_validas, window_end
@@ -333,10 +371,14 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Pipeline de Mineração de Métricas DORA (Lab03)")
     parser.add_argument("--config", default="config.yaml", help="Caminho do arquivo de configuração")
     parser.add_argument("--reference-mode", action="store_true", default=False, help="Usa dados de demonstração e métricas simuladas (sem rede)")
+    parser.add_argument("--search-api", action="store_true", default=False, help="Executa busca particionada de candidatos na API do GitHub")
     args = parser.parse_args(argv)
 
     cfg = carregar_config(args.config)
-    executar_pipeline(cfg, modo_referencia=args.reference_mode)
+    if getattr(args, "search_api", False):
+        executar_pipeline(cfg, modo_referencia=args.reference_mode, buscar_api=True)
+    else:
+        executar_pipeline(cfg, modo_referencia=args.reference_mode)
 
 
 if __name__ == "__main__":

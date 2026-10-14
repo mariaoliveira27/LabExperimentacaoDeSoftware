@@ -32,34 +32,46 @@ class ColetorCommits:
         Retorna lista de dicionários de commits com author_date e message.
         Retorna None se houver erro 404 (tag apagada/reescrita).
         """
-        endpoint = f"/repos/{owner}/{repo}/compare/{base_tag}...{head_tag}"
-        params = {"per_page": 100}
+        current_url = f"/repos/{owner}/{repo}/compare/{base_tag}...{head_tag}"
+        current_params = {"per_page": 100}
+        resultado_commits = []
 
         try:
-            status, data, _ = self.client.request(endpoint, params=params)
-            if status == 404:
-                logger.warning(f"Compare retornou 404 para {owner}/{repo}: {base_tag}...{head_tag}. Tag inexistente ou reescrita.")
-                return None
-            if status != 200 or not isinstance(data, dict):
-                return []
+            while current_url:
+                status, data, headers = self.client.request(current_url, params=current_params)
+                if status == 404:
+                    logger.warning(f"Compare retornou 404 para {owner}/{repo}: {base_tag}...{head_tag}. Tag inexistente ou reescrita.")
+                    return None
+                if status != 200 or not isinstance(data, dict):
+                    break
 
-            commits_raw = data.get("commits", [])
-            resultado_commits = []
+                commits_raw = data.get("commits", [])
+                for c in commits_raw:
+                    commit_info = c.get("commit") or {}
+                    author_info = commit_info.get("author") or {}
+                    date_str = author_info.get("date")
+                    dt = parse_datetime(date_str) if date_str else None
+                    msg = commit_info.get("message", "")
 
-            for c in commits_raw:
-                commit_info = c.get("commit", {})
-                author_info = commit_info.get("author", {})
-                date_str = author_info.get("date")
-                dt = parse_datetime(date_str) if date_str else None
-                msg = commit_info.get("message", "")
+                    if dt:
+                        resultado_commits.append({
+                            "sha": c.get("sha"),
+                            "author_date": dt,
+                            "author_date_str": date_str,
+                            "message": msg,
+                        })
 
-                if dt:
-                    resultado_commits.append({
-                        "sha": c.get("sha"),
-                        "author_date": dt,
-                        "author_date_str": date_str,
-                        "message": msg,
-                    })
+                # Verifica paginação através do cabeçalho Link (rel="next")
+                link_header = headers.get("Link", headers.get("link", "")) if isinstance(headers, dict) else ""
+                next_url = None
+                if hasattr(self.client, "_extract_next_url"):
+                    next_url = self.client._extract_next_url(link_header)
+
+                if next_url:
+                    current_url = next_url
+                    current_params = None
+                else:
+                    break
 
             return resultado_commits
 
