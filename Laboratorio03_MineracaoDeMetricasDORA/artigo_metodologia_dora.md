@@ -132,6 +132,8 @@ O filtro de pelo menos 50 execuções poderá ser comprovado por 50 runs distint
 
 ### 3.2 Desenho Amostral Reproduzível
 
+A busca de candidatos utilizará respostas atuais da API e poderá rejeitar até três rodadas inconsistentes antes de interromper a coleta. Uma nova rodada poderá obter outra lista, devido a mudanças no índice, nas estrelas ou na visibilidade. A reprodutibilidade do sorteio será estabelecida sobre a mesma versão dos arquivos finais aprovados, das releases e do manifesto, identificada pelos hashes e versões registrados; não se presume que uma nova busca reproduza o universo observado anteriormente.
+
 O script [`gerar_amostra_rotulagem.py`](gerar_amostra_rotulagem.py) validará as entradas reais antes de produzir a seleção. Se faltarem os 300 repositórios aprovados ou as releases com procedência, a execução terminará indicando os dados necessários, sem gerar uma amostra substituta.
 
 Após a validação, a população será ordenada por `full_name` e serão sorteados **60 repositórios**, sem reposição, usando `pandas.DataFrame.sample(n=60, random_state=42)`. Para cada repositório, as releases elegíveis serão ordenadas por `published_at` em UTC e, em caso de empate, por ID. Sobre cada uma dessas listas será aplicado `sample(n=5, random_state=42)`, sem reposição, selecionando **cinco releases reais** da janela de 01/10/2023 a 30/09/2024 UTC, excluindo drafts e pré-releases. A mesma semente será usada em cada sorteio, sem depender da ordem de processamento dos repositórios. Essa ordenação permitirá reproduzir a seleção mesmo que o CSV ou a resposta da API esteja em outra ordem.

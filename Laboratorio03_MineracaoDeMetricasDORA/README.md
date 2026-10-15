@@ -67,6 +67,8 @@ O ZIP histórico foi baixado integralmente (**952.289.386 bytes**) e seu MD5 pub
 
 ### 1. Obter as entradas reais e gerar a seleção comum
 
+Se aparecer `total_count mudou entre páginas`, a busca reinicia automaticamente desde a raiz, com respostas atuais e no máximo três rodadas. Páginas de Search não são reutilizadas do cache; metadados, releases, runs e qualificações já preservados continuam disponíveis. Persistindo a instabilidade, repita o mesmo comando de coleta. A reprodução do sorteio usa os arquivos finais congelados, não uma nova consulta ao índice mutável do GitHub.
+
 A coleta deverá fornecer **pelo menos 300 repositórios aprovados**, as releases originais da API do GitHub e a procedência vinculada por hashes. O novo coletor [`coleta_amostra_real.py`](coleta_amostra_real.py) usa busca, metadados e releases da API; os runs poderão vir da API ou de uma exportação pública original verificada. A origem e a cobertura dos runs serão registradas separadamente. Consulte [`AMOSTRA_OURO.md`](AMOSTRA_OURO.md) para o formato das entradas. Preencher um manifesto manualmente não comprova a origem dos registros. `seed_data.py` e modo de referência não podem completar a amostra.
 
 Execute os comandos desta seção na pasta `Laboratorio03_MineracaoDeMetricasDORA`, após instalar `requirements.txt`. Configure `GITHUB_TOKEN` ou, se já autenticado no GitHub CLI, use `--usar-gh-auth`:

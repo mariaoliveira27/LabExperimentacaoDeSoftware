@@ -46,6 +46,10 @@ Não acrescente esses campos aos dados antigos apenas para passar a validação.
 
 ## Coleta, retomada e disponibilidade histórica
 
+A busca de candidatos consulta páginas atuais do GitHub, sem reutilizar seu cache SQLite: uma página antiga não pode ser combinada com outra recém-obtida. Mudanças de contagem ou duplicatas entre páginas/fatias descartam a rodada inteira, com no máximo três rodadas desde a raiz. As rodadas rejeitadas são registradas no relatório da busca concluída e nos logs; HTTP e campos obrigatórios inválidos continuam sendo erros. Se a instabilidade persistir, a execução termina com código 2 e preserva as qualificações anteriores. Repita o mesmo comando para retomar; não é necessário apagar o cache de metadados, releases ou runs, nem usar `--reavaliar` para esse erro.
+
+A lista da API pode mudar entre rodadas, pois estrelas, visibilidade e índice de busca são mutáveis. A reprodução do sorteio depende dos mesmos arquivos finais aprovados, releases e manifesto, congelados e identificados por hashes e versões. Uma nova busca pode produzir outros candidatos. `--limite-candidatos 5000` é um orçamento de busca, não uma declaração de 5.000 aprovados ou de universo exaurido.
+
 Execute na pasta `Laboratorio03_MineracaoDeMetricasDORA`, após `pip install -r requirements.txt`. A autenticação usa `GITHUB_TOKEN`; alternativamente, `--usar-gh-auth` utiliza a autenticação existente do GitHub CLI, sem gravar o token nos artefatos:
 
 Os candidatos vêm da API de busca, com particionamento para tratar o limite por consulta. O coletor preserva o progresso e as respostas da API. Uma interrupção ou amostra insuficiente mantém os artefatos parciais (`estado.json`, descartes, funil e cache) para auditoria e retomada; esses registros não são uma população final de 300 aprovados. Execute novamente o mesmo comando para continuar a coleta. Não complete as linhas com dados de demonstração.

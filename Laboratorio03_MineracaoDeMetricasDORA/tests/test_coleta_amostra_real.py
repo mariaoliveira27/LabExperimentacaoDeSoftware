@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 
 import coleta_amostra_real as coleta
+from busca_candidatos import BuscaInstavelError
 from executar_amostra_ouro import executar
 
 
@@ -129,6 +130,28 @@ def test_interrupcao_de_api_nao_vira_descarte_e_retoma(preparar):
     estado = coleta.coletar(config, destino, client=api)
     assert estado["status"] == "insuficiente" and estado["n_processados"] == 3
     assert not any(endpoint == "/repos/fixture/projeto-000" for endpoint, _ in api.chamadas)
+
+
+def test_busca_instavel_preserva_qualificacoes_e_entradas_anteriores(preparar, monkeypatch):
+    config, destino, api = preparar(APIPlanejada(runs=0))
+    coleta.coletar(config, destino, client=api)
+    protegidos = list((destino / "qualificacoes").glob("*.json")) + [
+        destino / "candidatos.json", destino / "busca.json", destino / "config_coleta.json",
+    ]
+    originais = {path: path.read_bytes() for path in protegidos}
+
+    def falhar(*args, **kwargs):
+        raise BuscaInstavelError("Busca permaneceu instável após 3 rodadas, exclusivo de fixture")
+
+    monkeypatch.setattr(coleta, "buscar_candidatos", falhar)
+    with pytest.raises(BuscaInstavelError, match="após 3 rodadas"):
+        coleta.coletar(config, destino, client=api)
+    assert all(path.read_bytes() == dados for path, dados in originais.items())
+    estado = json.loads((destino / "estado.json").read_text(encoding="utf-8"))
+    assert estado["status"] == "interrompida" and estado["n_processados"] == 3
+    assert estado["n_aprovados"] == 0
+    for nome in ("repositorios_aprovados.csv", "releases.json", "proveniencia.json", "rotulos_aulus.csv"):
+        assert not (destino / nome).exists()
 
 
 def test_snapshot_adulterado_bloqueia_retomada(preparar):

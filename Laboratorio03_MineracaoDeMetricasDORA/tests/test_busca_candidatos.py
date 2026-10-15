@@ -2,11 +2,13 @@
 
 from copy import deepcopy
 from datetime import date
+import hashlib
 import re
 
 import pytest
 
-from busca_candidatos import buscar_candidatos
+from api_client import GitHubClient
+from busca_candidatos import BuscaInstavelError, buscar_candidatos
 
 
 def repositorio(identificador, *, stars=1000, created="2020-01-01T00:00:00Z"):
@@ -28,7 +30,8 @@ class BuscaFake:
         self.chamadas = []
         self.invalidadas = []
 
-    def request(self, endpoint, params):
+    def request(self, endpoint, params, use_cache=None):
+        assert use_cache is False  # Search nunca mistura páginas de épocas diferentes.
         assert endpoint == "/search/repositories"
         assert "is:public" in params["q"]
         assert "fork:" not in params["q"] and "archived:" not in params["q"]
@@ -194,6 +197,7 @@ def test_erros_http_nao_sao_exaustao(status, populacao):
     with pytest.raises(RuntimeError, match=f"HTTP {status}"):
         buscar_candidatos(client)
     assert client.invalidadas
+    assert len(client.chamadas) == 1  # Retry de rede cabe ao GitHubClient.
 
 
 def test_rate_limit_esgotado_no_cliente_propaga(populacao):
@@ -246,6 +250,7 @@ def test_total_count_inconsistente_entre_paginas(populacao):
     with pytest.raises(ValueError, match="total_count mudou"):
         buscar_candidatos(client)
     assert client.invalidadas[-1]["page"] == 2
+    assert [p["page"] for p in client.chamadas] == [1, 2, 1, 2, 1, 2]
 
 
 def test_total_count_das_particoes_deve_somar_raiz():
@@ -280,9 +285,111 @@ def test_duplicatas_na_mesma_pagina_sao_rejeitadas():
 @pytest.mark.parametrize("kwargs", [
     {"min_stars": -1}, {"min_stars": True}, {"max_candidatos": 0},
     {"max_candidatos": False}, {"criado_ate": "30/09/2024"}, {"criado_ate": None},
+    {"tentativas": 0}, {"tentativas": True},
 ])
 def test_argumentos_invalidos_nao_consultam_api(kwargs):
     client = BuscaFake([])
     with pytest.raises(ValueError):
         buscar_candidatos(client, **kwargs)
     assert client.chamadas == []
+
+
+def test_nova_rodada_descarta_todos_ids_da_rodada_rejeitada(populacao):
+    atuais = [repositorio(1001 + i, stars=1000 + i) for i in range(260)]
+    mudou = False
+
+    def mutar(params, payload):
+        nonlocal mudou
+        if params["page"] == 2 and not mudou:
+            mudou = True
+            payload["total_count"] = len(atuais)
+            client.items = atuais
+
+    client = BuscaFake(populacao, mutar)
+    resultado = buscar_candidatos(client, max_candidatos=None)
+    assert {r["id"] for r in resultado} == {r["id"] for r in atuais}
+    assert len(resultado) == 260
+    assert [p["page"] for p in client.chamadas] == [1, 2, 1, 2, 3]
+    assert resultado.relatorio["tentativas_utilizadas"] == 2
+    assert len(resultado.relatorio["rodadas_descartadas"]) == 1
+    assert "anterior=250, recebido=260" in resultado.relatorio["rodadas_descartadas"][0]["motivo"]
+
+
+def test_soma_de_particoes_alterada_renova_tambem_a_raiz():
+    items = [repositorio(i + 1, stars=1000 + (i >= 501)) for i in range(1002)]
+    mudou = False
+
+    def mutar(params, payload):
+        nonlocal mudou
+        if "stars:1000..1000" in params["q"] and not mudou:
+            mudou = True
+            payload["total_count"] -= 1
+
+    client = BuscaFake(items, mutar)
+    resultado = buscar_candidatos(client, max_candidatos=None)
+    assert len(resultado) == 1002
+    assert len({r["id"] for r in resultado}) == 1002
+    assert sum("stars:>=1000" in p["q"] for p in client.chamadas) == 2
+    assert resultado.relatorio["tentativas_utilizadas"] == 2
+
+
+def test_reordenacao_com_total_igual_tambem_exige_nova_rodada(populacao):
+    mudou = False
+
+    def mutar(params, payload):
+        nonlocal mudou
+        if params["page"] == 2 and not mudou:
+            mudou = True
+            payload["items"][0] = deepcopy(populacao[-1])
+
+    resultado = buscar_candidatos(BuscaFake(populacao, mutar), max_candidatos=None)
+    assert {r["id"] for r in resultado} == {r["id"] for r in populacao}
+    assert len(resultado) == 250
+    assert resultado.relatorio["tentativas_utilizadas"] == 2
+
+
+def test_sqlite_antigo_nao_mistura_paginas_1_a_5_com_pagina_6_http(tmp_path, monkeypatch):
+    antigas = [repositorio(i + 1, stars=1000 + i) for i in range(550)]
+    atuais = antigas + [repositorio(9999, stars=9999)]
+    banco = tmp_path / "cache.db"
+    client = GitHubClient(token="token-exclusivo-da-fixture", cache_db_path=str(banco))
+    query = "stars:>=1000 created:<=2024-09-30 is:public"
+    url = "https://api.github.com/search/repositories"
+    api_antiga = BuscaFake(antigas)
+    for page in range(1, 6):
+        params = dict(q=query, sort="stars", order="desc", per_page=100, page=page)
+        _, payload, _ = api_antiga.request("/search/repositories", params, use_cache=False)
+        chave = client._get_cache_key(url, params)
+        client._save_to_cache(chave, url, 200, payload, {})
+    hash_antes = hashlib.sha256(banco.read_bytes()).hexdigest()
+    api_atual = BuscaFake(atuais)
+
+    class Resposta:
+        status_code = 200
+        headers = {}
+        def __init__(self, payload): self.payload = payload
+        def json(self): return self.payload
+
+    def http(endpoint, params, **kwargs):
+        assert endpoint == url
+        _, payload, _ = api_atual.request("/search/repositories", params, use_cache=False)
+        return Resposta(payload)
+
+    monkeypatch.setattr(client.session, "get", http)
+    resultado = buscar_candidatos(client, max_candidatos=None)
+    assert len(resultado) == 551 and {r["id"] for r in resultado} == {r["id"] for r in atuais}
+    assert [p["page"] for p in api_atual.chamadas] == [1, 2, 3, 4, 5, 6]
+    assert resultado.relatorio["tentativas_utilizadas"] == 1
+    assert resultado.relatorio["cache_busca"].startswith("ignorado")
+    assert hashlib.sha256(banco.read_bytes()).hexdigest() == hash_antes
+
+
+def test_instabilidade_persistente_respeita_limite_e_informa_motivo(populacao):
+    def mutar(params, payload):
+        if params["page"] == 2:
+            payload["total_count"] += 1
+
+    client = BuscaFake(populacao, mutar)
+    with pytest.raises(BuscaInstavelError, match="após 2 rodadas atuais.*total_count mudou"):
+        buscar_candidatos(client, tentativas=2)
+    assert [p["page"] for p in client.chamadas] == [1, 2, 1, 2]
