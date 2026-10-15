@@ -99,6 +99,22 @@ Em seguida, execute a coleta com a fonte histórica verificada. `--reavaliar` pr
 python coleta_amostra_real.py --config config.yaml --saida data/coleta_final --alvo 300 --limite-candidatos 5000 --usar-gh-auth --historico-zenodo data/historico_2024 --reavaliar
 ```
 
+Para continuar a coleta com concorrência, mantenha **um único processo por diretório `--saida`** e escolha `--workers` entre 1 e 8 (padrão: 1). Confirme que a execução anterior terminou antes de iniciar outra; um bloqueio do sistema operacional impede duas execuções sobre a mesma saída. O programa usa uma sessão por worker, compartilha o cache e centraliza a escrita de checkpoints e snapshots. Para quatro workers com a autenticação existente e uma única cota de conta:
+
+```bash
+python coleta_amostra_real.py --config config.yaml --saida data/coleta_final --alvo 300 --limite-candidatos 5000 --usar-gh-auth --historico-zenodo data/historico_2024 --workers 4
+```
+
+Também é possível fornecer nomes de variáveis de ambiente com `--token-env`, repetindo a opção. Prepare `GITHUB_TOKEN_A` e `GITHUB_TOKEN_B` no ambiente do processo usando credenciais de contas distintas e informe apenas seus nomes, sem valores de token no comando. A quantidade de variáveis não pode exceder `--workers`, e `--token-env` não pode ser combinado com `--usar-gh-auth`:
+
+```bash
+python coleta_amostra_real.py --config config.yaml --saida data/coleta_final --alvo 300 --limite-candidatos 5000 --historico-zenodo data/historico_2024 --workers 4 --token-env GITHUB_TOKEN_A --token-env GITHUB_TOKEN_B
+```
+
+As identidades dos tokens múltiplos são verificadas pela API `/user`, sem cache. Valores repetidos ou tokens de uma mesma conta são rejeitados: use somente um token por conta. Sem `--token-env`, o coletor mantém o uso de `GITHUB_TOKEN` ou de `--usar-gh-auth`; uma única credencial pode atender aos quatro workers, compartilhando a cota. Os valores ficam em memória, sem gravação em argumentos, logs, snapshots ou configuração de coleta. `--reavaliar` continua reservado à repetição dos filtros com preservação das qualificações anteriores, como ao incorporar uma nova fonte histórica; aumentar os workers não exige essa flag.
+
+O coletor espaça as requisições em até 10 GET/s no processo e aplica pausas globais para limites secundários; a cota primária é acompanhada por conta e por tipo de recurso da API. `Ctrl+C` solicita uma parada cooperativa, aguardando as requisições em voo (timeout HTTP de 30 segundos) e preservando o checkpoint. O paralelismo mantém a janela e os critérios. O ganho de velocidade depende da API e das cotas disponíveis; a quantidade de aprovações continua dependendo das releases e da evidência histórica, inclusive das limitações já identificadas nesta fonte.
+
 Pelo menos 50 runs distintos observados na janela e válidos para `push`, default branch e conclusão comprovam o mínimo de elegibilidade; uma cobertura parcial não comprova métricas anuais DORA. Os artefatos históricos e os estados parciais **não autorizam o sorteio nem a rotulagem** por si só. A coleta preserva `estado.json`, descartes, funil e cache; o status continuará insuficiente até comprovar os filtros e pelo menos 300 aprovados reais. Consultas sem registros preservados não comprovam ausência histórica de Actions. Somente depois de `estado.json` indicar `status=completa` e os arquivos finais estarem disponíveis, execute o preparo único:
 
 ```bash

@@ -96,6 +96,28 @@ python coleta_amostra_real.py --config config.yaml --saida data/coleta_final --a
 
 `--historico-zenodo` vincula o arquivo original verificado, seus hashes e os runs exportados à coleta. Para retomar o piloto anterior com essa nova fonte, `--reavaliar` preserva as qualificações anteriores e repete a verificação; ele não converte descartes em aprovados automaticamente. A etapa ainda exige metadados atuais, pelo menos cinco releases reais e 50 runs válidos observados na janela por repositório. Se não houver 300 aprovados, a saída continua parcial e não pode alimentar o sorteio.
 
+## Coleta com workers e múltiplas credenciais
+
+`--workers` controla a concorrência dentro de **um único processo**, com valores de 1 a 8 e padrão 1. Mantenha somente uma execução usando cada diretório `--saida`: antes de iniciar o comando paralelo, encerre e aguarde o fechamento da execução anterior. Um bloqueio do sistema operacional impede outro processo sobre a mesma saída. Cada worker usa sua própria sessão HTTP, o cache é compartilhado e um único escritor persiste estado, snapshots e relatórios, na ordem dos candidatos. Para continuar com quatro workers e autenticação pelo GitHub CLI, compartilhando uma única cota de conta:
+
+```powershell
+python coleta_amostra_real.py --config config.yaml --saida data/coleta_final --alvo 300 --limite-candidatos 5000 --usar-gh-auth --historico-zenodo data/historico_2024 --workers 4
+```
+
+Sem `--token-env`, permanece o comportamento de `GITHUB_TOKEN` ou `--usar-gh-auth`, inclusive quando uma única credencial atende a vários workers. Para fornecer múltiplas credenciais de contas distintas, prepare variáveis de ambiente no processo e passe seus **nomes** usando `--token-env` repetível. A quantidade de variáveis deve ser menor ou igual ao número de workers. A opção é incompatível com `--usar-gh-auth`:
+
+```powershell
+python coleta_amostra_real.py --config config.yaml --saida data/coleta_final --alvo 300 --limite-candidatos 5000 --historico-zenodo data/historico_2024 --workers 4 --token-env GITHUB_TOKEN_A --token-env GITHUB_TOKEN_B
+```
+
+O comando não recebe valores literais de token. As credenciais múltiplas são verificadas na API `/user`, sem cache. Valores repetidos ou credenciais associadas ao mesmo identificador de conta são rejeitados; use somente um token por conta. Os segredos permanecem em memória, sem gravação em argumentos, logs, snapshots ou arquivos de configuração da coleta. Os exemplos pressupõem que as variáveis já estejam configuradas no ambiente; seus valores não devem ser incluídos no comando mostrado ou no repositório.
+
+A retomada com outro número de workers mantém os critérios e as qualificações preservadas. `--reavaliar` é necessário quando se deseja repetir os filtros de candidatos anteriores, como ao incorporar uma nova fonte histórica; ele não é necessário apenas para mudar a concorrência. O cache e os registros existentes devem permanecer no diretório da coleta.
+
+O processo limita o início das requisições a até 10 GET/s e compartilha as pausas por limites secundários. A cota primária é acompanhada por conta e por tipo de recurso da API. Ao receber `Ctrl+C`, a parada é cooperativa: o programa aguarda as requisições em voo, com timeout HTTP de 30 segundos, encerra os workers e preserva o checkpoint. Requisições já iniciadas podem acrescentar respostas ao cache após o alvo ser atingido; isso não incorpora candidatos extras à população final, e os hashes finais são calculados após encerrar os workers.
+
+O número de workers aumenta a concorrência das requisições, sujeito às cotas e aos limites da API. A janela de 01/10/2023 a 30/09/2024 UTC, a necessidade de dados reais e as pendências de cobertura histórica permanecem. Os três projetos auditados continuam sem cinco releases elegíveis; executar em paralelo não altera esse resultado nem comprova a população mínima de 300 aprovados. A amostra e a rotulagem seguem bloqueadas enquanto faltarem as entradas finais verificadas.
+
 ## Sorteio e artefatos
 
 Execute a partir de `Laboratorio03_MineracaoDeMetricasDORA`, em ambiente Python com `pip install -r requirements.txt`, **somente depois de a coleta indicar `status=completa` e preservar pelo menos 300 aprovados nos arquivos finais**:
