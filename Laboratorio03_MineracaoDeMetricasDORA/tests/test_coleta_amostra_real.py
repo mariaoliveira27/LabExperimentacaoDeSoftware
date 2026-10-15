@@ -5,6 +5,7 @@ import csv
 import json
 import sqlite3
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -16,6 +17,8 @@ from executar_amostra_ouro import executar
 
 class APIPlanejada:
     def __init__(self, quantidade=3, *, runs=50, releases=5, actions=True):
+        self.token = None
+        self.session = SimpleNamespace(close=lambda: None)
         self.chamadas = []
         self.quantidade = quantidade
         self.n_runs, self.n_releases, self.actions = runs, releases, actions

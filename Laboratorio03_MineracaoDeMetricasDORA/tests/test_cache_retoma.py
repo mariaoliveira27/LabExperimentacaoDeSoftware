@@ -98,8 +98,8 @@ def test_invalid_success_json_stays_pending_then_can_resume(client, sleeps, raw)
     ({"Retry-After": "7"}, 10.0),
     ({"retry-after": "Thu, 01 Jan 1970 00:16:47 GMT"}, 10.0),
     ({"X-RateLimit-Remaining": "0", "X-RateLimit-Reset": "1012"}, 15.0),
-    ({}, 1.0),
-    ({"Retry-After": "invalid", "X-RateLimit-Remaining": "invalid"}, 1.0),
+    ({}, 60.0),
+    ({"Retry-After": "invalid", "X-RateLimit-Remaining": "invalid"}, 60.0),
 ])
 def test_http_429_retries_regardless_of_body(client, sleeps, headers, expected):
     client.session.get = Mock(side_effect=[response(429, headers=headers, raw=b"Try again"), response(data=[])])

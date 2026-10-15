@@ -10,6 +10,7 @@ from contextlib import closing
 import hashlib
 import json
 import logging
+import os
 from pathlib import Path
 import re
 import shutil
@@ -17,14 +18,18 @@ import sqlite3
 import subprocess
 import sys
 import time
+import threading
 from datetime import datetime, timezone
 from urllib.parse import quote, urlsplit
+from types import SimpleNamespace
 
 import yaml
 
 from api_client import GitHubClient, PaginacaoIncompletaError
 from busca_candidatos import buscar_candidatos
 from coletor_runs import ColetorRuns, VALID_CONCLUSIONS
+from coleta_paralela import exclusividade, qualificar_em_ordem
+from controle_cotas import ControleCotas
 from funil import FunilSelecao
 from gerar_amostra_rotulagem import instante, ler_aprovados, releases_validas, sha256, validar_proveniencia
 from metricas.calculo_metricas import calcular_cfr_ci
@@ -32,6 +37,7 @@ from recuperar_historico import DOI_FONTE, URL_FONTE, MD5_FONTE, INICIO_FONTE, F
 
 
 logger = logging.getLogger("ColetaAmostraReal")
+AUDITORIA_LOCK = threading.Lock()
 CAMPOS_APROVADOS = (
     "full_name", "owner", "repo", "stars", "language", "default_branch", "created_at",
     "total_releases_janela", "total_runs_janela", "origem_coleta", "origem_metricas_estabilidade",
@@ -441,17 +447,7 @@ class ClienteAuditavel(GitHubClient):
         super().__init__(**kwargs)
 
     def request(self, endpoint, params=None, use_cache=None):
-        cache_info = None
-        if self.use_cache and use_cache is not False:
-            key = self._get_cache_key(self._url(endpoint), params)
-            if self._read_from_cache(key) is not None:
-                with sqlite3.connect(self.cache_db_path) as conn:
-                    cache_info = conn.execute(
-                        "SELECT timestamp FROM api_cache WHERE cache_key=? AND state='complete'", (key,),
-                    ).fetchone()
-        registro = {"registrado_em": agora(), "endpoint": endpoint, "params": params,
-                    "origem": "cache" if cache_info else "http",
-                    "cache_timestamp": cache_info[0] if cache_info else None}
+        registro = {"registrado_em": agora(), "endpoint": endpoint, "params": params}
         try:
             status, data, headers = super().request(endpoint, params=params, use_cache=use_cache)
             registro.update(http_status=status, resposta_sha256=_hash_json(data))
@@ -460,9 +456,11 @@ class ClienteAuditavel(GitHubClient):
             registro["erro"] = type(exc).__name__
             raise
         finally:
-            self.auditoria.parent.mkdir(parents=True, exist_ok=True)
-            with self.auditoria.open("a", encoding="utf-8") as stream:
-                stream.write(json.dumps(registro, ensure_ascii=False) + "\n")
+            registro.update(self.last_response_info)
+            with AUDITORIA_LOCK:
+                self.auditoria.parent.mkdir(parents=True, exist_ok=True)
+                with self.auditoria.open("a", encoding="utf-8") as stream:
+                    stream.write(json.dumps(registro, ensure_ascii=False) + "\n")
 
 
 def token_gh():
@@ -474,6 +472,59 @@ def token_gh():
     if processo.returncode or not processo.stdout.strip():
         raise ValueError("Autenticação gh indisponível; configure GITHUB_TOKEN ou gh auth login.")
     return processo.stdout.strip()
+
+
+def _criar_clientes(config, destino, cache_path, workers, token_envs, usar_gh_auth, evento_parada):
+    api = config.get("api", {})
+    if api.get("base_url", "https://api.github.com").rstrip("/") != "https://api.github.com":
+        raise ValueError("Coleta real exige API pública https://api.github.com.")
+    tokens = []
+    for nome in token_envs:
+        if not isinstance(nome, str) or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", nome):
+            raise ValueError("--token-env aceita somente nomes de variáveis de ambiente.")
+        valor = os.environ.get(nome, "").strip()
+        if not valor:
+            raise ValueError("Uma variável indicada em --token-env não está definida ou está vazia.")
+        if valor in tokens:
+            raise ValueError("Credenciais repetidas; use somente um token por conta.")
+        tokens.append(valor)
+    if not tokens:
+        tokens = [token_gh() if usar_gh_auth else None]
+    controle = ControleCotas(evento_parada, margem=api.get("rate_limit_safety_margin_seconds", 5))
+    clientes, contas = [], []
+    try:
+        for indice in range(workers):
+            client = ClienteAuditavel(
+                destino / "requisicoes.jsonl", token=tokens[indice % len(tokens)],
+                base_url="https://api.github.com", cache_db_path=str(cache_path), verify_ssl=True,
+                max_retries=api.get("max_retries", 5), backoff_base_seconds=api.get("backoff_base_seconds", 1.0),
+                safety_margin_seconds=api.get("rate_limit_safety_margin_seconds", 5),
+            )
+            clientes.append(client)
+            client.evento_parada = evento_parada
+            client.controle_cotas = controle
+            if len(tokens) > 1 and indice < len(tokens):
+                # A identidade é validada antes do pool; /user não entra no cache.
+                client.conta_cota = f"verificacao-{indice}"
+                status, data, headers = client.request("/user", use_cache=False)
+                if status != 200 or not isinstance(data, dict) or type(data.get("id")) is not int or data["id"] <= 0:
+                    raise ValueError("Uma credencial não foi aceita como token de usuário pela API /user.")
+                if data["id"] in contas:
+                    raise ValueError("Tokens da mesma conta compartilham cota; use somente um token por conta.")
+                contas.append(data["id"])
+                controle.registrar(data["id"], "https://api.github.com/user",
+                                   SimpleNamespace(status_code=status, headers=headers, text=""))
+            client.conta_cota = contas[indice % len(tokens)] if len(tokens) > 1 else "conta-unica"
+            # Preserve o token efetivamente resolvido por GITHUB_TOKEN/.env.
+            if indice == 0 and tokens == [None]:
+                tokens[0] = client.token
+        logger.info("Coleta configurada: %s worker(s), %s cota(s) de conta; cache e auditoria compartilhados.",
+                    workers, len(tokens))
+        return clientes
+    except BaseException:
+        for client in clientes:
+            client.session.close()
+        raise
 
 
 def _configuracao(config_path, alvo):
@@ -634,7 +685,33 @@ def _checkpoint(destino, resultados, assinatura, busca, status, erro=None):
 
 
 def coletar(config_path="config.yaml", saida="data/coleta_final", alvo=300, limite_candidatos=5000,
-            client=None, usar_gh_auth=False, cache_historico=None, reavaliar=False, historico_zenodo=None):
+            client=None, usar_gh_auth=False, cache_historico=None, reavaliar=False, historico_zenodo=None,
+            workers=1, token_envs=None):
+    if type(workers) is not int or not 1 <= workers <= 8:
+        raise ValueError("workers deve ser um inteiro entre 1 e 8.")
+    if isinstance(token_envs, str):
+        raise ValueError("token_envs deve ser uma lista de nomes de variáveis.")
+    token_envs = list(token_envs or [])
+    if usar_gh_auth and token_envs:
+        raise ValueError("Escolha --usar-gh-auth ou --token-env, sem combiná-los.")
+    if len(token_envs) > workers:
+        raise ValueError("--workers deve ser pelo menos o número de variáveis --token-env.")
+    if client is not None and (workers != 1 or token_envs):
+        raise ValueError("Cliente injetado é exclusivo do modo sequencial; cada worker precisa de sua própria sessão.")
+    evento_parada, recursos = threading.Event(), []
+    with exclusividade(saida):
+        try:
+            return _coletar(config_path, saida, alvo, limite_candidatos, client, usar_gh_auth,
+                            cache_historico, reavaliar, historico_zenodo,
+                            workers, token_envs, evento_parada, recursos)
+        finally:
+            evento_parada.set()
+            for recurso in recursos:
+                recurso.session.close()
+
+
+def _coletar(config_path, saida, alvo, limite_candidatos, client, usar_gh_auth,
+             cache_historico, reavaliar, historico_zenodo, workers, token_envs, evento_parada, recursos):
     config, inicio, fim, criterios, assinatura = _configuracao(config_path, alvo)
     historico = _carregar_historico_zenodo(historico_zenodo, inicio, fim) if historico_zenodo else None
     if historico is not None:
@@ -669,15 +746,11 @@ def coletar(config_path="config.yaml", saida="data/coleta_final", alvo=300, limi
     if cache_historico:
         _importar_cache_historico(destino, cache_path, cache_historico)
     if client is None:
-        api = config.get("api", {})
-        if api.get("base_url", "https://api.github.com").rstrip("/") != "https://api.github.com":
-            raise ValueError("Coleta real exige API pública https://api.github.com.")
-        client = ClienteAuditavel(
-            destino / "requisicoes.jsonl", token=token_gh() if usar_gh_auth else None,
-            base_url="https://api.github.com", cache_db_path=str(cache_path), verify_ssl=True,
-            max_retries=api.get("max_retries", 5), backoff_base_seconds=api.get("backoff_base_seconds", 1.0),
-            safety_margin_seconds=api.get("rate_limit_safety_margin_seconds", 5),
-        )
+        clientes = _criar_clientes(config, destino, cache_path, workers, token_envs, usar_gh_auth, evento_parada)
+        recursos.extend(clientes)
+        client = clientes[0]
+    else:
+        clientes = [client]
     snapshots = destino / "qualificacoes"
     snapshots.mkdir(exist_ok=True)
     resultados = []
@@ -715,19 +788,20 @@ def coletar(config_path="config.yaml", saida="data/coleta_final", alvo=300, limi
                         len(historico.runs_por_id), n_com_historico)
         _json_atomic(destino / "candidatos.json", candidatos)
         _json_atomic(destino / "busca.json", busca_info)
-        for candidato in candidatos:
-            if sum(item["aprovado"] for item in resultados) >= alvo:
-                break
-            if candidato["id"] in vistos:
-                continue
-            item = _qualificar(client, candidato, inicio, fim, criterios, historico)
-            snapshot_path = snapshots / f"{candidato['id']}.json"
-            _json_atomic(snapshot_path, item)
-            item["_snapshot_sha256"] = sha256(snapshot_path)
-            resultados.append(item)
-            vistos.add(candidato["id"])
-            estado = _checkpoint(destino, resultados, assinatura, busca_info, "em_andamento")
-            logger.info("Progresso: %s/%s candidatos; %s/%s aprovados. %s: %s", len(resultados), len(candidatos), estado["n_aprovados"], alvo, item["full_name"], item["motivo"] or "aprovado")
+        if sum(item["aprovado"] for item in resultados) < alvo:
+            pendentes = (c for c in candidatos if c["id"] not in vistos)
+            qualificar = lambda api, c: _qualificar(api, c, inicio, fim, criterios, historico)
+            with closing(qualificar_em_ordem(pendentes, clientes, qualificar, evento_parada)) as tarefas:
+                for candidato, item in tarefas:
+                    snapshot_path = snapshots / f"{candidato['id']}.json"
+                    _json_atomic(snapshot_path, item)
+                    item["_snapshot_sha256"] = sha256(snapshot_path)
+                    resultados.append(item)
+                    vistos.add(candidato["id"])
+                    estado = _checkpoint(destino, resultados, assinatura, busca_info, "em_andamento")
+                    logger.info("Progresso: %s/%s candidatos; %s/%s aprovados. %s: %s", len(resultados), len(candidatos), estado["n_aprovados"], alvo, item["full_name"], item["motivo"] or "aprovado")
+                    if estado["n_aprovados"] >= alvo:
+                        break
         aprovados = sorted((item["registro"] for item in resultados if item["aprovado"]), key=lambda row: row["full_name"])
         if len(aprovados) < alvo:
             return _checkpoint(destino, resultados, assinatura, busca_info, "insuficiente")
@@ -762,6 +836,9 @@ def main(argv=None):
     parser.add_argument("--saida", default="data/coleta_final")
     parser.add_argument("--alvo", type=int, default=300)
     parser.add_argument("--limite-candidatos", type=int, default=5000)
+    parser.add_argument("--workers", type=int, default=1, help="Repositórios em paralelo (1 a 8); um único escritor de checkpoint")
+    parser.add_argument("--token-env", action="append", default=[], metavar="NOME_ENV",
+                        help="Nome da variável com um token; repetível para contas distintas. Nunca passe o valor do token")
     parser.add_argument("--usar-gh-auth", action="store_true")
     parser.add_argument("--cache-historico", help="SQLite real previamente coletado; importa uma cópia consistente sem alterar a fonte")
     parser.add_argument("--historico-zenodo", help="Diretório emitido por recuperar_historico.py; verifica fonte, hashes e janela antes de usar runs reais")
@@ -770,7 +847,8 @@ def main(argv=None):
     try:
         estado = coletar(args.config, args.saida, args.alvo, args.limite_candidatos,
                         usar_gh_auth=args.usar_gh_auth, cache_historico=args.cache_historico,
-                        reavaliar=args.reavaliar, historico_zenodo=args.historico_zenodo)
+                        reavaliar=args.reavaliar, historico_zenodo=args.historico_zenodo,
+                        workers=args.workers, token_envs=args.token_env)
     except (Exception, KeyboardInterrupt) as exc:
         print(f"Coleta interrompida: {exc}. As respostas completas ficam em cache para retomada.", file=sys.stderr)
         return 2
