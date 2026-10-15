@@ -47,6 +47,16 @@ class PaginacaoIncompletaError(RuntimeError):
         super().__init__(f"Paginação incompleta: {motivo} em {endpoint}.")
 
 
+class APIHTTPTransitorioError(RuntimeError):
+    """Falha HTTP 5xx esgotada, identificável sem interpretar sua mensagem."""
+
+    def __init__(self, status_code, endpoint, tentativas):
+        self.status_code = status_code
+        self.endpoint = endpoint
+        self.tentativas = tentativas
+        super().__init__(f"GitHub API retornou HTTP {status_code} após {tentativas} tentativas em {endpoint}.")
+
+
 class GitHubClient:
     def __init__(
         self,
@@ -312,6 +322,7 @@ class GitHubClient:
                 raise InterrompidaColeta("Coleta interrompida; respostas completas preservadas.")
             if self.controle_cotas is not None:
                 self.controle_cotas.aguardar(self.conta_cota, url)
+            self.last_response_info.update(http_status=None, tentativas=attempt + 1)
             try:
                 response = self.session.get(url, params=params, verify=self.verify_ssl, timeout=30)
             except requests.RequestException as exc:
@@ -325,6 +336,7 @@ class GitHubClient:
 
             if self.controle_cotas is not None:
                 self.controle_cotas.registrar(self.conta_cota, url, response)
+            self.last_response_info.update(http_status=response.status_code, tentativas=attempt + 1)
             headers = dict(response.headers)
             if response.status_code == 200:
                 # Decoding/validation/storage stay outside the network retry handler:
@@ -338,6 +350,8 @@ class GitHubClient:
 
             if response.status_code >= 500 or self._is_rate_limit(response):
                 if attempt == self.max_retries:
+                    if response.status_code >= 500:
+                        raise APIHTTPTransitorioError(response.status_code, url, attempt + 1)
                     raise RuntimeError(
                         f"GitHub API retornou HTTP {response.status_code} após {attempt + 1} tentativas."
                     )

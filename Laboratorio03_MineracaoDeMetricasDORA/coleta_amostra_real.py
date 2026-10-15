@@ -25,7 +25,7 @@ from types import SimpleNamespace
 
 import yaml
 
-from api_client import GitHubClient, PaginacaoIncompletaError
+from api_client import GitHubClient, PaginacaoIncompletaError, APIHTTPTransitorioError
 from busca_candidatos import buscar_candidatos
 from coletor_runs import ColetorRuns, VALID_CONCLUSIONS
 from coleta_paralela import exclusividade, qualificar_em_ordem
@@ -562,6 +562,27 @@ def _metadata(client, candidate, fim):
     return data
 
 
+def _listar_releases(client, nome):
+    """Reduza o trabalho por pedido em 504, sem concatenar prefixos parciais."""
+    endpoint = f"/repos/{nome}/releases"
+    reinicios = []
+    for tamanho in (100, 25, 5):
+        try:
+            releases = client.paginate(endpoint, params={"per_page": tamanho})
+            return releases, {"completa": True, "per_page_usado": tamanho,
+                              "reinicios_por_504": reinicios}
+        except APIHTTPTransitorioError as exc:
+            if (exc.status_code != 504 or tamanho == 5
+                    or not urlsplit(exc.endpoint).path.rstrip("/").endswith("/releases")):
+                raise
+            reinicios.append({"endpoint": exc.endpoint, "http_status": exc.status_code,
+                              "tentativas": exc.tentativas, "per_page": tamanho})
+            proximo = 25 if tamanho == 100 else 5
+            logger.warning("%s: HTTP 504 com per_page=%s; reiniciando a listagem completa "
+                           "na primeira página com per_page=%s. Prefixos e cache permanecem separados.",
+                           nome, tamanho, proximo)
+
+
 def _qualificar(client, candidato, inicio, fim, criterios, historico=None):
     metadata = _metadata(client, candidato, fim)
     nome = metadata["full_name"]
@@ -583,7 +604,7 @@ def _qualificar(client, candidato, inicio, fim, criterios, historico=None):
         return resultado
     resultado["tem_actions"] = True
     try:
-        raw_releases = client.paginate(f"/repos/{nome}/releases", params={"per_page": 100})
+        raw_releases, paginacao = _listar_releases(client, nome)
     except PaginacaoIncompletaError as exc:
         mensagem = exc.resposta.get("message", "") if isinstance(exc.resposta, dict) else ""
         limite_releases = (exc.status_code == 422
@@ -602,6 +623,7 @@ def _qualificar(client, candidato, inicio, fim, criterios, historico=None):
         logger.warning("%s: limite da API de releases; pendência técnica registrada. "
                        "O prefixo não comprova a janela completa; continuando os demais candidatos.", nome)
         return resultado
+    resultado["paginacao_releases"] = paginacao
     n_releases = _contar_releases(raw_releases, nome, inicio, fim)
     resultado["releases"] = raw_releases
     resultado["total_releases_janela"] = n_releases
@@ -850,7 +872,8 @@ def main(argv=None):
                         reavaliar=args.reavaliar, historico_zenodo=args.historico_zenodo,
                         workers=args.workers, token_envs=args.token_env)
     except (Exception, KeyboardInterrupt) as exc:
-        print(f"Coleta interrompida: {exc}. As respostas completas ficam em cache para retomada.", file=sys.stderr)
+        print(f"Coleta interrompida: {str(exc).rstrip('.')}. As respostas completas ficam em cache para retomada. "
+              "Repita o mesmo comando, sem --reavaliar, para tentar os candidatos ainda não concluídos.", file=sys.stderr)
         return 2
     if estado["status"] != "completa":
         print(f"Coleta real insuficiente: {estado['n_aprovados']}/{estado['alvo']} aprovados em {estado['n_processados']} candidatos consultados. "
