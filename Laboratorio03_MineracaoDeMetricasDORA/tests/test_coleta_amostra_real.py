@@ -10,6 +10,7 @@ import pytest
 
 import coleta_amostra_real as coleta
 from busca_candidatos import BuscaInstavelError
+from api_client import PaginacaoIncompletaError
 from executar_amostra_ouro import executar
 
 
@@ -152,6 +153,99 @@ def test_busca_instavel_preserva_qualificacoes_e_entradas_anteriores(preparar, m
     assert estado["n_aprovados"] == 0
     for nome in ("repositorios_aprovados.csv", "releases.json", "proveniencia.json", "rotulos_aulus.csv"):
         assert not (destino / nome).exists()
+
+
+@pytest.mark.parametrize("prefixo", [5, 10000])
+def test_limite_de_releases_e_pendencia_tecnica_e_nao_interrompe_outros(preparar, prefixo):
+    config, destino, api = preparar(APIPlanejada())
+    paginate = api.paginate
+
+    def releases(endpoint, params=None):
+        if "projeto-000" in endpoint:
+            raise PaginacaoIncompletaError(
+                "https://api.github.com/repositories/1/releases?per_page=100&page=101", 422,
+                {"message": "Only the first 10000 results are available."}, 100, prefixo,
+            )
+        return paginate(endpoint, params)
+
+    api.paginate = releases
+    estado = coleta.coletar(config, destino, client=api)
+    assert estado["n_processados"] == 3 and estado["n_aprovados"] == 2
+    assert estado["n_pendencias_tecnicas"] == 1 and estado["status"] == "insuficiente"
+    snapshot = json.loads((destino / "qualificacoes/1.json").read_text(encoding="utf-8"))
+    assert snapshot["qualificacao_inconclusiva"] is True and snapshot["aprovado"] is False
+    assert snapshot["motivo"] == "evidencia_releases_incompleta"
+    assert "total_releases_janela" not in snapshot and "releases" not in snapshot
+    assert snapshot["paginacao_releases"]["completa"] is False
+    with (destino / "pendencias_tecnicas.csv").open(encoding="utf-8", newline="") as stream:
+        pendencias = list(csv.DictReader(stream))
+    assert len(pendencias) == 1 and int(pendencias[0]["itens_obtidos"]) == prefixo
+    assert not (destino / "repositorios_aprovados.csv").exists()
+    assert coleta.coletar(config, destino, client=api)["n_pendencias_tecnicas"] == 1
+
+
+@pytest.mark.parametrize("status,mensagem", [
+    (422, "Validation Failed"), (403, "Only the first 10000 results are available."),
+    (500, "Only the first 10000 results are available."),
+])
+def test_outros_erros_de_releases_nao_sao_convertidos_em_exclusao(preparar, status, mensagem):
+    config, destino, api = preparar(APIPlanejada())
+
+    def falhar(*args, **kwargs):
+        raise PaginacaoIncompletaError("https://api.github.com/repos/fixture/projeto-000/releases?page=2",
+                                     status, {"message": mensagem}, 1, 100)
+
+    api.paginate = falhar
+    with pytest.raises(PaginacaoIncompletaError):
+        coleta.coletar(config, destino, client=api)
+    estado = json.loads((destino / "estado.json").read_text(encoding="utf-8"))
+    assert estado["n_processados"] == 0 and estado["status"] == "interrompida"
+
+
+@pytest.mark.parametrize("winerror", [5, 32, 33])
+def test_checkpoint_aguarda_bloqueio_transitorio_windows_sem_apagar_anterior(tmp_path, monkeypatch, winerror):
+    destino = tmp_path / "estado.json"
+    anterior = b'{"valor":"anterior"}'
+    destino.write_bytes(anterior)
+    substituir = Path.replace
+    chamadas, pausas = [], []
+
+    def bloqueado(temporario, alvo):
+        chamadas.append(alvo)
+        if len(chamadas) < 3:
+            assert destino.read_bytes() == anterior
+            erro = PermissionError("Bloqueio artificial da fixture")
+            erro.winerror = winerror
+            raise erro
+        return substituir(temporario, alvo)
+
+    monkeypatch.setattr(Path, "replace", bloqueado)
+    monkeypatch.setattr(coleta.time, "sleep", pausas.append)
+    coleta._json_atomic(destino, {"valor": "novo"})
+    assert json.loads(destino.read_text(encoding="utf-8")) == {"valor": "novo"}
+    assert len(chamadas) == 3 and pausas == [0.05, 0.1]
+
+
+@pytest.mark.parametrize("winerror,tentativas", [(5, 5), (None, 1), (6, 1)])
+def test_bloqueio_permanente_preserva_checkpoint_e_temporario(tmp_path, monkeypatch, winerror, tentativas):
+    destino = tmp_path / "estado.json"
+    anterior = b'{"valor":"anterior"}'
+    destino.write_bytes(anterior)
+    chamadas = []
+
+    def bloqueado(temporario, alvo):
+        chamadas.append(alvo)
+        erro = PermissionError("Bloqueio artificial permanente")
+        if winerror is not None:
+            erro.winerror = winerror
+        raise erro
+
+    monkeypatch.setattr(Path, "replace", bloqueado)
+    monkeypatch.setattr(coleta.time, "sleep", lambda _: None)
+    with pytest.raises(PermissionError):
+        coleta._json_atomic(destino, {"valor": "novo"})
+    assert len(chamadas) == tentativas and destino.read_bytes() == anterior
+    assert json.loads(destino.with_name("estado.json.tmp").read_text(encoding="utf-8")) == {"valor": "novo"}
 
 
 def test_snapshot_adulterado_bloqueia_retomada(preparar):

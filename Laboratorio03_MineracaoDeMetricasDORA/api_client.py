@@ -34,6 +34,19 @@ if not logger.handlers:
     logger.setLevel(logging.INFO)
 
 
+class PaginacaoIncompletaError(RuntimeError):
+    """Falha sem liberar o prefixo de uma listagem como resultado completo."""
+
+    def __init__(self, endpoint, status_code, resposta, paginas_obtidas, itens_obtidos):
+        self.endpoint = endpoint
+        self.status_code = status_code
+        self.resposta = resposta
+        self.paginas_obtidas = paginas_obtidas
+        self.itens_obtidos = itens_obtidos
+        motivo = f"HTTP {status_code}" if status_code is not None else "ciclo no Link"
+        super().__init__(f"Paginação incompleta: {motivo} em {endpoint}.")
+
+
 class GitHubClient:
     def __init__(
         self,
@@ -325,18 +338,25 @@ class GitHubClient:
         all_items: List[Dict[str, Any]] = []
         current_url: Optional[str] = endpoint
         current_params = dict(params or {})
+        paginas_obtidas = 0
+        visitadas = set()
 
         while current_url:
+            chave = self._get_cache_key(self._url(current_url), current_params)
+            if chave in visitadas:
+                raise PaginacaoIncompletaError(current_url, None, None, paginas_obtidas, len(all_items))
+            visitadas.add(chave)
             status_code, data, headers = self.request(current_url, params=current_params)
 
             if status_code != 200:
-                raise RuntimeError(f"Paginação incompleta: HTTP {status_code} em {current_url}.")
+                raise PaginacaoIncompletaError(current_url, status_code, data, paginas_obtidas, len(all_items))
             items = data.get("items") if isinstance(data, dict) else data
             if not isinstance(items, list):
                 self.invalidate_cache(current_url, current_params)
                 raise ValueError("Paginação incompleta: resposta sem uma lista de itens.")
 
             all_items.extend(items)
+            paginas_obtidas += 1
             if max_items and len(all_items) >= max_items:
                 return all_items[:max_items]
 

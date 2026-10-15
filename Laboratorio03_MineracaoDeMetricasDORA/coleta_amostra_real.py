@@ -16,12 +16,13 @@ import shutil
 import sqlite3
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from urllib.parse import quote, urlsplit
 
 import yaml
 
-from api_client import GitHubClient
+from api_client import GitHubClient, PaginacaoIncompletaError
 from busca_candidatos import buscar_candidatos
 from coletor_runs import ColetorRuns, VALID_CONCLUSIONS
 from funil import FunilSelecao
@@ -46,6 +47,7 @@ class FunilColeta(FunilSelecao):
         tabela = super().gerar_tabela_funil()
         tabela[0]["etapa"] = "1. Candidatos processados da busca pública (stars >= 1000)"
         tabela[1]["motivo_descarte"] = "evidencia_actions_historicos_insuficiente"
+        tabela[2]["motivo_descarte"] = "menos_de_5_releases_na_janela; evidencia_releases_incompleta"
         tabela[3]["etapa"] = "4. Mínimo de 50 workflow runs válidos comprovado por registros disponíveis"
         tabela[3]["motivo_descarte"] = "evidencia_runs_historicos_insuficiente; evidencia_runs_validos_insuficiente"
         return tabela
@@ -201,6 +203,18 @@ def _hash_json(valor):
     return hashlib.sha256(json.dumps(valor, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
 
 
+def _substituir_atomicamente(temporario, destino):
+    """Aguarde bloqueios breves do Windows, mantendo o destino anterior intacto."""
+    for tentativa in range(5):
+        try:
+            temporario.replace(destino)
+            return
+        except PermissionError as exc:
+            if getattr(exc, "winerror", None) not in (5, 32, 33) or tentativa == 4:
+                raise
+            time.sleep(0.05 * 2 ** tentativa)
+
+
 def _json_atomic(path, valor):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -208,7 +222,7 @@ def _json_atomic(path, valor):
     with temporario.open("w", encoding="utf-8") as stream:
         json.dump(valor, stream, ensure_ascii=False, indent=2, allow_nan=False)
         stream.write("\n")
-    temporario.replace(path)
+    _substituir_atomicamente(temporario, path)
 
 
 def _csv_atomic(path, rows, campos):
@@ -218,7 +232,7 @@ def _csv_atomic(path, rows, campos):
         writer = csv.DictWriter(stream, fieldnames=campos)
         writer.writeheader()
         writer.writerows(rows)
-    temporario.replace(path)
+    _substituir_atomicamente(temporario, path)
 
 
 def _invalidar_resposta(client, endpoint, params=None):
@@ -517,7 +531,26 @@ def _qualificar(client, candidato, inicio, fim, criterios, historico=None):
         resultado.update(etapa="2. GitHub Actions", motivo="evidencia_actions_historicos_insuficiente")
         return resultado
     resultado["tem_actions"] = True
-    raw_releases = client.paginate(f"/repos/{nome}/releases", params={"per_page": 100})
+    try:
+        raw_releases = client.paginate(f"/repos/{nome}/releases", params={"per_page": 100})
+    except PaginacaoIncompletaError as exc:
+        mensagem = exc.resposta.get("message", "") if isinstance(exc.resposta, dict) else ""
+        limite_releases = (exc.status_code == 422
+                           and urlsplit(exc.endpoint).path.rstrip("/").endswith("/releases")
+                           and isinstance(mensagem, str)
+                           and re.fullmatch(r"Only the first [1-9][0-9]* results are available\.", mensagem))
+        if not limite_releases:
+            raise  # Outras falhas HTTP/schema não viram exclusão científica.
+        resultado.update(
+            etapa="3. Releases na janela", motivo="evidencia_releases_incompleta",
+            qualificacao_inconclusiva=True,
+            paginacao_releases={"endpoint": exc.endpoint, "http_status": exc.status_code,
+                                "mensagem_api": mensagem, "paginas_obtidas": exc.paginas_obtidas,
+                                "itens_obtidos": exc.itens_obtidos, "completa": False},
+        )
+        logger.warning("%s: limite da API de releases; pendência técnica registrada. "
+                       "O prefixo não comprova a janela completa; continuando os demais candidatos.", nome)
+        return resultado
     n_releases = _contar_releases(raw_releases, nome, inicio, fim)
     resultado["releases"] = raw_releases
     resultado["total_releases_janela"] = n_releases
@@ -570,7 +603,14 @@ def _qualificar(client, candidato, inicio, fim, criterios, historico=None):
 
 def _checkpoint(destino, resultados, assinatura, busca, status, erro=None):
     aprovados = [item["registro"] for item in resultados if item["aprovado"]]
+    pendentes = [item for item in resultados if item.get("qualificacao_inconclusiva")]
     _csv_atomic(destino / "repositorios_aprovados_parcial.csv", aprovados, CAMPOS_PARCIAIS)
+    _csv_atomic(destino / "pendencias_tecnicas.csv", [
+        {"full_name": item["full_name"], "motivo": item["motivo"],
+         **{campo: item["paginacao_releases"][campo] for campo in
+            ("endpoint", "http_status", "paginas_obtidas", "itens_obtidos")}}
+        for item in pendentes
+    ], ("full_name", "motivo", "endpoint", "http_status", "paginas_obtidas", "itens_obtidos"))
     funil = FunilColeta(target_approved=assinatura["alvo"])
     for item in resultados:
         repo = {"full_name": item["full_name"]}
@@ -582,11 +622,11 @@ def _checkpoint(destino, resultados, assinatura, busca, status, erro=None):
         if item["aprovado"]:
             funil.aprovar_repositorio(repo)
         else:
-            detalhes = {key: item[key] for key in ("total_releases_janela", "total_runs_janela", "runs_disponiveis_api", "escopo_contagem_runs") if key in item}
+            detalhes = {key: item[key] for key in ("total_releases_janela", "total_runs_janela", "runs_disponiveis_api", "escopo_contagem_runs", "qualificacao_inconclusiva", "paginacao_releases") if key in item}
             funil.registrar_descarte(item["full_name"], item["etapa"], item["motivo"], json.dumps(detalhes))
     funil.salvar_relatorios(str(destino / "funil_selecao.csv"), str(destino / "funil_selecao.md"), str(destino / "descartes.csv"))
     estado = {**assinatura, "status": status, "atualizado_em": agora(), "n_processados": len(resultados),
-              "n_aprovados": len(aprovados), "busca": busca, "erro": erro,
+              "n_aprovados": len(aprovados), "n_pendencias_tecnicas": len(pendentes), "busca": busca, "erro": erro,
               "snapshots": {f"{item['candidate_id']}.json": item.get("_snapshot_sha256") or sha256(destino / "qualificacoes" / f"{item['candidate_id']}.json") for item in resultados},
               "pendencia": None if status == "completa" else "Obter pelo menos 300 aprovados reais na janela; não gerar rotulagem com a coleta parcial."}
     _json_atomic(destino / "estado.json", estado)
@@ -666,6 +706,13 @@ def coletar(config_path="config.yaml", saida="data/coleta_final", alvo=300, limi
     try:
         candidatos = buscar_candidatos(client, min_stars=criterios["min_stars"], criado_ate=fim.date().isoformat(), max_candidatos=limite_candidatos)
         busca_info = getattr(candidatos, "relatorio", {"max_candidatos": limite_candidatos, "n_candidatos": len(candidatos)})
+        if historico is not None:
+            n_com_historico = sum(c["id"] in historico.runs_por_id for c in candidatos)
+            busca_info["candidatos_com_runs_no_arquivo"] = n_com_historico
+            logger.info("Histórico recuperado: %s repositórios com runs exportados; %s estão nesta lista. "
+                        "Esses registros ainda exigem verificar branch, metadados e releases; "
+                        "a API ou fontes adicionais precisam comprovar os demais aprovados.",
+                        len(historico.runs_por_id), n_com_historico)
         _json_atomic(destino / "candidatos.json", candidatos)
         _json_atomic(destino / "busca.json", busca_info)
         for candidato in candidatos:
