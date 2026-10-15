@@ -19,3 +19,12 @@ htmlcov/
 # Local cache DB if needed (keep datasets in data/output)
 data/cache/*.db
 data/cache/*.db-*
+
+# Respostas completas e snapshots locais da coleta ampliada (recriáveis pela API).
+data/coleta_final/cache/
+data/coleta_final/qualificacoes/
+data/coleta_final/reavaliacoes/
+data/coleta_final/*.tmp
+# Artefatos históricos volumosos ficam locais; manifeste e preserve seus hashes.
+data/historico_2024/metadata_repositorios.json
+data/historico_2024/runs_historicos.json
