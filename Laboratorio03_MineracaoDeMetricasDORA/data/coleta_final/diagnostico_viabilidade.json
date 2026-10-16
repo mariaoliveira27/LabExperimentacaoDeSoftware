@@ -1,0 +1,90 @@
+{
+  "status": "historico_indisponivel",
+  "verificado_em": "2026-10-16T16:25:39.287476+00:00",
+  "janela": {
+    "inicio": "2023-10-01T00:00:00+00:00",
+    "fim": "2024-09-30T23:59:59+00:00"
+  },
+  "n_consultas_historicas_total_zero": 1515,
+  "n_processados": 4617,
+  "n_aprovados": 0,
+  "n_fontes_potenciais": 15,
+  "alvo": 300,
+  "origem_serie_zero": "checkpoint_descartes",
+  "validacao_empirica_serie_nesta_guarda": false,
+  "ressalva_serie": "Contagem do ledger/resultados; esta guarda não revalida respostas nem hashes dos snapshots.",
+  "fontes_potenciais": {
+    "repositorios_historico_com_run_na_janela": 15,
+    "paginas_runs_cache_examinadas": 1516,
+    "runs_na_janela_encontrados_no_cache": 0,
+    "cache_acesso": "SQLite mode=ro; páginas individuais; sem hash do banco"
+  },
+  "identidades_potenciais": [
+    {
+      "tipo": "id",
+      "valor": 206427
+    },
+    {
+      "tipo": "id",
+      "valor": 2253830
+    },
+    {
+      "tipo": "id",
+      "valor": 3933868
+    },
+    {
+      "tipo": "id",
+      "valor": 5025286
+    },
+    {
+      "tipo": "id",
+      "valor": 23029617
+    },
+    {
+      "tipo": "id",
+      "valor": 61579222
+    },
+    {
+      "tipo": "id",
+      "valor": 83446927
+    },
+    {
+      "tipo": "id",
+      "valor": 86057635
+    },
+    {
+      "tipo": "id",
+      "valor": 88674404
+    },
+    {
+      "tipo": "id",
+      "valor": 91797088
+    },
+    {
+      "tipo": "id",
+      "valor": 115192595
+    },
+    {
+      "tipo": "id",
+      "valor": 171915396
+    },
+    {
+      "tipo": "id",
+      "valor": 185901023
+    },
+    {
+      "tipo": "id",
+      "valor": 432598139
+    },
+    {
+      "tipo": "id",
+      "valor": 440577490
+    }
+  ],
+  "evidencias_sha256": {
+    "estado.json": "7097671ddd61cd42fa9a01e9e92ed7af0e629b56ee5731d8d8b5304202c7ec58",
+    "descartes.csv": "204a5118503c5da9af3cf0052ac70b8a517827074db0fad02aef397e1c6796a1"
+  },
+  "interpretacao": "A fonte conhecida não sustenta o alvo sob a série de respostas vazias. Não é prova de ausência histórica de CI; potenciais são um teto generoso apenas das fontes locais examinadas, não da população GitHub.",
+  "dica": "Obter cache histórico original verificável ou autorização do professor para revisar explicitamente janela/duração; não completar a população com dados de referência."
+}

@@ -2,18 +2,25 @@
 
 Cada fatia deve conter menos de 1.000 resultados. Faixas de estrelas são
 particionadas sem sobreposição; uma estrela única é particionada pela data
-real de criação. Respostas incompletas ou mutáveis interrompem a busca.
+real de criação. A busca usa respostas atuais; rodadas mutáveis são rejeitadas
+e repetidas de forma limitada, sem misturar candidatos de rodadas diferentes.
 """
 
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
+import logging
 import re
 
 
 TETO_BUSCA = 1000
 POR_PAGINA = 100
 ENDPOINT = "/search/repositories"
+logger = logging.getLogger("BuscaCandidatos")
+
+
+class BuscaInstavelError(ValueError):
+    """Índice mudou durante a rodada; seus candidatos não podem ser publicados."""
 
 
 class CandidatosBusca(list):
@@ -43,7 +50,9 @@ def _invalidar(client, params):
 def _consulta(client, q, estrelas, datas, consultas, *, page=1, per_page=POR_PAGINA, sort="stars", order="desc"):
     params = {"q": q, "sort": sort, "order": order, "per_page": per_page, "page": page}
     try:
-        status, payload, _ = client.request(ENDPOINT, params=params)
+        # Search é um índice mutável. Uma página de ontem não pode compor uma
+        # rodada com outra obtida hoje. Os demais endpoints mantêm seu cache.
+        status, payload, _ = client.request(ENDPOINT, params=params, use_cache=False)
         if status != 200:
             raise RuntimeError(f"Busca interrompida: HTTP {status} em {q!r}, página {page}.")
         if not isinstance(payload, dict):
@@ -58,7 +67,7 @@ def _consulta(client, q, estrelas, datas, consultas, *, page=1, per_page=POR_PAG
             raise ValueError("items deve ser uma lista na busca.")
         quantidade = min(per_page, max(0, min(total, TETO_BUSCA) - (page - 1) * per_page))
         if len(items) != quantidade:
-            raise ValueError(
+            raise BuscaInstavelError(
                 f"Página de busca incompleta ou inconsistente: {len(items)} itens, "
                 f"esperados {quantidade}; total_count={total}."
             )
@@ -97,14 +106,44 @@ def _query(estrelas, datas):
     return f"{stars} {created} is:public"
 
 
-def buscar_candidatos(client, min_stars=1000, criado_ate="2024-09-30", max_candidatos=5000):
+def buscar_candidatos(client, min_stars=1000, criado_ate="2024-09-30", max_candidatos=5000, *, tentativas=3):
     """Retorna candidatos reais ordenados por estrelas, nome e id.
 
     O resultado é uma subclasse de ``list``; ``resultado.relatorio`` registra
     as consultas e distingue quota de candidatos de uma busca completa. Essa
     lista ainda não é a amostra aprovada: releases e runs requerem coleta e
     validação posteriores. ``max_candidatos=None`` solicita busca completa.
+    Cada tentativa começa pela raiz, com listas e identificadores isolados.
+    HTTP e schema inválido propagam; somente instabilidade tem nova rodada.
     """
+    if type(tentativas) is not int or tentativas < 1:
+        raise ValueError("tentativas deve ser inteiro positivo.")
+    descartadas = []
+    for tentativa in range(1, tentativas + 1):
+        logger.info("Busca de candidatos: rodada %s/%s, respostas atuais da API.", tentativa, tentativas)
+        try:
+            resultado = _buscar_uma_vez(client, min_stars, criado_ate, max_candidatos)
+        except BuscaInstavelError as exc:
+            descartadas.append({"rodada": tentativa, "motivo": str(exc)})
+            if tentativa == tentativas:
+                raise BuscaInstavelError(
+                    f"Busca permaneceu instável após {tentativas} rodadas atuais: {exc} "
+                    "Nenhuma lista de candidatos foi concluída nesta execução. "
+                    "Repita o mesmo comando; as qualificações anteriores permanecem preservadas."
+                ) from exc
+            logger.warning("Busca mudou na rodada %s/%s: %s Refazendo desde a raiz com respostas atuais.",
+                           tentativa, tentativas, exc)
+            continue
+        resultado.relatorio.update(
+            cache_busca="ignorado; respostas atuais da API", tentativas_utilizadas=tentativa,
+            rodadas_descartadas=descartadas,
+        )
+        logger.info("Busca concluída: %s candidatos retornados, rodada %s/%s.", len(resultado), tentativa, tentativas)
+        return resultado
+
+
+def _buscar_uma_vez(client, min_stars, criado_ate, max_candidatos):
+    """Não permite que itens de uma rodada rejeitada escapem para a seguinte."""
     if isinstance(min_stars, bool) or not isinstance(min_stars, int) or min_stars < 0:
         raise ValueError("min_stars deve ser inteiro não negativo.")
     if max_candidatos is not None and (
@@ -133,7 +172,7 @@ def buscar_candidatos(client, min_stars=1000, criado_ate="2024-09-30", max_candi
             if identificador in ids or nome in nomes:
                 params = {"q": _query(estrelas, datas), "sort": "stars", "order": "desc", "per_page": POR_PAGINA, "page": page}
                 _invalidar(client, params)
-                raise ValueError("Busca contém ids ou full_name duplicados entre páginas/fatias; população mudou ou há sobreposição.")
+                raise BuscaInstavelError("Busca contém ids ou full_name duplicados entre páginas/fatias; população mudou ou há sobreposição.")
             ids.add(identificador)
             nomes.add(nome)
             coletados.append(item)
@@ -147,7 +186,10 @@ def buscar_candidatos(client, min_stars=1000, criado_ate="2024-09-30", max_candi
                 if payload["total_count"] != total:
                     params = {key: value for key, value in consultas[-1].items() if key not in ("total_count", "items_recebidos")}
                     _invalidar(client, params)
-                    raise ValueError("total_count mudou entre páginas; a busca não é uma população consistente.")
+                    raise BuscaInstavelError(
+                        f"total_count mudou entre páginas em {_query(estrelas, datas)!r}, página {page}: "
+                        f"anterior={total}, recebido={payload['total_count']}."
+                    )
                 adicionar(payload["items"], estrelas, datas, page)
             return
 
@@ -164,7 +206,7 @@ def buscar_candidatos(client, min_stars=1000, criado_ate="2024-09-30", max_candi
             primeira_direita = consultar(direita, datas)
             primeira_esquerda = consultar(esquerda, datas)
             if primeira_direita["total_count"] + primeira_esquerda["total_count"] != total:
-                raise ValueError("total_count das faixas de estrelas não soma a população anterior; busca mudou.")
+                raise BuscaInstavelError("total_count das faixas de estrelas não soma a população anterior; busca mudou.")
             visitar(direita, datas, primeira_direita)
             if not quota_atingida():
                 visitar(esquerda, datas, primeira_esquerda)
@@ -182,7 +224,7 @@ def buscar_candidatos(client, min_stars=1000, criado_ate="2024-09-30", max_candi
             while inicio > date.min:
                 anteriores = consultar(estrelas, (None, inicio - timedelta(days=1)))
                 if anteriores["total_count"] >= total_anterior:
-                    raise ValueError("total_count não diminuiu ao excluir datas observadas; busca mudou.")
+                    raise BuscaInstavelError("total_count não diminuiu ao excluir datas observadas; busca mudou.")
                 if anteriores["total_count"] == 0:
                     break
                 inicio = min(_data_criacao(item["created_at"]) for item in anteriores["items"])
@@ -198,7 +240,7 @@ def buscar_candidatos(client, min_stars=1000, criado_ate="2024-09-30", max_candi
         primeira_direita = consultar(estrelas, direita)
         primeira_esquerda = consultar(estrelas, esquerda)
         if primeira_direita["total_count"] + primeira_esquerda["total_count"] != total:
-            raise ValueError("total_count das faixas de criação não soma a população anterior; busca mudou.")
+            raise BuscaInstavelError("total_count das faixas de criação não soma a população anterior; busca mudou.")
         visitar(estrelas, direita, primeira_direita)
         if not quota_atingida():
             visitar(estrelas, esquerda, primeira_esquerda)
@@ -210,7 +252,7 @@ def buscar_candidatos(client, min_stars=1000, criado_ate="2024-09-30", max_candi
     resultado = ordenados if max_candidatos is None else ordenados[:max_candidatos]
     limitado = max_candidatos is not None and raiz["total_count"] > max_candidatos
     if not limitado and len(resultado) != raiz["total_count"]:
-        raise ValueError("Quantidade coletada difere de total_count da população inicial.")
+        raise BuscaInstavelError("Quantidade coletada difere de total_count da população inicial.")
     return CandidatosBusca(resultado, {
         "fonte": "github_search_api", "endpoint": ENDPOINT,
         "min_stars": min_stars, "criado_ate": criado_ate,

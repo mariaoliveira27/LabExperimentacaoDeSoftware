@@ -12,6 +12,7 @@ ENV/
 
 # Pytest / Coverage
 .cache
+.*.coleta.lock
 .pytest_cache/
 .coverage
 htmlcov/

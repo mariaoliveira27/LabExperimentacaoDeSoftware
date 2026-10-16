@@ -34,6 +34,29 @@ if not logger.handlers:
     logger.setLevel(logging.INFO)
 
 
+class PaginacaoIncompletaError(RuntimeError):
+    """Falha sem liberar o prefixo de uma listagem como resultado completo."""
+
+    def __init__(self, endpoint, status_code, resposta, paginas_obtidas, itens_obtidos):
+        self.endpoint = endpoint
+        self.status_code = status_code
+        self.resposta = resposta
+        self.paginas_obtidas = paginas_obtidas
+        self.itens_obtidos = itens_obtidos
+        motivo = f"HTTP {status_code}" if status_code is not None else "ciclo no Link"
+        super().__init__(f"Paginação incompleta: {motivo} em {endpoint}.")
+
+
+class APIHTTPTransitorioError(RuntimeError):
+    """Falha HTTP 5xx esgotada, identificável sem interpretar sua mensagem."""
+
+    def __init__(self, status_code, endpoint, tentativas):
+        self.status_code = status_code
+        self.endpoint = endpoint
+        self.tentativas = tentativas
+        super().__init__(f"GitHub API retornou HTTP {status_code} após {tentativas} tentativas em {endpoint}.")
+
+
 class GitHubClient:
     def __init__(
         self,
@@ -63,6 +86,11 @@ class GitHubClient:
         self.max_retries = max_retries
         self.backoff_base_seconds = backoff_base_seconds
         self.safety_margin_seconds = safety_margin_seconds
+        # O coletor paralelo associa sessões distintas ao mesmo controle de cotas.
+        self.controle_cotas = None
+        self.conta_cota = None
+        self.evento_parada = None
+        self.last_response_info = {"origem": "http", "cache_timestamp": None}
 
         if not self.verify_ssl:
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -115,22 +143,24 @@ class GitHubClient:
         return url
 
     def _read_from_cache(self, cache_key: str) -> Optional[Tuple[int, Any, Dict[str, str]]]:
+        self._cache_timestamp = None
         if not self.use_cache:
             return None
         with closing(sqlite3.connect(self.cache_db_path)) as conn, conn:
             row = conn.execute(
-                "SELECT status_code, response_json, response_headers FROM api_cache WHERE cache_key = ? AND state = 'complete'",
+                "SELECT status_code, response_json, response_headers, timestamp FROM api_cache WHERE cache_key = ? AND state = 'complete'",
                 (cache_key,),
             ).fetchone()
             if not row:
                 return None
             try:
-                status_code, data_json, headers_json = row
+                status_code, data_json, headers_json, timestamp = row
                 data = json.loads(data_json)
                 headers = json.loads(headers_json)
                 self._validate_payload(data)
                 if status_code != 200 or not isinstance(headers, dict):
                     raise ValueError("Invalid cached response")
+                self._cache_timestamp = timestamp
                 return status_code, data, headers
             except (TypeError, ValueError):
                 conn.execute(
@@ -233,10 +263,19 @@ class GitHubClient:
 
     def _handle_rate_limit(self, response: requests.Response):
         """Espera após persistir respostas válidas, permitindo interrupção e retomada."""
+        if self.controle_cotas is not None:
+            return  # A resposta completa é liberada; a próxima chamada aguardará.
         delay = self._rate_limit_delay(response)
         if delay is not None:
             logger.warning("Rate limit atingido. Aguardando %.1f segundos...", delay)
-            time.sleep(delay)
+            self._aguardar(delay)
+
+    def _aguardar(self, segundos):
+        if self.evento_parada is None:
+            time.sleep(segundos)
+        elif self.evento_parada.wait(segundos):
+            from controle_cotas import InterrompidaColeta
+            raise InterrompidaColeta("Coleta interrompida; respostas completas preservadas.")
 
     def _is_rate_limit(self, response: requests.Response) -> bool:
         if response.status_code == 429:
@@ -263,16 +302,27 @@ class GitHubClient:
         JSON, persistência ou interrupções deixam a página pendente para retomada.
         """
         url = self._url(endpoint)
+        self.last_response_info = {"origem": "http", "cache_timestamp": None}
+        if self.evento_parada is not None and self.evento_parada.is_set():
+            from controle_cotas import InterrompidaColeta
+            raise InterrompidaColeta("Coleta interrompida; respostas completas preservadas.")
         cache_key = self._get_cache_key(url, params)
         should_cache = self.use_cache and use_cache is not False
         if should_cache:
             cached = self._read_from_cache(cache_key)
             if cached is not None:
+                self.last_response_info = {"origem": "cache", "cache_timestamp": self._cache_timestamp}
                 return cached
             self._mark_pending(cache_key, url)
 
         for attempt in range(self.max_retries + 1):
             backoff = min(self.backoff_base_seconds * (2 ** attempt), 60.0)
+            if self.evento_parada is not None and self.evento_parada.is_set():
+                from controle_cotas import InterrompidaColeta
+                raise InterrompidaColeta("Coleta interrompida; respostas completas preservadas.")
+            if self.controle_cotas is not None:
+                self.controle_cotas.aguardar(self.conta_cota, url)
+            self.last_response_info.update(http_status=None, tentativas=attempt + 1)
             try:
                 response = self.session.get(url, params=params, verify=self.verify_ssl, timeout=30)
             except requests.RequestException as exc:
@@ -281,9 +331,12 @@ class GitHubClient:
                         f"Falha de conexão com a API após {attempt + 1} tentativas."
                     ) from exc
                 logger.warning("Falha transitória de conexão. Nova tentativa em %.1fs.", backoff)
-                time.sleep(backoff)
+                self._aguardar(backoff)
                 continue
 
+            if self.controle_cotas is not None:
+                self.controle_cotas.registrar(self.conta_cota, url, response)
+            self.last_response_info.update(http_status=response.status_code, tentativas=attempt + 1)
             headers = dict(response.headers)
             if response.status_code == 200:
                 # Decoding/validation/storage stay outside the network retry handler:
@@ -297,11 +350,15 @@ class GitHubClient:
 
             if response.status_code >= 500 or self._is_rate_limit(response):
                 if attempt == self.max_retries:
+                    if response.status_code >= 500:
+                        raise APIHTTPTransitorioError(response.status_code, url, attempt + 1)
                     raise RuntimeError(
                         f"GitHub API retornou HTTP {response.status_code} após {attempt + 1} tentativas."
                     )
                 delay = self._rate_limit_delay(response)
-                time.sleep(backoff if delay is None else delay)
+                if delay is None:
+                    delay = max(60.0, backoff) if self._is_rate_limit(response) else backoff
+                self._aguardar(delay)
                 continue
 
             # HTTP errors remain pending; collectors decide whether they are fatal.
@@ -325,18 +382,25 @@ class GitHubClient:
         all_items: List[Dict[str, Any]] = []
         current_url: Optional[str] = endpoint
         current_params = dict(params or {})
+        paginas_obtidas = 0
+        visitadas = set()
 
         while current_url:
+            chave = self._get_cache_key(self._url(current_url), current_params)
+            if chave in visitadas:
+                raise PaginacaoIncompletaError(current_url, None, None, paginas_obtidas, len(all_items))
+            visitadas.add(chave)
             status_code, data, headers = self.request(current_url, params=current_params)
 
             if status_code != 200:
-                raise RuntimeError(f"Paginação incompleta: HTTP {status_code} em {current_url}.")
+                raise PaginacaoIncompletaError(current_url, status_code, data, paginas_obtidas, len(all_items))
             items = data.get("items") if isinstance(data, dict) else data
             if not isinstance(items, list):
                 self.invalidate_cache(current_url, current_params)
                 raise ValueError("Paginação incompleta: resposta sem uma lista de itens.")
 
             all_items.extend(items)
+            paginas_obtidas += 1
             if max_items and len(all_items) >= max_items:
                 return all_items[:max_items]
 

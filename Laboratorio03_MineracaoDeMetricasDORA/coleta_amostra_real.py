@@ -10,27 +10,35 @@ from contextlib import closing
 import hashlib
 import json
 import logging
+import os
 from pathlib import Path
 import re
 import shutil
 import sqlite3
 import subprocess
 import sys
+import time
+import threading
 from datetime import datetime, timezone
 from urllib.parse import quote, urlsplit
+from types import SimpleNamespace
 
 import yaml
 
-from api_client import GitHubClient
+from api_client import GitHubClient, PaginacaoIncompletaError, APIHTTPTransitorioError
 from busca_candidatos import buscar_candidatos
 from coletor_runs import ColetorRuns, VALID_CONCLUSIONS
+from coleta_paralela import exclusividade, qualificar_em_ordem
+from controle_cotas import ControleCotas
 from funil import FunilSelecao
 from gerar_amostra_rotulagem import instante, ler_aprovados, releases_validas, sha256, validar_proveniencia
 from metricas.calculo_metricas import calcular_cfr_ci
 from recuperar_historico import DOI_FONTE, URL_FONTE, MD5_FONTE, INICIO_FONTE, FIM_FONTE, _hashes, _ler_fonte
+from viabilidade_coleta import HistoricoIndisponivelError, verificar_viabilidade
 
 
 logger = logging.getLogger("ColetaAmostraReal")
+AUDITORIA_LOCK = threading.Lock()
 CAMPOS_APROVADOS = (
     "full_name", "owner", "repo", "stars", "language", "default_branch", "created_at",
     "total_releases_janela", "total_runs_janela", "origem_coleta", "origem_metricas_estabilidade",
@@ -46,6 +54,7 @@ class FunilColeta(FunilSelecao):
         tabela = super().gerar_tabela_funil()
         tabela[0]["etapa"] = "1. Candidatos processados da busca pública (stars >= 1000)"
         tabela[1]["motivo_descarte"] = "evidencia_actions_historicos_insuficiente"
+        tabela[2]["motivo_descarte"] = "menos_de_5_releases_na_janela; evidencia_releases_incompleta; tag_de_release_ambigua"
         tabela[3]["etapa"] = "4. Mínimo de 50 workflow runs válidos comprovado por registros disponíveis"
         tabela[3]["motivo_descarte"] = "evidencia_runs_historicos_insuficiente; evidencia_runs_validos_insuficiente"
         return tabela
@@ -201,6 +210,18 @@ def _hash_json(valor):
     return hashlib.sha256(json.dumps(valor, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
 
 
+def _substituir_atomicamente(temporario, destino):
+    """Aguarde bloqueios breves do Windows, mantendo o destino anterior intacto."""
+    for tentativa in range(5):
+        try:
+            temporario.replace(destino)
+            return
+        except PermissionError as exc:
+            if getattr(exc, "winerror", None) not in (5, 32, 33) or tentativa == 4:
+                raise
+            time.sleep(0.05 * 2 ** tentativa)
+
+
 def _json_atomic(path, valor):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -208,7 +229,7 @@ def _json_atomic(path, valor):
     with temporario.open("w", encoding="utf-8") as stream:
         json.dump(valor, stream, ensure_ascii=False, indent=2, allow_nan=False)
         stream.write("\n")
-    temporario.replace(path)
+    _substituir_atomicamente(temporario, path)
 
 
 def _csv_atomic(path, rows, campos):
@@ -218,7 +239,7 @@ def _csv_atomic(path, rows, campos):
         writer = csv.DictWriter(stream, fieldnames=campos)
         writer.writeheader()
         writer.writerows(rows)
-    temporario.replace(path)
+    _substituir_atomicamente(temporario, path)
 
 
 def _invalidar_resposta(client, endpoint, params=None):
@@ -251,10 +272,18 @@ def _workflows(client, nome):
     return data, params
 
 
+class ReleaseTagAmbiguaError(ValueError):
+    """Recursos REST distintos compartilham a mesma tag na janela do estudo."""
+
+    def __init__(self, nome, ambiguidades):
+        self.ambiguidades = ambiguidades
+        super().__init__(f"Tag de release ambígua em {nome}; preservar os IDs distintos para revisão.")
+
+
 def _contar_releases(raw_releases, nome, inicio, fim):
     if not isinstance(raw_releases, list):
         raise ValueError(f"Resposta REST de releases deve ser lista em {nome}.")
-    ids, tags = set(), set()
+    ids, tags = set(), {}
     for rel in raw_releases:
         if not isinstance(rel, dict) or type(rel.get("draft")) is not bool or type(rel.get("prerelease")) is not bool:
             raise ValueError(f"Resposta REST de releases incompleta em {nome}.")
@@ -268,10 +297,14 @@ def _contar_releases(raw_releases, nome, inicio, fim):
         url = urlsplit(rel.get("html_url") or "")
         if url.scheme != "https" or url.netloc != "github.com" or not url.path.startswith(f"/{nome}/releases/"):
             raise ValueError(f"Link direto REST da release inválido em {nome}.")
-        if identificador in ids or tag in tags:
+        if identificador in ids:
             raise ValueError(f"Release duplicada (ID/tag) em {nome}.")
         ids.add(identificador)
-        tags.add(tag)
+        tags.setdefault(tag, []).append(identificador)
+    ambiguidades = [{"tag_name": tag, "release_ids": sorted(identificadores)}
+                    for tag, identificadores in sorted(tags.items()) if len(identificadores) > 1]
+    if ambiguidades:
+        raise ReleaseTagAmbiguaError(nome, ambiguidades)
     return len(ids)
 
 
@@ -427,17 +460,7 @@ class ClienteAuditavel(GitHubClient):
         super().__init__(**kwargs)
 
     def request(self, endpoint, params=None, use_cache=None):
-        cache_info = None
-        if self.use_cache and use_cache is not False:
-            key = self._get_cache_key(self._url(endpoint), params)
-            if self._read_from_cache(key) is not None:
-                with sqlite3.connect(self.cache_db_path) as conn:
-                    cache_info = conn.execute(
-                        "SELECT timestamp FROM api_cache WHERE cache_key=? AND state='complete'", (key,),
-                    ).fetchone()
-        registro = {"registrado_em": agora(), "endpoint": endpoint, "params": params,
-                    "origem": "cache" if cache_info else "http",
-                    "cache_timestamp": cache_info[0] if cache_info else None}
+        registro = {"registrado_em": agora(), "endpoint": endpoint, "params": params}
         try:
             status, data, headers = super().request(endpoint, params=params, use_cache=use_cache)
             registro.update(http_status=status, resposta_sha256=_hash_json(data))
@@ -446,9 +469,11 @@ class ClienteAuditavel(GitHubClient):
             registro["erro"] = type(exc).__name__
             raise
         finally:
-            self.auditoria.parent.mkdir(parents=True, exist_ok=True)
-            with self.auditoria.open("a", encoding="utf-8") as stream:
-                stream.write(json.dumps(registro, ensure_ascii=False) + "\n")
+            registro.update(self.last_response_info)
+            with AUDITORIA_LOCK:
+                self.auditoria.parent.mkdir(parents=True, exist_ok=True)
+                with self.auditoria.open("a", encoding="utf-8") as stream:
+                    stream.write(json.dumps(registro, ensure_ascii=False) + "\n")
 
 
 def token_gh():
@@ -460,6 +485,59 @@ def token_gh():
     if processo.returncode or not processo.stdout.strip():
         raise ValueError("Autenticação gh indisponível; configure GITHUB_TOKEN ou gh auth login.")
     return processo.stdout.strip()
+
+
+def _criar_clientes(config, destino, cache_path, workers, token_envs, usar_gh_auth, evento_parada):
+    api = config.get("api", {})
+    if api.get("base_url", "https://api.github.com").rstrip("/") != "https://api.github.com":
+        raise ValueError("Coleta real exige API pública https://api.github.com.")
+    tokens = []
+    for nome in token_envs:
+        if not isinstance(nome, str) or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", nome):
+            raise ValueError("--token-env aceita somente nomes de variáveis de ambiente.")
+        valor = os.environ.get(nome, "").strip()
+        if not valor:
+            raise ValueError("Uma variável indicada em --token-env não está definida ou está vazia.")
+        if valor in tokens:
+            raise ValueError("Credenciais repetidas; use somente um token por conta.")
+        tokens.append(valor)
+    if not tokens:
+        tokens = [token_gh() if usar_gh_auth else None]
+    controle = ControleCotas(evento_parada, margem=api.get("rate_limit_safety_margin_seconds", 5))
+    clientes, contas = [], []
+    try:
+        for indice in range(workers):
+            client = ClienteAuditavel(
+                destino / "requisicoes.jsonl", token=tokens[indice % len(tokens)],
+                base_url="https://api.github.com", cache_db_path=str(cache_path), verify_ssl=True,
+                max_retries=api.get("max_retries", 5), backoff_base_seconds=api.get("backoff_base_seconds", 1.0),
+                safety_margin_seconds=api.get("rate_limit_safety_margin_seconds", 5),
+            )
+            clientes.append(client)
+            client.evento_parada = evento_parada
+            client.controle_cotas = controle
+            if len(tokens) > 1 and indice < len(tokens):
+                # A identidade é validada antes do pool; /user não entra no cache.
+                client.conta_cota = f"verificacao-{indice}"
+                status, data, headers = client.request("/user", use_cache=False)
+                if status != 200 or not isinstance(data, dict) or type(data.get("id")) is not int or data["id"] <= 0:
+                    raise ValueError("Uma credencial não foi aceita como token de usuário pela API /user.")
+                if data["id"] in contas:
+                    raise ValueError("Tokens da mesma conta compartilham cota; use somente um token por conta.")
+                contas.append(data["id"])
+                controle.registrar(data["id"], "https://api.github.com/user",
+                                   SimpleNamespace(status_code=status, headers=headers, text=""))
+            client.conta_cota = contas[indice % len(tokens)] if len(tokens) > 1 else "conta-unica"
+            # Preserve o token efetivamente resolvido por GITHUB_TOKEN/.env.
+            if indice == 0 and tokens == [None]:
+                tokens[0] = client.token
+        logger.info("Coleta configurada: %s worker(s), %s cota(s) de conta; cache e auditoria compartilhados.",
+                    workers, len(tokens))
+        return clientes
+    except BaseException:
+        for client in clientes:
+            client.session.close()
+        raise
 
 
 def _configuracao(config_path, alvo):
@@ -497,6 +575,27 @@ def _metadata(client, candidate, fim):
     return data
 
 
+def _listar_releases(client, nome):
+    """Reduza o trabalho por pedido em 504, sem concatenar prefixos parciais."""
+    endpoint = f"/repos/{nome}/releases"
+    reinicios = []
+    for tamanho in (100, 25, 5):
+        try:
+            releases = client.paginate(endpoint, params={"per_page": tamanho})
+            return releases, {"completa": True, "per_page_usado": tamanho,
+                              "reinicios_por_504": reinicios}
+        except APIHTTPTransitorioError as exc:
+            if (exc.status_code != 504 or tamanho == 5
+                    or not urlsplit(exc.endpoint).path.rstrip("/").endswith("/releases")):
+                raise
+            reinicios.append({"endpoint": exc.endpoint, "http_status": exc.status_code,
+                              "tentativas": exc.tentativas, "per_page": tamanho})
+            proximo = 25 if tamanho == 100 else 5
+            logger.warning("%s: HTTP 504 com per_page=%s; reiniciando a listagem completa "
+                           "na primeira página com per_page=%s. Prefixos e cache permanecem separados.",
+                           nome, tamanho, proximo)
+
+
 def _qualificar(client, candidato, inicio, fim, criterios, historico=None):
     metadata = _metadata(client, candidato, fim)
     nome = metadata["full_name"]
@@ -517,9 +616,38 @@ def _qualificar(client, candidato, inicio, fim, criterios, historico=None):
         resultado.update(etapa="2. GitHub Actions", motivo="evidencia_actions_historicos_insuficiente")
         return resultado
     resultado["tem_actions"] = True
-    raw_releases = client.paginate(f"/repos/{nome}/releases", params={"per_page": 100})
-    n_releases = _contar_releases(raw_releases, nome, inicio, fim)
+    try:
+        raw_releases, paginacao = _listar_releases(client, nome)
+    except PaginacaoIncompletaError as exc:
+        mensagem = exc.resposta.get("message", "") if isinstance(exc.resposta, dict) else ""
+        limite_releases = (exc.status_code == 422
+                           and urlsplit(exc.endpoint).path.rstrip("/").endswith("/releases")
+                           and isinstance(mensagem, str)
+                           and re.fullmatch(r"Only the first [1-9][0-9]* results are available\.", mensagem))
+        if not limite_releases:
+            raise  # Outras falhas HTTP/schema não viram exclusão científica.
+        resultado.update(
+            etapa="3. Releases na janela", motivo="evidencia_releases_incompleta",
+            qualificacao_inconclusiva=True,
+            paginacao_releases={"endpoint": exc.endpoint, "http_status": exc.status_code,
+                                "mensagem_api": mensagem, "paginas_obtidas": exc.paginas_obtidas,
+                                "itens_obtidos": exc.itens_obtidos, "completa": False},
+        )
+        logger.warning("%s: limite da API de releases; pendência técnica registrada. "
+                       "O prefixo não comprova a janela completa; continuando os demais candidatos.", nome)
+        return resultado
+    resultado["paginacao_releases"] = paginacao
     resultado["releases"] = raw_releases
+    try:
+        n_releases = _contar_releases(raw_releases, nome, inicio, fim)
+    except ReleaseTagAmbiguaError as exc:
+        resultado.update(
+            etapa="3. Releases na janela", motivo="tag_de_release_ambigua",
+            qualificacao_inconclusiva=True, ambiguidades_tags=exc.ambiguidades,
+        )
+        logger.warning("%s: IDs de releases distintos compartilham uma tag na janela; "
+                       "objetos preservados como pendência técnica, sem fundir ou aprovar releases.", nome)
+        return resultado
     resultado["total_releases_janela"] = n_releases
     if n_releases < criterios["min_releases"]:
         resultado.update(etapa="3. Releases na janela", motivo="menos_de_5_releases_na_janela")
@@ -570,7 +698,16 @@ def _qualificar(client, candidato, inicio, fim, criterios, historico=None):
 
 def _checkpoint(destino, resultados, assinatura, busca, status, erro=None):
     aprovados = [item["registro"] for item in resultados if item["aprovado"]]
+    pendentes = [item for item in resultados if item.get("qualificacao_inconclusiva")]
     _csv_atomic(destino / "repositorios_aprovados_parcial.csv", aprovados, CAMPOS_PARCIAIS)
+    _csv_atomic(destino / "pendencias_tecnicas.csv", [
+        {"full_name": item["full_name"], "motivo": item["motivo"],
+         **{campo: item.get("paginacao_releases", {}).get(campo) for campo in
+            ("endpoint", "http_status", "paginas_obtidas", "itens_obtidos")},
+         "detalhes": json.dumps({"ambiguidades_tags": item["ambiguidades_tags"]}, ensure_ascii=False)
+         if "ambiguidades_tags" in item else ""}
+        for item in pendentes
+    ], ("full_name", "motivo", "endpoint", "http_status", "paginas_obtidas", "itens_obtidos", "detalhes"))
     funil = FunilColeta(target_approved=assinatura["alvo"])
     for item in resultados:
         repo = {"full_name": item["full_name"]}
@@ -582,19 +719,55 @@ def _checkpoint(destino, resultados, assinatura, busca, status, erro=None):
         if item["aprovado"]:
             funil.aprovar_repositorio(repo)
         else:
-            detalhes = {key: item[key] for key in ("total_releases_janela", "total_runs_janela", "runs_disponiveis_api", "escopo_contagem_runs") if key in item}
+            detalhes = {key: item[key] for key in ("total_releases_janela", "total_runs_janela", "runs_disponiveis_api", "escopo_contagem_runs", "qualificacao_inconclusiva", "paginacao_releases", "ambiguidades_tags") if key in item}
             funil.registrar_descarte(item["full_name"], item["etapa"], item["motivo"], json.dumps(detalhes))
     funil.salvar_relatorios(str(destino / "funil_selecao.csv"), str(destino / "funil_selecao.md"), str(destino / "descartes.csv"))
     estado = {**assinatura, "status": status, "atualizado_em": agora(), "n_processados": len(resultados),
-              "n_aprovados": len(aprovados), "busca": busca, "erro": erro,
+              "n_aprovados": len(aprovados), "n_pendencias_tecnicas": len(pendentes), "busca": busca, "erro": erro,
               "snapshots": {f"{item['candidate_id']}.json": item.get("_snapshot_sha256") or sha256(destino / "qualificacoes" / f"{item['candidate_id']}.json") for item in resultados},
               "pendencia": None if status == "completa" else "Obter pelo menos 300 aprovados reais na janela; não gerar rotulagem com a coleta parcial."}
     _json_atomic(destino / "estado.json", estado)
     return estado
 
 
+def _verificar_viabilidade_registrada(destino, inicio, fim, alvo, historico, resultados=None):
+    try:
+        verificar_viabilidade(destino, inicio, fim, alvo, historico=historico, resultados=resultados)
+    except HistoricoIndisponivelError as exc:
+        path = Path(destino) / "diagnostico_viabilidade.json"
+        _json_atomic(path, exc.diagnostico)
+        logger.error("Coleta bloqueada por disponibilidade histórica. Diagnóstico: %s", path)
+        raise
+
+
 def coletar(config_path="config.yaml", saida="data/coleta_final", alvo=300, limite_candidatos=5000,
-            client=None, usar_gh_auth=False, cache_historico=None, reavaliar=False, historico_zenodo=None):
+            client=None, usar_gh_auth=False, cache_historico=None, reavaliar=False, historico_zenodo=None,
+            workers=1, token_envs=None):
+    if type(workers) is not int or not 1 <= workers <= 8:
+        raise ValueError("workers deve ser um inteiro entre 1 e 8.")
+    if isinstance(token_envs, str):
+        raise ValueError("token_envs deve ser uma lista de nomes de variáveis.")
+    token_envs = list(token_envs or [])
+    if usar_gh_auth and token_envs:
+        raise ValueError("Escolha --usar-gh-auth ou --token-env, sem combiná-los.")
+    if len(token_envs) > workers:
+        raise ValueError("--workers deve ser pelo menos o número de variáveis --token-env.")
+    if client is not None and (workers != 1 or token_envs):
+        raise ValueError("Cliente injetado é exclusivo do modo sequencial; cada worker precisa de sua própria sessão.")
+    evento_parada, recursos = threading.Event(), []
+    with exclusividade(saida):
+        try:
+            return _coletar(config_path, saida, alvo, limite_candidatos, client, usar_gh_auth,
+                            cache_historico, reavaliar, historico_zenodo,
+                            workers, token_envs, evento_parada, recursos)
+        finally:
+            evento_parada.set()
+            for recurso in recursos:
+                recurso.session.close()
+
+
+def _coletar(config_path, saida, alvo, limite_candidatos, client, usar_gh_auth,
+             cache_historico, reavaliar, historico_zenodo, workers, token_envs, evento_parada, recursos):
     config, inicio, fim, criterios, assinatura = _configuracao(config_path, alvo)
     historico = _carregar_historico_zenodo(historico_zenodo, inicio, fim) if historico_zenodo else None
     if historico is not None:
@@ -628,16 +801,6 @@ def coletar(config_path="config.yaml", saida="data/coleta_final", alvo=300, limi
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     if cache_historico:
         _importar_cache_historico(destino, cache_path, cache_historico)
-    if client is None:
-        api = config.get("api", {})
-        if api.get("base_url", "https://api.github.com").rstrip("/") != "https://api.github.com":
-            raise ValueError("Coleta real exige API pública https://api.github.com.")
-        client = ClienteAuditavel(
-            destino / "requisicoes.jsonl", token=token_gh() if usar_gh_auth else None,
-            base_url="https://api.github.com", cache_db_path=str(cache_path), verify_ssl=True,
-            max_retries=api.get("max_retries", 5), backoff_base_seconds=api.get("backoff_base_seconds", 1.0),
-            safety_margin_seconds=api.get("rate_limit_safety_margin_seconds", 5),
-        )
     snapshots = destino / "qualificacoes"
     snapshots.mkdir(exist_ok=True)
     resultados = []
@@ -649,6 +812,15 @@ def coletar(config_path="config.yaml", saida="data/coleta_final", alvo=300, limi
                           if k in estado_anterior}
         if contrato_estado != assinatura and not reavaliar:
             raise ValueError("Assinatura do checkpoint diverge da fonte atual; uma reavaliação pode ter sido interrompida. Use --reavaliar.")
+    # Verifique o checkpoint leve antes de ler gigabytes de snapshots, autenticar
+    # ou consultar uma nova lista de candidatos sem histórico utilizável.
+    _verificar_viabilidade_registrada(destino, inicio, fim, alvo, historico)
+    if client is None:
+        clientes = _criar_clientes(config, destino, cache_path, workers, token_envs, usar_gh_auth, evento_parada)
+        recursos.extend(clientes)
+        client = clientes[0]
+    else:
+        clientes = [client]
     anteriores = estado_anterior.get("snapshots", {})
     for nome_snapshot, hash_snapshot in sorted(anteriores.items()):
         if not re.fullmatch(r"[1-9][0-9]*\.json", nome_snapshot):
@@ -662,25 +834,40 @@ def coletar(config_path="config.yaml", saida="data/coleta_final", alvo=300, limi
         resultados = []
         _checkpoint(destino, resultados, assinatura, None, "reavaliando")
     vistos = {item["candidate_id"] for item in resultados}
+    zeros_historicos = sum(item.get("motivo") == "evidencia_runs_historicos_insuficiente"
+                           and item.get("runs_disponiveis_api") == 0 for item in resultados)
     busca_info = None
     try:
         candidatos = buscar_candidatos(client, min_stars=criterios["min_stars"], criado_ate=fim.date().isoformat(), max_candidatos=limite_candidatos)
         busca_info = getattr(candidatos, "relatorio", {"max_candidatos": limite_candidatos, "n_candidatos": len(candidatos)})
+        if historico is not None:
+            n_com_historico = sum(c["id"] in historico.runs_por_id for c in candidatos)
+            busca_info["candidatos_com_runs_no_arquivo"] = n_com_historico
+            logger.info("Histórico recuperado: %s repositórios com runs exportados; %s estão nesta lista. "
+                        "Esses registros ainda exigem verificar branch, metadados e releases; "
+                        "a API ou fontes adicionais precisam comprovar os demais aprovados.",
+                        len(historico.runs_por_id), n_com_historico)
         _json_atomic(destino / "candidatos.json", candidatos)
         _json_atomic(destino / "busca.json", busca_info)
-        for candidato in candidatos:
-            if sum(item["aprovado"] for item in resultados) >= alvo:
-                break
-            if candidato["id"] in vistos:
-                continue
-            item = _qualificar(client, candidato, inicio, fim, criterios, historico)
-            snapshot_path = snapshots / f"{candidato['id']}.json"
-            _json_atomic(snapshot_path, item)
-            item["_snapshot_sha256"] = sha256(snapshot_path)
-            resultados.append(item)
-            vistos.add(candidato["id"])
-            estado = _checkpoint(destino, resultados, assinatura, busca_info, "em_andamento")
-            logger.info("Progresso: %s/%s candidatos; %s/%s aprovados. %s: %s", len(resultados), len(candidatos), estado["n_aprovados"], alvo, item["full_name"], item["motivo"] or "aprovado")
+        if sum(item["aprovado"] for item in resultados) < alvo:
+            pendentes = (c for c in candidatos if c["id"] not in vistos)
+            qualificar = lambda api, c: _qualificar(api, c, inicio, fim, criterios, historico)
+            with closing(qualificar_em_ordem(pendentes, clientes, qualificar, evento_parada)) as tarefas:
+                for candidato, item in tarefas:
+                    snapshot_path = snapshots / f"{candidato['id']}.json"
+                    _json_atomic(snapshot_path, item)
+                    item["_snapshot_sha256"] = sha256(snapshot_path)
+                    resultados.append(item)
+                    vistos.add(candidato["id"])
+                    estado = _checkpoint(destino, resultados, assinatura, busca_info, "em_andamento")
+                    logger.info("Progresso: %s/%s candidatos; %s/%s aprovados. %s: %s", len(resultados), len(candidatos), estado["n_aprovados"], alvo, item["full_name"], item["motivo"] or "aprovado")
+                    if (item.get("motivo") == "evidencia_runs_historicos_insuficiente"
+                            and item.get("runs_disponiveis_api") == 0):
+                        zeros_historicos += 1
+                        if zeros_historicos == 100:
+                            _verificar_viabilidade_registrada(destino, inicio, fim, alvo, historico, resultados)
+                    if estado["n_aprovados"] >= alvo:
+                        break
         aprovados = sorted((item["registro"] for item in resultados if item["aprovado"]), key=lambda row: row["full_name"])
         if len(aprovados) < alvo:
             return _checkpoint(destino, resultados, assinatura, busca_info, "insuficiente")
@@ -705,7 +892,11 @@ def coletar(config_path="config.yaml", saida="data/coleta_final", alvo=300, limi
             stream.write("\n")
         return _checkpoint(destino, resultados, assinatura, busca_info, "completa")
     except (Exception, KeyboardInterrupt) as exc:
-        _checkpoint(destino, resultados, assinatura, busca_info, "interrompida", f"{type(exc).__name__}: {exc}")
+        status = "historico_indisponivel" if isinstance(exc, HistoricoIndisponivelError) else "interrompida"
+        _checkpoint(destino, resultados, assinatura, busca_info, status, f"{type(exc).__name__}: {exc}")
+        if isinstance(exc, HistoricoIndisponivelError):
+            exc.diagnostico["estado_apos_bloqueio_sha256"] = sha256(estado_path)
+            _json_atomic(destino / "diagnostico_viabilidade.json", exc.diagnostico)
         raise
 
 
@@ -715,6 +906,9 @@ def main(argv=None):
     parser.add_argument("--saida", default="data/coleta_final")
     parser.add_argument("--alvo", type=int, default=300)
     parser.add_argument("--limite-candidatos", type=int, default=5000)
+    parser.add_argument("--workers", type=int, default=1, help="Repositórios em paralelo (1 a 8); um único escritor de checkpoint")
+    parser.add_argument("--token-env", action="append", default=[], metavar="NOME_ENV",
+                        help="Nome da variável com um token; repetível para contas distintas. Nunca passe o valor do token")
     parser.add_argument("--usar-gh-auth", action="store_true")
     parser.add_argument("--cache-historico", help="SQLite real previamente coletado; importa uma cópia consistente sem alterar a fonte")
     parser.add_argument("--historico-zenodo", help="Diretório emitido por recuperar_historico.py; verifica fonte, hashes e janela antes de usar runs reais")
@@ -723,9 +917,17 @@ def main(argv=None):
     try:
         estado = coletar(args.config, args.saida, args.alvo, args.limite_candidatos,
                         usar_gh_auth=args.usar_gh_auth, cache_historico=args.cache_historico,
-                        reavaliar=args.reavaliar, historico_zenodo=args.historico_zenodo)
+                        reavaliar=args.reavaliar, historico_zenodo=args.historico_zenodo,
+                        workers=args.workers, token_envs=args.token_env)
+    except HistoricoIndisponivelError as exc:
+        print(f"Coleta bloqueada por indisponibilidade histórica: {str(exc).rstrip('.')}. "
+              "O progresso foi preservado. Veja diagnostico_viabilidade.json na saída. "
+              "Não repita a coleta com as mesmas fontes: obtenha um cache histórico real suficiente "
+              "ou autorização do professor para revisar a janela e a duração do estudo.", file=sys.stderr)
+        return 2
     except (Exception, KeyboardInterrupt) as exc:
-        print(f"Coleta interrompida: {exc}. As respostas completas ficam em cache para retomada.", file=sys.stderr)
+        print(f"Coleta interrompida: {str(exc).rstrip('.')}. As respostas completas ficam em cache para retomada. "
+              "Repita o mesmo comando, sem --reavaliar, para tentar os candidatos ainda não concluídos.", file=sys.stderr)
         return 2
     if estado["status"] != "completa":
         print(f"Coleta real insuficiente: {estado['n_aprovados']}/{estado['alvo']} aprovados em {estado['n_processados']} candidatos consultados. "
