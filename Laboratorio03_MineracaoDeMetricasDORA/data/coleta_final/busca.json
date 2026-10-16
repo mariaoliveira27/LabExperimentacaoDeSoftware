@@ -3,10 +3,10 @@
   "endpoint": "/search/repositories",
   "min_stars": 1000,
   "criado_ate": "2024-09-30",
-  "max_candidatos": 100,
-  "total_count_raiz": 58459,
-  "candidatos_coletados": 219,
-  "candidatos_retornados": 100,
+  "max_candidatos": 5000,
+  "total_count_raiz": 58470,
+  "candidatos_coletados": 5194,
+  "candidatos_retornados": 5000,
   "limitado_por_max_candidatos": true,
   "busca_completa": false,
   "ordenacao": "stargazers_count desc, full_name casefold asc, id asc",
@@ -17,72 +17,634 @@
       "order": "desc",
       "per_page": 100,
       "page": 1,
+      "total_count": 58470,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:277358..553714 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 11,
+      "items_recebidos": 11
+    },
+    {
+      "q": "stars:1000..277357 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
       "total_count": 58459,
       "items_recebidos": 100
     },
     {
-      "q": "stars:277113..553225 created:<=2024-09-30 is:public",
+      "q": "stars:139179..277357 created:<=2024-09-30 is:public",
       "sort": "stars",
       "order": "desc",
       "per_page": 100,
       "page": 1,
-      "total_count": 12,
-      "items_recebidos": 12
+      "total_count": 46,
+      "items_recebidos": 46
     },
     {
-      "q": "stars:1000..277112 created:<=2024-09-30 is:public",
+      "q": "stars:1000..139178 created:<=2024-09-30 is:public",
       "sort": "stars",
       "order": "desc",
       "per_page": 100,
       "page": 1,
-      "total_count": 58447,
+      "total_count": 58413,
       "items_recebidos": 100
     },
     {
-      "q": "stars:139057..277112 created:<=2024-09-30 is:public",
+      "q": "stars:70090..139178 created:<=2024-09-30 is:public",
       "sort": "stars",
       "order": "desc",
       "per_page": 100,
       "page": 1,
-      "total_count": 45,
-      "items_recebidos": 45
-    },
-    {
-      "q": "stars:1000..139056 created:<=2024-09-30 is:public",
-      "sort": "stars",
-      "order": "desc",
-      "per_page": 100,
-      "page": 1,
-      "total_count": 58402,
+      "total_count": 161,
       "items_recebidos": 100
     },
     {
-      "q": "stars:70029..139056 created:<=2024-09-30 is:public",
+      "q": "stars:1000..70089 created:<=2024-09-30 is:public",
       "sort": "stars",
       "order": "desc",
       "per_page": 100,
       "page": 1,
-      "total_count": 162,
+      "total_count": 58252,
       "items_recebidos": 100
     },
     {
-      "q": "stars:1000..70028 created:<=2024-09-30 is:public",
-      "sort": "stars",
-      "order": "desc",
-      "per_page": 100,
-      "page": 1,
-      "total_count": 58240,
-      "items_recebidos": 100
-    },
-    {
-      "q": "stars:70029..139056 created:<=2024-09-30 is:public",
+      "q": "stars:70090..139178 created:<=2024-09-30 is:public",
       "sort": "stars",
       "order": "desc",
       "per_page": 100,
       "page": 2,
-      "total_count": 162,
-      "items_recebidos": 62
+      "total_count": 161,
+      "items_recebidos": 61
+    },
+    {
+      "q": "stars:35545..70089 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 552,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:1000..35544 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 57700,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:35545..70089 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 2,
+      "total_count": 552,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:35545..70089 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 3,
+      "total_count": 552,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:35545..70089 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 4,
+      "total_count": 552,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:35545..70089 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 5,
+      "total_count": 552,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:35545..70089 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 6,
+      "total_count": 552,
+      "items_recebidos": 52
+    },
+    {
+      "q": "stars:18273..35544 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 1458,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:1000..18272 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 56242,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:26909..35544 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 493,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:18273..26908 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 965,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:26909..35544 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 2,
+      "total_count": 493,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:26909..35544 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 3,
+      "total_count": 493,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:26909..35544 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 4,
+      "total_count": 493,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:26909..35544 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 5,
+      "total_count": 493,
+      "items_recebidos": 93
+    },
+    {
+      "q": "stars:18273..26908 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 2,
+      "total_count": 965,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:18273..26908 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 3,
+      "total_count": 965,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:18273..26908 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 4,
+      "total_count": 965,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:18273..26908 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 5,
+      "total_count": 965,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:18273..26908 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 6,
+      "total_count": 965,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:18273..26908 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 7,
+      "total_count": 965,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:18273..26908 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 8,
+      "total_count": 965,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:18273..26908 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 9,
+      "total_count": 965,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:18273..26908 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 10,
+      "total_count": 965,
+      "items_recebidos": 65
+    },
+    {
+      "q": "stars:9637..18272 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 2966,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:1000..9636 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 53276,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:13955..18272 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 1031,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:9637..13954 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 1935,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:16114..18272 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 440,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:13955..16113 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 591,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:16114..18272 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 2,
+      "total_count": 440,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:16114..18272 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 3,
+      "total_count": 440,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:16114..18272 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 4,
+      "total_count": 440,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:16114..18272 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 5,
+      "total_count": 440,
+      "items_recebidos": 40
+    },
+    {
+      "q": "stars:13955..16113 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 2,
+      "total_count": 591,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:13955..16113 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 3,
+      "total_count": 591,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:13955..16113 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 4,
+      "total_count": 591,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:13955..16113 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 5,
+      "total_count": 591,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:13955..16113 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 6,
+      "total_count": 591,
+      "items_recebidos": 91
+    },
+    {
+      "q": "stars:11796..13954 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 808,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:9637..11795 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 1127,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:11796..13954 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 2,
+      "total_count": 808,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:11796..13954 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 3,
+      "total_count": 808,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:11796..13954 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 4,
+      "total_count": 808,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:11796..13954 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 5,
+      "total_count": 808,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:11796..13954 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 6,
+      "total_count": 808,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:11796..13954 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 7,
+      "total_count": 808,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:11796..13954 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 8,
+      "total_count": 808,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:11796..13954 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 9,
+      "total_count": 808,
+      "items_recebidos": 8
+    },
+    {
+      "q": "stars:10717..11795 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 504,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:9637..10716 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 623,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:10717..11795 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 2,
+      "total_count": 504,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:10717..11795 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 3,
+      "total_count": 504,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:10717..11795 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 4,
+      "total_count": 504,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:10717..11795 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 5,
+      "total_count": 504,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:10717..11795 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 6,
+      "total_count": 504,
+      "items_recebidos": 4
+    },
+    {
+      "q": "stars:9637..10716 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 2,
+      "total_count": 623,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:9637..10716 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 3,
+      "total_count": 623,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:9637..10716 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 4,
+      "total_count": 623,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:9637..10716 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 5,
+      "total_count": 623,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:9637..10716 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 6,
+      "total_count": 623,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:9637..10716 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 7,
+      "total_count": 623,
+      "items_recebidos": 23
     }
   ],
-  "observacao": "Candidatos de busca; a aprovação por releases e runs ainda não foi realizada."
+  "observacao": "Candidatos de busca; a aprovação por releases e runs ainda não foi realizada.",
+  "cache_busca": "ignorado; respostas atuais da API",
+  "tentativas_utilizadas": 1,
+  "rodadas_descartadas": [],
+  "candidatos_com_runs_no_arquivo": 3
 }

@@ -1,0 +1,9 @@
+full_name,motivo,endpoint,http_status,paginas_obtidas,itens_obtidos
+brave/brave-browser,evidencia_releases_incompleta,https://api.github.com/repositories/110178895/releases?per_page=100&page=101,422,100,10000
+Effect-TS/effect,evidencia_releases_incompleta,https://api.github.com/repositories/221458136/releases?per_page=100&page=101,422,100,10000
+udecode/plate,evidencia_releases_incompleta,https://api.github.com/repositories/225260962/releases?per_page=100&page=101,422,100,10000
+CleverRaven/Cataclysm-DDA,evidencia_releases_incompleta,https://api.github.com/repositories/5973855/releases?per_page=100&page=101,422,100,10000
+microsoft/fluentui,evidencia_releases_incompleta,https://api.github.com/repositories/60537144/releases?per_page=100&page=101,422,100,10000
+vercel/ai,evidencia_releases_incompleta,https://api.github.com/repositories/644461337/releases?per_page=100&page=101,422,100,10000
+renovatebot/renovate,evidencia_releases_incompleta,https://api.github.com/repositories/76734068/releases?per_page=100&page=101,422,100,10000
+googleapis/google-api-nodejs-client,evidencia_releases_incompleta,https://api.github.com/repositories/8608480/releases?per_page=100&page=101,422,100,10000
