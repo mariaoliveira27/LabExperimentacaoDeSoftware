@@ -34,6 +34,7 @@ from funil import FunilSelecao
 from gerar_amostra_rotulagem import instante, ler_aprovados, releases_validas, sha256, validar_proveniencia
 from metricas.calculo_metricas import calcular_cfr_ci
 from recuperar_historico import DOI_FONTE, URL_FONTE, MD5_FONTE, INICIO_FONTE, FIM_FONTE, _hashes, _ler_fonte
+from viabilidade_coleta import HistoricoIndisponivelError, verificar_viabilidade
 
 
 logger = logging.getLogger("ColetaAmostraReal")
@@ -53,7 +54,7 @@ class FunilColeta(FunilSelecao):
         tabela = super().gerar_tabela_funil()
         tabela[0]["etapa"] = "1. Candidatos processados da busca pública (stars >= 1000)"
         tabela[1]["motivo_descarte"] = "evidencia_actions_historicos_insuficiente"
-        tabela[2]["motivo_descarte"] = "menos_de_5_releases_na_janela; evidencia_releases_incompleta"
+        tabela[2]["motivo_descarte"] = "menos_de_5_releases_na_janela; evidencia_releases_incompleta; tag_de_release_ambigua"
         tabela[3]["etapa"] = "4. Mínimo de 50 workflow runs válidos comprovado por registros disponíveis"
         tabela[3]["motivo_descarte"] = "evidencia_runs_historicos_insuficiente; evidencia_runs_validos_insuficiente"
         return tabela
@@ -271,10 +272,18 @@ def _workflows(client, nome):
     return data, params
 
 
+class ReleaseTagAmbiguaError(ValueError):
+    """Recursos REST distintos compartilham a mesma tag na janela do estudo."""
+
+    def __init__(self, nome, ambiguidades):
+        self.ambiguidades = ambiguidades
+        super().__init__(f"Tag de release ambígua em {nome}; preservar os IDs distintos para revisão.")
+
+
 def _contar_releases(raw_releases, nome, inicio, fim):
     if not isinstance(raw_releases, list):
         raise ValueError(f"Resposta REST de releases deve ser lista em {nome}.")
-    ids, tags = set(), set()
+    ids, tags = set(), {}
     for rel in raw_releases:
         if not isinstance(rel, dict) or type(rel.get("draft")) is not bool or type(rel.get("prerelease")) is not bool:
             raise ValueError(f"Resposta REST de releases incompleta em {nome}.")
@@ -288,10 +297,14 @@ def _contar_releases(raw_releases, nome, inicio, fim):
         url = urlsplit(rel.get("html_url") or "")
         if url.scheme != "https" or url.netloc != "github.com" or not url.path.startswith(f"/{nome}/releases/"):
             raise ValueError(f"Link direto REST da release inválido em {nome}.")
-        if identificador in ids or tag in tags:
+        if identificador in ids:
             raise ValueError(f"Release duplicada (ID/tag) em {nome}.")
         ids.add(identificador)
-        tags.add(tag)
+        tags.setdefault(tag, []).append(identificador)
+    ambiguidades = [{"tag_name": tag, "release_ids": sorted(identificadores)}
+                    for tag, identificadores in sorted(tags.items()) if len(identificadores) > 1]
+    if ambiguidades:
+        raise ReleaseTagAmbiguaError(nome, ambiguidades)
     return len(ids)
 
 
@@ -624,8 +637,17 @@ def _qualificar(client, candidato, inicio, fim, criterios, historico=None):
                        "O prefixo não comprova a janela completa; continuando os demais candidatos.", nome)
         return resultado
     resultado["paginacao_releases"] = paginacao
-    n_releases = _contar_releases(raw_releases, nome, inicio, fim)
     resultado["releases"] = raw_releases
+    try:
+        n_releases = _contar_releases(raw_releases, nome, inicio, fim)
+    except ReleaseTagAmbiguaError as exc:
+        resultado.update(
+            etapa="3. Releases na janela", motivo="tag_de_release_ambigua",
+            qualificacao_inconclusiva=True, ambiguidades_tags=exc.ambiguidades,
+        )
+        logger.warning("%s: IDs de releases distintos compartilham uma tag na janela; "
+                       "objetos preservados como pendência técnica, sem fundir ou aprovar releases.", nome)
+        return resultado
     resultado["total_releases_janela"] = n_releases
     if n_releases < criterios["min_releases"]:
         resultado.update(etapa="3. Releases na janela", motivo="menos_de_5_releases_na_janela")
@@ -680,10 +702,12 @@ def _checkpoint(destino, resultados, assinatura, busca, status, erro=None):
     _csv_atomic(destino / "repositorios_aprovados_parcial.csv", aprovados, CAMPOS_PARCIAIS)
     _csv_atomic(destino / "pendencias_tecnicas.csv", [
         {"full_name": item["full_name"], "motivo": item["motivo"],
-         **{campo: item["paginacao_releases"][campo] for campo in
-            ("endpoint", "http_status", "paginas_obtidas", "itens_obtidos")}}
+         **{campo: item.get("paginacao_releases", {}).get(campo) for campo in
+            ("endpoint", "http_status", "paginas_obtidas", "itens_obtidos")},
+         "detalhes": json.dumps({"ambiguidades_tags": item["ambiguidades_tags"]}, ensure_ascii=False)
+         if "ambiguidades_tags" in item else ""}
         for item in pendentes
-    ], ("full_name", "motivo", "endpoint", "http_status", "paginas_obtidas", "itens_obtidos"))
+    ], ("full_name", "motivo", "endpoint", "http_status", "paginas_obtidas", "itens_obtidos", "detalhes"))
     funil = FunilColeta(target_approved=assinatura["alvo"])
     for item in resultados:
         repo = {"full_name": item["full_name"]}
@@ -695,7 +719,7 @@ def _checkpoint(destino, resultados, assinatura, busca, status, erro=None):
         if item["aprovado"]:
             funil.aprovar_repositorio(repo)
         else:
-            detalhes = {key: item[key] for key in ("total_releases_janela", "total_runs_janela", "runs_disponiveis_api", "escopo_contagem_runs", "qualificacao_inconclusiva", "paginacao_releases") if key in item}
+            detalhes = {key: item[key] for key in ("total_releases_janela", "total_runs_janela", "runs_disponiveis_api", "escopo_contagem_runs", "qualificacao_inconclusiva", "paginacao_releases", "ambiguidades_tags") if key in item}
             funil.registrar_descarte(item["full_name"], item["etapa"], item["motivo"], json.dumps(detalhes))
     funil.salvar_relatorios(str(destino / "funil_selecao.csv"), str(destino / "funil_selecao.md"), str(destino / "descartes.csv"))
     estado = {**assinatura, "status": status, "atualizado_em": agora(), "n_processados": len(resultados),
@@ -704,6 +728,16 @@ def _checkpoint(destino, resultados, assinatura, busca, status, erro=None):
               "pendencia": None if status == "completa" else "Obter pelo menos 300 aprovados reais na janela; não gerar rotulagem com a coleta parcial."}
     _json_atomic(destino / "estado.json", estado)
     return estado
+
+
+def _verificar_viabilidade_registrada(destino, inicio, fim, alvo, historico, resultados=None):
+    try:
+        verificar_viabilidade(destino, inicio, fim, alvo, historico=historico, resultados=resultados)
+    except HistoricoIndisponivelError as exc:
+        path = Path(destino) / "diagnostico_viabilidade.json"
+        _json_atomic(path, exc.diagnostico)
+        logger.error("Coleta bloqueada por disponibilidade histórica. Diagnóstico: %s", path)
+        raise
 
 
 def coletar(config_path="config.yaml", saida="data/coleta_final", alvo=300, limite_candidatos=5000,
@@ -767,12 +801,6 @@ def _coletar(config_path, saida, alvo, limite_candidatos, client, usar_gh_auth,
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     if cache_historico:
         _importar_cache_historico(destino, cache_path, cache_historico)
-    if client is None:
-        clientes = _criar_clientes(config, destino, cache_path, workers, token_envs, usar_gh_auth, evento_parada)
-        recursos.extend(clientes)
-        client = clientes[0]
-    else:
-        clientes = [client]
     snapshots = destino / "qualificacoes"
     snapshots.mkdir(exist_ok=True)
     resultados = []
@@ -784,6 +812,15 @@ def _coletar(config_path, saida, alvo, limite_candidatos, client, usar_gh_auth,
                           if k in estado_anterior}
         if contrato_estado != assinatura and not reavaliar:
             raise ValueError("Assinatura do checkpoint diverge da fonte atual; uma reavaliação pode ter sido interrompida. Use --reavaliar.")
+    # Verifique o checkpoint leve antes de ler gigabytes de snapshots, autenticar
+    # ou consultar uma nova lista de candidatos sem histórico utilizável.
+    _verificar_viabilidade_registrada(destino, inicio, fim, alvo, historico)
+    if client is None:
+        clientes = _criar_clientes(config, destino, cache_path, workers, token_envs, usar_gh_auth, evento_parada)
+        recursos.extend(clientes)
+        client = clientes[0]
+    else:
+        clientes = [client]
     anteriores = estado_anterior.get("snapshots", {})
     for nome_snapshot, hash_snapshot in sorted(anteriores.items()):
         if not re.fullmatch(r"[1-9][0-9]*\.json", nome_snapshot):
@@ -797,6 +834,8 @@ def _coletar(config_path, saida, alvo, limite_candidatos, client, usar_gh_auth,
         resultados = []
         _checkpoint(destino, resultados, assinatura, None, "reavaliando")
     vistos = {item["candidate_id"] for item in resultados}
+    zeros_historicos = sum(item.get("motivo") == "evidencia_runs_historicos_insuficiente"
+                           and item.get("runs_disponiveis_api") == 0 for item in resultados)
     busca_info = None
     try:
         candidatos = buscar_candidatos(client, min_stars=criterios["min_stars"], criado_ate=fim.date().isoformat(), max_candidatos=limite_candidatos)
@@ -822,6 +861,11 @@ def _coletar(config_path, saida, alvo, limite_candidatos, client, usar_gh_auth,
                     vistos.add(candidato["id"])
                     estado = _checkpoint(destino, resultados, assinatura, busca_info, "em_andamento")
                     logger.info("Progresso: %s/%s candidatos; %s/%s aprovados. %s: %s", len(resultados), len(candidatos), estado["n_aprovados"], alvo, item["full_name"], item["motivo"] or "aprovado")
+                    if (item.get("motivo") == "evidencia_runs_historicos_insuficiente"
+                            and item.get("runs_disponiveis_api") == 0):
+                        zeros_historicos += 1
+                        if zeros_historicos == 100:
+                            _verificar_viabilidade_registrada(destino, inicio, fim, alvo, historico, resultados)
                     if estado["n_aprovados"] >= alvo:
                         break
         aprovados = sorted((item["registro"] for item in resultados if item["aprovado"]), key=lambda row: row["full_name"])
@@ -848,7 +892,11 @@ def _coletar(config_path, saida, alvo, limite_candidatos, client, usar_gh_auth,
             stream.write("\n")
         return _checkpoint(destino, resultados, assinatura, busca_info, "completa")
     except (Exception, KeyboardInterrupt) as exc:
-        _checkpoint(destino, resultados, assinatura, busca_info, "interrompida", f"{type(exc).__name__}: {exc}")
+        status = "historico_indisponivel" if isinstance(exc, HistoricoIndisponivelError) else "interrompida"
+        _checkpoint(destino, resultados, assinatura, busca_info, status, f"{type(exc).__name__}: {exc}")
+        if isinstance(exc, HistoricoIndisponivelError):
+            exc.diagnostico["estado_apos_bloqueio_sha256"] = sha256(estado_path)
+            _json_atomic(destino / "diagnostico_viabilidade.json", exc.diagnostico)
         raise
 
 
@@ -871,6 +919,12 @@ def main(argv=None):
                         usar_gh_auth=args.usar_gh_auth, cache_historico=args.cache_historico,
                         reavaliar=args.reavaliar, historico_zenodo=args.historico_zenodo,
                         workers=args.workers, token_envs=args.token_env)
+    except HistoricoIndisponivelError as exc:
+        print(f"Coleta bloqueada por indisponibilidade histórica: {str(exc).rstrip('.')}. "
+              "O progresso foi preservado. Veja diagnostico_viabilidade.json na saída. "
+              "Não repita a coleta com as mesmas fontes: obtenha um cache histórico real suficiente "
+              "ou autorização do professor para revisar a janela e a duração do estudo.", file=sys.stderr)
+        return 2
     except (Exception, KeyboardInterrupt) as exc:
         print(f"Coleta interrompida: {str(exc).rstrip('.')}. As respostas completas ficam em cache para retomada. "
               "Repita o mesmo comando, sem --reavaliar, para tentar os candidatos ainda não concluídos.", file=sys.stderr)
