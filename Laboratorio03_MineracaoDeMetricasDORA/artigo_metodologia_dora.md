@@ -3,7 +3,7 @@
 **Disciplina:** Laboratório de Experimentação de Software  
 **Responsáveis:** Vinícius (definições operacionais e heurística de CFR(b)); Áulus (amostragem, concordância e revisão do protocolo de validação humana).
 
-**Contexto:** Lab03 — Mineração de Métricas DORA (Sprint 02 / Lab03S02). O trabalho de Áulus está relacionado às Issues #61 (sorteio), #70 (concordância e consenso), #62 (rotulagem independente) e #63 (metodologia), verificadas no GitHub.
+**Contexto:** Lab03 — Mineração de Métricas DORA (Lab03S03, incluindo pendências da Sprint 02). O trabalho de Áulus está relacionado às Issues #61 (sorteio), #70 (concordância e consenso), #62 (rotulagem independente), #63 (metodologia) e #59 (relatório compartilhado), verificadas no GitHub. A consulta de 20/10/2026 não encontrou Issues com o termo `Lab03S03`; os vínculos preservam os números existentes.
 
 **Estado da validação humana:** pendente da amostra final obtida por coleta real, dos três arquivos independentes e do consenso documentado.
 
@@ -220,3 +220,58 @@ Quando a amostra real, os três arquivos individuais e o consenso estiverem comp
 ## 6. Conclusão
 
 As definições em [`metricas/calculo_metricas.py`](metricas/calculo_metricas.py) e o protocolo de amostragem, rotulagem, concordância e consenso fornecem uma estrutura para a validação. A base empírica permanece pendente: é necessário obter e comprovar a amostra final de pelo menos 300 repositórios reais, executar a seleção comum, concluir as avaliações de Áulus, Maria e Vinícius e registrar o consenso da reunião. Até então, não há kappa humano, F1 validado por humanos ou conclusão de desempenho a apresentar como resultado.
+
+## 7. Execução e resultados de RQ01–RQ04 na Sprint 03
+
+**Estado: resultados e discussão empírica pendentes.** A nova execução e os
+comandos verificáveis estão em [ENTREGA_LAB03S03_AULUS.md](ENTREGA_LAB03S03_AULUS.md).
+As evidências do diagnóstico mensal de `microsoft/vscode` cobrem as 12 consultas
+da janela de 01/10/2023 a 30/09/2024 UTC. A API retornou zero runs retidos nessa
+consulta. Esse resultado não estima a atividade histórica do projeto: a
+enumeração dos registros disponíveis terminou, mas a preservação do histórico
+anual continua desconhecida. Não se usa zero como CFR ou tempo de recuperação.
+
+O script [analisar_rqs.py](analisar_rqs.py) revalida a população final, os hashes,
+os snapshots e as releases antes dos cálculos. Nenhuma análise oficial aceita o
+CSV antigo, o modo de referência ou uma população inferior a 300 aprovados.
+Em uma população final válida, falta de dados em determinada métrica é registrada
+como ausência com motivo, sem imputação de zero. As tabelas principais usam o
+repositório como unidade: mediana, Q1, Q3, IQR (Q3 − Q1), número de valores
+válidos, ausentes e censurados. Os quartis usam interpolação linear tipo 7.
+
+| Questão | Procedimento pronto | Resultado empírico nesta entrega |
+|---|---|---|
+| RQ01 — Frequência | Releases estáveis na janela divididas pelas 52,14 semanas fixadas na configuração; distribuição entre repositórios. | Pendente da população final validada. |
+| RQ02 — Lead Time | Mediana por release e mediana por commit; `commit.author.date` nas comparações paginadas com a predecessora cronológica; primeira release sem predecessora e comparações indisponíveis identificadas. | Pendente da população e das comparações completas das Issues #65 (Maria) e #55 (Vinícius). |
+| RQ03 — CFR | Proxy de CI com conclusões válidas; proxy de releases com a heurística v3 existente, janela corretiva de sete dias e exclusão das releases censuradas do denominador. Mensagens ausentes não equivalem a ausência de correção. | Pendente da população, da cobertura anual para CI e das comparações para CFR(b). A validação humana da heurística também permanece pendente. |
+| RQ04 — Recuperação | Episódios por workflow; mediana/IQR dos recuperados, contagens e proporções censuradas separadas; repositórios sem recuperação observada não recebem duração zero. | Pendente da população e de evidências anuais de runs. |
+
+As saídas serão `metricas_por_repositorio.csv`, `sumarios_rq01_rq04.csv`,
+`dados_ausentes.csv`, `rq03_censura_releases.csv`, `rq04_episodios.csv`, quatro figuras
+`rq01_mediana_iqr.svg` a `rq04_mediana_iqr.svg` e `analise.json`, com hashes de
+entradas, código e saídas. A distribuição agregada de episódios é identificada
+separadamente e não substitui a distribuição por repositório. A mediana dos
+recuperados é condicional à recuperação observada; não é uma estimativa de
+sobrevivência incluindo censurados. Não se estabelece associação, tendência ou
+confirmação de hipóteses antes da execução real.
+
+### 7.1 Auditoria da amostra e concordância antes do consenso
+
+O sorteio exige a auditoria de leitura do bundle final e das qualificações de
+todos os aprovados. O manifesto da seleção é revalidado pelos comandos de
+rotulagem e concordância, incluindo a reprodução do sorteio, para impedir que
+um CSV estruturalmente semelhante seja tomado como referência empírica.
+O guia [ROTULAGEM_AULUS.md](ROTULAGEM_AULUS.md) estabelece o preenchimento pessoal
+e cego de 60 decisões por dimensão de repositório e 300 decisões por release.
+Os campos de julgamento são deixados vazios na geração.
+
+O comando `metricas.concordancia avaliar` calcula os três kappas de Fleiss dos
+arquivos independentes completos **antes da reunião**, preserva os hashes das
+entradas e produz divergências e um formulário vazio de consenso. O comando
+`calcular` exige as decisões humanas consolidadas. Nomes de avaliadores
+equivalentes e o mesmo arquivo físico usado mais de uma vez são rejeitados.
+Arquivos distintos com decisões iguais podem representar concordância legítima;
+o software não certifica, sozinho, que o cegamento foi respeitado. Empates 1–1–1
+continuam dependentes de discussão e evidência, e toda decisão não resolvida
+permanece pendente. Nenhum kappa ou consenso foi calculado nesta entrega a
+partir de exemplos ou de uma única avaliação.
