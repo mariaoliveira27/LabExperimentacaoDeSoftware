@@ -21,8 +21,8 @@ from rotulagem import JULGAMENTOS, gerar_rotulos, ler_csv, validar_rotulos
 
 def _preflight(saida, rotulos):
     """Valide os destinos antes de gerar qualquer seleção ou arquivo humano."""
-    if rotulos.name.casefold() == "rotulos_vinicius.csv":
-        raise ValueError("O fluxo de Áulus não pode gravar rotulos_vinicius.csv.")
+    if rotulos.name.casefold() in ("rotulos_vinicius.csv", "rotulos_maria.csv"):
+        raise ValueError(f"O fluxo de Áulus não pode gravar {rotulos.name.lower()}.")
     for destino in (rotulos, saida):
         if destino.exists() or destino.is_symlink():
             raise FileExistsError(
@@ -107,7 +107,7 @@ def main(argv=None):
     )
     print(
         f"CSV independente: {resultado['rotulos']}; rascunho validado, "
-        "todos os julgamentos vazios. Issue 02 pendente de julgamento humano de Áulus."
+        "todos os julgamentos vazios. Issue #62 pendente de julgamento humano de Áulus."
     )
     print("Os arquivos humanos de Maria e Vinicius e o consenso do grupo continuam pendentes.")
     return 0

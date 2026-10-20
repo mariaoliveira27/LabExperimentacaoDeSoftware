@@ -187,7 +187,7 @@ def test_coluna_ausente(amostra_rotulagem, rotulos_completos):
         validar_rotulos(amostra_rotulagem, rotulos_completos, permitir_vazios=True)
 
 
-def test_geracao_esvazia_julgamentos_e_exclui_heuristica(
+def test_geracao_rejeita_referencia_que_expoe_julgamentos(
     tmp_path, amostra_rotulagem, rotulos_completos,
 ):
     amostra = tmp_path / "amostra.csv"
@@ -195,6 +195,18 @@ def test_geracao_esvazia_julgamentos_e_exclui_heuristica(
     for row in rotulos_completos:
         row["heuristica"] = "sim"
     escrever_csv(amostra, rotulos_completos, METADADOS + JULGAMENTOS + ("heuristica",))
+    with pytest.raises(ValueError, match="cegamento"):
+        gerar_rotulos(amostra, saida)
+    assert not saida.exists()
+
+
+def test_geracao_julgamentos_vazios_exclui_heuristica(tmp_path, amostra_rotulagem):
+    amostra = tmp_path / "amostra.csv"
+    saida = tmp_path / "rotulos_aulus.csv"
+    for row in amostra_rotulagem:
+        row.update({campo: "" for campo in JULGAMENTOS})
+        row["heuristica"] = "sim"
+    escrever_csv(amostra, amostra_rotulagem, METADADOS + JULGAMENTOS + ("heuristica",))
     gerar_rotulos(amostra, saida)
     gerados = ler_csv(saida)
     assert len(gerados) == 300
@@ -250,7 +262,9 @@ def test_leitura_aceita_bom(tmp_path, amostra_rotulagem):
     validar_amostra(ler_csv(path))
 
 
-def test_cli_geracao_e_validacao_rascunho(tmp_path, amostra_rotulagem, capsys):
+def test_cli_geracao_e_validacao_rascunho(tmp_path, amostra_rotulagem, capsys, monkeypatch):
+    import gerar_amostra_rotulagem
+    monkeypatch.setattr(gerar_amostra_rotulagem, "validar_referencia", lambda *args: None)
     amostra = tmp_path / "amostra.csv"
     saida = tmp_path / "rotulos_aulus.csv"
     escrever_csv(amostra, amostra_rotulagem)
@@ -263,12 +277,30 @@ def test_cli_geracao_e_validacao_rascunho(tmp_path, amostra_rotulagem, capsys):
     assert "Rótulo ausente" in capsys.readouterr().err
 
 
-def test_cli_rotulagem_completa(tmp_path, amostra_rotulagem, rotulos_completos):
+def test_cli_rotulagem_completa(tmp_path, amostra_rotulagem, rotulos_completos, monkeypatch):
+    import gerar_amostra_rotulagem
+    monkeypatch.setattr(gerar_amostra_rotulagem, "validar_referencia", lambda *args: None)
     amostra = tmp_path / "amostra.csv"
     rotulos = tmp_path / "rotulos.csv"
     escrever_csv(amostra, amostra_rotulagem)
     escrever_csv(rotulos, rotulos_completos, METADADOS + JULGAMENTOS)
     assert main(["validar", "--amostra", str(amostra), "--rotulos", str(rotulos)]) == 0
+
+
+def test_cli_csv_exemplo_sem_manifesto_nao_gera_formulario(tmp_path, amostra_rotulagem, capsys):
+    amostra = tmp_path / "amostra.csv"
+    saida = tmp_path / "rotulos_aulus.csv"
+    escrever_csv(amostra, amostra_rotulagem)
+    assert main(["gerar", "--amostra", str(amostra), "--saida", str(saida)]) == 2
+    assert "selecao.json" in capsys.readouterr().err
+    assert not saida.exists()
+
+
+@pytest.mark.parametrize("campo,valor", [("corretiva", None), ("evidencia", 42), ("previous_tag", None)])
+def test_valores_nao_textuais_nao_sao_rascunhos_validos(amostra_rotulagem, rotulos_completos, campo, valor):
+    rotulos_completos[0][campo] = valor
+    with pytest.raises(ValueError, match="conter texto"):
+        validar_rotulos(amostra_rotulagem, rotulos_completos, permitir_vazios=True)
 
 
 def test_integracao_sorteio_gera_arquivo_independente(tmp_path):
