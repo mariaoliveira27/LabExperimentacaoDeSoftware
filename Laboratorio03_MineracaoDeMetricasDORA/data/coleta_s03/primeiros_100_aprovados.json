@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "objetivo": 100,
+  "n_comprovados": 0,
+  "completo": false,
+  "janela": {
+    "inicio": "2023-10-01T00:00:00+00:00",
+    "fim": "2024-09-30T23:59:59+00:00"
+  },
+  "ordem": "ordem de aprovação no processamento auditado de candidatos",
+  "repositorios": [],
+  "pendencia": "Ainda não há evidência de 100 repositórios aprovados; candidatos processados não são aprovações."
+}

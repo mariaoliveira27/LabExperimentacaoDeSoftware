@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "origem": "github_api",
+  "alvo": 300,
+  "janela": {
+    "inicio": "2023-10-01T00:00:00+00:00",
+    "fim": "2024-09-30T23:59:59+00:00"
+  },
+  "criterios": {
+    "min_stars": 1000,
+    "min_releases": 5,
+    "min_workflow_runs": 50
+  }
+}

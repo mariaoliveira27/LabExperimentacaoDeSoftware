@@ -1,0 +1,12 @@
+{
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "sistema": "Windows-11-10.0.26300-SP0",
+  "pacotes": {
+    "requests": "2.34.2",
+    "pyyaml": "6.0.3",
+    "pytest": "9.1.1",
+    "pytest-cov": "7.1.0",
+    "pandas": "3.0.6",
+    "statsmodels": "0.15.0"
+  }
+}

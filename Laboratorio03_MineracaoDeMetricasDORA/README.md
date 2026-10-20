@@ -1,3 +1,14 @@
+## Entrega de Áulus — Lab03S03
+
+Consulte [a entrega e as evidências da execução](ENTREGA_LAB03S03_AULUS.md),
+[as instruções de rotulagem pessoal](ROTULAGEM_AULUS.md) e
+[a metodologia e o estado das RQ01–RQ04](artigo_metodologia_dora.md#7-execução-e-resultados-de-rq01rq04-na-sprint-03).
+O dataset antigo de 100 linhas não comprova a população final. O modo real do
+pipeline registra Lead Time como ausente até a integração paginada da #65.
+As análises oficiais usam `analisar_rqs.py`, que exige o bundle final auditado
+com pelo menos 300 aprovados. A execução S03 não conclui a sprint sem esses
+dados e as três avaliações humanas independentes.
+
 ## INFORMAÇÕES SOBRE A AVALIAÇÃO
 
 | LAB03 | Laboratório 03 - 20 pontos |
@@ -67,7 +78,7 @@ O ZIP histórico foi baixado integralmente (**952.289.386 bytes**) e seu MD5 pub
 
 ### 1. Obter as entradas reais e gerar a seleção comum
 
-A coleta deverá fornecer **pelo menos 300 repositórios aprovados**, as releases originais da API do GitHub e a procedência vinculada por hashes. O novo coletor [`coleta_amostra_real.py`](coleta_amostra_real.py) usa busca, metadados e releases da API; os runs poderão vir da API ou de uma exportação pública original verificada. A origem e a cobertura dos runs serão registradas separadamente. Consulte [`AMOSTRA_OURO.md`](AMOSTRA_OURO.md) para o formato das entradas. Preencher um manifesto manualmente não comprova a origem dos registros. `seed_data.py` e modo de referência não podem completar a amostra.
+A coleta deverá fornecer **pelo menos 300 repositórios aprovados**, as releases originais da API do GitHub e a procedência vinculada por hashes. O novo coletor [`coleta_amostra_real.py`](coleta_amostra_real.py) usa busca, metadados e releases da API; os runs poderão vir da API ou de uma exportação pública original verificada. A origem e a cobertura dos runs serão registradas separadamente. Consulte [`ROTULAGEM_AULUS.md`](ROTULAGEM_AULUS.md) para o formato das entradas. Preencher um manifesto manualmente não comprova a origem dos registros. `seed_data.py` e modo de referência não podem completar a amostra.
 
 Execute os comandos desta seção na pasta `Laboratorio03_MineracaoDeMetricasDORA`, após instalar `requirements.txt`. Configure `GITHUB_TOKEN` ou, se já autenticado no GitHub CLI, use `--usar-gh-auth`:
 
