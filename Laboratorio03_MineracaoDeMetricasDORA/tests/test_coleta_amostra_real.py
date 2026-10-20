@@ -92,6 +92,34 @@ def test_300_aprovados_exporta_contrato_e_prepara_rotulagem(preparar, tmp_path):
     assert len(api.chamadas) == chamadas
 
 
+@pytest.mark.parametrize("persistente", [False, True])
+def test_checkpoint_windows_preserva_atomicidade_em_bloqueio_temporario(tmp_path, monkeypatch, persistente):
+    destino = tmp_path / "estado.json"
+    destino.write_text('{"anterior": true}', encoding="utf-8")
+    substituir = Path.replace
+    chamadas = []
+
+    def bloqueado(temporario, alvo):
+        chamadas.append(alvo)
+        if persistente or len(chamadas) < 3:
+            erro = PermissionError("arquivo temporariamente aberto")
+            erro.winerror = 32
+            raise erro
+        return substituir(temporario, alvo)
+
+    monkeypatch.setattr(Path, "replace", bloqueado)
+    monkeypatch.setattr(coleta.time, "sleep", lambda atraso: None)
+    if persistente:
+        with pytest.raises(PermissionError):
+            coleta._json_atomic(destino, {"novo": True})
+        assert json.loads(destino.read_text()) == {"anterior": True}
+        assert len(chamadas) == 7
+    else:
+        coleta._json_atomic(destino, {"novo": True})
+        assert json.loads(destino.read_text()) == {"novo": True}
+        assert len(chamadas) == 3
+
+
 @pytest.mark.parametrize("alteracoes,motivo", [
     ({"actions": False}, "evidencia_actions_historicos_insuficiente"),
     ({"releases": 4}, "menos_de_5_releases_na_janela"),

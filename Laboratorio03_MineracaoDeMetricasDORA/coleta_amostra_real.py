@@ -16,6 +16,7 @@ import shutil
 import sqlite3
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from urllib.parse import quote, urlsplit
 
@@ -201,6 +202,19 @@ def _hash_json(valor):
     return hashlib.sha256(json.dumps(valor, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
 
 
+def _substituir_atomic(temporario, destino):
+    # Windows pode manter o destino brevemente aberto após leitura/indexação.
+    # Preserve a troca atômica; falha persistente continua interrompendo a coleta.
+    for tentativa in range(7):
+        try:
+            temporario.replace(destino)
+            return
+        except PermissionError as exc:
+            if getattr(exc, "winerror", None) not in (5, 32, 33) or tentativa == 6:
+                raise
+            time.sleep(0.01 * 2 ** tentativa)
+
+
 def _json_atomic(path, valor):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -208,7 +222,7 @@ def _json_atomic(path, valor):
     with temporario.open("w", encoding="utf-8") as stream:
         json.dump(valor, stream, ensure_ascii=False, indent=2, allow_nan=False)
         stream.write("\n")
-    temporario.replace(path)
+    _substituir_atomic(temporario, path)
 
 
 def _csv_atomic(path, rows, campos):
@@ -218,7 +232,7 @@ def _csv_atomic(path, rows, campos):
         writer = csv.DictWriter(stream, fieldnames=campos)
         writer.writeheader()
         writer.writerows(rows)
-    temporario.replace(path)
+    _substituir_atomic(temporario, path)
 
 
 def _invalidar_resposta(client, endpoint, params=None):
