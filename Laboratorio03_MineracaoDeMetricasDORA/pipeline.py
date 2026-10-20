@@ -215,12 +215,14 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
         # Se estamos em modo de referência ou sem chamadas pesadas de compare:
         dep_freq = calcular_deployment_frequency(n_releases, weeks)
 
-        # Simulação controlada e determinística baseada nos metadados reais para os 100 aprovados
-        # Lead time
-        lead_time_a = round(max(0.5, (120.0 / max(1, n_releases))), 2)
-        lead_time_b = round(max(0.2, (lead_time_a * 0.45)), 2)
+        # A integração paginada do Lead Time (#65, Maria) ainda é uma
+        # dependência. Contagem de releases não mede a idade dos commits.
+        lead_time_a = None
+        lead_time_b = None
 
         if modo_referencia:
+            lead_time_a = round(max(0.5, (120.0 / max(1, n_releases))), 2)
+            lead_time_b = round(max(0.2, (lead_time_a * 0.45)), 2)
             taxa_falha_ci = round(min(0.35, max(0.04, (item["stars"] % 17) / 60.0)), 3)
             cfr_ci = taxa_falha_ci
             recovery_hours = round(max(0.4, (item["contribs"] % 24) * 0.8 + 0.5), 2)
@@ -261,6 +263,17 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
             cfr=cfr_ci,
             recovery_hours=recovery_hours,
         )
+        if not modo_referencia:
+            # Ausência é informação desconhecida, sem patamar de desempenho.
+            valores_classificados = {
+                "deployment_frequency": dep_freq, "lead_time": lead_time_a,
+                "change_failure_rate": cfr_ci, "recovery_time": recovery_hours,
+            }
+            for metrica, valor in valores_classificados.items():
+                if valor is None:
+                    tiers_indiv[metrica] = None
+            if any(valor is None for valor in valores_classificados.values()):
+                tier_geral = None
 
         created_dt = parse_datetime(item["created"])
         agora = datetime.now(timezone.utc)
@@ -283,6 +296,7 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
             "deployment_frequency_semana": round(dep_freq, 3),
             "lead_time_release_mediana_dias": lead_time_a,
             "lead_time_commit_mediana_dias": lead_time_b,
+            "origem_lead_time": "referencia_simulada" if modo_referencia else "pendente_integracao_paginada_issue_65",
             "cfr_ci_proxy": cfr_ci,
             "cfr_releases_proxy": cfr_releases,
             "tempo_recuperacao_mediana_horas": recovery_hours,

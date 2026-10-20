@@ -66,10 +66,16 @@ def test_pipeline_exporta_metricas_reais_e_reutiliza_cache(fluxo_local, stars, c
     assert row["episodios_censurados"] == 0
     assert row["proporcao_episodios_censurados"] == 0.0
     assert row["origem_metricas_estabilidade"] == "workflow_runs"
+    assert row["lead_time_release_mediana_dias"] is None
+    assert row["lead_time_commit_mediana_dias"] is None
+    assert row["origem_lead_time"] == "pendente_integracao_paginada_issue_65"
+    assert row["tier_lead_time"] is None and row["tier_dora_geral"] is None
     with open(config["storage"]["repos_csv"], encoding="utf-8", newline="") as stream:
         exported = next(csv.DictReader(stream))
     assert float(exported["cfr_ci_proxy"]) == pytest.approx(1 / 3)
     assert float(exported["tempo_recuperacao_mediana_horas"]) == pytest.approx(1.2)
+    assert exported["lead_time_release_mediana_dias"] == exported["lead_time_commit_mediana_dias"] == ""
+    assert exported["tier_lead_time"] == exported["tier_dora_geral"] == ""
     assert len(calls) == 4
 
     def no_network(*args, **kwargs):
@@ -98,6 +104,8 @@ def test_pipeline_indisponivel_exportado_vazio(fluxo_local):
     assert rows[0]["tempo_recuperacao_mediana_horas"] is None
     assert rows[0]["runs_ignorados"] == 3
     assert rows[0]["proporcao_episodios_censurados"] is None
+    assert rows[0]["tier_cfr"] is None
+    assert rows[0]["tier_recovery_time"] is None
     with open(config["storage"]["repos_csv"], encoding="utf-8", newline="") as stream:
         exported = next(csv.DictReader(stream))
     assert exported["cfr_ci_proxy"] == exported["tempo_recuperacao_mediana_horas"] == ""
