@@ -7,7 +7,7 @@ fica no cache do GitHubClient; repetir a coleta reutiliza páginas já recebidas
 
 import logging
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 from urllib.parse import parse_qs, urlparse
 
 from api_client import GitHubClient
@@ -44,6 +44,7 @@ def _utc(value):
 class ColetorRuns:
     def __init__(self, client: GitHubClient):
         self.client = client
+        self.ultimo_relatorio_cobertura = None
 
     def _falhar(self, endpoint, params, message, invalidate=False):
         if invalidate:
@@ -94,9 +95,22 @@ class ColetorRuns:
             start = interval_end + SECOND
 
     def _pagina(self, endpoint, params):
-        data, headers = self._request(endpoint, params)
-        if not isinstance(data.get("workflow_runs"), list) or len(data["workflow_runs"]) > 100:
-            self._falhar(endpoint, params, "workflow_runs inválido", invalidate=True)
+        consulta = {"params": dict(params), "state": "pending"}
+        if self.ultimo_relatorio_cobertura is not None:
+            self.ultimo_relatorio_cobertura["queries"].append(consulta)
+        try:
+            data, headers = self._request(endpoint, params)
+            if not isinstance(data.get("workflow_runs"), list) or len(data["workflow_runs"]) > 100:
+                self._falhar(endpoint, params, "workflow_runs inválido", invalidate=True)
+            if not isinstance(headers, dict) or not isinstance(headers.get("Link", headers.get("link", "")), str):
+                self._falhar(endpoint, params, "cabeçalhos de paginação inválidos", invalidate=True)
+        except ColetaIncompletaError as exc:
+            consulta.update(state="failed", error=str(exc))
+            raise
+        consulta.update(
+            state="received", total_count=data["total_count"],
+            received_count=len(data["workflow_runs"]),
+        )
         return data["total_count"], data["workflow_runs"], headers
 
     def _normalizar_run(self, run, endpoint, params):
@@ -186,6 +200,12 @@ class ColetorRuns:
                 if pages != [str(params["page"] + 1)]:
                     self._falhar(endpoint, params, "Link de paginação não sequencial", invalidate=True)
             elif len(seen) == expected:
+                self.ultimo_relatorio_cobertura["completed_intervals"].append({
+                    "start": start.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "end": end.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "total_count": expected, "unique_ids": len(seen),
+                    "selected_runs": len(selected), "pages": params["page"],
+                })
                 logger.info("Intervalo completo %s: %s IDs, %s selecionados", params["created"], len(seen), len(selected))
                 return selected
             elif link:
@@ -202,32 +222,65 @@ class ColetorRuns:
     def coletar_runs_janela(
         self, owner: str, repo: str, default_branch: str,
         window_start: datetime, window_end: datetime,
+        *, relatorio_cobertura: Optional[Dict[str, Any]] = None,
     ) -> List[Dict[str, Any]]:
         """Retorna somente coleta completa; falhas preservam páginas no cache.
 
         A janela é inclusiva. Precisão inferior a segundo é ajustada para dentro
         da janela, pois os timestamps de criação da API têm precisão de segundos.
         Conclusões ignoradas são preservadas para contabilização nas métricas.
+
+        O relatório opcional é preenchido inclusive em falhas e também fica em
+        ``ultimo_relatorio_cobertura``. ``enumeration_complete`` confirma apenas
+        a enumeração das respostas atualmente disponíveis. A API atual não
+        comprova a preservação de runs históricos removidos ou expirados.
         """
         if not default_branch:
             raise ValueError("default_branch deve ser informado")
         start, end = _utc(window_start), _utc(window_end)
         if start > end:
             raise ValueError("window_start deve ser anterior ou igual a window_end")
+        report = relatorio_cobertura if relatorio_cobertura is not None else {}
+        report.clear()
+        report.update({
+            "schema_version": 1, "repository": f"{owner}/{repo}",
+            "branch": default_branch, "event": "push",
+            "requested_window": {
+                "start": start.isoformat(), "end": end.isoformat(),
+            },
+            "enumeration_complete": False,
+            "historical_coverage": "unknown", "historico_anual_completo": False,
+            "historical_coverage_note": (
+                "A enumeração cobre somente os registros atualmente retornados pela API. "
+                "Runs históricos removidos ou expirados não podem ser identificados por esta consulta; "
+                "uma resposta vazia não comprova ausência de atividade na janela."
+            ),
+            "queries": [], "completed_intervals": [], "workflow_run_count": None,
+        })
+        self.ultimo_relatorio_cobertura = report
         if start.microsecond:
             start = start.replace(microsecond=0) + SECOND
         end = end.replace(microsecond=0)
+        report["query_window"] = {
+            "start": start.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "end": end.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        } if start <= end else None
         endpoint = f"/repos/{owner}/{repo}/actions/runs"
         all_runs = {}
         consultadas = []
         logger.info("Coletando %s/%s, branch=%s, %s até %s", owner, repo, default_branch, start, end)
-        for sub_start, sub_end in self._intervalos_mensais(start, end):
-            for run in self._coletar_intervalo(endpoint, default_branch, sub_start, sub_end, consultadas):
-                if run["id"] in all_runs and all_runs[run["id"]] != run:
-                    for consulta in consultadas:
-                        self.client.invalidate_cache(endpoint, consulta)
-                    self._falhar(endpoint, None, "ID divergente entre intervalos")
-                all_runs[run["id"]] = run
+        try:
+            for sub_start, sub_end in self._intervalos_mensais(start, end):
+                for run in self._coletar_intervalo(endpoint, default_branch, sub_start, sub_end, consultadas):
+                    if run["id"] in all_runs and all_runs[run["id"]] != run:
+                        for consulta in consultadas:
+                            self.client.invalidate_cache(endpoint, consulta)
+                        self._falhar(endpoint, None, "ID divergente entre intervalos")
+                    all_runs[run["id"]] = run
+        except ColetaIncompletaError as exc:
+            report["error"] = str(exc)
+            raise
         result = sorted(all_runs.values(), key=lambda run: (_timestamp(run["created_at"]), run["id"]))
+        report.update(enumeration_complete=True, workflow_run_count=len(result))
         logger.info("Coleta completa %s/%s: %s workflow runs", owner, repo, len(result))
         return result

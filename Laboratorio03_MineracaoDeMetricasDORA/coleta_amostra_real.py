@@ -319,7 +319,7 @@ def _ler_snapshot(path, hash_snapshot):
     return item
 
 
-def _validar_publicacao_final(destino, arquivos, assinatura, inicio, fim, historico=None):
+def _validar_publicacao_final(destino, arquivos, assinatura, inicio, fim, historico=None, *, gravar_checkpoint=True):
     proveniencia = json.loads(arquivos[2].read_text(encoding="utf-8"))
     if any(proveniencia.get(campo) != valor for campo, valor in assinatura.items()):
         raise ValueError("Contrato final não corresponde à janela, critérios e alvo da coleta.")
@@ -397,7 +397,35 @@ def _validar_publicacao_final(destino, arquivos, assinatura, inicio, fim, histor
         registro = registros[row["full_name"]]
         if any(str(registro.get(campo, "")) != row.get(campo) for campo in CAMPOS_APROVADOS):
             raise ValueError(f"CSV final diverge do snapshot de {row['full_name']}.")
-    return _checkpoint(destino, resultados, assinatura, proveniencia.get("busca"), "completa")
+    if gravar_checkpoint:
+        return _checkpoint(destino, resultados, assinatura, proveniencia.get("busca"), "completa")
+    return {**assinatura, "status": "completa", "n_aprovados": len(aprovados),
+            "n_processados": len(resultados), "somente_leitura": True}
+
+
+def auditar_bundle_final(destino, config_yaml="config.yaml"):
+    """Revalide a população final e suas evidências sem rede ou escrita.
+
+    Aprovação comprova os limiares de seleção observados; não transforma
+    registros retidos ou arquivos parciais em cobertura histórica anual.
+    """
+    destino = Path(destino)
+    arquivos = [destino / nome for nome in
+                ("repositorios_aprovados.csv", "releases.json", "proveniencia.json")]
+    faltantes = [path.name for path in arquivos if not path.is_file()]
+    if faltantes:
+        raise ValueError(f"Bundle final ausente/incompleto em {destino}: {', '.join(faltantes)}; exige >=300 aprovados reais.")
+    proveniencia = json.loads(arquivos[2].read_text(encoding="utf-8"))
+    config, inicio, fim, criterios, assinatura = _configuracao(config_yaml, proveniencia.get("alvo", 300))
+    referencia = proveniencia.get("historico_zenodo")
+    historico = None
+    if referencia is not None:
+        if not isinstance(referencia, dict) or not referencia.get("diretorio"):
+            raise ValueError("Fonte histórica sem diretório verificável; recupere os artefatos originais.")
+        historico = _carregar_historico_zenodo(referencia["diretorio"], inicio, fim)
+        assinatura["historico_zenodo"] = historico.referencia
+    return _validar_publicacao_final(destino, arquivos, assinatura, inicio, fim,
+                                     historico, gravar_checkpoint=False)
 
 
 def _preservar_reavaliacao(destino, snapshots):
@@ -550,6 +578,7 @@ def _qualificar(client, candidato, inicio, fim, criterios, historico=None):
                              runs_disponiveis_api=resumo["total_count"], escopo_contagem_runs="registros_retidos_api")
             return resultado
         runs = coletor.coletar_runs_janela(owner, repo, metadata["default_branch"], inicio, fim)
+        resultado["cobertura_runs"] = getattr(coletor, "ultimo_relatorio_cobertura", None)
         origem_runs, escopo_runs = "workflow_runs", "registros_retidos_api"
     ci = calcular_cfr_ci(runs)
     n_runs = ci.sucessos + ci.falhas
@@ -590,6 +619,22 @@ def _checkpoint(destino, resultados, assinatura, busca, status, erro=None):
               "snapshots": {f"{item['candidate_id']}.json": item.get("_snapshot_sha256") or sha256(destino / "qualificacoes" / f"{item['candidate_id']}.json") for item in resultados},
               "pendencia": None if status == "completa" else "Obter pelo menos 300 aprovados reais na janela; não gerar rotulagem com a coleta parcial."}
     _json_atomic(destino / "estado.json", estado)
+    # Ordem de aprovação é a ordem de processamento, nunca a ordem alfabética
+    # do CSV final. Uma lista vazia informa a pendência, sem fabricar evidência.
+    primeiras = [item for item in resultados if item["aprovado"]][:100]
+    _json_atomic(destino / "primeiros_100_aprovados.json", {
+        "schema_version": 1, "objetivo": 100, "n_comprovados": len(primeiras),
+        "completo": len(primeiras) == 100, "janela": assinatura["janela"],
+        "ordem": "ordem de aprovação no processamento auditado de candidatos",
+        "repositorios": [{"full_name": item["full_name"], "candidate_id": item["candidate_id"],
+                           "snapshot": f"qualificacoes/{item['candidate_id']}.json",
+                           "sha256": estado["snapshots"][f"{item['candidate_id']}.json"],
+                           "total_runs_janela": item["registro"]["total_runs_janela"],
+                           "total_releases_janela": item["registro"]["total_releases_janela"],
+                           "escopo_contagem_runs": item["registro"]["escopo_contagem_runs"]}
+                          for item in primeiras],
+        "pendencia": None if len(primeiras) == 100 else "Ainda não há evidência de 100 repositórios aprovados; candidatos processados não são aprovações.",
+    })
     return estado
 
 
