@@ -84,6 +84,15 @@ def _entradas_cli(tmp_path, amostra, avaliadores):
     return args
 
 
+@pytest.fixture
+def referencia_cli(tmp_path, monkeypatch):
+    # Testes de integridade do sorteio/bundle estão em test_amostra_ouro e
+    # test_coleta_amostra_real; aqui a CLI exercita o protocolo de três humanos.
+    import gerar_amostra_rotulagem
+    monkeypatch.setattr(gerar_amostra_rotulagem, "validar_referencia", lambda *args: None)
+    (tmp_path / "selecao.json").write_text("{}", encoding="utf-8")
+
+
 def test_kappa_conhecido_agrega_statsmodels(monkeypatch):
     chamadas = []
     aggregate = concordancia.aggregate_raters
@@ -157,6 +166,18 @@ def test_exige_exatamente_tres_avaliadores(amostra, avaliadores, quantidade):
     else:
         avaliadores["quarto"] = deepcopy(avaliadores["aulus"])
     with pytest.raises(ValueError, match="exatamente três"):
+        concordancia.calcular_kappas(amostra, avaliadores)
+
+
+def test_avaliador_repetido_com_outra_caixa_nao_conta_como_pessoa(amostra, avaliadores):
+    avaliadores["AULUS"] = avaliadores.pop("vinicius")
+    with pytest.raises(ValueError, match="identificadores distintos"):
+        concordancia.calcular_kappas(amostra, avaliadores)
+
+
+def test_mesma_lista_nao_representa_tres_humanos(amostra, avaliadores):
+    avaliadores["maria"] = avaliadores["aulus"]
+    with pytest.raises(ValueError, match="mesmo conjunto"):
         concordancia.calcular_kappas(amostra, avaliadores)
 
 
@@ -257,7 +278,7 @@ def test_final_preserva_kappas_pre_consenso(amostra, avaliadores, consenso_compl
     assert resultado["frequencias_consenso"]["corretiva"]["sim"] == 300
 
 
-def test_cli_prepara_e_calcula_sem_sobrescrever(tmp_path, amostra, avaliadores, consenso_completo):
+def test_cli_prepara_e_calcula_sem_sobrescrever(tmp_path, amostra, avaliadores, consenso_completo, referencia_cli):
     args = _entradas_cli(tmp_path, amostra, avaliadores)
     divergencias_path = tmp_path / "divergencias.csv"
     consenso_path = tmp_path / "consenso.csv"
@@ -284,7 +305,7 @@ def test_cli_prepara_e_calcula_sem_sobrescrever(tmp_path, amostra, avaliadores, 
         concordancia.main(calcular)
 
 
-def test_cli_protege_arquivos_humanos_e_preverifica_saidas(tmp_path, amostra, avaliadores):
+def test_cli_protege_arquivos_humanos_e_preverifica_saidas(tmp_path, amostra, avaliadores, referencia_cli):
     args = _entradas_cli(tmp_path, amostra, avaliadores)
     vinicius_path = tmp_path / "rotulos_vinicius.csv"
     original = vinicius_path.read_bytes()
@@ -297,7 +318,7 @@ def test_cli_protege_arquivos_humanos_e_preverifica_saidas(tmp_path, amostra, av
     assert not divergencias_path.exists()
 
 
-def test_cli_rejeita_saidas_iguais(tmp_path, amostra, avaliadores):
+def test_cli_rejeita_saidas_iguais(tmp_path, amostra, avaliadores, referencia_cli):
     args = _entradas_cli(tmp_path, amostra, avaliadores)
     path = tmp_path / "saida.csv"
     with pytest.raises(SystemExit):
@@ -305,7 +326,7 @@ def test_cli_rejeita_saidas_iguais(tmp_path, amostra, avaliadores):
     assert not path.exists()
 
 
-def test_cli_rejeita_mesmo_arquivo_como_tres_avaliadores(tmp_path, amostra, avaliadores):
+def test_cli_rejeita_mesmo_arquivo_como_tres_avaliadores(tmp_path, amostra, avaliadores, referencia_cli):
     args = _entradas_cli(tmp_path, amostra, avaliadores)
     for opcao in ("--maria", "--vinicius"):
         args[args.index(opcao) + 1] = str(tmp_path / "rotulos_aulus.csv")
@@ -315,3 +336,42 @@ def test_cli_rejeita_mesmo_arquivo_como_tres_avaliadores(tmp_path, amostra, aval
             "preparar", *args, "--consenso", str(path), "--divergencias", str(tmp_path / "divergencias.csv"),
         ])
     assert not path.exists()
+
+
+def test_cli_avaliar_calcula_antes_do_consenso_sem_preencher_decisoes(tmp_path, amostra, avaliadores, referencia_cli):
+    args = _entradas_cli(tmp_path, amostra, avaliadores)
+    consenso = tmp_path / "consenso.csv"
+    saida = tmp_path / "kappas_independentes.json"
+    assert concordancia.main([
+        "avaliar", *args, "--consenso", str(consenso),
+        "--divergencias", str(tmp_path / "divergencias.csv"), "--saida", str(saida),
+    ]) == 0
+    resultado = json.loads(saida.read_text(encoding="utf-8"))
+    assert resultado["status"] == "rotulos_independentes_completos_aguardando_consenso"
+    assert all(valor["kappa"] == pytest.approx(0.25) for valor in resultado["kappas"].values())
+    assert all(row["rotulo_consenso"] == "" for row in concordancia.ler_csv(consenso))
+
+
+def test_cli_rejeita_hardlink_do_mesmo_avaliador(tmp_path, amostra, avaliadores, referencia_cli):
+    args = _entradas_cli(tmp_path, amostra, avaliadores)
+    alias = tmp_path / "alias_aulus.csv"
+    alias.hardlink_to(tmp_path / "rotulos_aulus.csv")
+    args[args.index("--maria") + 1] = str(alias)
+    consenso = tmp_path / "consenso.csv"
+    with pytest.raises(SystemExit):
+        concordancia.main([
+            "preparar", *args, "--consenso", str(consenso),
+            "--divergencias", str(tmp_path / "divergencias.csv"),
+        ])
+    assert not consenso.exists()
+
+
+def test_cli_csv_exemplo_sem_manifesto_nao_calcula(tmp_path, amostra, avaliadores):
+    args = _entradas_cli(tmp_path, amostra, avaliadores)
+    saida = tmp_path / "kappas.json"
+    with pytest.raises(SystemExit):
+        concordancia.main([
+            "avaliar", *args, "--saida", str(saida), "--consenso", str(tmp_path / "consenso.csv"),
+            "--divergencias", str(tmp_path / "divergencias.csv"),
+        ])
+    assert not saida.exists()
