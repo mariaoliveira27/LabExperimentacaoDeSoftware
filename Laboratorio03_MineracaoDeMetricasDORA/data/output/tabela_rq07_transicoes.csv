@@ -1,0 +1,20 @@
+# Matriz C1 x C2
+,C2_Elite,C2_High,C2_Medium,C2_Low
+C1_Elite,0,0,0,0
+C1_High,0,126,0,0
+C1_Medium,0,119,55,0
+C1_Low,0,0,0,0
+
+# Matriz C1 x C3
+,C3_Elite,C3_High,C3_Medium,C3_Low
+C1_Elite,0,0,0,0
+C1_High,0,126,0,0
+C1_Medium,0,117,57,0
+C1_Low,0,0,0,0
+
+# Matriz C2 x C3
+,C3_Elite,C3_High,C3_Medium,C3_Low
+C2_Elite,0,0,0,0
+C2_High,0,243,2,0
+C2_Medium,0,0,55,0
+C2_Low,0,0,0,0

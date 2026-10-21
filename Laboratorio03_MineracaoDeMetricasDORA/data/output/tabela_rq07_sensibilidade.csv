@@ -1,0 +1,4 @@
+par,total,iguais,mudaram,pct_concordancia,pct_mudanca,kappa_linear,interpretacao
+C1 (Referência) x C2 (Pré-releases),300,181,119,60.33,39.67,0.2797,Razoável (concordância justa)
+C1 (Referência) x C3 (Tags),300,183,117,61.0,39.0,0.2904,Razoável (concordância justa)
+C2 (Pré-releases) x C3 (Tags),300,298,2,99.33,0.67,0.978,Quase perfeita

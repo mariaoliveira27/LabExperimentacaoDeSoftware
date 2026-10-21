@@ -248,11 +248,11 @@ def salvar_relatorios_saida(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Benchmarking da Heurística de Releases Corretivas (Lab03S02)")
+    parser = argparse.ArgumentParser(description="Benchmarking da Heurística de Releases Corretivas (Lab03S02 / Lab03S03)")
     parser.add_argument(
         "--dados",
-        default="rotulos_vinicius.csv",
-        help="Caminho do CSV de validação manual (default: rotulos_vinicius.csv)",
+        default=None,
+        help="Caminho do CSV de validação manual ou consenso (default: data/gold_standard/consenso.csv ou rotulos_vinicius.csv)",
     )
     parser.add_argument(
         "--relatorio-md",
@@ -266,10 +266,24 @@ def main():
     )
     args = parser.parse_args()
 
-    # Busca alternativa na pasta data se não encontrar na raiz
+    # Prioridade de seleção automática do dataset de referência / consenso
     caminho_dados = args.dados
-    if not os.path.exists(caminho_dados) and os.path.exists(os.path.join("data", args.dados)):
-        caminho_dados = os.path.join("data", args.dados)
+    if not caminho_dados:
+        candidatos_padrao = [
+            "data/gold_standard/consenso.csv",
+            "data/output/consenso_amostra_ouro.csv",
+            "data/gold_standard/rotulos_vinicius.csv",
+            "rotulos_vinicius.csv",
+            "data/rotulos_vinicius.csv",
+        ]
+        for cand in candidatos_padrao:
+            if os.path.exists(cand):
+                caminho_dados = cand
+                break
+        if not caminho_dados:
+            caminho_dados = "rotulos_vinicius.csv"
+    elif not os.path.exists(caminho_dados) and os.path.exists(os.path.join("data", caminho_dados)):
+        caminho_dados = os.path.join("data", caminho_dados)
 
     registros = carregar_dados_rotulados(caminho_dados)
     print(f"Carregados {len(registros)} registros rotulados de: {caminho_dados}")
