@@ -5,7 +5,7 @@
 
 **Contexto:** Lab03 — Mineração de Métricas DORA (Lab03S03, incluindo pendências da Sprint 02). Issues atuais de Áulus, verificadas em 21/10/2026: #74 (runs e primeiros 100 aprovados), #75 (sorteio, Fleiss e consenso), #76 (RQ01–RQ04) e #77 (artigo). As Issues #61, #70, #62, #63 e #59 preservam o histórico das entregas anteriores.
 
-**Estado da validação humana:** pendente da amostra final obtida por coleta real, dos três arquivos independentes e do consenso documentado.
+**Estado da validação humana:** referência fornecida da main preparada em 60 × 5, por escolha de Áulus, com todos os julgamentos vazios e 0/3 avaliações completas. A comprovação da população por coleta real e o consenso humano continuam pendentes.
 
 **Auditoria após integrar `origin/main` (`a892089`):** os 300 registros novos e suas 5.189 releases correspondem ao gerador `consolidar_dataset.py`, que usa seeds e fórmulas e declara `origem=github_api`. O bundle foi rejeitado pela auditoria real. Os números de benchmark e RQ07 preservados nas seções 4–5 abaixo são resultados do material recebido, **sem validação empírica nesta entrega**. Não comprovam rótulos humanos, aprovações, cobertura ou desempenho oficial. Ver [auditoria pós-main](data/execucao_pos_main/auditoria_dados.json) e [entrega](ENTREGA_LAB03S03_AULUS.md).
 
@@ -129,8 +129,10 @@ Para cada par de combinações (C1 $\times$ C2, C1 $\times$ C3, C2 $\times$ C3),
 Em conformidade com a Seção 6 do protocolo experimental, a avaliação de heurísticas automáticas requer um padrão de referência humano (*Gold Standard*).
 
 ### 3.1 Desenho Amostral e Rotulagem Independente
-- O sorteio exige bundle final auditável de pelo menos 300 aprovados. Ordena-se a população por `full_name` e sorteiam-se **60 repositórios** com `random_state=42`;
-- Ordenam-se as releases estáveis válidas por publicação UTC e ID e sorteiam-se **5 releases reais** por repositório com `random_state=42`, totalizando **300 releases**;
+- No protocolo de coleta auditada, `executar_amostra_ouro.py` exige bundle final auditável de pelo menos 300 aprovados. Esse requisito permanece preservado;
+- Para a entrada adotada expressamente por Áulus, `amostra_csv_main.py` usa os 300 nomes de `data/coleta_final/repositorios_aprovados.csv` e `releases.json` do mesmo bundle. O manifesto registra `tipo_fonte=csv_main_adotado` e mantém falsos os indicadores de releases originais auditadas, critérios de aprovação auditados e cobertura histórica verificada;
+- Ordena-se a população por `full_name` e sorteiam-se **60 repositórios** com `random_state=42`. Ordenam-se as releases estáveis fornecidas por publicação UTC e ID e sorteiam-se **5 registros por repositório** com `random_state=42`, totalizando **300 unidades**, sem reposição e mantendo 01/10/2023–30/09/2024 UTC;
+- A seleção está em `data/amostra_ouro_csv_main/amostra_comum.csv`, com registros associados, cópias das entradas e manifesto de hashes e identificadores. A validação reproduz o sorteio e a integridade dos arquivos; não converte a origem gerada identificada na auditoria em evidência empírica;
 - Cada integrante deverá avaliar independentemente, sem consultar colegas ou saídas da heurística. O gerador deixa os julgamentos vazios;
 - Serão julgadas três dimensões:
   1. `tipo_projeto` (60 unidades): biblioteca/framework, aplicação/serviço, ferramenta CLI ou outro;
@@ -138,7 +140,9 @@ Em conformidade com a Seção 6 do protocolo experimental, a avaliação de heur
   3. `corretiva` (300 releases): sim ou não.
 
 ### 3.2 Consenso de Referência
-Os arquivos recebidos de Maria e Vinícius foram preservados, mas não comprovam três avaliações independentes completas sobre uma referência auditada. Áulus não tem formulário real nem avaliação concluída. Após os três arquivos completos, `metricas.concordancia avaliar` calcula Fleiss **pré-consenso**, gera divergências e 420 decisões vazias (60 + 60 + 300). A reunião registra decisões, evidências, responsáveis e data, inclusive nas unidades unânimes; empate 1–1–1 exige resolução explícita. `calcular` só emite o relatório final após validar esse consenso. A igualdade de dois CSVs não substitui o protocolo.
+Os arquivos antigos de Maria e Vinícius foram preservados e não foram copiados para a nova referência. Foram preparados `rotulos_aulus.csv`, `rotulos_maria_independente.csv` e `rotulos_vinicius_independente.csv`, com as mesmas 300 unidades e todos os julgamentos vazios. O estado atual é **0/3 avaliações completas**. Cada pessoa deverá registrar suas decisões independentemente; casos sem fonte real verificável permanecem pendentes.
+
+`preparar_concordancia_aulus.py` registra a prontidão e gera `consenso_formulario.csv`, com 420 decisões vazias (60 + 60 + 300). Somente após os três arquivos completos executa o cálculo de Fleiss **pré-consenso** e gera `kappas_pre_consenso.json`, `divergencias.csv` e `consenso.csv`. Os relatórios preservam a origem fornecida e seus limites. A reunião registra decisões, evidências, responsáveis e data, inclusive nas unidades unânimes; empate 1–1–1 exige resolução explícita. `metricas.concordancia calcular` só emite o relatório final após validar esse consenso. Igualdade de conteúdo e integridade estrutural não comprovam independência humana. Nenhum kappa ou decisão de reunião foi produzido nesta preparação.
 
 ---
 
@@ -201,7 +205,7 @@ Importante destacar que **não houve nenhuma migração extrema** (nenhum reposi
 
 ## 7. Conclusão
 
-As definições em [`metricas/calculo_metricas.py`](metricas/calculo_metricas.py) e o protocolo de amostragem, rotulagem, concordância e consenso fornecem uma estrutura para a validação. A base empírica permanece pendente: é necessário obter e comprovar a amostra final de pelo menos 300 repositórios reais, executar a seleção comum, concluir as avaliações de Áulus, Maria e Vinícius e registrar o consenso da reunião. Até então, não há kappa humano, F1 validado por humanos ou conclusão de desempenho a apresentar como resultado.
+As definições em [`metricas/calculo_metricas.py`](metricas/calculo_metricas.py) e o protocolo de amostragem, rotulagem, concordância e consenso fornecem uma estrutura para a validação. A seleção comum da fonte fornecida está preparada; faltam as avaliações pessoais de Áulus, Maria e Vinícius e o consenso da reunião. A base empírica continua pendente de população final real comprovada e evidências originais. Não há kappa humano, F1 validado por humanos ou conclusão empírica de desempenho a apresentar como resultado nesta preparação.
 
 ## 8. Execução e resultados de RQ01–RQ04 na Sprint 03
 
@@ -245,10 +249,12 @@ confirmação de hipóteses antes da execução real.
 
 ### 8.1 Auditoria da amostra e concordância antes do consenso
 
-O sorteio exige a auditoria de leitura do bundle final e das qualificações de
-todos os aprovados. O manifesto da seleção é revalidado pelos comandos de
-rotulagem e concordância, incluindo a reprodução do sorteio, para impedir que
-um CSV estruturalmente semelhante seja tomado como referência empírica.
+O fluxo de coleta real exige a auditoria de leitura do bundle final e das
+qualificações de todos os aprovados. A seleção adotada da main usa o modo
+separado `csv_main_adotado`, com origem gerada declarada e verificações de
+integridade e reprodução, sem certificar a coleta. O manifesto da seleção é
+revalidado pelos comandos de rotulagem e concordância segundo seu tipo de
+fonte; os indicadores de ausência de auditoria acompanham os resultados.
 O guia [ROTULAGEM_AULUS.md](ROTULAGEM_AULUS.md) estabelece o preenchimento pessoal
 e cego de 60 decisões por dimensão de repositório e 300 decisões por release.
 Os campos de julgamento são deixados vazios na geração.

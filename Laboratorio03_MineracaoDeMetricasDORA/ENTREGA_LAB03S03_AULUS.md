@@ -1,5 +1,71 @@
 # Entrega de Áulus — Lab03S03 após integrar a main
 
+## Atualização: referência do CSV adotado e preparação humana
+
+Por instrução de Áulus, a seleção passou a usar o CSV da main e o arquivo de
+releases associado, no modo explícito `csv_main_adotado`. Foram preparados
+**60 repositórios × 5 releases**, com `random_state=42`, mantendo a janela de
+01/10/2023 a 30/09/2024 UTC. A [referência](data/amostra_ouro_csv_main/amostra_comum.csv),
+os [registros fornecidos](data/amostra_ouro_csv_main/evidencias_releases.json),
+as cópias das entradas e o [manifesto](data/amostra_ouro_csv_main/selecao.json)
+permitem reproduzir a seleção e verificar sua integridade.
+
+Essa escolha não resolve a procedência empírica: a origem gerada identificada
+na auditoria permanece declarada. O manifesto mantém falsos os indicadores de
+releases originais auditadas, critérios de aprovação auditados e cobertura
+histórica verificada. `executar_amostra_ouro.py` conserva os requisitos da
+coleta real. Nenhum ID ou registro foi fabricado para substituir evidência.
+
+**Entregas preparadas de Áulus (#75/#62/#77):**
+
+- `rotulos_aulus.csv`, `rotulos_maria_independente.csv` e
+  `rotulos_vinicius_independente.csv`, cada um com 300 registros e todos os
+  julgamentos vazios; arquivos legados dos colegas preservados.
+- `data/concordancia_aulus/estado.json`, com **0/3 avaliações completas**, e
+  `consenso_formulario.csv`, com **420 decisões vazias**.
+- `preparar_concordancia_aulus.py`, que confere a referência e os três arquivos;
+  somente com todos completos calcula Fleiss pré-consenso e gera divergências
+  e o formulário para a reunião. Sem rótulos, kappa ou decisões automáticas.
+- [Guia de rotulagem e reunião](ROTULAGEM_AULUS.md), com comandos de reprodução,
+  validação, cálculo pré-consenso e consolidação posterior ao encontro.
+
+**Investigação das releases originais:** o cache tem paginação completa para
+222 dos 300 nomes; 164 desses têm pelo menos cinco releases estáveis na janela.
+No sorteio original de 60, somente 26 têm o mínimo comprovado no cache, 16 têm
+menos de cinco e 18 não têm cobertura no cache. Consultas adicionais à API
+confirmaram zero releases elegíveis de `FactoryBoy/factory_boy`, uma de
+`yaml/pyyaml` e HTTP 404 para `ecosystem-org/lib-tool-001`. A evidência está em
+`data/execucao_amostra_aulus/`, incluindo os relatórios do cache e as respostas
+em `confirmacoes_api/`. O ZIP com snapshots dos selecionados permanece local
+(`originais_selecionados60.zip`, 19.895.042 bytes, SHA-256
+`27869afe60409e3d97065795998d9854014f96f66f54cbd464e005739b7f9d82`), fora do Git.
+
+**Pendências atuais de Áulus:** preencher pessoalmente seus julgamentos (#62),
+respeitando a ausência de fonte real verificável; executar o cálculo após as
+três avaliações completas; participar da reunião e validar seu registro (#75).
+Evidências dos primeiros 100 reais e resultados empíricos continuam dependentes
+da coleta auditável (#74/#76/#77). **Pendências do grupo:** comprovar a população
+real e a cobertura anual, preservar comparações completas de commits, concluir
+as três avaliações independentes e registrar o consenso. As Issues e a sprint
+continuam abertas.
+
+Os relatos abaixo documentam as execuções anteriores à adoção dessa referência.
+Em particular, a ausência de `rotulos_aulus.csv` neles descreve o estado anterior.
+**Testes desta preparação:** 154 testes relevantes e mais 13 testes novos
+isolados passaram; a suíte completa passou com **552 testes** e **83,13% de
+cobertura de `metricas`**. Os comandos e resultados estão em
+[execucoes.json](data/execucao_amostra_aulus/execucoes.json) e no
+[log completo](data/execucao_amostra_aulus/suite_completa.txt).
+As contagens das execuções históricas abaixo descrevem as rodadas anteriores.
+
+O `fetch` mais recente identificou dois commits adicionais de `origin/main`,
+até `4e05345`: `17224e5` (Maria, resumo/conclusão e comentários da heurística)
+e `4e05345` (Vinícius, `FloatBarrier`). Ambos alteram somente `artigo/main.tex`.
+A publicação desta preparação também deverá incorporar esses commits na branch
+de Áulus, preservando os oito commits locais e os formulários preparados.
+
+## Histórico: análise do CSV e integração da main
+
 **Atualização de 21/10/2026 — CSV adotado para análise:** por escolha expressa
 de Áulus, `data/output/repositorios_aprovados.csv` da main `a892089` passou a
 ser a entrada de uma análise descritiva dos 300 registros fornecidos.

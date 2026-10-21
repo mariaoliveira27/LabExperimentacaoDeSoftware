@@ -1,119 +1,129 @@
 # Rotulagem independente de Áulus — Issues #62 e #75
 
-O formulário `rotulos_aulus.csv` será criado com os identificadores e links reais
-assim que existir uma população final auditável de pelo menos 300 repositórios
-aprovados. Após integrar a main `a892089` em 21/10/2026, o bundle declarado de
-300 foi rejeitado: suas releases e contagens reproduzem um gerador de referência.
-A auditoria dos 4.617 snapshots antigos encontrou zero aprovados. A qualificação
-histórica adicional comprovou sete aprovações reais parciais (7/100, sem ano
-completo), preservadas em `data/execucao_pos_main/historico_15`; não há referência comum
-válida de 60 repositórios e 300 releases. Criar linhas inventadas ou copiar a
-amostra antiga não resolve essa pendência. A Issue #62 permanece aberta.
+A referência de **60 repositórios × 5 releases** foi preparada com o CSV e o
+arquivo de releases da main, conforme a escolha de Áulus. Os arquivos
+`rotulos_aulus.csv`, `rotulos_maria_independente.csv` e
+`rotulos_vinicius_independente.csv` contêm as mesmas 300 unidades, com os cinco
+campos de julgamento vazios. Os arquivos antigos dos colegas foram preservados.
 
-## Preparar a referência e o formulário
+O manifesto identifica `tipo_fonte=csv_main_adotado`. A auditoria encontrou
+seeds e registros gerados nessa fonte. Os identificadores, datas, notas e links
+fornecidos foram preservados, mas não certificam releases originais da API,
+300 aprovações reais ou cobertura histórica integral. A preparação permite
+trabalhar com a entrada escolhida; a validação empírica continua pendente.
+Sem fonte real verificável para uma unidade, preserve o julgamento pendente.
 
-Execute na pasta do laboratório, usando o ambiente instalado:
+## Arquivos e reprodução
+
+- [Referência comum](data/amostra_ouro_csv_main/amostra_comum.csv): 300 unidades, sem julgamentos.
+- [Manifesto](data/amostra_ouro_csv_main/selecao.json): semente, janela, origem, hashes e seleção.
+- [Registros de releases fornecidos](data/amostra_ouro_csv_main/evidencias_releases.json): conteúdo associado aos identificadores sorteados.
+- `data/amostra_ouro_csv_main/fontes_entrada/`: cópias das entradas preservadas para reprodução.
+- [Formulário de Áulus](rotulos_aulus.csv): arquivo a preencher pessoalmente.
+- [Estado da concordância](data/concordancia_aulus/estado.json): 0/3 avaliações completas.
+- [Formulário de consenso](data/concordancia_aulus/consenso_formulario.csv): 420 decisões vazias.
+
+Execute na pasta `Laboratorio03_MineracaoDeMetricasDORA`. Para reproduzir a
+preparação, escolha saídas novas; os comandos não sobrescrevem arquivos:
 
 ```powershell
-.\.venv\Scripts\python.exe executar_amostra_ouro.py --config config.yaml --coleta data/coleta_final --saida data/amostra_ouro --rotulos rotulos_aulus.csv
+.\.venv\Scripts\python.exe -X utf8 amostra_csv_main.py --csv data/coleta_final/repositorios_aprovados.csv --releases data/coleta_final/releases.json --proveniencia data/coleta_final/proveniencia.json --config config.yaml --saida data/amostra_ouro_csv_main_reproducao --rotulos rotulos_aulus_reproducao.csv
 ```
 
-O comando exige `repositorios_aprovados.csv`, `releases.json` e
-`proveniencia.json` do mesmo bundle final, com os snapshots de qualificação
-auditáveis. Verifica os critérios da coleta e sorteia 60 repositórios e cinco
-releases por repositório, com população ordenada e `random_state=42`. Salva a
-referência vazia, as notas originais das releases e um manifesto com hashes,
-versões e identificadores. Não substitui seleção ou formulário existentes.
+A população é ordenada por `full_name`; as releases estáveis fornecidas são
+ordenadas por publicação UTC e ID. Cada sorteio usa `random_state=42`, sem
+reposição: 60 repositórios e cinco releases por repositório. A janela permanece
+de `2023-10-01T00:00:00Z` a `2024-09-30T23:59:59Z`. A validação reproduz o
+sorteio e confere hashes e conteúdo das evidências. Os indicadores de auditoria
+de origem, critérios e cobertura permanecem falsos no manifesto.
 
-Se o sorteio já existe e somente o formulário de Áulus ainda não foi criado:
+O fluxo `executar_amostra_ouro.py` continua exigindo o bundle real e seus
+snapshots. Ele não foi flexibilizado para aceitar a fonte fornecida.
 
-```powershell
-.\.venv\Scripts\python.exe rotulagem.py gerar --amostra data/amostra_ouro/amostra_comum.csv --saida rotulos_aulus.csv
-```
+## Preencher pessoalmente
 
-A CLI confere `selecao.json`, os hashes das entradas, a auditoria do bundle e a
-reprodução do sorteio antes de aceitar a referência. Preserve a pasta da coleta
-original e os caminhos das entradas registrados no manifesto. Uma referência
-com julgamentos preenchidos será rejeitada para preservar o cegamento.
-
-## Preencher pessoalmente, antes de consultar outros avaliadores
-
-1. Trabalhe somente no seu CSV e nas fontes originais do projeto. Não consulte
-   os rótulos de Maria ou Vinicius, previsões automáticas de corretivas ou um
-   consenso antes de terminar e preservar sua avaliação independente.
+1. Trabalhe somente no seu CSV e nas fontes do projeto. Não consulte rótulos
+   dos colegas, previsões da heurística ou consenso antes de concluir e preservar
+   sua avaliação independente.
 2. Mantenha `full_name`, `release_id`, `published_at`, `tag_name`, `html_url`,
    `release_notes_url`, `commits_url` e `previous_tag` sem alterações. Salve em
    UTF-8, com vírgula como delimitador e aspas nos textos que contêm vírgulas.
-3. Para cada um dos 60 repositórios, leia README, descrição e documentação.
-   Em `tipo_projeto`, escolha exatamente `biblioteca/framework`,
-   `aplicação/serviço`, `ferramenta CLI` ou `outro`.
-4. Avalie se as releases representam entregas funcionais aos usuários, incluindo
-   consumidores de bibliotecas, usando notas, artefatos e documentação de
-   distribuição. Em `entrega_real`, escolha `sim`, `não` ou `incerto`.
-   Repita as decisões de `tipo_projeto` e `entrega_real` nas cinco linhas do
-   mesmo repositório; elas correspondem a uma decisão por repositório.
-5. Para cada uma das 300 releases, abra `release_notes_url` e `commits_url`.
-   Marque `corretiva=sim` quando o objetivo predominante for corrigir defeitos,
-   regressões ou vulnerabilidades; caso contrário, marque `não`. Um incremento
-   de patch sozinho não determina a classificação. Quando `previous_tag` estiver
-   vazio, o link apresenta o histórico da tag; consulte também o histórico
-   anterior para delimitar as mudanças da release.
-6. Preencha `justificativa` e `evidencia` em cada linha: motivo da decisão e links,
-   SHAs ou trechos identificáveis das fontes. Registre dificuldades de acesso ou
-   ambiguidade. Para `corretiva`, que é binária, deixe a unidade pendente enquanto
-   não puder julgá-la; não use um rótulo arbitrário para passar no validador.
+3. Para cada repositório, consulte README, descrição e documentação. Em
+   `tipo_projeto`, escolha `biblioteca/framework`, `aplicação/serviço`,
+   `ferramenta CLI` ou `outro`.
+4. Em `entrega_real`, escolha `sim`, `não` ou `incerto` após avaliar se as
+   releases representam entregas funcionais aos usuários, incluindo consumidores
+   de bibliotecas. Repita `tipo_projeto` e `entrega_real` nas cinco linhas:
+   cada dimensão tem uma decisão por repositório.
+5. Para cada release, confira notas e commits. Marque `corretiva=sim` quando o
+   objetivo predominante for corrigir defeitos, regressões ou vulnerabilidades;
+   caso contrário, marque `não`. Um incremento de patch sozinho não determina
+   a classificação. Se `previous_tag` estiver vazio, investigue também o
+   histórico anterior da tag para delimitar as mudanças.
+6. Preencha `justificativa` e `evidencia` em cada linha com o motivo e links,
+   SHAs ou trechos identificáveis. Os registros fornecidos podem apontar para
+   releases inexistentes ou diferentes das reais. Sem evidência suficiente,
+   mantenha a unidade pendente e registre o problema; não invente um julgamento.
 
-Durante o preenchimento, o rascunho pode conter campos vazios:
+Valide o rascunho durante o preenchimento:
 
 ```powershell
-.\.venv\Scripts\python.exe rotulagem.py validar --amostra data/amostra_ouro/amostra_comum.csv --rotulos rotulos_aulus.csv --rascunho
+.\.venv\Scripts\python.exe -X utf8 rotulagem.py validar --amostra data/amostra_ouro_csv_main/amostra_comum.csv --rotulos rotulos_aulus.csv --rascunho
 ```
 
-Depois de concluir pessoalmente todas as unidades, execute sem `--rascunho`:
+Depois de concluir pessoalmente todos os campos humanos, valide sem
+`--rascunho` e preserve o arquivo anterior à reunião:
 
 ```powershell
-.\.venv\Scripts\python.exe rotulagem.py validar --amostra data/amostra_ouro/amostra_comum.csv --rotulos rotulos_aulus.csv
+.\.venv\Scripts\python.exe -X utf8 rotulagem.py validar --amostra data/amostra_ouro_csv_main/amostra_comum.csv --rotulos rotulos_aulus.csv
 Get-FileHash rotulos_aulus.csv -Algorithm SHA256
 ```
 
-Preserve e versione esse arquivo antes da reunião do grupo. Registre que a
-avaliação foi realizada sem consulta aos outros arquivos ou às previsões. O
-validador comprova integridade estrutural; não consegue comprovar por si só a
-independência humana. Só após essa avaliação e validação a Issue #62 pode ser
-considerada concluída. Nenhum script preenche julgamentos em nome de Áulus.
+Maria e Vinícius preencherão, separadamente, suas novas cópias
+`rotulos_maria_independente.csv` e `rotulos_vinicius_independente.csv`.
+O validador comprova estrutura, categorias e correspondência com a referência.
+A independência humana precisa ser respeitada e declarada pelos avaliadores.
+A Issue #62 permanece aberta.
 
-## Concordância e reunião, após os três arquivos completos
+## Concordância pré-consenso
 
-Cada colega deverá avaliar a mesma referência de forma independente e preservar
-sua versão anterior à reunião. O arquivo preexistente de Vinicius não será
-adotado automaticamente como avaliação da nova referência. O exemplo usa uma
-nova avaliação em `rotulos_vinicius_independente.csv`.
+A preparação atual gerou `data/concordancia_aulus/estado.json`, com **0/3
+avaliações completas**, e `consenso_formulario.csv`, com 420 decisões vazias.
+Não há kappa ou relatório de divergências enquanto faltarem os três arquivos
+humanos completos. Para verificar novamente, use um novo diretório:
 
 ```powershell
-.\.venv\Scripts\python.exe -m metricas.concordancia avaliar --amostra data/amostra_ouro/amostra_comum.csv --aulus rotulos_aulus.csv --maria rotulos_maria.csv --vinicius rotulos_vinicius_independente.csv --divergencias data/amostra_ouro/divergencias.csv --consenso data/amostra_ouro/consenso.csv --saida data/amostra_ouro/kappas_independentes.json
+.\.venv\Scripts\python.exe -X utf8 preparar_concordancia_aulus.py --amostra data/amostra_ouro_csv_main/amostra_comum.csv --aulus rotulos_aulus.csv --maria rotulos_maria_independente.csv --vinicius rotulos_vinicius_independente.csv --saida data/concordancia_aulus_verificacao
 ```
 
-O comando valida os três arquivos completos, rejeita o mesmo arquivo físico
-usado como mais de um avaliador e calcula o kappa de Fleiss anterior ao consenso.
-São 60 unidades para `tipo_projeto`, 60 para `entrega_real` e 300 para
-`corretiva`. Se houver somente uma categoria observada, o resultado será
-indefinido, com motivo explícito. Conteúdos coincidentes de arquivos distintos
-podem representar concordância legítima; hashes não comprovam independência.
+Após as três avaliações completas, execute com uma saída ainda inexistente:
 
-O relatório identifica as divergências com suas evidências. O formulário de
-consenso mantém vazias as 420 decisões, inclusive unanimidades. Na reunião,
-confiram as fontes, discutam divergências e registrem `rotulo_consenso`,
+```powershell
+.\.venv\Scripts\python.exe -X utf8 preparar_concordancia_aulus.py --amostra data/amostra_ouro_csv_main/amostra_comum.csv --aulus rotulos_aulus.csv --maria rotulos_maria_independente.csv --vinicius rotulos_vinicius_independente.csv --saida data/concordancia_aulus_preconsenso
+```
+
+Somente com três arquivos completos o comando produz `kappas_pre_consenso.json`,
+`divergencias.csv` e `consenso.csv`. Fleiss usa os votos independentes
+**anteriores à reunião**: 60 unidades de `tipo_projeto`, 60 de `entrega_real`
+e 300 de `corretiva`. Distribuições com kappa indefinido têm o motivo registrado.
+O resultado mantém os limites de origem da referência; calcular concordância
+não comprova a origem das releases. O mesmo arquivo físico não pode representar
+dois avaliadores.
+
+## Reunião e decisões
+
+O `consenso.csv` mantém vazias as 420 decisões, inclusive unanimidades. Na
+reunião, confiram fontes e divergências e preencham `rotulo_consenso`,
 `justificativa`, `evidencia`, `responsaveis` (`aulus;maria;vinicius`),
 `data_reuniao` (`YYYY-MM-DD`) e `protocolo`. Apliquem maioria simples após a
-discussão; empates 1-1-1 exigem decisão conjunta e registro em `desempate`.
-Se a decisão não for possível, preservem a pendência. Não alterem retroativamente
-os arquivos independentes usados para calcular a concordância.
+discussão; empates 1-1-1 exigem decisão conjunta registrada em `desempate`.
+Casos não resolvidos permanecem pendentes. Preservem os arquivos independentes.
 
-Após documentar as 420 decisões do grupo, valide a consolidação final:
+Depois de o grupo registrar as 420 decisões, valide a consolidação:
 
 ```powershell
-.\.venv\Scripts\python.exe -m metricas.concordancia calcular --amostra data/amostra_ouro/amostra_comum.csv --aulus rotulos_aulus.csv --maria rotulos_maria.csv --vinicius rotulos_vinicius_independente.csv --consenso data/amostra_ouro/consenso.csv --saida data/amostra_ouro/kappas_consenso_final.json
+.\.venv\Scripts\python.exe -X utf8 -m metricas.concordancia calcular --amostra data/amostra_ouro_csv_main/amostra_comum.csv --aulus rotulos_aulus.csv --maria rotulos_maria_independente.csv --vinicius rotulos_vinicius_independente.csv --consenso data/concordancia_aulus_preconsenso/consenso.csv --saida data/concordancia_aulus_preconsenso/concordancia_final.json
 ```
 
-Nenhum kappa, consenso ou resultado humano oficial foi produzido na execução
-atual: faltam a população final auditada e as três avaliações humanas reais.
+Nenhum rótulo, kappa, decisão, responsável ou data de reunião foi preenchido
+automaticamente. A Issue #75 depende das três avaliações humanas e do consenso.

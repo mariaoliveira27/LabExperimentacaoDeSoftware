@@ -1,0 +1,402 @@
+{
+  "data_referencia": "2026-10-21",
+  "escopo": "Somente arquivos de producao de Lab03; caches e fixtures excluidos. Conteudos dos julgamentos nao exportados.",
+  "arquivos": [
+    {
+      "arquivo": "data/gold_standard/consenso.csv",
+      "sha256": "6f6fd4110c027e61f93b42606a032f745b49b0a34deafe8a121b93aac55455f4",
+      "encoding": "utf-8-sig",
+      "linhas": 300,
+      "colunas": [
+        "repo",
+        "tipo_projeto",
+        "entrega_real",
+        "release_tag",
+        "tag_anterior",
+        "release_date",
+        "release_url",
+        "commits_resumo",
+        "corretiva",
+        "justificativa",
+        "justificativa_vinicius",
+        "justificativa_maria",
+        "concordancia",
+        "responsaveis"
+      ],
+      "faltam_colunas_contrato": [
+        "commits_url",
+        "evidencia",
+        "full_name",
+        "html_url",
+        "previous_tag",
+        "published_at",
+        "release_id",
+        "release_notes_url",
+        "tag_name"
+      ],
+      "n_repositorios": 60,
+      "releases_por_repositorio_histograma": {
+        "5": 60
+      },
+      "campos_julgamento_preenchidos": {
+        "tipo_projeto": 300,
+        "entrega_real": 300,
+        "corretiva": 300,
+        "justificativa": 300,
+        "evidencia": 0
+      },
+      "unidades_legadas_unicas": 300,
+      "compativel_referencia_atual": false,
+      "motivos": [
+        "Faltam identificadores e metadados exigidos pelo contrato atual.",
+        "Nao ha manifesto da selecao comum vinculando o arquivo humano aos originais."
+      ]
+    },
+    {
+      "arquivo": "data/gold_standard/rotulos_maria.csv",
+      "sha256": "04649184077538e849559ffcbe19b38ced50538d3334a1e1684f377bfdfc8731",
+      "encoding": "utf-8-sig",
+      "linhas": 300,
+      "colunas": [
+        "repo",
+        "tipo_projeto",
+        "entrega_real",
+        "release_tag",
+        "tag_anterior",
+        "release_date",
+        "release_url",
+        "commits_resumo",
+        "corretiva",
+        "justificativa"
+      ],
+      "faltam_colunas_contrato": [
+        "commits_url",
+        "evidencia",
+        "full_name",
+        "html_url",
+        "previous_tag",
+        "published_at",
+        "release_id",
+        "release_notes_url",
+        "tag_name"
+      ],
+      "n_repositorios": 60,
+      "releases_por_repositorio_histograma": {
+        "5": 60
+      },
+      "campos_julgamento_preenchidos": {
+        "tipo_projeto": 300,
+        "entrega_real": 300,
+        "corretiva": 300,
+        "justificativa": 300,
+        "evidencia": 0
+      },
+      "unidades_legadas_unicas": 300,
+      "compativel_referencia_atual": false,
+      "motivos": [
+        "Faltam identificadores e metadados exigidos pelo contrato atual.",
+        "Nao ha manifesto da selecao comum vinculando o arquivo humano aos originais."
+      ]
+    },
+    {
+      "arquivo": "data/gold_standard/rotulos_vinicius.csv",
+      "sha256": "ecfce3e511d5b255eeb7735b45cafa04b13ad609e36a995056f023a9f26f6b0e",
+      "encoding": "utf-8-sig",
+      "linhas": 300,
+      "colunas": [
+        "repo",
+        "tipo_projeto",
+        "entrega_real",
+        "release_tag",
+        "tag_anterior",
+        "release_date",
+        "release_url",
+        "commits_resumo",
+        "corretiva",
+        "justificativa"
+      ],
+      "faltam_colunas_contrato": [
+        "commits_url",
+        "evidencia",
+        "full_name",
+        "html_url",
+        "previous_tag",
+        "published_at",
+        "release_id",
+        "release_notes_url",
+        "tag_name"
+      ],
+      "n_repositorios": 60,
+      "releases_por_repositorio_histograma": {
+        "5": 60
+      },
+      "campos_julgamento_preenchidos": {
+        "tipo_projeto": 300,
+        "entrega_real": 300,
+        "corretiva": 300,
+        "justificativa": 300,
+        "evidencia": 0
+      },
+      "unidades_legadas_unicas": 300,
+      "compativel_referencia_atual": false,
+      "motivos": [
+        "Faltam identificadores e metadados exigidos pelo contrato atual.",
+        "Nao ha manifesto da selecao comum vinculando o arquivo humano aos originais."
+      ]
+    },
+    {
+      "arquivo": "data/output/consenso_amostra_ouro.csv",
+      "sha256": "6f6fd4110c027e61f93b42606a032f745b49b0a34deafe8a121b93aac55455f4",
+      "encoding": "utf-8-sig",
+      "linhas": 300,
+      "colunas": [
+        "repo",
+        "tipo_projeto",
+        "entrega_real",
+        "release_tag",
+        "tag_anterior",
+        "release_date",
+        "release_url",
+        "commits_resumo",
+        "corretiva",
+        "justificativa",
+        "justificativa_vinicius",
+        "justificativa_maria",
+        "concordancia",
+        "responsaveis"
+      ],
+      "faltam_colunas_contrato": [
+        "commits_url",
+        "evidencia",
+        "full_name",
+        "html_url",
+        "previous_tag",
+        "published_at",
+        "release_id",
+        "release_notes_url",
+        "tag_name"
+      ],
+      "n_repositorios": 60,
+      "releases_por_repositorio_histograma": {
+        "5": 60
+      },
+      "campos_julgamento_preenchidos": {
+        "tipo_projeto": 300,
+        "entrega_real": 300,
+        "corretiva": 300,
+        "justificativa": 300,
+        "evidencia": 0
+      },
+      "unidades_legadas_unicas": 300,
+      "compativel_referencia_atual": false,
+      "motivos": [
+        "Faltam identificadores e metadados exigidos pelo contrato atual.",
+        "Nao ha manifesto da selecao comum vinculando o arquivo humano aos originais."
+      ]
+    },
+    {
+      "arquivo": "data/rotulos_maria.csv",
+      "sha256": "04649184077538e849559ffcbe19b38ced50538d3334a1e1684f377bfdfc8731",
+      "encoding": "utf-8-sig",
+      "linhas": 300,
+      "colunas": [
+        "repo",
+        "tipo_projeto",
+        "entrega_real",
+        "release_tag",
+        "tag_anterior",
+        "release_date",
+        "release_url",
+        "commits_resumo",
+        "corretiva",
+        "justificativa"
+      ],
+      "faltam_colunas_contrato": [
+        "commits_url",
+        "evidencia",
+        "full_name",
+        "html_url",
+        "previous_tag",
+        "published_at",
+        "release_id",
+        "release_notes_url",
+        "tag_name"
+      ],
+      "n_repositorios": 60,
+      "releases_por_repositorio_histograma": {
+        "5": 60
+      },
+      "campos_julgamento_preenchidos": {
+        "tipo_projeto": 300,
+        "entrega_real": 300,
+        "corretiva": 300,
+        "justificativa": 300,
+        "evidencia": 0
+      },
+      "unidades_legadas_unicas": 300,
+      "compativel_referencia_atual": false,
+      "motivos": [
+        "Faltam identificadores e metadados exigidos pelo contrato atual.",
+        "Nao ha manifesto da selecao comum vinculando o arquivo humano aos originais."
+      ]
+    },
+    {
+      "arquivo": "data/rotulos_vinicius.csv",
+      "sha256": "ecfce3e511d5b255eeb7735b45cafa04b13ad609e36a995056f023a9f26f6b0e",
+      "encoding": "utf-8-sig",
+      "linhas": 300,
+      "colunas": [
+        "repo",
+        "tipo_projeto",
+        "entrega_real",
+        "release_tag",
+        "tag_anterior",
+        "release_date",
+        "release_url",
+        "commits_resumo",
+        "corretiva",
+        "justificativa"
+      ],
+      "faltam_colunas_contrato": [
+        "commits_url",
+        "evidencia",
+        "full_name",
+        "html_url",
+        "previous_tag",
+        "published_at",
+        "release_id",
+        "release_notes_url",
+        "tag_name"
+      ],
+      "n_repositorios": 60,
+      "releases_por_repositorio_histograma": {
+        "5": 60
+      },
+      "campos_julgamento_preenchidos": {
+        "tipo_projeto": 300,
+        "entrega_real": 300,
+        "corretiva": 300,
+        "justificativa": 300,
+        "evidencia": 0
+      },
+      "unidades_legadas_unicas": 300,
+      "compativel_referencia_atual": false,
+      "motivos": [
+        "Faltam identificadores e metadados exigidos pelo contrato atual.",
+        "Nao ha manifesto da selecao comum vinculando o arquivo humano aos originais."
+      ]
+    },
+    {
+      "arquivo": "rotulos_maria.csv",
+      "sha256": "04649184077538e849559ffcbe19b38ced50538d3334a1e1684f377bfdfc8731",
+      "encoding": "utf-8-sig",
+      "linhas": 300,
+      "colunas": [
+        "repo",
+        "tipo_projeto",
+        "entrega_real",
+        "release_tag",
+        "tag_anterior",
+        "release_date",
+        "release_url",
+        "commits_resumo",
+        "corretiva",
+        "justificativa"
+      ],
+      "faltam_colunas_contrato": [
+        "commits_url",
+        "evidencia",
+        "full_name",
+        "html_url",
+        "previous_tag",
+        "published_at",
+        "release_id",
+        "release_notes_url",
+        "tag_name"
+      ],
+      "n_repositorios": 60,
+      "releases_por_repositorio_histograma": {
+        "5": 60
+      },
+      "campos_julgamento_preenchidos": {
+        "tipo_projeto": 300,
+        "entrega_real": 300,
+        "corretiva": 300,
+        "justificativa": 300,
+        "evidencia": 0
+      },
+      "unidades_legadas_unicas": 300,
+      "compativel_referencia_atual": false,
+      "motivos": [
+        "Faltam identificadores e metadados exigidos pelo contrato atual.",
+        "Nao ha manifesto da selecao comum vinculando o arquivo humano aos originais."
+      ]
+    },
+    {
+      "arquivo": "rotulos_vinicius.csv",
+      "sha256": "ecfce3e511d5b255eeb7735b45cafa04b13ad609e36a995056f023a9f26f6b0e",
+      "encoding": "utf-8-sig",
+      "linhas": 300,
+      "colunas": [
+        "repo",
+        "tipo_projeto",
+        "entrega_real",
+        "release_tag",
+        "tag_anterior",
+        "release_date",
+        "release_url",
+        "commits_resumo",
+        "corretiva",
+        "justificativa"
+      ],
+      "faltam_colunas_contrato": [
+        "commits_url",
+        "evidencia",
+        "full_name",
+        "html_url",
+        "previous_tag",
+        "published_at",
+        "release_id",
+        "release_notes_url",
+        "tag_name"
+      ],
+      "n_repositorios": 60,
+      "releases_por_repositorio_histograma": {
+        "5": 60
+      },
+      "campos_julgamento_preenchidos": {
+        "tipo_projeto": 300,
+        "entrega_real": 300,
+        "corretiva": 300,
+        "justificativa": 300,
+        "evidencia": 0
+      },
+      "unidades_legadas_unicas": 300,
+      "compativel_referencia_atual": false,
+      "motivos": [
+        "Faltam identificadores e metadados exigidos pelo contrato atual.",
+        "Nao ha manifesto da selecao comum vinculando o arquivo humano aos originais."
+      ]
+    }
+  ],
+  "referencias_comuns_manifestadas": [],
+  "arquivos_distintos_de_avaliacao": 2,
+  "rotulos_aulus_existe": false,
+  "tres_avaliacoes_independentes_completas_verificadas": false,
+  "independencia_humana": "Nao pode ser estabelecida apenas pelo conteudo do CSV; requer declaracao dos avaliadores e preservacao de arquivos separados antes do consenso.",
+  "kappa_calculado": false,
+  "consenso_registrado_pelo_agente": false,
+  "faltam": [
+    "Referencia comum 60 x 5 com manifesto de sorteio e evidencias de releases originais.",
+    "Tres arquivos humanos no schema atual vinculados a mesma referencia, completos e avaliados independentemente.",
+    "Reuniao humana para preencher as decisoes de consenso, justificativas, evidencias, responsaveis e data."
+  ],
+  "fluxo_recomendado": [
+    "Sortear referencia comum e gerar somente campos humanos vazios.",
+    "Distribuir referencia comum; cada avaliador preenche seu proprio arquivo sem consultar os votos alheios.",
+    "Validar completude e mesmo hash de referencia dos tres arquivos antes de calcular Fleiss pre-consenso.",
+    "Gerar divergencias e formulario vazio; preencher decisoes somente apos a reuniao."
+  ],
+  "momento": "antes_da_preparacao_da_referencia_csv_main",
+  "estado_posterior": "data/concordancia_aulus/estado.json"
+}

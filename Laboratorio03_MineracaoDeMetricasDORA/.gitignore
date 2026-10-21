@@ -38,3 +38,6 @@ data/cobertura_s03/*.tmp
 .tmp-runs-coverage/
 data/cobertura_pos_main/cache/
 data/cobertura_pos_main/*.tmp
+
+# Páginas originais do cache permanecem locais; manifesto e hashes versionados.
+data/execucao_amostra_aulus/originais_selecionados60.zip

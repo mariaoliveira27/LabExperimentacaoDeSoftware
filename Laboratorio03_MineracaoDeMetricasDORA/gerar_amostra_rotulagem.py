@@ -196,6 +196,9 @@ def validar_referencia(amostra_csv, manifesto_json=None):
     amostra_csv = Path(amostra_csv)
     manifesto_json = Path(manifesto_json) if manifesto_json else amostra_csv.parent / "selecao.json"
     manifesto = json.loads(manifesto_json.read_text(encoding="utf-8"))
+    if isinstance(manifesto, dict) and manifesto.get("tipo_fonte") == "csv_main_adotado":
+        from amostra_csv_main import validar_referencia_fornecida
+        return validar_referencia_fornecida(amostra_csv, manifesto_json)
     contrato = {"schema_version": 1, "random_state": SEMENTE,
                 "n_repositorios": N_REPOSITORIOS, "n_releases": N_REPOSITORIOS * RELEASES_POR_REPOSITORIO,
                 "releases_por_repositorio": RELEASES_POR_REPOSITORIO}

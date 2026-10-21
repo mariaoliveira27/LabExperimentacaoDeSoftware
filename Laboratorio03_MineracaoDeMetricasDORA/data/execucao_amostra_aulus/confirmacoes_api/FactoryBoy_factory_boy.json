@@ -1,0 +1,15 @@
+{
+  "consultado_em": "2026-10-21T15:48:54.640449+00:00",
+  "endpoint": "/repos/FactoryBoy/factory_boy/releases",
+  "params": {
+    "per_page": 100,
+    "page": 1
+  },
+  "http_status": 200,
+  "headers": {
+    "ETag": "\"2fb4cad7adbf0a5b08ab1fc5f6d4e793243a4ba27003f8e0564b1ce137614c71\"",
+    "X-RateLimit-Remaining": "4984",
+    "X-RateLimit-Reset": "1792600079"
+  },
+  "resposta": []
+}

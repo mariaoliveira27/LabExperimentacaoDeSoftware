@@ -1,0 +1,3 @@
+Refer�ncia da fonte fornecida: data\amostra_ouro_csv_main\amostra_comum.csv (60 � 5; random_state=42).
+Rascunho independente: rotulos_aulus.csv; todos os julgamentos vazios.
+Fonte fornecida pela main; releases originais da API, crit�rios e cobertura hist�rica n�o auditados.

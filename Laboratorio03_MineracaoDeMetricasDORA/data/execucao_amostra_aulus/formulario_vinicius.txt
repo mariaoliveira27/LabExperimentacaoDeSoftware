@@ -1,0 +1,1 @@
+Criado rotulos_vinicius_independente.csv: 300 releases, 60 reposit�rios, julgamentos vazios. Issue #62 pendente de julgamento humano independente de �ulus.

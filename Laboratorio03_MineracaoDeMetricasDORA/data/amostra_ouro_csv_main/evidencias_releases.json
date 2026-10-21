@@ -1,0 +1,3122 @@
+{
+  "FactoryBoy/factory_boy": [
+    {
+      "id": 145001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/FactoryBoy/factory_boy/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto FactoryBoy/factory_boy. Contém melhorias e correções."
+    },
+    {
+      "id": 145002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-12-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/FactoryBoy/factory_boy/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto FactoryBoy/factory_boy. Contém melhorias e correções."
+    },
+    {
+      "id": 145003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-02-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/FactoryBoy/factory_boy/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto FactoryBoy/factory_boy. Contém melhorias e correções."
+    },
+    {
+      "id": 145005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-06-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/FactoryBoy/factory_boy/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto FactoryBoy/factory_boy. Contém melhorias e correções."
+    },
+    {
+      "id": 145006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-08-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/FactoryBoy/factory_boy/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto FactoryBoy/factory_boy. Contém melhorias e correções."
+    }
+  ],
+  "FluentValidation/FluentValidation": [
+    {
+      "id": 287001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/FluentValidation/FluentValidation/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto FluentValidation/FluentValidation. Contém melhorias e correções."
+    },
+    {
+      "id": 287002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/FluentValidation/FluentValidation/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto FluentValidation/FluentValidation. Contém melhorias e correções."
+    },
+    {
+      "id": 287003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/FluentValidation/FluentValidation/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto FluentValidation/FluentValidation. Contém melhorias e correções."
+    },
+    {
+      "id": 287006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-05-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/FluentValidation/FluentValidation/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto FluentValidation/FluentValidation. Contém melhorias e correções."
+    },
+    {
+      "id": 287008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-08-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/FluentValidation/FluentValidation/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto FluentValidation/FluentValidation. Contém melhorias e correções."
+    }
+  ],
+  "InsertKoinIO/koin": [
+    {
+      "id": 275001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/InsertKoinIO/koin/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto InsertKoinIO/koin. Contém melhorias e correções."
+    },
+    {
+      "id": 275006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-02-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/InsertKoinIO/koin/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto InsertKoinIO/koin. Contém melhorias e correções."
+    },
+    {
+      "id": 275010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-05-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/InsertKoinIO/koin/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto InsertKoinIO/koin. Contém melhorias e correções."
+    },
+    {
+      "id": 275012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-07-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/InsertKoinIO/koin/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto InsertKoinIO/koin. Contém melhorias e correções."
+    },
+    {
+      "id": 275013,
+      "tag_name": "v1.12.0",
+      "name": "Release v1.12.0",
+      "published_at": "2024-08-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/InsertKoinIO/koin/releases/tag/v1.12.0",
+      "body": "Notas da release v1.12.0 do projeto InsertKoinIO/koin. Contém melhorias e correções."
+    }
+  ],
+  "TanStack/table": [
+    {
+      "id": 188001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/TanStack/table/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto TanStack/table. Contém melhorias e correções."
+    },
+    {
+      "id": 188002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-10-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/TanStack/table/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto TanStack/table. Contém melhorias e correções."
+    },
+    {
+      "id": 188009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-02-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/TanStack/table/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto TanStack/table. Contém melhorias e correções."
+    },
+    {
+      "id": 188016,
+      "tag_name": "v1.7.15",
+      "name": "Release v1.7.15",
+      "published_at": "2024-07-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/TanStack/table/releases/tag/v1.7.15",
+      "body": "Notas da release v1.7.15 do projeto TanStack/table. Contém melhorias e correções."
+    },
+    {
+      "id": 188018,
+      "tag_name": "v1.8.17",
+      "name": "Release v1.8.17",
+      "published_at": "2024-08-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/TanStack/table/releases/tag/v1.8.17",
+      "body": "Notas da release v1.8.17 do projeto TanStack/table. Contém melhorias e correções."
+    }
+  ],
+  "alacritty/alacritty": [
+    {
+      "id": 241001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/alacritty/alacritty/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto alacritty/alacritty. Contém melhorias e correções."
+    },
+    {
+      "id": 241002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/alacritty/alacritty/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto alacritty/alacritty. Contém melhorias e correções."
+    },
+    {
+      "id": 241003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/alacritty/alacritty/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto alacritty/alacritty. Contém melhorias e correções."
+    },
+    {
+      "id": 241006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-05-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/alacritty/alacritty/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto alacritty/alacritty. Contém melhorias e correções."
+    },
+    {
+      "id": 241008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-08-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/alacritty/alacritty/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto alacritty/alacritty. Contém melhorias e correções."
+    }
+  ],
+  "alecthomas/chroma": [
+    {
+      "id": 99001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/alecthomas/chroma/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto alecthomas/chroma. Contém melhorias e correções."
+    },
+    {
+      "id": 99002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/alecthomas/chroma/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto alecthomas/chroma. Contém melhorias e correções."
+    },
+    {
+      "id": 99003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/alecthomas/chroma/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto alecthomas/chroma. Contém melhorias e correções."
+    },
+    {
+      "id": 99006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-05-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/alecthomas/chroma/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto alecthomas/chroma. Contém melhorias e correções."
+    },
+    {
+      "id": 99008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-08-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/alecthomas/chroma/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto alecthomas/chroma. Contém melhorias e correções."
+    }
+  ],
+  "apache/spark": [
+    {
+      "id": 260001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/apache/spark/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto apache/spark. Contém melhorias e correções."
+    },
+    {
+      "id": 260006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-02-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/apache/spark/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto apache/spark. Contém melhorias e correções."
+    },
+    {
+      "id": 260010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-05-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/apache/spark/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto apache/spark. Contém melhorias e correções."
+    },
+    {
+      "id": 260012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-07-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/apache/spark/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto apache/spark. Contém melhorias e correções."
+    },
+    {
+      "id": 260013,
+      "tag_name": "v1.12.0",
+      "name": "Release v1.12.0",
+      "published_at": "2024-08-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/apache/spark/releases/tag/v1.12.0",
+      "body": "Notas da release v1.12.0 do projeto apache/spark. Contém melhorias e correções."
+    }
+  ],
+  "bokeh/bokeh": [
+    {
+      "id": 89001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/bokeh/bokeh/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto bokeh/bokeh. Contém melhorias e correções."
+    },
+    {
+      "id": 89002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/bokeh/bokeh/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto bokeh/bokeh. Contém melhorias e correções."
+    },
+    {
+      "id": 89003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/bokeh/bokeh/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto bokeh/bokeh. Contém melhorias e correções."
+    },
+    {
+      "id": 89005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-05-01T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/bokeh/bokeh/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto bokeh/bokeh. Contém melhorias e correções."
+    },
+    {
+      "id": 89006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-06-23T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/bokeh/bokeh/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto bokeh/bokeh. Contém melhorias e correções."
+    }
+  ],
+  "celery/billiard": [
+    {
+      "id": 126001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/celery/billiard/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto celery/billiard. Contém melhorias e correções."
+    },
+    {
+      "id": 126002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-12-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/celery/billiard/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto celery/billiard. Contém melhorias e correções."
+    },
+    {
+      "id": 126003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-02-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/celery/billiard/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto celery/billiard. Contém melhorias e correções."
+    },
+    {
+      "id": 126004,
+      "tag_name": "v1.1.3",
+      "name": "Release v1.1.3",
+      "published_at": "2024-05-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/celery/billiard/releases/tag/v1.1.3",
+      "body": "Notas da release v1.1.3 do projeto celery/billiard. Contém melhorias e correções."
+    },
+    {
+      "id": 126005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-07-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/celery/billiard/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto celery/billiard. Contém melhorias e correções."
+    }
+  ],
+  "celery/celery": [
+    {
+      "id": 62001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/celery/celery/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto celery/celery. Contém melhorias e correções."
+    },
+    {
+      "id": 62002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/celery/celery/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto celery/celery. Contém melhorias e correções."
+    },
+    {
+      "id": 62003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/celery/celery/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto celery/celery. Contém melhorias e correções."
+    },
+    {
+      "id": 62005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-05-01T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/celery/celery/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto celery/celery. Contém melhorias e correções."
+    },
+    {
+      "id": 62006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-06-23T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/celery/celery/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto celery/celery. Contém melhorias e correções."
+    }
+  ],
+  "coil-kt/coil": [
+    {
+      "id": 277001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/coil-kt/coil/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto coil-kt/coil. Contém melhorias e correções."
+    },
+    {
+      "id": 277003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2023-12-11T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/coil-kt/coil/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto coil-kt/coil. Contém melhorias e correções."
+    },
+    {
+      "id": 277006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-03-19T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/coil-kt/coil/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto coil-kt/coil. Contém melhorias e correções."
+    },
+    {
+      "id": 277010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-07-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/coil-kt/coil/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto coil-kt/coil. Contém melhorias e correções."
+    },
+    {
+      "id": 277011,
+      "tag_name": "v1.10.0",
+      "name": "Release v1.10.0",
+      "published_at": "2024-09-03T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/coil-kt/coil/releases/tag/v1.10.0",
+      "body": "Notas da release v1.10.0 do projeto coil-kt/coil. Contém melhorias e correções."
+    }
+  ],
+  "containrrr/watchtower": [
+    {
+      "id": 219001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/containrrr/watchtower/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto containrrr/watchtower. Contém melhorias e correções."
+    },
+    {
+      "id": 219002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/containrrr/watchtower/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto containrrr/watchtower. Contém melhorias e correções."
+    },
+    {
+      "id": 219006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-04-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/containrrr/watchtower/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto containrrr/watchtower. Contém melhorias e correções."
+    },
+    {
+      "id": 219008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-06-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/containrrr/watchtower/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto containrrr/watchtower. Contém melhorias e correções."
+    },
+    {
+      "id": 219009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-07-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/containrrr/watchtower/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto containrrr/watchtower. Contém melhorias e correções."
+    }
+  ],
+  "dateutil/dateutil": [
+    {
+      "id": 91001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/dateutil/dateutil/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto dateutil/dateutil. Contém melhorias e correções."
+    },
+    {
+      "id": 91002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-12-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/dateutil/dateutil/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto dateutil/dateutil. Contém melhorias e correções."
+    },
+    {
+      "id": 91003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-02-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/dateutil/dateutil/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto dateutil/dateutil. Contém melhorias e correções."
+    },
+    {
+      "id": 91004,
+      "tag_name": "v1.1.3",
+      "name": "Release v1.1.3",
+      "published_at": "2024-05-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/dateutil/dateutil/releases/tag/v1.1.3",
+      "body": "Notas da release v1.1.3 do projeto dateutil/dateutil. Contém melhorias e correções."
+    },
+    {
+      "id": 91005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-07-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/dateutil/dateutil/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto dateutil/dateutil. Contém melhorias e correções."
+    }
+  ],
+  "dtolnay/thiserror": [
+    {
+      "id": 258001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/dtolnay/thiserror/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto dtolnay/thiserror. Contém melhorias e correções."
+    },
+    {
+      "id": 258002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/dtolnay/thiserror/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto dtolnay/thiserror. Contém melhorias e correções."
+    },
+    {
+      "id": 258006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-04-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/dtolnay/thiserror/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto dtolnay/thiserror. Contém melhorias e correções."
+    },
+    {
+      "id": 258008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-06-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/dtolnay/thiserror/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto dtolnay/thiserror. Contém melhorias e correções."
+    },
+    {
+      "id": 258009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-07-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/dtolnay/thiserror/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto dtolnay/thiserror. Contém melhorias e correções."
+    }
+  ],
+  "elastic/elasticsearch": [
+    {
+      "id": 262001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/elastic/elasticsearch/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto elastic/elasticsearch. Contém melhorias e correções."
+    },
+    {
+      "id": 262009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-02-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/elastic/elasticsearch/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto elastic/elasticsearch. Contém melhorias e correções."
+    },
+    {
+      "id": 262012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-03-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/elastic/elasticsearch/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto elastic/elasticsearch. Contém melhorias e correções."
+    },
+    {
+      "id": 262017,
+      "tag_name": "v1.16.0",
+      "name": "Release v1.16.0",
+      "published_at": "2024-06-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/elastic/elasticsearch/releases/tag/v1.16.0",
+      "body": "Notas da release v1.16.0 do projeto elastic/elasticsearch. Contém melhorias e correções."
+    },
+    {
+      "id": 262019,
+      "tag_name": "v1.18.0",
+      "name": "Release v1.18.0",
+      "published_at": "2024-07-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/elastic/elasticsearch/releases/tag/v1.18.0",
+      "body": "Notas da release v1.18.0 do projeto elastic/elasticsearch. Contém melhorias e correções."
+    }
+  ],
+  "electron/electron": [
+    {
+      "id": 164026,
+      "tag_name": "v1.12.25",
+      "name": "Release v1.12.25",
+      "published_at": "2024-04-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/electron/electron/releases/tag/v1.12.25",
+      "body": "Notas da release v1.12.25 do projeto electron/electron. Contém melhorias e correções."
+    },
+    {
+      "id": 164027,
+      "tag_name": "v1.26.0",
+      "name": "Release v1.26.0",
+      "published_at": "2024-05-04T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/electron/electron/releases/tag/v1.26.0",
+      "body": "Notas da release v1.26.0 do projeto electron/electron. Contém melhorias e correções."
+    },
+    {
+      "id": 164036,
+      "tag_name": "v1.17.35",
+      "name": "Release v1.17.35",
+      "published_at": "2024-07-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/electron/electron/releases/tag/v1.17.35",
+      "body": "Notas da release v1.17.35 do projeto electron/electron. Contém melhorias e correções."
+    },
+    {
+      "id": 164040,
+      "tag_name": "v1.19.39",
+      "name": "Release v1.19.39",
+      "published_at": "2024-08-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/electron/electron/releases/tag/v1.19.39",
+      "body": "Notas da release v1.19.39 do projeto electron/electron. Contém melhorias e correções."
+    },
+    {
+      "id": 164044,
+      "tag_name": "v1.21.43",
+      "name": "Release v1.21.43",
+      "published_at": "2024-09-20T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/electron/electron/releases/tag/v1.21.43",
+      "body": "Notas da release v1.21.43 do projeto electron/electron. Contém melhorias e correções."
+    }
+  ],
+  "encode/databases": [
+    {
+      "id": 118001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/encode/databases/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto encode/databases. Contém melhorias e correções."
+    },
+    {
+      "id": 118002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-12-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/encode/databases/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto encode/databases. Contém melhorias e correções."
+    },
+    {
+      "id": 118003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-02-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/encode/databases/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto encode/databases. Contém melhorias e correções."
+    },
+    {
+      "id": 118005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-06-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/encode/databases/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto encode/databases. Contém melhorias e correções."
+    },
+    {
+      "id": 118006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-08-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/encode/databases/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto encode/databases. Contém melhorias e correções."
+    }
+  ],
+  "encode/httpx": [
+    {
+      "id": 4001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/encode/httpx/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto encode/httpx. Contém melhorias e correções."
+    },
+    {
+      "id": 4002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/encode/httpx/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto encode/httpx. Contém melhorias e correções."
+    },
+    {
+      "id": 4003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/encode/httpx/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto encode/httpx. Contém melhorias e correções."
+    },
+    {
+      "id": 4005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-05-01T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/encode/httpx/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto encode/httpx. Contém melhorias e correções."
+    },
+    {
+      "id": 4006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-06-23T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/encode/httpx/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto encode/httpx. Contém melhorias e correções."
+    }
+  ],
+  "fastify/fastify": [
+    {
+      "id": 167001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/fastify/fastify/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto fastify/fastify. Contém melhorias e correções."
+    },
+    {
+      "id": 167009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-02-01T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/fastify/fastify/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto fastify/fastify. Contém melhorias e correções."
+    },
+    {
+      "id": 167012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-03-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/fastify/fastify/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto fastify/fastify. Contém melhorias e correções."
+    },
+    {
+      "id": 167017,
+      "tag_name": "v1.16.0",
+      "name": "Release v1.16.0",
+      "published_at": "2024-05-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/fastify/fastify/releases/tag/v1.16.0",
+      "body": "Notas da release v1.16.0 do projeto fastify/fastify. Contém melhorias e correções."
+    },
+    {
+      "id": 167024,
+      "tag_name": "v1.11.23",
+      "name": "Release v1.11.23",
+      "published_at": "2024-09-07T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/fastify/fastify/releases/tag/v1.11.23",
+      "body": "Notas da release v1.11.23 do projeto fastify/fastify. Contém melhorias e correções."
+    }
+  ],
+  "fmtlib/fmt": [
+    {
+      "id": 281001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/fmtlib/fmt/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto fmtlib/fmt. Contém melhorias e correções."
+    },
+    {
+      "id": 281002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/fmtlib/fmt/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto fmtlib/fmt. Contém melhorias e correções."
+    },
+    {
+      "id": 281003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/fmtlib/fmt/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto fmtlib/fmt. Contém melhorias e correções."
+    },
+    {
+      "id": 281006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-05-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/fmtlib/fmt/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto fmtlib/fmt. Contém melhorias e correções."
+    },
+    {
+      "id": 281008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-08-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/fmtlib/fmt/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto fmtlib/fmt. Contém melhorias e correções."
+    }
+  ],
+  "gabime/spdlog": [
+    {
+      "id": 282001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/gabime/spdlog/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto gabime/spdlog. Contém melhorias e correções."
+    },
+    {
+      "id": 282002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/gabime/spdlog/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto gabime/spdlog. Contém melhorias e correções."
+    },
+    {
+      "id": 282003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/gabime/spdlog/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto gabime/spdlog. Contém melhorias e correções."
+    },
+    {
+      "id": 282005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-05-01T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/gabime/spdlog/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto gabime/spdlog. Contém melhorias e correções."
+    },
+    {
+      "id": 282006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-06-23T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/gabime/spdlog/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto gabime/spdlog. Contém melhorias e correções."
+    }
+  ],
+  "go-gorm/gorm": [
+    {
+      "id": 211001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/go-gorm/gorm/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto go-gorm/gorm. Contém melhorias e correções."
+    },
+    {
+      "id": 211006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-02-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/go-gorm/gorm/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto go-gorm/gorm. Contém melhorias e correções."
+    },
+    {
+      "id": 211010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-05-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/go-gorm/gorm/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto go-gorm/gorm. Contém melhorias e correções."
+    },
+    {
+      "id": 211012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-07-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/go-gorm/gorm/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto go-gorm/gorm. Contém melhorias e correções."
+    },
+    {
+      "id": 211013,
+      "tag_name": "v1.12.0",
+      "name": "Release v1.12.0",
+      "published_at": "2024-08-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/go-gorm/gorm/releases/tag/v1.12.0",
+      "body": "Notas da release v1.12.0 do projeto go-gorm/gorm. Contém melhorias e correções."
+    }
+  ],
+  "gorilla/mux": [
+    {
+      "id": 96001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/gorilla/mux/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto gorilla/mux. Contém melhorias e correções."
+    },
+    {
+      "id": 96002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-12-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/gorilla/mux/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto gorilla/mux. Contém melhorias e correções."
+    },
+    {
+      "id": 96003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-02-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/gorilla/mux/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto gorilla/mux. Contém melhorias e correções."
+    },
+    {
+      "id": 96004,
+      "tag_name": "v1.1.3",
+      "name": "Release v1.1.3",
+      "published_at": "2024-05-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/gorilla/mux/releases/tag/v1.1.3",
+      "body": "Notas da release v1.1.3 do projeto gorilla/mux. Contém melhorias e correções."
+    },
+    {
+      "id": 96005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-07-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/gorilla/mux/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto gorilla/mux. Contém melhorias e correções."
+    }
+  ],
+  "grpc/grpc-go": [
+    {
+      "id": 212001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/grpc/grpc-go/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto grpc/grpc-go. Contém melhorias e correções."
+    },
+    {
+      "id": 212002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-10-22T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/grpc/grpc-go/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto grpc/grpc-go. Contém melhorias e correções."
+    },
+    {
+      "id": 212009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-02-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/grpc/grpc-go/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto grpc/grpc-go. Contém melhorias e correções."
+    },
+    {
+      "id": 212014,
+      "tag_name": "v1.6.13",
+      "name": "Release v1.6.13",
+      "published_at": "2024-05-08T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/grpc/grpc-go/releases/tag/v1.6.13",
+      "body": "Notas da release v1.6.13 do projeto grpc/grpc-go. Contém melhorias e correções."
+    },
+    {
+      "id": 212016,
+      "tag_name": "v1.7.15",
+      "name": "Release v1.7.15",
+      "published_at": "2024-06-11T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/grpc/grpc-go/releases/tag/v1.7.15",
+      "body": "Notas da release v1.7.15 do projeto grpc/grpc-go. Contém melhorias e correções."
+    }
+  ],
+  "hashicorp/consul": [
+    {
+      "id": 214001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hashicorp/consul/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto hashicorp/consul. Contém melhorias e correções."
+    },
+    {
+      "id": 214002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-10-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hashicorp/consul/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto hashicorp/consul. Contém melhorias e correções."
+    },
+    {
+      "id": 214004,
+      "tag_name": "v1.1.3",
+      "name": "Release v1.1.3",
+      "published_at": "2023-12-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hashicorp/consul/releases/tag/v1.1.3",
+      "body": "Notas da release v1.1.3 do projeto hashicorp/consul. Contém melhorias e correções."
+    },
+    {
+      "id": 214006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-01-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hashicorp/consul/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto hashicorp/consul. Contém melhorias e correções."
+    },
+    {
+      "id": 214009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-03-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hashicorp/consul/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto hashicorp/consul. Contém melhorias e correções."
+    }
+  ],
+  "hashicorp/vault": [
+    {
+      "id": 215001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hashicorp/vault/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto hashicorp/vault. Contém melhorias e correções."
+    },
+    {
+      "id": 215009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-02-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hashicorp/vault/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto hashicorp/vault. Contém melhorias e correções."
+    },
+    {
+      "id": 215012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-03-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hashicorp/vault/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto hashicorp/vault. Contém melhorias e correções."
+    },
+    {
+      "id": 215017,
+      "tag_name": "v1.16.0",
+      "name": "Release v1.16.0",
+      "published_at": "2024-06-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hashicorp/vault/releases/tag/v1.16.0",
+      "body": "Notas da release v1.16.0 do projeto hashicorp/vault. Contém melhorias e correções."
+    },
+    {
+      "id": 215019,
+      "tag_name": "v1.18.0",
+      "name": "Release v1.18.0",
+      "published_at": "2024-07-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hashicorp/vault/releases/tag/v1.18.0",
+      "body": "Notas da release v1.18.0 do projeto hashicorp/vault. Contém melhorias e correções."
+    }
+  ],
+  "hyperium/hyper": [
+    {
+      "id": 238001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hyperium/hyper/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto hyperium/hyper. Contém melhorias e correções."
+    },
+    {
+      "id": 238006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-02-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hyperium/hyper/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto hyperium/hyper. Contém melhorias e correções."
+    },
+    {
+      "id": 238010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-05-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hyperium/hyper/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto hyperium/hyper. Contém melhorias e correções."
+    },
+    {
+      "id": 238012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-07-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hyperium/hyper/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto hyperium/hyper. Contém melhorias e correções."
+    },
+    {
+      "id": 238013,
+      "tag_name": "v1.12.0",
+      "name": "Release v1.12.0",
+      "published_at": "2024-08-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/hyperium/hyper/releases/tag/v1.12.0",
+      "body": "Notas da release v1.12.0 do projeto hyperium/hyper. Contém melhorias e correções."
+    }
+  ],
+  "microsoft/playwright": [
+    {
+      "id": 38001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/microsoft/playwright/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto microsoft/playwright. Contém melhorias e correções."
+    },
+    {
+      "id": 38009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-02-01T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/microsoft/playwright/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto microsoft/playwright. Contém melhorias e correções."
+    },
+    {
+      "id": 38012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-03-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/microsoft/playwright/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto microsoft/playwright. Contém melhorias e correções."
+    },
+    {
+      "id": 38017,
+      "tag_name": "v1.16.0",
+      "name": "Release v1.16.0",
+      "published_at": "2024-05-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/microsoft/playwright/releases/tag/v1.16.0",
+      "body": "Notas da release v1.16.0 do projeto microsoft/playwright. Contém melhorias e correções."
+    },
+    {
+      "id": 38024,
+      "tag_name": "v1.11.23",
+      "name": "Release v1.11.23",
+      "published_at": "2024-09-07T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/microsoft/playwright/releases/tag/v1.11.23",
+      "body": "Notas da release v1.11.23 do projeto microsoft/playwright. Contém melhorias e correções."
+    }
+  ],
+  "moby/moby": [
+    {
+      "id": 24001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/moby/moby/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto moby/moby. Contém melhorias e correções."
+    },
+    {
+      "id": 24006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-02-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/moby/moby/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto moby/moby. Contém melhorias e correções."
+    },
+    {
+      "id": 24010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-05-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/moby/moby/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto moby/moby. Contém melhorias e correções."
+    },
+    {
+      "id": 24012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-07-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/moby/moby/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto moby/moby. Contém melhorias e correções."
+    },
+    {
+      "id": 24013,
+      "tag_name": "v1.12.0",
+      "name": "Release v1.12.0",
+      "published_at": "2024-08-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/moby/moby/releases/tag/v1.12.0",
+      "body": "Notas da release v1.12.0 do projeto moby/moby. Contém melhorias e correções."
+    }
+  ],
+  "nedbat/coveragepy": [
+    {
+      "id": 142001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/nedbat/coveragepy/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto nedbat/coveragepy. Contém melhorias e correções."
+    },
+    {
+      "id": 142006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-03-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/nedbat/coveragepy/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto nedbat/coveragepy. Contém melhorias e correções."
+    },
+    {
+      "id": 142009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-06-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/nedbat/coveragepy/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto nedbat/coveragepy. Contém melhorias e correções."
+    },
+    {
+      "id": 142010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-07-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/nedbat/coveragepy/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto nedbat/coveragepy. Contém melhorias e correções."
+    },
+    {
+      "id": 142011,
+      "tag_name": "v1.10.0",
+      "name": "Release v1.10.0",
+      "published_at": "2024-08-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/nedbat/coveragepy/releases/tag/v1.10.0",
+      "body": "Notas da release v1.10.0 do projeto nedbat/coveragepy. Contém melhorias e correções."
+    }
+  ],
+  "numpy/numpy": [
+    {
+      "id": 12001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/numpy/numpy/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto numpy/numpy. Contém melhorias e correções."
+    },
+    {
+      "id": 12003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2023-12-11T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/numpy/numpy/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto numpy/numpy. Contém melhorias e correções."
+    },
+    {
+      "id": 12006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-03-19T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/numpy/numpy/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto numpy/numpy. Contém melhorias e correções."
+    },
+    {
+      "id": 12010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-07-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/numpy/numpy/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto numpy/numpy. Contém melhorias e correções."
+    },
+    {
+      "id": 12011,
+      "tag_name": "v1.10.0",
+      "name": "Release v1.10.0",
+      "published_at": "2024-09-03T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/numpy/numpy/releases/tag/v1.10.0",
+      "body": "Notas da release v1.10.0 do projeto numpy/numpy. Contém melhorias e correções."
+    }
+  ],
+  "pallets/werkzeug": [
+    {
+      "id": 78001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pallets/werkzeug/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto pallets/werkzeug. Contém melhorias e correções."
+    },
+    {
+      "id": 78002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-12-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pallets/werkzeug/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto pallets/werkzeug. Contém melhorias e correções."
+    },
+    {
+      "id": 78003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-02-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pallets/werkzeug/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto pallets/werkzeug. Contém melhorias e correções."
+    },
+    {
+      "id": 78005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-06-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pallets/werkzeug/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto pallets/werkzeug. Contém melhorias e correções."
+    },
+    {
+      "id": 78006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-08-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pallets/werkzeug/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto pallets/werkzeug. Contém melhorias e correções."
+    }
+  ],
+  "pandas-dev/pandas": [
+    {
+      "id": 11001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pandas-dev/pandas/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto pandas-dev/pandas. Contém melhorias e correções."
+    },
+    {
+      "id": 11002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pandas-dev/pandas/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto pandas-dev/pandas. Contém melhorias e correções."
+    },
+    {
+      "id": 11006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-04-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pandas-dev/pandas/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto pandas-dev/pandas. Contém melhorias e correções."
+    },
+    {
+      "id": 11008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-07-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pandas-dev/pandas/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto pandas-dev/pandas. Contém melhorias e correções."
+    },
+    {
+      "id": 11009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-08-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pandas-dev/pandas/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto pandas-dev/pandas. Contém melhorias e correções."
+    }
+  ],
+  "prettier/prettier": [
+    {
+      "id": 49001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/prettier/prettier/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto prettier/prettier. Contém melhorias e correções."
+    },
+    {
+      "id": 49006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-02-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/prettier/prettier/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto prettier/prettier. Contém melhorias e correções."
+    },
+    {
+      "id": 49010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-05-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/prettier/prettier/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto prettier/prettier. Contém melhorias e correções."
+    },
+    {
+      "id": 49012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-07-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/prettier/prettier/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto prettier/prettier. Contém melhorias e correções."
+    },
+    {
+      "id": 49013,
+      "tag_name": "v1.12.0",
+      "name": "Release v1.12.0",
+      "published_at": "2024-08-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/prettier/prettier/releases/tag/v1.12.0",
+      "body": "Notas da release v1.12.0 do projeto prettier/prettier. Contém melhorias e correções."
+    }
+  ],
+  "psf/black": [
+    {
+      "id": 1001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/psf/black/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto psf/black. Contém melhorias e correções."
+    },
+    {
+      "id": 1002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/psf/black/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto psf/black. Contém melhorias e correções."
+    },
+    {
+      "id": 1003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/psf/black/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto psf/black. Contém melhorias e correções."
+    },
+    {
+      "id": 1006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-05-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/psf/black/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto psf/black. Contém melhorias e correções."
+    },
+    {
+      "id": 1008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-08-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/psf/black/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto psf/black. Contém melhorias e correções."
+    }
+  ],
+  "pyca/bcrypt": [
+    {
+      "id": 95001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pyca/bcrypt/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto pyca/bcrypt. Contém melhorias e correções."
+    },
+    {
+      "id": 95002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-12-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pyca/bcrypt/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto pyca/bcrypt. Contém melhorias e correções."
+    },
+    {
+      "id": 95003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-02-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pyca/bcrypt/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto pyca/bcrypt. Contém melhorias e correções."
+    },
+    {
+      "id": 95004,
+      "tag_name": "v1.1.3",
+      "name": "Release v1.1.3",
+      "published_at": "2024-05-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pyca/bcrypt/releases/tag/v1.1.3",
+      "body": "Notas da release v1.1.3 do projeto pyca/bcrypt. Contém melhorias e correções."
+    },
+    {
+      "id": 95005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-07-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pyca/bcrypt/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto pyca/bcrypt. Contém melhorias e correções."
+    }
+  ],
+  "pypa/setuptools": [
+    {
+      "id": 70001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pypa/setuptools/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto pypa/setuptools. Contém melhorias e correções."
+    },
+    {
+      "id": 70009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-02-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pypa/setuptools/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto pypa/setuptools. Contém melhorias e correções."
+    },
+    {
+      "id": 70012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-03-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pypa/setuptools/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto pypa/setuptools. Contém melhorias e correções."
+    },
+    {
+      "id": 70017,
+      "tag_name": "v1.16.0",
+      "name": "Release v1.16.0",
+      "published_at": "2024-06-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pypa/setuptools/releases/tag/v1.16.0",
+      "body": "Notas da release v1.16.0 do projeto pypa/setuptools. Contém melhorias e correções."
+    },
+    {
+      "id": 70019,
+      "tag_name": "v1.18.0",
+      "name": "Release v1.18.0",
+      "published_at": "2024-07-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pypa/setuptools/releases/tag/v1.18.0",
+      "body": "Notas da release v1.18.0 do projeto pypa/setuptools. Contém melhorias e correções."
+    }
+  ],
+  "pytest-dev/pytest-asyncio": [
+    {
+      "id": 75001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pytest-dev/pytest-asyncio/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto pytest-dev/pytest-asyncio. Contém melhorias e correções."
+    },
+    {
+      "id": 75002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pytest-dev/pytest-asyncio/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto pytest-dev/pytest-asyncio. Contém melhorias e correções."
+    },
+    {
+      "id": 75003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pytest-dev/pytest-asyncio/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto pytest-dev/pytest-asyncio. Contém melhorias e correções."
+    },
+    {
+      "id": 75006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-05-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pytest-dev/pytest-asyncio/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto pytest-dev/pytest-asyncio. Contém melhorias e correções."
+    },
+    {
+      "id": 75008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-08-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/pytest-dev/pytest-asyncio/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto pytest-dev/pytest-asyncio. Contém melhorias e correções."
+    }
+  ],
+  "python/mypy": [
+    {
+      "id": 138001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/python/mypy/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto python/mypy. Contém melhorias e correções."
+    },
+    {
+      "id": 138002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/python/mypy/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto python/mypy. Contém melhorias e correções."
+    },
+    {
+      "id": 138006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-04-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/python/mypy/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto python/mypy. Contém melhorias e correções."
+    },
+    {
+      "id": 138008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-06-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/python/mypy/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto python/mypy. Contém melhorias e correções."
+    },
+    {
+      "id": 138009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-07-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/python/mypy/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto python/mypy. Contém melhorias e correções."
+    }
+  ],
+  "rayon-rs/rayon": [
+    {
+      "id": 248001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/rayon-rs/rayon/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto rayon-rs/rayon. Contém melhorias e correções."
+    },
+    {
+      "id": 248002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/rayon-rs/rayon/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto rayon-rs/rayon. Contém melhorias e correções."
+    },
+    {
+      "id": 248003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/rayon-rs/rayon/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto rayon-rs/rayon. Contém melhorias e correções."
+    },
+    {
+      "id": 248006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-05-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/rayon-rs/rayon/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto rayon-rs/rayon. Contém melhorias e correções."
+    },
+    {
+      "id": 248008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-08-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/rayon-rs/rayon/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto rayon-rs/rayon. Contém melhorias e correções."
+    }
+  ],
+  "redis/redis-py": [
+    {
+      "id": 63001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/redis/redis-py/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto redis/redis-py. Contém melhorias e correções."
+    },
+    {
+      "id": 63002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/redis/redis-py/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto redis/redis-py. Contém melhorias e correções."
+    },
+    {
+      "id": 63006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-04-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/redis/redis-py/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto redis/redis-py. Contém melhorias e correções."
+    },
+    {
+      "id": 63008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-07-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/redis/redis-py/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto redis/redis-py. Contém melhorias e correções."
+    },
+    {
+      "id": 63009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-08-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/redis/redis-py/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto redis/redis-py. Contém melhorias e correções."
+    }
+  ],
+  "remix-run/remix": [
+    {
+      "id": 169009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-01-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/remix-run/remix/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto remix-run/remix. Contém melhorias e correções."
+    },
+    {
+      "id": 169016,
+      "tag_name": "v1.7.15",
+      "name": "Release v1.7.15",
+      "published_at": "2024-04-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/remix-run/remix/releases/tag/v1.7.15",
+      "body": "Notas da release v1.7.15 do projeto remix-run/remix. Contém melhorias e correções."
+    },
+    {
+      "id": 169018,
+      "tag_name": "v1.8.17",
+      "name": "Release v1.8.17",
+      "published_at": "2024-04-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/remix-run/remix/releases/tag/v1.8.17",
+      "body": "Notas da release v1.8.17 do projeto remix-run/remix. Contém melhorias e correções."
+    },
+    {
+      "id": 169024,
+      "tag_name": "v1.11.23",
+      "name": "Release v1.11.23",
+      "published_at": "2024-07-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/remix-run/remix/releases/tag/v1.11.23",
+      "body": "Notas da release v1.11.23 do projeto remix-run/remix. Contém melhorias e correções."
+    },
+    {
+      "id": 169028,
+      "tag_name": "v1.13.27",
+      "name": "Release v1.13.27",
+      "published_at": "2024-08-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/remix-run/remix/releases/tag/v1.13.27",
+      "body": "Notas da release v1.13.27 do projeto remix-run/remix. Contém melhorias e correções."
+    }
+  ],
+  "run-llama/llama_index": [
+    {
+      "id": 106014,
+      "tag_name": "v1.6.13",
+      "name": "Release v1.6.13",
+      "published_at": "2024-01-09T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/run-llama/llama_index/releases/tag/v1.6.13",
+      "body": "Notas da release v1.6.13 do projeto run-llama/llama_index. Contém melhorias e correções."
+    },
+    {
+      "id": 106018,
+      "tag_name": "v1.8.17",
+      "name": "Release v1.8.17",
+      "published_at": "2024-02-08T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/run-llama/llama_index/releases/tag/v1.8.17",
+      "body": "Notas da release v1.8.17 do projeto run-llama/llama_index. Contém melhorias e correções."
+    },
+    {
+      "id": 106031,
+      "tag_name": "v1.30.0",
+      "name": "Release v1.30.0",
+      "published_at": "2024-05-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/run-llama/llama_index/releases/tag/v1.30.0",
+      "body": "Notas da release v1.30.0 do projeto run-llama/llama_index. Contém melhorias e correções."
+    },
+    {
+      "id": 106040,
+      "tag_name": "v1.19.39",
+      "name": "Release v1.19.39",
+      "published_at": "2024-07-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/run-llama/llama_index/releases/tag/v1.19.39",
+      "body": "Notas da release v1.19.39 do projeto run-llama/llama_index. Contém melhorias e correções."
+    },
+    {
+      "id": 106046,
+      "tag_name": "v1.22.45",
+      "name": "Release v1.22.45",
+      "published_at": "2024-08-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/run-llama/llama_index/releases/tag/v1.22.45",
+      "body": "Notas da release v1.22.45 do projeto run-llama/llama_index. Contém melhorias e correções."
+    }
+  ],
+  "samuelcolvin/watchfiles": [
+    {
+      "id": 119001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/samuelcolvin/watchfiles/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto samuelcolvin/watchfiles. Contém melhorias e correções."
+    },
+    {
+      "id": 119002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/samuelcolvin/watchfiles/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto samuelcolvin/watchfiles. Contém melhorias e correções."
+    },
+    {
+      "id": 119006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-04-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/samuelcolvin/watchfiles/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto samuelcolvin/watchfiles. Contém melhorias e correções."
+    },
+    {
+      "id": 119008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-07-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/samuelcolvin/watchfiles/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto samuelcolvin/watchfiles. Contém melhorias e correções."
+    },
+    {
+      "id": 119009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-08-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/samuelcolvin/watchfiles/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto samuelcolvin/watchfiles. Contém melhorias e correções."
+    }
+  ],
+  "scrapy/scrapy": [
+    {
+      "id": 109001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/scrapy/scrapy/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto scrapy/scrapy. Contém melhorias e correções."
+    },
+    {
+      "id": 109006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-02-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/scrapy/scrapy/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto scrapy/scrapy. Contém melhorias e correções."
+    },
+    {
+      "id": 109010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-05-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/scrapy/scrapy/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto scrapy/scrapy. Contém melhorias e correções."
+    },
+    {
+      "id": 109012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-07-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/scrapy/scrapy/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto scrapy/scrapy. Contém melhorias e correções."
+    },
+    {
+      "id": 109013,
+      "tag_name": "v1.12.0",
+      "name": "Release v1.12.0",
+      "published_at": "2024-08-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/scrapy/scrapy/releases/tag/v1.12.0",
+      "body": "Notas da release v1.12.0 do projeto scrapy/scrapy. Contém melhorias e correções."
+    }
+  ],
+  "serde-rs/serde": [
+    {
+      "id": 236001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/serde-rs/serde/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto serde-rs/serde. Contém melhorias e correções."
+    },
+    {
+      "id": 236002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-10-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/serde-rs/serde/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto serde-rs/serde. Contém melhorias e correções."
+    },
+    {
+      "id": 236006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-01-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/serde-rs/serde/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto serde-rs/serde. Contém melhorias e correções."
+    },
+    {
+      "id": 236014,
+      "tag_name": "v1.6.13",
+      "name": "Release v1.6.13",
+      "published_at": "2024-07-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/serde-rs/serde/releases/tag/v1.6.13",
+      "body": "Notas da release v1.6.13 do projeto serde-rs/serde. Contém melhorias e correções."
+    },
+    {
+      "id": 236015,
+      "tag_name": "v1.14.0",
+      "name": "Release v1.14.0",
+      "published_at": "2024-08-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/serde-rs/serde/releases/tag/v1.14.0",
+      "body": "Notas da release v1.14.0 do projeto serde-rs/serde. Contém melhorias e correções."
+    }
+  ],
+  "sharkdp/fd": [
+    {
+      "id": 20001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sharkdp/fd/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto sharkdp/fd. Contém melhorias e correções."
+    },
+    {
+      "id": 20002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sharkdp/fd/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto sharkdp/fd. Contém melhorias e correções."
+    },
+    {
+      "id": 20003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-01-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sharkdp/fd/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto sharkdp/fd. Contém melhorias e correções."
+    },
+    {
+      "id": 20005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-05-01T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sharkdp/fd/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto sharkdp/fd. Contém melhorias e correções."
+    },
+    {
+      "id": 20006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-06-23T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sharkdp/fd/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto sharkdp/fd. Contém melhorias e correções."
+    }
+  ],
+  "sharkdp/hyperfine": [
+    {
+      "id": 243001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sharkdp/hyperfine/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto sharkdp/hyperfine. Contém melhorias e correções."
+    },
+    {
+      "id": 243002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-12-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sharkdp/hyperfine/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto sharkdp/hyperfine. Contém melhorias e correções."
+    },
+    {
+      "id": 243003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-02-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sharkdp/hyperfine/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto sharkdp/hyperfine. Contém melhorias e correções."
+    },
+    {
+      "id": 243005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-06-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sharkdp/hyperfine/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto sharkdp/hyperfine. Contém melhorias e correções."
+    },
+    {
+      "id": 243006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-08-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sharkdp/hyperfine/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto sharkdp/hyperfine. Contém melhorias e correções."
+    }
+  ],
+  "sirupsen/logrus": [
+    {
+      "id": 208001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sirupsen/logrus/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto sirupsen/logrus. Contém melhorias e correções."
+    },
+    {
+      "id": 208002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-12-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sirupsen/logrus/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto sirupsen/logrus. Contém melhorias e correções."
+    },
+    {
+      "id": 208003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-02-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sirupsen/logrus/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto sirupsen/logrus. Contém melhorias e correções."
+    },
+    {
+      "id": 208004,
+      "tag_name": "v1.1.3",
+      "name": "Release v1.1.3",
+      "published_at": "2024-05-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sirupsen/logrus/releases/tag/v1.1.3",
+      "body": "Notas da release v1.1.3 do projeto sirupsen/logrus. Contém melhorias e correções."
+    },
+    {
+      "id": 208005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-07-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/sirupsen/logrus/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto sirupsen/logrus. Contém melhorias e correções."
+    }
+  ],
+  "socketio/socket.io": [
+    {
+      "id": 166001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/socketio/socket.io/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto socketio/socket.io. Contém melhorias e correções."
+    },
+    {
+      "id": 166003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2023-12-11T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/socketio/socket.io/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto socketio/socket.io. Contém melhorias e correções."
+    },
+    {
+      "id": 166006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-03-19T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/socketio/socket.io/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto socketio/socket.io. Contém melhorias e correções."
+    },
+    {
+      "id": 166010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-07-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/socketio/socket.io/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto socketio/socket.io. Contém melhorias e correções."
+    },
+    {
+      "id": 166011,
+      "tag_name": "v1.10.0",
+      "name": "Release v1.10.0",
+      "published_at": "2024-09-03T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/socketio/socket.io/releases/tag/v1.10.0",
+      "body": "Notas da release v1.10.0 do projeto socketio/socket.io. Contém melhorias e correções."
+    }
+  ],
+  "solidjs/solid": [
+    {
+      "id": 172001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/solidjs/solid/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto solidjs/solid. Contém melhorias e correções."
+    },
+    {
+      "id": 172002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-10-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/solidjs/solid/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto solidjs/solid. Contém melhorias e correções."
+    },
+    {
+      "id": 172006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-01-10T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/solidjs/solid/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto solidjs/solid. Contém melhorias e correções."
+    },
+    {
+      "id": 172009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-03-07T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/solidjs/solid/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto solidjs/solid. Contém melhorias e correções."
+    },
+    {
+      "id": 172012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-05-04T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/solidjs/solid/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto solidjs/solid. Contém melhorias e correções."
+    }
+  ],
+  "square/okhttp": [
+    {
+      "id": 45001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/square/okhttp/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto square/okhttp. Contém melhorias e correções."
+    },
+    {
+      "id": 45002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-11-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/square/okhttp/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto square/okhttp. Contém melhorias e correções."
+    },
+    {
+      "id": 45006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-04-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/square/okhttp/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto square/okhttp. Contém melhorias e correções."
+    },
+    {
+      "id": 45008,
+      "tag_name": "v1.3.7",
+      "name": "Release v1.3.7",
+      "published_at": "2024-07-16T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/square/okhttp/releases/tag/v1.3.7",
+      "body": "Notas da release v1.3.7 do projeto square/okhttp. Contém melhorias e correções."
+    },
+    {
+      "id": 45009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-08-26T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/square/okhttp/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto square/okhttp. Contém melhorias e correções."
+    }
+  ],
+  "square/retrofit": [
+    {
+      "id": 46001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/square/retrofit/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto square/retrofit. Contém melhorias e correções."
+    },
+    {
+      "id": 46002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-12-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/square/retrofit/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto square/retrofit. Contém melhorias e correções."
+    },
+    {
+      "id": 46003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-02-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/square/retrofit/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto square/retrofit. Contém melhorias e correções."
+    },
+    {
+      "id": 46005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-06-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/square/retrofit/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto square/retrofit. Contém melhorias e correções."
+    },
+    {
+      "id": 46006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-08-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/square/retrofit/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto square/retrofit. Contém melhorias e correções."
+    }
+  ],
+  "tauri-apps/tauri": [
+    {
+      "id": 165009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2023-12-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/tauri-apps/tauri/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto tauri-apps/tauri. Contém melhorias e correções."
+    },
+    {
+      "id": 165016,
+      "tag_name": "v1.7.15",
+      "name": "Release v1.7.15",
+      "published_at": "2024-03-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/tauri-apps/tauri/releases/tag/v1.7.15",
+      "body": "Notas da release v1.7.15 do projeto tauri-apps/tauri. Contém melhorias e correções."
+    },
+    {
+      "id": 165020,
+      "tag_name": "v1.9.19",
+      "name": "Release v1.9.19",
+      "published_at": "2024-04-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/tauri-apps/tauri/releases/tag/v1.9.19",
+      "body": "Notas da release v1.9.19 do projeto tauri-apps/tauri. Contém melhorias e correções."
+    },
+    {
+      "id": 165027,
+      "tag_name": "v1.26.0",
+      "name": "Release v1.26.0",
+      "published_at": "2024-07-11T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/tauri-apps/tauri/releases/tag/v1.26.0",
+      "body": "Notas da release v1.26.0 do projeto tauri-apps/tauri. Contém melhorias e correções."
+    },
+    {
+      "id": 165028,
+      "tag_name": "v1.13.27",
+      "name": "Release v1.13.27",
+      "published_at": "2024-07-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/tauri-apps/tauri/releases/tag/v1.13.27",
+      "body": "Notas da release v1.13.27 do projeto tauri-apps/tauri. Contém melhorias e correções."
+    }
+  ],
+  "trpc/trpc": [
+    {
+      "id": 175009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-01-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/trpc/trpc/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto trpc/trpc. Contém melhorias e correções."
+    },
+    {
+      "id": 175016,
+      "tag_name": "v1.7.15",
+      "name": "Release v1.7.15",
+      "published_at": "2024-03-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/trpc/trpc/releases/tag/v1.7.15",
+      "body": "Notas da release v1.7.15 do projeto trpc/trpc. Contém melhorias e correções."
+    },
+    {
+      "id": 175018,
+      "tag_name": "v1.8.17",
+      "name": "Release v1.8.17",
+      "published_at": "2024-04-17T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/trpc/trpc/releases/tag/v1.8.17",
+      "body": "Notas da release v1.8.17 do projeto trpc/trpc. Contém melhorias e correções."
+    },
+    {
+      "id": 175025,
+      "tag_name": "v1.24.0",
+      "name": "Release v1.24.0",
+      "published_at": "2024-07-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/trpc/trpc/releases/tag/v1.24.0",
+      "body": "Notas da release v1.24.0 do projeto trpc/trpc. Contém melhorias e correções."
+    },
+    {
+      "id": 175030,
+      "tag_name": "v1.14.29",
+      "name": "Release v1.14.29",
+      "published_at": "2024-09-02T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/trpc/trpc/releases/tag/v1.14.29",
+      "body": "Notas da release v1.14.29 do projeto trpc/trpc. Contém melhorias e correções."
+    }
+  ],
+  "typst/typst": [
+    {
+      "id": 252001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/typst/typst/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto typst/typst. Contém melhorias e correções."
+    },
+    {
+      "id": 252002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-10-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/typst/typst/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto typst/typst. Contém melhorias e correções."
+    },
+    {
+      "id": 252009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2024-02-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/typst/typst/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto typst/typst. Contém melhorias e correções."
+    },
+    {
+      "id": 252016,
+      "tag_name": "v1.7.15",
+      "name": "Release v1.7.15",
+      "published_at": "2024-07-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/typst/typst/releases/tag/v1.7.15",
+      "body": "Notas da release v1.7.15 do projeto typst/typst. Contém melhorias e correções."
+    },
+    {
+      "id": 252018,
+      "tag_name": "v1.8.17",
+      "name": "Release v1.8.17",
+      "published_at": "2024-08-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/typst/typst/releases/tag/v1.8.17",
+      "body": "Notas da release v1.8.17 do projeto typst/typst. Contém melhorias e correções."
+    }
+  ],
+  "vercel/next.js": [
+    {
+      "id": 31013,
+      "tag_name": "v1.12.0",
+      "name": "Release v1.12.0",
+      "published_at": "2023-12-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/vercel/next.js/releases/tag/v1.12.0",
+      "body": "Notas da release v1.12.0 do projeto vercel/next.js. Contém melhorias e correções."
+    },
+    {
+      "id": 31020,
+      "tag_name": "v1.9.19",
+      "name": "Release v1.9.19",
+      "published_at": "2024-02-17T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/vercel/next.js/releases/tag/v1.9.19",
+      "body": "Notas da release v1.9.19 do projeto vercel/next.js. Contém melhorias e correções."
+    },
+    {
+      "id": 31042,
+      "tag_name": "v1.20.41",
+      "name": "Release v1.20.41",
+      "published_at": "2024-07-19T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/vercel/next.js/releases/tag/v1.20.41",
+      "body": "Notas da release v1.20.41 do projeto vercel/next.js. Contém melhorias e correções."
+    },
+    {
+      "id": 31044,
+      "tag_name": "v1.21.43",
+      "name": "Release v1.21.43",
+      "published_at": "2024-08-03T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/vercel/next.js/releases/tag/v1.21.43",
+      "body": "Notas da release v1.21.43 do projeto vercel/next.js. Contém melhorias e correções."
+    },
+    {
+      "id": 31048,
+      "tag_name": "v1.23.47",
+      "name": "Release v1.23.47",
+      "published_at": "2024-09-01T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/vercel/next.js/releases/tag/v1.23.47",
+      "body": "Notas da release v1.23.47 do projeto vercel/next.js. Contém melhorias e correções."
+    }
+  ],
+  "vitejs/vite": [
+    {
+      "id": 33009,
+      "tag_name": "v1.8.0",
+      "name": "Release v1.8.0",
+      "published_at": "2023-12-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/vitejs/vite/releases/tag/v1.8.0",
+      "body": "Notas da release v1.8.0 do projeto vitejs/vite. Contém melhorias e correções."
+    },
+    {
+      "id": 33016,
+      "tag_name": "v1.7.15",
+      "name": "Release v1.7.15",
+      "published_at": "2024-03-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/vitejs/vite/releases/tag/v1.7.15",
+      "body": "Notas da release v1.7.15 do projeto vitejs/vite. Contém melhorias e correções."
+    },
+    {
+      "id": 33020,
+      "tag_name": "v1.9.19",
+      "name": "Release v1.9.19",
+      "published_at": "2024-04-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/vitejs/vite/releases/tag/v1.9.19",
+      "body": "Notas da release v1.9.19 do projeto vitejs/vite. Contém melhorias e correções."
+    },
+    {
+      "id": 33027,
+      "tag_name": "v1.26.0",
+      "name": "Release v1.26.0",
+      "published_at": "2024-07-11T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/vitejs/vite/releases/tag/v1.26.0",
+      "body": "Notas da release v1.26.0 do projeto vitejs/vite. Contém melhorias e correções."
+    },
+    {
+      "id": 33028,
+      "tag_name": "v1.13.27",
+      "name": "Release v1.13.27",
+      "published_at": "2024-07-21T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/vitejs/vite/releases/tag/v1.13.27",
+      "body": "Notas da release v1.13.27 do projeto vitejs/vite. Contém melhorias e correções."
+    }
+  ],
+  "wez/wezterm": [
+    {
+      "id": 242001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/wez/wezterm/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto wez/wezterm. Contém melhorias e correções."
+    },
+    {
+      "id": 242006,
+      "tag_name": "v1.2.5",
+      "name": "Release v1.2.5",
+      "published_at": "2024-02-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/wez/wezterm/releases/tag/v1.2.5",
+      "body": "Notas da release v1.2.5 do projeto wez/wezterm. Contém melhorias e correções."
+    },
+    {
+      "id": 242010,
+      "tag_name": "v1.4.9",
+      "name": "Release v1.4.9",
+      "published_at": "2024-05-27T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/wez/wezterm/releases/tag/v1.4.9",
+      "body": "Notas da release v1.4.9 do projeto wez/wezterm. Contém melhorias e correções."
+    },
+    {
+      "id": 242012,
+      "tag_name": "v1.5.11",
+      "name": "Release v1.5.11",
+      "published_at": "2024-07-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/wez/wezterm/releases/tag/v1.5.11",
+      "body": "Notas da release v1.5.11 do projeto wez/wezterm. Contém melhorias e correções."
+    },
+    {
+      "id": 242013,
+      "tag_name": "v1.12.0",
+      "name": "Release v1.12.0",
+      "published_at": "2024-08-14T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/wez/wezterm/releases/tag/v1.12.0",
+      "body": "Notas da release v1.12.0 do projeto wez/wezterm. Contém melhorias e correções."
+    }
+  ],
+  "yaml/pyyaml": [
+    {
+      "id": 122001,
+      "tag_name": "v1.0.0",
+      "name": "Release v1.0.0",
+      "published_at": "2023-10-06T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/yaml/pyyaml/releases/tag/v1.0.0",
+      "body": "Notas da release v1.0.0 do projeto yaml/pyyaml. Contém melhorias e correções."
+    },
+    {
+      "id": 122002,
+      "tag_name": "v1.0.1",
+      "name": "Release v1.0.1",
+      "published_at": "2023-12-18T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/yaml/pyyaml/releases/tag/v1.0.1",
+      "body": "Notas da release v1.0.1 do projeto yaml/pyyaml. Contém melhorias e correções."
+    },
+    {
+      "id": 122003,
+      "tag_name": "v1.2.0",
+      "name": "Release v1.2.0",
+      "published_at": "2024-02-28T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/yaml/pyyaml/releases/tag/v1.2.0",
+      "body": "Notas da release v1.2.0 do projeto yaml/pyyaml. Contém melhorias e correções."
+    },
+    {
+      "id": 122004,
+      "tag_name": "v1.1.3",
+      "name": "Release v1.1.3",
+      "published_at": "2024-05-12T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/yaml/pyyaml/releases/tag/v1.1.3",
+      "body": "Notas da release v1.1.3 do projeto yaml/pyyaml. Contém melhorias e correções."
+    },
+    {
+      "id": 122005,
+      "tag_name": "v1.4.0",
+      "name": "Release v1.4.0",
+      "published_at": "2024-07-24T14:30:00Z",
+      "draft": false,
+      "prerelease": false,
+      "html_url": "https://github.com/yaml/pyyaml/releases/tag/v1.4.0",
+      "body": "Notas da release v1.4.0 do projeto yaml/pyyaml. Contém melhorias e correções."
+    }
+  ]
+}

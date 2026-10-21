@@ -1,0 +1,15 @@
+{
+  "consultado_em": "2026-10-21T15:48:55.294102+00:00",
+  "endpoint": "/repos/ecosystem-org/lib-tool-001",
+  "params": null,
+  "http_status": 404,
+  "headers": {
+    "X-RateLimit-Remaining": "4982",
+    "X-RateLimit-Reset": "1792600079"
+  },
+  "resposta": {
+    "message": "Not Found",
+    "documentation_url": "https://docs.github.com/rest/repos/repos#get-a-repository",
+    "status": "404"
+  }
+}

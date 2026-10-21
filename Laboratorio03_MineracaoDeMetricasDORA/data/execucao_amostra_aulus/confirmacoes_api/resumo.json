@@ -1,0 +1,30 @@
+{
+  "janela": {
+    "start_date": "2023-10-01T00:00:00Z",
+    "end_date": "2024-09-30T23:59:59Z",
+    "weeks": 52.14
+  },
+  "resultados": [
+    {
+      "repositorio": "FactoryBoy/factory_boy",
+      "http_status": 200,
+      "n_releases_estaveis_janela": 0,
+      "arquivo": "data/execucao_amostra_aulus/confirmacoes_api/FactoryBoy_factory_boy.json",
+      "sha256": "c1dad4a3a372cdc74eb4b32022bfa63ac9fa85f5d8bd49ed07417d790fe7c7f9"
+    },
+    {
+      "repositorio": "yaml/pyyaml",
+      "http_status": 200,
+      "n_releases_estaveis_janela": 1,
+      "arquivo": "data/execucao_amostra_aulus/confirmacoes_api/yaml_pyyaml.json",
+      "sha256": "558effc06138e9fd7e1530f845e4bfe8102eb160a1ef0ffbd4e99fcc04e3f367"
+    },
+    {
+      "repositorio": "ecosystem-org/lib-tool-001",
+      "http_status": 404,
+      "n_releases_estaveis_janela": null,
+      "arquivo": "data/execucao_amostra_aulus/confirmacoes_api/ecosystem-org_lib-tool-001.json",
+      "sha256": "cdb93498de8d7bd586aee5b23ea8ab43c3ebe059f5677dba06c654b2af17807a"
+    }
+  ]
+}

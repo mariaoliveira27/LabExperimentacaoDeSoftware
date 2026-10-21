@@ -135,7 +135,7 @@ def preparar_consenso(amostra: Sequence[Row], avaliadores: Avaliacoes) -> tuple[
     """Retorna divergências e um formulário de consenso inteiramente vazio."""
     _validar_avaliadores(amostra, avaliadores)
     indices = _indices(avaliadores)
-    divergencias, consenso = [], []
+    divergencias = []
     for dimensao, repo, release in _unidades(amostra):
         linhas = {nome: _row_unidade(indice, repo, release) for nome, indice in indices.items()}
         if len({row[dimensao].strip() for row in linhas.values()}) > 1:
@@ -147,11 +147,24 @@ def preparar_consenso(amostra: Sequence[Row], avaliadores: Avaliacoes) -> tuple[
                     "html_url": row["html_url"], "release_notes_url": row["release_notes_url"],
                     "commits_url": row["commits_url"],
                 })
-        consenso.append({
+    return divergencias, formulario_consenso(amostra)
+
+
+def formulario_consenso(amostra: Sequence[Row]) -> list[dict]:
+    """Prepare as 420 decisões vazias sem exigir ou inferir votos humanos.
+
+    Esta preparação estrutural não é um consenso validado. Os comandos de
+    arquivo verificam separadamente o manifesto da referência comum antes de
+    disponibilizar o formulário para a reunião futura.
+    """
+    validar_amostra(amostra)
+    return [
+        {
             **dict.fromkeys(CAMPOS_CONSENSO, ""),
             "dimensao": dimensao, "full_name": repo, "release_id": release,
-        })
-    return divergencias, consenso
+        }
+        for dimensao, repo, release in _unidades(amostra)
+    ]
 
 
 def validar_consenso(amostra: Sequence[Row], avaliadores: Avaliacoes, consenso: Sequence[Row]) -> None:
@@ -260,7 +273,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             raise ValueError("Informe três arquivos distintos de rotulagem independente.")
         from gerar_amostra_rotulagem import validar_referencia
         manifesto_path = args.manifesto or args.amostra.parent / "selecao.json"
-        validar_referencia(args.amostra, manifesto_path)
+        origem_referencia = validar_referencia(args.amostra, manifesto_path)
         entradas = [args.amostra, *humanos.values()]
         amostra = ler_csv(args.amostra)
         avaliadores = {nome: ler_csv(path) for nome, path in humanos.items()}
@@ -276,6 +289,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                     "status": "rotulos_independentes_completos_aguardando_consenso",
                     "base_kappa": "rotulos_independentes_anteriores_ao_consenso",
                     "avaliadores": sorted(avaliadores),
+                    "origem_referencia": origem_referencia,
                     "kappas": calcular_kappas(amostra, avaliadores),
                     "arquivos_fontes": [{"arquivo": str(path), "sha256": _sha256(path)}
                                          for path in [*entradas, manifesto_path]],
@@ -292,6 +306,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             entradas.append(args.consenso)
             _checar_saidas([args.saida], [*entradas, manifesto_path])
             resultado = finalizar(amostra, avaliadores, ler_csv(args.consenso))
+            resultado["origem_referencia"] = origem_referencia
             resultado["arquivos_fontes"] = [
                 {"arquivo": str(path), "sha256": _sha256(path)} for path in entradas
             ]

@@ -1,0 +1,159 @@
+[
+  {
+    "nome": "preparacao_csv_main",
+    "comando": [
+      "python",
+      "amostra_csv_main.py",
+      "--csv",
+      "data/coleta_final/repositorios_aprovados.csv",
+      "--releases",
+      "data/coleta_final/releases.json",
+      "--proveniencia",
+      "data/coleta_final/proveniencia.json",
+      "--config",
+      "config.yaml",
+      "--saida",
+      "data/amostra_ouro_csv_main",
+      "--rotulos",
+      "rotulos_aulus.csv"
+    ],
+    "inicio_utc": "2026-10-21T19:47:30.778176+00:00",
+    "fim_utc": "2026-10-21T19:47:31.757663+00:00",
+    "exit_code": 0,
+    "log": "data/execucao_amostra_aulus/preparacao_csv_main.txt",
+    "log_sha256": "96a6aa3e61c96dfc431bc4084f345f70848f5c2afbb2bf4790399ab30b51d335"
+  },
+  {
+    "nome": "formulario_maria",
+    "comando": [
+      "python",
+      "rotulagem.py",
+      "gerar",
+      "--amostra",
+      "data/amostra_ouro_csv_main/amostra_comum.csv",
+      "--saida",
+      "rotulos_maria_independente.csv"
+    ],
+    "inicio_utc": "2026-10-21T19:47:31.764168+00:00",
+    "fim_utc": "2026-10-21T19:47:32.540662+00:00",
+    "exit_code": 0,
+    "log": "data/execucao_amostra_aulus/formulario_maria.txt",
+    "log_sha256": "e10a9e429317da5a7abcb12e70c7b4264cb68edb2811d198c0c7cfce03d4767d"
+  },
+  {
+    "nome": "formulario_vinicius",
+    "comando": [
+      "python",
+      "rotulagem.py",
+      "gerar",
+      "--amostra",
+      "data/amostra_ouro_csv_main/amostra_comum.csv",
+      "--saida",
+      "rotulos_vinicius_independente.csv"
+    ],
+    "inicio_utc": "2026-10-21T19:47:32.547674+00:00",
+    "fim_utc": "2026-10-21T19:47:33.345317+00:00",
+    "exit_code": 0,
+    "log": "data/execucao_amostra_aulus/formulario_vinicius.txt",
+    "log_sha256": "074fba981597db34a74fcae5c66ddf3a732c879b92088a16d467576ceeab6e09"
+  },
+  {
+    "nome": "validacao_rascunho_aulus",
+    "comando": [
+      "python",
+      "rotulagem.py",
+      "validar",
+      "--amostra",
+      "data/amostra_ouro_csv_main/amostra_comum.csv",
+      "--rotulos",
+      "rotulos_aulus.csv",
+      "--rascunho"
+    ],
+    "inicio_utc": "2026-10-21T19:47:33.352340+00:00",
+    "fim_utc": "2026-10-21T19:47:34.153021+00:00",
+    "exit_code": 0,
+    "log": "data/execucao_amostra_aulus/validacao_rascunho_aulus.txt",
+    "log_sha256": "4d3841ac3a44ba2b97b63e8da111519c05f378e281cdbf962fc10e2b360cc959"
+  },
+  {
+    "nome": "validacao_rascunho_maria",
+    "comando": [
+      "python",
+      "rotulagem.py",
+      "validar",
+      "--amostra",
+      "data/amostra_ouro_csv_main/amostra_comum.csv",
+      "--rotulos",
+      "rotulos_maria_independente.csv",
+      "--rascunho"
+    ],
+    "inicio_utc": "2026-10-21T19:47:34.160749+00:00",
+    "fim_utc": "2026-10-21T19:47:34.973575+00:00",
+    "exit_code": 0,
+    "log": "data/execucao_amostra_aulus/validacao_rascunho_maria.txt",
+    "log_sha256": "4d3841ac3a44ba2b97b63e8da111519c05f378e281cdbf962fc10e2b360cc959"
+  },
+  {
+    "nome": "validacao_rascunho_vinicius",
+    "comando": [
+      "python",
+      "rotulagem.py",
+      "validar",
+      "--amostra",
+      "data/amostra_ouro_csv_main/amostra_comum.csv",
+      "--rotulos",
+      "rotulos_vinicius_independente.csv",
+      "--rascunho"
+    ],
+    "inicio_utc": "2026-10-21T19:47:34.975575+00:00",
+    "fim_utc": "2026-10-21T19:47:35.775892+00:00",
+    "exit_code": 0,
+    "log": "data/execucao_amostra_aulus/validacao_rascunho_vinicius.txt",
+    "log_sha256": "4d3841ac3a44ba2b97b63e8da111519c05f378e281cdbf962fc10e2b360cc959"
+  },
+  {
+    "nome": "preparacao_concordancia",
+    "comando": [
+      "python",
+      "preparar_concordancia_aulus.py",
+      "--amostra",
+      "data/amostra_ouro_csv_main/amostra_comum.csv",
+      "--aulus",
+      "rotulos_aulus.csv",
+      "--maria",
+      "rotulos_maria_independente.csv",
+      "--vinicius",
+      "rotulos_vinicius_independente.csv",
+      "--saida",
+      "data/concordancia_aulus"
+    ],
+    "inicio_utc": "2026-10-21T19:47:35.777893+00:00",
+    "fim_utc": "2026-10-21T19:47:37.555667+00:00",
+    "exit_code": 0,
+    "log": "data/execucao_amostra_aulus/preparacao_concordancia.txt",
+    "log_sha256": "dbe1bda278498d9f623a7d7a5673e05cf5e75cf8343da1a70e51dad45f2df10e"
+  },
+  {
+    "nome": "suite_completa",
+    "comando": [
+      "python",
+      "-m",
+      "pytest",
+      "--cov=metricas",
+      "--cov-report=term-missing",
+      "--cov-report=json:.cache/coverage_amostra_aulus.json",
+      "--cov-fail-under=80",
+      "-q",
+      "--tb=short",
+      "--basetemp",
+      ".cache/pytest_amostra_aulus_full_01",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "inicio_utc": "2026-10-21T19:47:37.563682+00:00",
+    "fim_utc": "2026-10-21T19:48:55.421975+00:00",
+    "exit_code": 0,
+    "log": "data/execucao_amostra_aulus/suite_completa.txt",
+    "log_sha256": "222527f4a7a469a8a63188eb93d7943c27fb8ecb7b4fb48573ae051a1bef42c6"
+  }
+]
