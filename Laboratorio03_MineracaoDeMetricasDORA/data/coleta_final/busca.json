@@ -1,0 +1,88 @@
+{
+  "fonte": "github_search_api",
+  "endpoint": "/search/repositories",
+  "min_stars": 1000,
+  "criado_ate": "2024-09-30",
+  "max_candidatos": 100,
+  "total_count_raiz": 58459,
+  "candidatos_coletados": 219,
+  "candidatos_retornados": 100,
+  "limitado_por_max_candidatos": true,
+  "busca_completa": false,
+  "ordenacao": "stargazers_count desc, full_name casefold asc, id asc",
+  "consultas": [
+    {
+      "q": "stars:>=1000 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 58459,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:277113..553225 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 12,
+      "items_recebidos": 12
+    },
+    {
+      "q": "stars:1000..277112 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 58447,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:139057..277112 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 45,
+      "items_recebidos": 45
+    },
+    {
+      "q": "stars:1000..139056 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 58402,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:70029..139056 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 162,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:1000..70028 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 58240,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:70029..139056 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 2,
+      "total_count": 162,
+      "items_recebidos": 62
+    }
+  ],
+  "observacao": "Candidatos de busca; a aprovação por releases e runs ainda não foi realizada."
+}

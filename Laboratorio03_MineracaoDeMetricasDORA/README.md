@@ -19,7 +19,7 @@ A execução normal calcula CFR(a) e recuperação a partir dos workflow runs. `
 é opcional, desativado por padrão e produz dados de demonstração identificados no CSV.
 Os cálculos preexistentes de lead time, CFR(b), rework e classificação ainda precisam da
 integração dos respectivos responsáveis; o CSV completo não deve ser tratado como resultado
-empírico final. A correção da CI permanece com Marias.
+empírico final. A CI do Lab03 executa os testes e a cobertura a partir do workflow na raiz do repositório.
 
 ### 1. Instalação de Dependências
 ```bash
@@ -53,7 +53,7 @@ python -m pytest --cov=metricas --cov-report=term-missing --cov-fail-under=80
 - **Log de Descartes com Motivos:** [`data/output/descartes.csv`](data/output/descartes.csv)
 - **Dicionário de Dados:** [`dicionario_dados.md`](dicionario_dados.md)
 - **Artigo (Introdução e Hipóteses de RQ03, RQ04 e RQ05):** [`artigo_introducao_e_hipoteses.md`](artigo_introducao_e_hipoteses.md)
-- **CI GitHub Actions:** [`.github/workflows/testes.yml`](.github/workflows/testes.yml)
+- **CI GitHub Actions:** [`../.github/workflows/lab03-testes.yml`](../.github/workflows/lab03-testes.yml)
 
 ---
 
@@ -61,23 +61,49 @@ python -m pytest --cov=metricas --cov-report=term-missing --cov-fail-under=80
 
 As tarefas de Áulus correspondem às Issues GitHub **#61** (sorteio), **#70** (kappa e consenso), **#62** (rotulagem independente) e **#63** (metodologia); os números 01, 02 e 03 da divisão de tarefas não são os identificadores do GitHub. O protocolo detalhado e a tabela de kappa pendente estão em [`artigo_metodologia_dora.md`](artigo_metodologia_dora.md).
 
-**Estado dos dados:** o CSV aprovado atual tem somente 100 repositórios e não comprova a procedência de uma amostra final real. As releases e os rótulos fixos da versão anterior do gerador não servem como amostra-ouro. `rotulos_vinicius.csv` está preservado e não constitui, isoladamente, prova de julgamento independente da seleção a produzir. Não há kappa ou F1 humano verificável nesta entrega.
+**Estado dos dados:** o arquivo legado `data/output/repositorios_aprovados.csv` tem 100 repositórios e não comprova a procedência de uma amostra final real. O piloto anterior da nova coleta, registrado em `data/coleta_final/estado.json`, consultou **100 candidatos e não comprovou nenhum aprovado**; isso descreve somente o piloto, sem concluir ausência histórica de Actions nos demais projetos.
+
+O ZIP histórico foi baixado integralmente (**952.289.386 bytes**) e seu MD5 publicado foi verificado. A recuperação documentada em `data/historico_2024/proveniencia_historico.json` preservou 19.849 metadados e identificou 15 repositórios com pelo menos 50 runs válidos observados, exportando 6.708 runs de janeiro a setembro de 2024. Esses repositórios ainda dependem dos filtros atuais e das releases reais; **não constituem a população final de 300 aprovados**. A qualificação final continua em curso. As releases e os rótulos fixos da versão anterior do gerador não servem como amostra-ouro. `rotulos_vinicius.csv` está preservado. Não há kappa ou F1 humano verificável nesta entrega.
 
 ### 1. Obter as entradas reais e gerar a seleção comum
 
-A coleta deverá fornecer **pelo menos 300 repositórios aprovados**, as releases originais da API do GitHub e a procedência vinculada por hashes. Consulte [`AMOSTRA_OURO.md`](AMOSTRA_OURO.md) para o formato das entradas. A procedência deve ser produzida e preservada pela coleta; preencher um manifesto manualmente não comprova a origem dos registros. `seed_data.py` e modo de referência não podem completar a amostra.
+A coleta deverá fornecer **pelo menos 300 repositórios aprovados**, as releases originais da API do GitHub e a procedência vinculada por hashes. O novo coletor [`coleta_amostra_real.py`](coleta_amostra_real.py) usa busca, metadados e releases da API; os runs poderão vir da API ou de uma exportação pública original verificada. A origem e a cobertura dos runs serão registradas separadamente. Consulte [`AMOSTRA_OURO.md`](AMOSTRA_OURO.md) para o formato das entradas. Preencher um manifesto manualmente não comprova a origem dos registros. `seed_data.py` e modo de referência não podem completar a amostra.
 
-Execute os comandos desta seção na pasta `Laboratorio03_MineracaoDeMetricasDORA`, após instalar `requirements.txt`. Com as entradas reais disponíveis:
+Execute os comandos desta seção na pasta `Laboratorio03_MineracaoDeMetricasDORA`, após instalar `requirements.txt`. Configure `GITHUB_TOKEN` ou, se já autenticado no GitHub CLI, use `--usar-gh-auth`:
+
+A janela permanece **01/10/2023 a 30/09/2024 UTC**. A política de retenção do GitHub passou a abranger metadados de workflow runs em 01/10/2026; os dados antigos podem já estar indisponíveis. Essa possibilidade exige verificar a API e procurar arquivos históricos reais, sem alterar a janela para obter aprovações. [Fonte: GitHub Changelog](https://github.blog/changelog/2026-10-01-actions-retention-now-covers-checks-runs-and-statuses/).
+
+Primeiro baixe ou retome a fonte pública. O downloader preserva `.part` e `.download.json` em caso de interrupção e retorna código 2; repita o mesmo comando para continuar. O arquivo `.zip` só é disponibilizado após conferir tamanho e MD5 publicados:
 
 ```bash
-python gerar_amostra_rotulagem.py --config config.yaml --repos data/output/repositorios_aprovados.csv --releases data/coleta/releases.json --proveniencia data/coleta/proveniencia.json --saida data/amostra_ouro
+python baixar_historico.py --saida .cache/arquivos_historicos/2024/cicd_env_results.zip
 ```
 
-O comando validará a população de entrada, sorteará 60 repositórios com `random_state=42` e cinco releases reais por repositório. Salvará `data/amostra_ouro/amostra_comum.csv`, `evidencias_releases.json` (conteúdo original das releases) e `selecao.json` (semente, algoritmo, versões, janela, hashes e IDs). A população é ordenada por `full_name` e as releases por publicação UTC e ID; cada sorteio usa `random_state=42` sem reposição. A referência incluirá identificadores, datas, tags e links para releases, notas e commits, com julgamentos vazios. Para releases sem predecessora elegível na janela, o link de commits aponta para o histórico da tag; consulte a história anterior quando necessário para identificar as mudanças. Se faltarem a amostra final ou os arquivos reais, a execução terminará com uma mensagem indicando a entrada necessária. **A execução com os dados atuais não gera uma seleção substituta.**
+Somente depois de o download terminar e o checksum integral ser validado, inspecione os registros e preserve o conjunto histórico em um diretório novo:
+
+```bash
+python recuperar_historico.py --arquivo .cache/arquivos_historicos/2024/cicd_env_results.zip --config config.yaml --saida data/historico_2024
+```
+
+Nesta execução, `data/historico_2024/` já contém a recuperação verificada: reutilize-a na etapa seguinte. O comando acima documenta a reprodução em um diretório ausente; para recuperar novamente, escolha outro `--saida` e preserve o conjunto existente.
+
+Em seguida, execute a coleta com a fonte histórica verificada. `--reavaliar` preserva as qualificações do piloto anterior e repete os filtros com as respostas em cache e a nova evidência histórica:
+
+```bash
+python coleta_amostra_real.py --config config.yaml --saida data/coleta_final --alvo 300 --limite-candidatos 5000 --usar-gh-auth --historico-zenodo data/historico_2024 --reavaliar
+```
+
+Pelo menos 50 runs distintos observados na janela e válidos para `push`, default branch e conclusão comprovam o mínimo de elegibilidade; uma cobertura parcial não comprova métricas anuais DORA. Os artefatos históricos e os estados parciais **não autorizam o sorteio nem a rotulagem** por si só. A coleta preserva `estado.json`, descartes, funil e cache; o status continuará insuficiente até comprovar os filtros e pelo menos 300 aprovados reais. Consultas sem registros preservados não comprovam ausência histórica de Actions. Somente depois de `estado.json` indicar `status=completa` e os arquivos finais estarem disponíveis, execute o preparo único:
+
+```bash
+python executar_amostra_ouro.py --config config.yaml --coleta data/coleta_final --saida data/amostra_ouro --rotulos rotulos_aulus.csv
+```
+
+O preparo validará `data/coleta_final/repositorios_aprovados.csv`, `releases.json` e `proveniencia.json`, sorteará 60 repositórios com `random_state=42` e cinco releases reais por repositório e criará a cópia vazia de Áulus. Salvará `data/amostra_ouro/amostra_comum.csv`, `evidencias_releases.json` (conteúdo original das releases) e `selecao.json` (semente, algoritmo, versões, janela, hashes e IDs). A população é ordenada por `full_name` e as releases por publicação UTC e ID; cada sorteio usa `random_state=42` sem reposição. A referência incluirá identificadores, datas, tags e links para releases, notas e commits, com julgamentos vazios. Para releases sem predecessora elegível na janela, o link de commits aponta para o histórico da tag; consulte a história anterior quando necessário para identificar as mudanças. Se faltarem a amostra final ou os arquivos reais, a execução terminará com uma mensagem indicando a entrada necessária. **Os 100 registros atuais e uma coleta parcial não geram uma seleção substituta.**
 
 ### 2. Gerar, preencher e validar o arquivo de Áulus
 
-Somente após gerar a amostra comum válida:
+O comando de preparo único já cria `rotulos_aulus.csv`. Se a referência foi produzida separadamente com `gerar_amostra_rotulagem.py` e a cópia de Áulus ainda não existe, use:
 
 ```bash
 python rotulagem.py gerar --amostra data/amostra_ouro/amostra_comum.csv --saida rotulos_aulus.csv
@@ -144,7 +170,7 @@ As fixtures são dados construídos exclusivamente para verificar determinismo, 
 
 ```bash
 python -m pytest tests/test_amostra_ouro.py tests/test_rotulagem.py tests/test_concordancia.py
-python -m pytest
+python -m pytest --cov=metricas --cov-report=term-missing --cov-fail-under=80
 ```
 
 ---
