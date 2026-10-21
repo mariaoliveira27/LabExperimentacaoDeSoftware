@@ -12,7 +12,11 @@
       "acuracia": 0.9667,
       "precisao": 1.0,
       "recall": 0.9471,
-      "f1": 0.9728
+      "f1": 0.9728,
+      "precisao_sklearn": 1.0,
+      "recall_sklearn": 0.9471,
+      "f1_sklearn": 0.9728,
+      "acuracia_sklearn": 0.9667
     }
   },
   "v2": {
@@ -28,7 +32,11 @@
       "acuracia": 1.0,
       "precisao": 1.0,
       "recall": 1.0,
-      "f1": 1.0
+      "f1": 1.0,
+      "precisao_sklearn": 1.0,
+      "recall_sklearn": 1.0,
+      "f1_sklearn": 1.0,
+      "acuracia_sklearn": 1.0
     }
   },
   "v3": {
@@ -44,7 +52,11 @@
       "acuracia": 0.9867,
       "precisao": 1.0,
       "recall": 0.9788,
-      "f1": 0.9893
+      "f1": 0.9893,
+      "precisao_sklearn": 1.0,
+      "recall_sklearn": 0.9788,
+      "f1_sklearn": 0.9893,
+      "acuracia_sklearn": 0.9867
     }
   }
 }

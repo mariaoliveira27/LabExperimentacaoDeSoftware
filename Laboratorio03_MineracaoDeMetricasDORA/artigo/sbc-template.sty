@@ -1,0 +1,72 @@
+% sbc-template.sty
+% Style file for SBC conferences (Sociedade Brasileira de Computação)
+% Updated 2017
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{sbc-template}[2017/04/18 SBC Conferences style]
+
+\RequirePackage{times}
+
+% Margins
+\setlength{\paperwidth}{21cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textwidth}{15cm}
+\setlength{\textheight}{24.7cm}
+\setlength{\oddsidemargin}{0.46cm}
+\setlength{\evensidemargin}{0.46cm}
+\setlength{\topmargin}{-0.54cm}
+\setlength{\headheight}{0cm}
+\setlength{\headsep}{0cm}
+\setlength{\topskip}{0cm}
+\setlength{\footskip}{0cm}
+
+\pagestyle{empty}
+
+% Title and Author formatting
+\def\inst#1{$^{#1}$}
+\def\nextinstitute{\\\smallskip}
+\def\email#1{\\\texttt{\small #1}}
+
+\renewcommand{\maketitle}{%
+  \begin{center}%
+    {\Large\bfseries \@title \par}%
+    \vskip 1.5em%
+    {\normalsize\bfseries
+      \lineskip .5em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+    \vskip 1.5em%
+    {\small \@address \par}%
+  \end{center}%
+  \par
+  \vskip 1.5em
+}
+
+\def\address#1{\def\@address{#1}}
+\def\@address{}
+
+% Abstracts
+\newenvironment{resumo}%
+  {\begin{center}{\bfseries\small Resumo}\end{center}\small\itshape\quotation}%
+  {\endquotation\par\bigskip}
+
+\renewenvironment{abstract}%
+  {\begin{center}{\bfseries\small Abstract}\end{center}\small\itshape\quotation}%
+  {\endquotation\par\bigskip}
+
+% Section titles
+\renewcommand{\section}{\@startsection {section}{1}{\z@}%
+  {-3.5ex \@plus -1ex \@minus -.2ex}%
+  {2.3ex \@plus.2ex}%
+  {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
+  {-3.25ex\@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
+  {-3.25ex\@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries}}
+
+\endinput

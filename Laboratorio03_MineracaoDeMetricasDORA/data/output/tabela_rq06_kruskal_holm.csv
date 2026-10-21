@@ -1,0 +1,31 @@
+fator,metrica,k_grupos,n_total,estatistica_h,p_valor_bruto,p_valor_holm,significativo_holm,epsilon_quadrado,magnitude_efeito
+Popularidade (Estrelas),Deployment Frequency,4,300,80.8419,2.0250606791701528e-17,5.467663833759093e-16,True,0.2704,grande
+Popularidade (Estrelas),Lead Time (Por Release),4,300,80.8419,2.0250606791700345e-17,5.467663833759093e-16,True,0.2704,grande
+Popularidade (Estrelas),Lead Time (Por Commit),4,300,80.8419,2.0250606791700345e-17,5.467663833759093e-16,True,0.2704,grande
+Popularidade (Estrelas),Change Failure Rate (CI),4,300,4.7084,0.19443521154773044,1.0,False,0.0157,pequeno
+Popularidade (Estrelas),Change Failure Rate (Releases),4,300,4.7084,0.19443521154773044,1.0,False,0.0157,pequeno
+Popularidade (Estrelas),Tempo de Recuperação,4,300,9.7393,0.020917016539130844,0.35558928116522437,False,0.0326,pequeno
+Tamanho da Equipe (Contribuidores),Deployment Frequency,4,300,82.8394,7.548672300515556e-18,2.264601690154667e-16,True,0.2771,grande
+Tamanho da Equipe (Contribuidores),Lead Time (Por Release),4,300,82.8394,7.548672300515556e-18,2.264601690154667e-16,True,0.2771,grande
+Tamanho da Equipe (Contribuidores),Lead Time (Por Commit),4,300,82.8394,7.548672300515556e-18,2.264601690154667e-16,True,0.2771,grande
+Tamanho da Equipe (Contribuidores),Change Failure Rate (CI),4,300,4.078,0.25316056642146095,1.0,False,0.0136,pequeno
+Tamanho da Equipe (Contribuidores),Change Failure Rate (Releases),4,300,4.078,0.25316056642146095,1.0,False,0.0136,pequeno
+Tamanho da Equipe (Contribuidores),Tempo de Recuperação,4,300,41.3178,5.598999517130199e-09,1.0078199130834358e-07,True,0.1382,moderado
+Idade do Repositório (Anos),Deployment Frequency,4,300,48.5367,1.6369787680945628e-10,3.437655412998378e-09,True,0.1623,grande
+Idade do Repositório (Anos),Lead Time (Por Release),4,300,48.5367,1.6369787680944656e-10,3.437655412998378e-09,True,0.1623,grande
+Idade do Repositório (Anos),Lead Time (Por Commit),4,300,48.5367,1.6369787680944656e-10,3.437655412998378e-09,True,0.1623,grande
+Idade do Repositório (Anos),Change Failure Rate (CI),4,300,1.4945,0.6835380717210467,1.0,False,0.005,desprezível
+Idade do Repositório (Anos),Change Failure Rate (Releases),4,300,1.4945,0.6835380717210467,1.0,False,0.005,desprezível
+Idade do Repositório (Anos),Tempo de Recuperação,4,300,1.6452,0.6491777777938235,1.0,False,0.0055,desprezível
+Tipo de Projeto,Deployment Frequency,3,300,1.377,0.502317408045182,1.0,False,0.0046,desprezível
+Tipo de Projeto,Lead Time (Por Release),3,300,1.377,0.502317408045182,1.0,False,0.0046,desprezível
+Tipo de Projeto,Lead Time (Por Commit),3,300,1.377,0.502317408045182,1.0,False,0.0046,desprezível
+Tipo de Projeto,Change Failure Rate (CI),3,300,1.1408,0.5653098735434696,1.0,False,0.0038,desprezível
+Tipo de Projeto,Change Failure Rate (Releases),3,300,1.1408,0.5653098735434696,1.0,False,0.0038,desprezível
+Tipo de Projeto,Tempo de Recuperação,3,300,1.4482,0.4847502423442587,1.0,False,0.0048,desprezível
+Linguagem Principal,Deployment Frequency,6,300,63.0599,2.829139995916793e-12,6.789935990200303e-11,True,0.2109,grande
+Linguagem Principal,Lead Time (Por Release),6,300,63.0599,2.829139995916793e-12,6.789935990200303e-11,True,0.2109,grande
+Linguagem Principal,Lead Time (Por Commit),6,300,63.0599,2.829139995916793e-12,6.789935990200303e-11,True,0.2109,grande
+Linguagem Principal,Change Failure Rate (CI),6,300,3.4183,0.6357834947214427,1.0,False,0.0114,pequeno
+Linguagem Principal,Change Failure Rate (Releases),6,300,3.4183,0.6357834947214427,1.0,False,0.0114,pequeno
+Linguagem Principal,Tempo de Recuperação,6,300,6.9803,0.2221087467616091,1.0,False,0.0233,pequeno

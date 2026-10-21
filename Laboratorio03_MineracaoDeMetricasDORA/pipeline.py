@@ -9,7 +9,7 @@ Executa de ponta a ponta:
 3. Aplicação do funil de seleção com rastreio de descartes
 4. Coleta de releases, commits entre releases e workflow runs
 5. Cálculo das métricas DORA (RQ01 a RQ04) e classificação DORA
-6. Exportação do dataset final (100 repositórios aprovados) e documentação do funil
+6. Exportação dos repositórios aprovados e documentação do funil
 """
 
 import os
@@ -54,7 +54,7 @@ def carregar_config(caminho_config: str = "config.yaml") -> Dict[str, Any]:
             "min_stars": 1000,
             "min_releases": 5,
             "min_workflow_runs": 50,
-            "target_approved_repos": 100,
+            "target_approved_repos": 300,
         },
         "api": {
             "base_url": "https://api.github.com",
@@ -92,7 +92,7 @@ def carregar_config(caminho_config: str = "config.yaml") -> Dict[str, Any]:
     return defaults
 
 
-def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
+def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False, buscar_api: bool = False):
     """Executa o pipeline completo de seleção, coleta, métricas e exportação."""
     logger.info("Iniciando Pipeline de Mineração de Métricas DORA...")
 
@@ -122,6 +122,34 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
 
     # 1. Obtenção dos candidatos
     candidatos_base = REPOSITORIOS_CANDIDATOS_REFERENCIA
+    deve_buscar = buscar_api or config.get("api", {}).get("search_candidates", False)
+    if not modo_referencia and deve_buscar:
+        try:
+            logger.info("Executando busca particionada de candidatos na API do GitHub...")
+            candidatos_api = coletor_meta.buscar_candidatos_particionado(
+                min_stars=config["criteria"]["min_stars"],
+                max_candidatos=max(500, target_approved * 2),
+            )
+            if candidatos_api and len(candidatos_api) >= target_approved:
+                candidatos_formatados = []
+                for cand in candidatos_api:
+                    meta = coletor_meta.extrair_metadados_repositorio(cand)
+                    candidatos_formatados.append({
+                        "owner": meta["owner"],
+                        "repo": meta["name"],
+                        "stars": meta["stars"],
+                        "lang": meta["language"],
+                        "branch": meta["default_branch"],
+                        "created": meta["created_at"],
+                        "contribs": meta["contributors_count"],
+                        "actions": None,
+                        "status": "candidato",
+                    })
+                candidatos_base = candidatos_formatados
+                logger.info(f"{len(candidatos_base)} candidatos obtidos via busca particionada na API do GitHub.")
+        except Exception as e:
+            logger.warning(f"Busca particionada na API não concluída ({e}); utilizando base de candidatos com histórico.")
+
     logger.info(f"Processando candidatos no funil de seleção...")
 
     repos_aprovados_dados: List[Dict[str, Any]] = []
@@ -212,15 +240,16 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
         funil.aprovar_repositorio(repo_info)
 
         # Cálculo das Métricas DORA para o repositório aprovado
-        # Se estamos em modo de referência ou sem chamadas pesadas de compare:
         dep_freq = calcular_deployment_frequency(n_releases, weeks)
 
-        # A integração paginada do Lead Time (#65, Maria) ainda é uma
-        # dependência. Contagem de releases não mede a idade dos commits.
-        lead_time_a = None
-        lead_time_b = None
+        comparacoes_esperadas = max(0, len(releases_validas) - 1)
+        comparacoes_completas = 0
+        releases_com_lead_time = 0
+        commits_com_lead_time = 0
+        falhas_b = avaliadas_b = censuradas_b = None
 
         if modo_referencia:
+            # Simulação determinística baseada nos metadados reais para o modo de referência
             lead_time_a = round(max(0.5, (120.0 / max(1, n_releases))), 2)
             lead_time_b = round(max(0.2, (lead_time_a * 0.45)), 2)
             taxa_falha_ci = round(min(0.35, max(0.04, (item["stars"] % 17) / 60.0)), 3)
@@ -232,29 +261,59 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
             cfr_ci = resultado_cfr.cfr
             recovery_hours = resultado_recuperacao.mediana_horas
 
-            # Integração real de CFR(b) e Rework Rate (Card #67 / Issue #07 - Vinícius)
-            # Para cada release R_i (i >= 1), coleta commits entre R_{i-1} e R_i via compare
+            # Integração real de Lead Time (RQ02), CFR(b) (RQ03) e Rework Rate (RQ08)
+            # Para cada release R_i (i >= 1), coleta commits entre R_{i-1} e R_i via compare com paginação
+            releases_data_lt = []
             for i in range(1, len(releases_validas)):
                 tag_ant = releases_validas[i - 1].get("tag_name")
                 tag_curr = releases_validas[i].get("tag_name")
-                if tag_ant and tag_curr:
-                    commits = coletor_comm.coletar_commits_entre_releases(
-                        owner, repo_name, tag_ant, tag_curr
-                    )
-                    if commits:
-                        releases_validas[i]["commit_messages"] = [
-                            c.get("message", "") for c in commits
-                        ]
-                        releases_validas[i]["commits"] = commits
-                    else:
-                        releases_validas[i]["commit_messages"] = []
+                if not tag_ant or not tag_curr:
+                    continue
+                commits = coletor_comm.coletar_commits_entre_releases(
+                    owner, repo_name, tag_ant, tag_curr
+                )
+                # None significa indisponibilidade; [] comprova comparação
+                # completa sem commits. Ausência não pode virar evidência negativa.
+                if commits is None:
+                    continue
+                comparacoes_completas += 1
+                releases_validas[i]["commit_messages"] = [
+                    c.get("message", "") for c in commits
+                ]
+                releases_validas[i]["commits"] = commits
+                c_dates = [c["author_date"] for c in commits if c.get("author_date")]
+                if c_dates:
+                    releases_data_lt.append({
+                        "release_date": releases_validas[i]["published_at"],
+                        "commit_dates": c_dates,
+                    })
 
-            cfr_b_val, falhas_b, avaliadas_b, censuradas_b = calcular_cfr_releases(
-                releases_validas, window_end
+            # Cálculo empírico real de Lead Time for Changes (RQ02 - Variantes a e b)
+            releases_com_lead_time = len(releases_data_lt)
+            lt_a_med, lt_b_med, commits_com_lead_time = calcular_lead_time_repositorio(releases_data_lt)
+            lead_time_a = round(lt_a_med, 2) if lt_a_med is not None else None
+            lead_time_b = round(lt_b_med, 2) if lt_b_med is not None else None
+
+            cfr_releases = rework_rate = None
+            if comparacoes_completas == comparacoes_esperadas:
+                cfr_b_val, falhas_b, avaliadas_b, censuradas_b = calcular_cfr_releases(
+                    releases_validas, window_end
+                )
+                cfr_releases = round(cfr_b_val, 3) if cfr_b_val is not None else None
+                taxa_rework = calcular_rework_rate(releases_validas)
+                rework_rate = round(taxa_rework, 3) if taxa_rework is not None else None
+
+        if modo_referencia:
+            origem_lead_time = origem_cfr_releases = "referencia_simulada"
+        else:
+            origem_lead_time = (
+                "compare_paginado" if releases_com_lead_time
+                else "indisponivel_sem_commits_comparaveis"
             )
-            cfr_releases = round(cfr_b_val, 3) if cfr_b_val is not None else None
-            taxa_rework = calcular_rework_rate(releases_validas)
-            rework_rate = round(taxa_rework, 3) if taxa_rework is not None else 0.0
+            origem_cfr_releases = (
+                "releases_e_compares_paginados" if comparacoes_completas == comparacoes_esperadas
+                else "indisponivel_comparacoes_incompletas"
+            )
 
         # Classificação DORA
         tier_geral, tiers_indiv = classificar_dora_repositorio(
@@ -296,9 +355,17 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False):
             "deployment_frequency_semana": round(dep_freq, 3),
             "lead_time_release_mediana_dias": lead_time_a,
             "lead_time_commit_mediana_dias": lead_time_b,
-            "origem_lead_time": "referencia_simulada" if modo_referencia else "pendente_integracao_paginada_issue_65",
+            "origem_lead_time": origem_lead_time,
+            "comparacoes_esperadas": comparacoes_esperadas if not modo_referencia else None,
+            "comparacoes_completas": comparacoes_completas if not modo_referencia else None,
+            "releases_com_lead_time": releases_com_lead_time if not modo_referencia else None,
+            "commits_com_lead_time": commits_com_lead_time if not modo_referencia else None,
             "cfr_ci_proxy": cfr_ci,
             "cfr_releases_proxy": cfr_releases,
+            "origem_cfr_releases": origem_cfr_releases,
+            "releases_com_falha": falhas_b,
+            "releases_avaliadas_cfr": avaliadas_b,
+            "releases_censuradas_cfr": censuradas_b,
             "tempo_recuperacao_mediana_horas": recovery_hours,
             "origem_metricas_estabilidade": "referencia_simulada" if modo_referencia else "workflow_runs",
             "runs_sucessos": resultado_cfr.sucessos if resultado_cfr else None,
@@ -347,10 +414,14 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Pipeline de Mineração de Métricas DORA (Lab03)")
     parser.add_argument("--config", default="config.yaml", help="Caminho do arquivo de configuração")
     parser.add_argument("--reference-mode", action="store_true", default=False, help="Usa dados de demonstração e métricas simuladas (sem rede)")
+    parser.add_argument("--search-api", action="store_true", default=False, help="Executa busca particionada de candidatos na API do GitHub")
     args = parser.parse_args(argv)
 
     cfg = carregar_config(args.config)
-    executar_pipeline(cfg, modo_referencia=args.reference_mode)
+    if getattr(args, "search_api", False):
+        executar_pipeline(cfg, modo_referencia=args.reference_mode, buscar_api=True)
+    else:
+        executar_pipeline(cfg, modo_referencia=args.reference_mode)
 
 
 if __name__ == "__main__":
