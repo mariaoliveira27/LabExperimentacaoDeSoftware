@@ -1,0 +1,8 @@
+rq,metrica,unidade_observacao,unidade,n_total,n_validos,n_ausentes,mediana,q1,q3,iqr
+RQ01,deployment_frequency_semana,repositorio,releases/semana,300,300,0,0.269,0.153,0.46,0.30700000000000005
+RQ02,lead_time_release_mediana_dias,repositorio,dias,300,300,0,8.57,5.0,15.0,10.0
+RQ02,lead_time_commit_mediana_dias,repositorio,dias,300,300,0,3.86,2.25,6.75,4.5
+RQ03,cfr_ci_proxy,repositorio,proporção,300,300,0,0.133,0.067,0.2,0.133
+RQ03,cfr_releases_proxy,repositorio,proporção,300,300,0,0.08,0.04,0.12,0.07999999999999999
+RQ04,tempo_recuperacao_mediana_horas,repositorio,horas,300,300,0,9.7,3.7,14.9,11.2
+RQ04,proporcao_episodios_censurados,repositorio,proporção,300,300,0,0.1,0.09375,0.107,0.013249999999999998

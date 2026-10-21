@@ -11,7 +11,9 @@ from rotulagem import JULGAMENTOS, METADADOS, ler_csv, validar_rotulos
 
 
 @pytest.fixture
-def bundle_fixture(tmp_path):
+def bundle_fixture(tmp_path, monkeypatch):
+    import gerar_amostra_rotulagem
+    monkeypatch.setattr(gerar_amostra_rotulagem, "validar_coleta_final", lambda *args: None)
     coleta = tmp_path / "coleta"
     coleta.mkdir()
     repos, releases = [], {}

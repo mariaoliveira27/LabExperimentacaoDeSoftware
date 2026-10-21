@@ -1,0 +1,7 @@
+# Preserve os bytes vinculados aos hashes da referência adotada.
+/data/amostra_ouro_csv_main/** -text whitespace=cr-at-eol
+/data/concordancia_aulus/** -text whitespace=cr-at-eol
+/data/execucao_amostra_aulus/** -text whitespace=cr-at-eol
+/rotulos_aulus.csv -text whitespace=cr-at-eol
+/rotulos_maria_independente.csv -text whitespace=cr-at-eol
+/rotulos_vinicius_independente.csv -text whitespace=cr-at-eol

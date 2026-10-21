@@ -74,6 +74,14 @@ def test_300_aprovados_exporta_contrato_e_prepara_rotulagem(preparar, tmp_path):
     assert manifesto["modo_referencia"] is False
     assert manifesto["repositorios_sha256"] == coleta.sha256(destino / "repositorios_aprovados.csv")
     assert len(manifesto["evidencias"]) == 300
+    hashes_antes = {path.name: coleta.sha256(path) for path in destino.iterdir() if path.is_file()}
+    auditoria = coleta.auditar_bundle_final(destino, config)
+    assert auditoria["somente_leitura"] is True and auditoria["n_aprovados"] == 300
+    assert hashes_antes == {path.name: coleta.sha256(path) for path in destino.iterdir() if path.is_file()}
+    primeiras = json.loads((destino / "primeiros_100_aprovados.json").read_text(encoding="utf-8"))
+    assert primeiras["completo"] is True and primeiras["n_comprovados"] == 100
+    assert [item["candidate_id"] for item in primeiras["repositorios"]] == list(range(1, 101))
+    assert primeiras["repositorios"][0]["sha256"] == coleta.sha256(destino / "qualificacoes/1.json")
     executar(config, destino, tmp_path / "ouro", tmp_path / "rotulos_aulus.csv")
     with (tmp_path / "rotulos_aulus.csv").open(encoding="utf-8", newline="") as stream:
         rotulos = list(csv.DictReader(stream))
@@ -82,6 +90,34 @@ def test_300_aprovados_exporta_contrato_e_prepara_rotulagem(preparar, tmp_path):
     chamadas = len(api.chamadas)
     assert coleta.coletar(config, destino, client=api)["status"] == "completa"
     assert len(api.chamadas) == chamadas
+
+
+@pytest.mark.parametrize("persistente", [False, True])
+def test_checkpoint_windows_preserva_atomicidade_em_bloqueio_temporario(tmp_path, monkeypatch, persistente):
+    destino = tmp_path / "estado.json"
+    destino.write_text('{"anterior": true}', encoding="utf-8")
+    substituir = Path.replace
+    chamadas = []
+
+    def bloqueado(temporario, alvo):
+        chamadas.append(alvo)
+        if persistente or len(chamadas) < 3:
+            erro = PermissionError("arquivo temporariamente aberto")
+            erro.winerror = 32
+            raise erro
+        return substituir(temporario, alvo)
+
+    monkeypatch.setattr(Path, "replace", bloqueado)
+    monkeypatch.setattr(coleta.time, "sleep", lambda atraso: None)
+    if persistente:
+        with pytest.raises(PermissionError):
+            coleta._json_atomic(destino, {"novo": True})
+        assert json.loads(destino.read_text()) == {"anterior": True}
+        assert len(chamadas) == 7
+    else:
+        coleta._json_atomic(destino, {"novo": True})
+        assert json.loads(destino.read_text()) == {"novo": True}
+        assert len(chamadas) == 3
 
 
 @pytest.mark.parametrize("alteracoes,motivo", [
@@ -93,6 +129,10 @@ def test_insuficiente_so_publica_parciais_e_descartes(preparar, alteracoes, moti
     config, destino, api = preparar(APIPlanejada(3, **alteracoes))
     estado = coleta.coletar(config, destino, client=api)
     assert estado["status"] == "insuficiente" and estado["n_aprovados"] == 0
+    primeiras = json.loads((destino / "primeiros_100_aprovados.json").read_text(encoding="utf-8"))
+    assert primeiras["completo"] is False and primeiras["n_comprovados"] == 0
+    with pytest.raises(ValueError, match="Bundle final ausente/incompleto"):
+        coleta.auditar_bundle_final(destino, config)
     assert not (destino / "repositorios_aprovados.csv").exists()
     assert not (destino / "releases.json").exists()
     assert not (destino / "proveniencia.json").exists()

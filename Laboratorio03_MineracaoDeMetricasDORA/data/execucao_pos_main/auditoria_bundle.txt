@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\aulus\Documents\GitHub\LabExperimentacaoDeSoftware\Laboratorio03_MineracaoDeMetricasDORA\coleta_amostra_real.py", line 441, in auditar_bundle_final
+    return _validar_publicacao_final(destino, arquivos, assinatura, inicio, fim,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\aulus\Documents\GitHub\LabExperimentacaoDeSoftware\Laboratorio03_MineracaoDeMetricasDORA\coleta_amostra_real.py", line 339, in _validar_publicacao_final
+    raise ValueError("Contrato final não corresponde à janela, critérios e alvo da coleta.")
+ValueError: Contrato final não corresponde à janela, critérios e alvo da coleta.

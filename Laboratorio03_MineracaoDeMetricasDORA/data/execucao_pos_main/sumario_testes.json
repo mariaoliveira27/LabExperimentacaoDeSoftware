@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "suite_02": {
+    "command": ".\\.venv\\Scripts\\python.exe -m pytest --cov=. --cov-report=term-missing --cov-report=json:.cache/coverage_pos_main_completa_02.json --basetemp .cache/pytest_pos_main_completa_02 -p no:cacheprovider -q",
+    "exit_code": 1,
+    "passed": 509,
+    "failed": 1,
+    "duration_seconds": 71.32,
+    "log": "data/execucao_pos_main/testes_suite_completa_tentativa_02.txt",
+    "failure": "test_executar_rq07_pipeline: backend Tk sem init.tcl; corrigido com Agg no modulo batch"
+  },
+  "suite_03": {
+    "command": ".\\.venv\\Scripts\\python.exe -m pytest --cov=. --cov-report=term-missing --cov-report=json:.cache/coverage_pos_main_completa_03.json --basetemp .cache/pytest_pos_main_completa_03 -p no:cacheprovider -q",
+    "exit_code": 0,
+    "passed": 510,
+    "failed": 0,
+    "duration_seconds": 68.85,
+    "log": "data/execucao_pos_main/testes_suite_completa.txt"
+  },
+  "coverage": {
+    "source": ".cache/coverage_pos_main_completa_03.json",
+    "all_files_including_tests": {
+      "num_statements": 7568,
+      "covered_lines": 6620,
+      "missing_lines": 948,
+      "percent_covered": 87.47357293868922
+    },
+    "production_excluding_tests": {
+      "num_statements": 4205,
+      "covered_lines": 3263,
+      "missing_lines": 942,
+      "percent_covered": 77.59809750297265
+    },
+    "metricas_package": {
+      "num_statements": 999,
+      "covered_lines": 830,
+      "missing_lines": 169,
+      "percent_covered": 83.08308308308308
+    },
+    "metricas_files": {
+      "metricas\\__init__.py": {
+        "covered_lines": 2,
+        "num_statements": 2,
+        "percent_covered": 100.0,
+        "percent_covered_display": "100",
+        "missing_lines": 0,
+        "excluded_lines": 0,
+        "percent_statements_covered": 100.0,
+        "percent_statements_covered_display": "100"
+      },
+      "metricas\\analise_rq05_rq06.py": {
+        "covered_lines": 169,
+        "num_statements": 324,
+        "percent_covered": 52.160493827160494,
+        "percent_covered_display": "52",
+        "missing_lines": 155,
+        "excluded_lines": 0,
+        "percent_statements_covered": 52.160493827160494,
+        "percent_statements_covered_display": "52"
+      },
+      "metricas\\analise_rq07.py": {
+        "covered_lines": 163,
+        "num_statements": 169,
+        "percent_covered": 96.44970414201184,
+        "percent_covered_display": "96",
+        "missing_lines": 6,
+        "excluded_lines": 0,
+        "percent_statements_covered": 96.44970414201184,
+        "percent_statements_covered_display": "96"
+      },
+      "metricas\\calculo_metricas.py": {
+        "covered_lines": 302,
+        "num_statements": 306,
+        "percent_covered": 98.69281045751634,
+        "percent_covered_display": "99",
+        "missing_lines": 4,
+        "excluded_lines": 0,
+        "percent_statements_covered": 98.69281045751634,
+        "percent_statements_covered_display": "99"
+      },
+      "metricas\\concordancia.py": {
+        "covered_lines": 194,
+        "num_statements": 198,
+        "percent_covered": 97.97979797979798,
+        "percent_covered_display": "98",
+        "missing_lines": 4,
+        "excluded_lines": 0,
+        "percent_statements_covered": 97.97979797979798,
+        "percent_statements_covered_display": "98"
+      }
+    }
+  },
+  "testes_relevantes": {
+    "command": ".venv/Scripts/python.exe -X utf8 -m pytest tests/test_pipeline.py tests/test_coletor_commits_real.py tests/test_coletor_runs.py tests/test_cache_retoma.py tests/test_coleta_amostra_real.py tests/test_verificar_cobertura_runs.py tests/test_amostra_ouro.py tests/test_executar_amostra_ouro.py tests/test_rotulagem.py tests/test_concordancia.py tests/test_analisar_rqs.py -q --tb=short --basetemp .cache/pytest_pos_main_relevantes_02 -p no:cacheprovider",
+    "exit_code": 0,
+    "passed": 345,
+    "duration_seconds": 37.19,
+    "log": "data/execucao_pos_main/testes_relevantes.txt"
+  },
+  "normalizacao_logs": "Removido CR duplicado na captura Windows; conteudo e resultados preservados em UTF-8/LF."
+}

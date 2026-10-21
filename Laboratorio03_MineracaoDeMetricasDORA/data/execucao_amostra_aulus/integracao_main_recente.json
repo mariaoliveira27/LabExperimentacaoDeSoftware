@@ -1,0 +1,38 @@
+{
+  "verificado_em_utc": "2026-10-21T19:53:13.218949+00:00",
+  "main_recebida": "4e05345db431402ea2cfcd079f4c2ef5c124ad2e",
+  "commits_recebidos": [
+    "17224e54e0fe5579d76c3794803e4556c3f656ad",
+    "4e05345db431402ea2cfcd079f4c2ef5c124ad2e"
+  ],
+  "arquivos_recebidos": [
+    "artigo/main.tex"
+  ],
+  "blocos_conflito_resolvidos": 4,
+  "decisao": "Combinar revis?es de interpreta??o e layout com limites de proveni?ncia; censura declarada 1129/11301; F1 recebido preservado como relato ainda n?o validado por tr?s avalia??es humanas atuais.",
+  "commits_preservados": [
+    "5eb6463",
+    "b3b44c9",
+    "ba0aa7b",
+    "29ea202",
+    "0dea57b",
+    "b7988d0",
+    "5a0dc78",
+    "83917e8",
+    "ec27244"
+  ],
+  "codigo_ou_dados_alterados_pela_main_recente": false,
+  "validacao_tex": {
+    "ambientes_balanceados": true,
+    "referencias_internas_resolvidas": true,
+    "figuras_existentes": 5,
+    "floatbarrier_por_figura": true,
+    "pdf_compilado": false,
+    "motivo_pdf": "Sem pdflatex, latexmk ou tectonic no ambiente."
+  },
+  "suite_completa_pre_integracao_documental": {
+    "testes": 552,
+    "cobertura_metricas": 83.13373253493015,
+    "log": "suite_completa.txt"
+  }
+}

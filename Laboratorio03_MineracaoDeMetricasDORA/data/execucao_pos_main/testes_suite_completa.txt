@@ -1,0 +1,68 @@
+........................................................................ [ 14%]
+........................................................................ [ 28%]
+........................................................................ [ 42%]
+........................................................................ [ 56%]
+........................................................................ [ 70%]
+........................................................................ [ 84%]
+........................................................................ [ 98%]
+......                                                                   [100%]
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.12.10-final-0 _______________
+
+Name                                     Stmts   Miss  Cover   Missing
+----------------------------------------------------------------------
+analisar_rqs.py                            274     12    96%   87, 104, 139, 156, 163, 175, 185, 192, 206, 432-434, 438
+api_client.py                              246     38    85%   52-57, 68, 119, 133, 156, 171, 174, 197-204, 222, 310-311, 314, 341, 376-392
+baixar_historico.py                        116      9    92%   33, 46, 48, 79, 83, 105, 107, 150, 154
+benchmark_heuristica.py                    127     72    43%   25-26, 41-46, 144-171, 180-247, 251-293, 297
+busca_candidatos.py                        160      8    95%   50, 68, 80, 117, 160, 185, 201, 213
+coleta_amostra_real.py                     580     67    88%   75, 79, 103, 108, 111, 119, 123, 141, 146, 150, 153, 158, 241, 251, 260, 270, 274, 276, 278, 286, 297, 305, 309, 331, 339, 343, 348, 356, 364, 370, 374, 377, 380, 383, 390, 395, 399, 404, 406, 409, 413, 437-440, 447, 453, 500-501, 503, 518, 529, 538, 550-551, 662, 685, 693, 714, 732, 786-788, 794-795, 799-800
+coletor_commits.py                          70      3    96%   105, 111-112
+coletor_metadados.py                        62     51    18%   36, 53-113, 124-143
+coletor_releases.py                         31      5    84%   38-40, 50, 54
+coletor_runs.py                            185      9    95%   40, 119, 195, 212, 239, 242, 276-278
+consolidar_dataset.py                      184    184     0%   12-495
+executar_amostra_ouro.py                    62      3    95%   34, 77, 117
+funil.py                                    56      0   100%
+gerador_graficos.py                         92     92     0%   1-159
+gerar_amostra_rotulagem.py                 225     18    92%   54, 58, 74-75, 77, 105, 115, 184, 203, 208, 213, 216, 221, 233, 244, 296-297, 301
+gerar_graficos_artigo.py                   153    153     0%   7-365
+metricas\__init__.py                         2      0   100%
+metricas\analise_rq05_rq06.py              324    155    52%   71-72, 77, 81, 176, 255, 282, 303-304, 331-333, 452-660, 664-688, 692
+metricas\analise_rq07.py                   169      6    96%   182, 185, 198-200, 382
+metricas\calculo_metricas.py               306      4    99%   22, 285-286, 588
+metricas\concordancia.py                   198      4    98%   41, 170, 189, 309
+pipeline.py                                191     27    86%   88-90, 103, 127-151, 165-167, 189-195, 207-213, 271, 422, 428-429
+recuperar_historico.py                     166     18    89%   35, 53, 58, 60, 62, 64, 67, 85, 89, 129, 137, 154, 158, 173, 243-249, 253
+rotulagem.py                               162      2    99%   142, 267
+seed_data.py                                 2      0   100%
+tests\conftest.py                            7      1    86%   10
+tests\test_amostra_ouro.py                 150      0   100%
+tests\test_analisar_rqs.py                 271      0   100%
+tests\test_api_client.py                    29      0   100%
+tests\test_baixar_historico.py             135      0   100%
+tests\test_benchmark_heuristica.py          41      0   100%
+tests\test_busca_candidatos.py             209      0   100%
+tests\test_cache_retoma.py                 155      0   100%
+tests\test_coleta_amostra_real.py          396      0   100%
+tests\test_coletor_commits_real.py         139      2    99%   36, 40
+tests\test_coletor_runs.py                 277      0   100%
+tests\test_concordancia.py                 251      0   100%
+tests\test_estabilidade.py                  97      0   100%
+tests\test_executar_amostra_ouro.py        155      1    99%   72
+tests\test_funil.py                         43      0   100%
+tests\test_metricas.py                     142      0   100%
+tests\test_pipeline.py                     186      2    99%   45, 85
+tests\test_recuperar_historico.py          156      0   100%
+tests\test_rotulagem.py                    216      0   100%
+tests\test_rq05_rq06.py                    115      0   100%
+tests\test_rq07.py                          83      0   100%
+tests\test_verificar_cobertura_runs.py     110      0   100%
+verificar_cobertura_runs.py                 62      2    97%   37, 93
+----------------------------------------------------------------------
+TOTAL                                     7568    948    87%
+Coverage JSON written to file .cache/coverage_pos_main_completa_03.json
+510 passed in 68.85s (0:01:08)
+
+Cobertura separada metricas/: 830/999 linhas (83.08%).
+Sumario com comandos exatos e codigos: data/execucao_pos_main/sumario_testes.json

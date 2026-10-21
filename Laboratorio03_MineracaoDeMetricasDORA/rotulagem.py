@@ -66,6 +66,8 @@ def _validar_colunas(rows, campos, origem):
             raise ValueError(
                 f"{origem}, linha {numero}: colunas ausentes: {', '.join(faltam)}."
             )
+        if any(not isinstance(row[campo], str) for campo in campos):
+            raise ValueError(f"{origem}, linha {numero}: os campos devem conter texto.")
 
 
 def _chave(row):
@@ -83,6 +85,8 @@ def validar_amostra(rows):
             f"Amostra requer {NUM_RELEASES} releases; recebidas {len(rows)}."
         )
     _validar_colunas(rows, METADADOS, "Amostra")
+    if any(_texto(row, campo) for row in rows for campo in JULGAMENTOS):
+        raise ValueError("A referência comum deve ter julgamentos vazios para preservar o cegamento.")
     chaves = set()
     releases = set()
     nomes_repositorios = {}
@@ -228,18 +232,22 @@ def main(argv=None):
     comandos = parser.add_subparsers(dest="comando", required=True)
     gerar = comandos.add_parser("gerar", help="Gerar CSV independente sem julgamentos")
     gerar.add_argument("--amostra", required=True, type=Path)
+    gerar.add_argument("--manifesto", type=Path, help="Padrão: selecao.json ao lado da referência comum")
     gerar.add_argument("--saida", type=Path, default=Path("rotulos_aulus.csv"))
     validar = comandos.add_parser("validar", help="Validar decisões contra a amostra")
     validar.add_argument("--amostra", required=True, type=Path)
+    validar.add_argument("--manifesto", type=Path, help="Padrão: selecao.json ao lado da referência comum")
     validar.add_argument("--rotulos", required=True, type=Path)
     validar.add_argument("--rascunho", action="store_true", help="Permitir campos vazios")
     args = parser.parse_args(argv)
     try:
+        from gerar_amostra_rotulagem import validar_referencia
+        validar_referencia(args.amostra, args.manifesto)
         if args.comando == "gerar":
             saida = gerar_rotulos(args.amostra, args.saida)
             print(
                 f"Criado {saida}: 300 releases, 60 repositórios, julgamentos vazios. "
-                "Issue 02 pendente de julgamento humano independente de Áulus."
+                "Issue #62 pendente de julgamento humano independente de Áulus."
             )
         else:
             validar_rotulos(
@@ -249,7 +257,7 @@ def main(argv=None):
                 print("Rascunho válido. Julgamentos humanos ainda podem estar pendentes.")
             else:
                 print("Rotulagem completa e válida: 60 repositórios e 300 releases.")
-    except (OSError, ValueError, csv.Error) as exc:
+    except (OSError, ValueError, KeyError, TypeError, csv.Error) as exc:
         print(f"Erro: {exc}", file=sys.stderr)
         return 2
     return 0

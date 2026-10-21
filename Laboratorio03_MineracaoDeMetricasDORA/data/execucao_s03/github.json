@@ -1,0 +1,341 @@
+﻿{
+    "consultado_em_utc":  "2026-10-20T14:05:25.3965199Z",
+    "repositorio":  "mariaoliveira27/LabExperimentacaoDeSoftware",
+    "commit_inicial":  "d9ccb5fe2036378a1f3c6edaf430b11c773a5bca",
+    "busca_issues_s03":  [
+
+                         ],
+    "issues_lab03":  [
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "U_kgDOBqDP0A",
+                                                   "login":  "AulusHZP",
+                                                   "name":  "Áulus",
+                                                   "databaseId":  111202256
+                                               }
+                                           ],
+                             "body":  "",
+                             "number":  70,
+                             "state":  "CLOSED",
+                             "title":  "Lab03S02 - Script cálculo de Kappa de Fleiss e geração do consenso",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/70"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "MDQ6VXNlcjgwOTI3ODI5",
+                                                   "login":  "ViniSimoesV",
+                                                   "name":  "Vinícius Simões",
+                                                   "databaseId":  80927829
+                                               }
+                                           ],
+                             "body":  "",
+                             "number":  69,
+                             "state":  "OPEN",
+                             "title":  "Lab03S02 - (Artigo) Metodologia: Definições Operacionais das Métricas DORA",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/69"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "MDQ6VXNlcjgwOTI3ODI5",
+                                                   "login":  "ViniSimoesV",
+                                                   "name":  "Vinícius Simões",
+                                                   "databaseId":  80927829
+                                               }
+                                           ],
+                             "body":  "",
+                             "number":  68,
+                             "state":  "OPEN",
+                             "title":  "Lab03S02 - Script de benchmarking da heurística",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/68"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "MDQ6VXNlcjgwOTI3ODI5",
+                                                   "login":  "ViniSimoesV",
+                                                   "name":  "Vinícius Simões",
+                                                   "databaseId":  80927829
+                                               }
+                                           ],
+                             "body":  "",
+                             "number":  67,
+                             "state":  "OPEN",
+                             "title":  "Lab03S02 - Script Integração de CFR(b) no Pipeline",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/67"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "U_kgDOCaH25Q",
+                                                   "login":  "mariaoliveira27",
+                                                   "name":  "Maria Clara",
+                                                   "databaseId":  161609445
+                                               }
+                                           ],
+                             "body":  "",
+                             "number":  66,
+                             "state":  "OPEN",
+                             "title":  "Lab03S02 - (Artigo) Metodologia: Coleta de Dados e Funil de Seleção",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/66"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "U_kgDOCaH25Q",
+                                                   "login":  "mariaoliveira27",
+                                                   "name":  "Maria Clara",
+                                                   "databaseId":  161609445
+                                               }
+                                           ],
+                             "body":  "",
+                             "number":  65,
+                             "state":  "OPEN",
+                             "title":  "Lab03S02 - Script integração do Lead Time com paginação",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/65"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "U_kgDOCaH25Q",
+                                                   "login":  "mariaoliveira27",
+                                                   "name":  "Maria Clara",
+                                                   "databaseId":  161609445
+                                               }
+                                           ],
+                             "body":  "Candidatos na API do GtiHub para \u003e= 300 repositórios",
+                             "number":  64,
+                             "state":  "OPEN",
+                             "title":  "Lab03S02 - Script busca particionada de candidatos",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/64"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "U_kgDOBqDP0A",
+                                                   "login":  "AulusHZP",
+                                                   "name":  "Áulus",
+                                                   "databaseId":  111202256
+                                               }
+                                           ],
+                             "body":  "Protocolo da Amostra-ouro, cegamente, desempate e tabela de Kappa de Fleiss\n",
+                             "number":  63,
+                             "state":  "CLOSED",
+                             "title":  "Lab03S02 - (Artigo) Metodologia: Protocolo da Amostra-ouro, cegamente, desempate",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/63"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "MDQ6VXNlcjgwOTI3ODI5",
+                                                   "login":  "ViniSimoesV",
+                                                   "name":  "Vinícius Simões",
+                                                   "databaseId":  80927829
+                                               },
+                                               {
+                                                   "id":  "U_kgDOBqDP0A",
+                                                   "login":  "AulusHZP",
+                                                   "name":  "Áulus",
+                                                   "databaseId":  111202256
+                                               },
+                                               {
+                                                   "id":  "U_kgDOCaH25Q",
+                                                   "login":  "mariaoliveira27",
+                                                   "name":  "Maria Clara",
+                                                   "databaseId":  161609445
+                                               }
+                                           ],
+                             "body":  "Cada um entregará um csv seguindo o padrão de nomeação: \n\nrotulos_[integrante].csv",
+                             "number":  62,
+                             "state":  "OPEN",
+                             "title":  "Lab03S02 - Rotulagem independente de 60 repositórios / 300 releases",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/62"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "U_kgDOBqDP0A",
+                                                   "login":  "AulusHZP",
+                                                   "name":  "Áulus",
+                                                   "databaseId":  111202256
+                                               }
+                                           ],
+                             "body":  "",
+                             "number":  61,
+                             "state":  "CLOSED",
+                             "title":  "Lab03S02 - Script sorteio repoduzível da amostra-ouro",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/61"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "MDQ6VXNlcjgwOTI3ODI5",
+                                                   "login":  "ViniSimoesV",
+                                                   "name":  "Vinícius Simões",
+                                                   "databaseId":  80927829
+                                               },
+                                               {
+                                                   "id":  "U_kgDOBqDP0A",
+                                                   "login":  "AulusHZP",
+                                                   "name":  "Áulus",
+                                                   "databaseId":  111202256
+                                               },
+                                               {
+                                                   "id":  "U_kgDOCaH25Q",
+                                                   "login":  "mariaoliveira27",
+                                                   "name":  "Maria Clara",
+                                                   "databaseId":  161609445
+                                               }
+                                           ],
+                             "body":  "",
+                             "number":  59,
+                             "state":  "OPEN",
+                             "title":  "Lab03S01 - Iniciar Relatório Final",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/59"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "MDQ6VXNlcjgwOTI3ODI5",
+                                                   "login":  "ViniSimoesV",
+                                                   "name":  "Vinícius Simões",
+                                                   "databaseId":  80927829
+                                               },
+                                               {
+                                                   "id":  "U_kgDOBqDP0A",
+                                                   "login":  "AulusHZP",
+                                                   "name":  "Áulus",
+                                                   "databaseId":  111202256
+                                               },
+                                               {
+                                                   "id":  "U_kgDOCaH25Q",
+                                                   "login":  "mariaoliveira27",
+                                                   "name":  "Maria Clara",
+                                                   "databaseId":  161609445
+                                               }
+                                           ],
+                             "body":  "Ao menos uma hipótese por RQ",
+                             "number":  58,
+                             "state":  "OPEN",
+                             "title":  "Lab03S01 - Fomular hipóteses informais",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/58"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "U_kgDOCaH25Q",
+                                                   "login":  "mariaoliveira27",
+                                                   "name":  "Maria Clara",
+                                                   "databaseId":  161609445
+                                               }
+                                           ],
+                             "body":  "Usar paginação e tratamento de rate limit",
+                             "number":  57,
+                             "state":  "OPEN",
+                             "title":  "Lab03S01 - Implementar cliente compartilhado da API",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/57"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "U_kgDOCaH25Q",
+                                                   "login":  "mariaoliveira27",
+                                                   "name":  "Maria Clara",
+                                                   "databaseId":  161609445
+                                               }
+                                           ],
+                             "body":  "Coletar:\nestrelas, linguagem, contribuidores e idade do repositório",
+                             "number":  56,
+                             "state":  "OPEN",
+                             "title":  "Lab03S01 - Selecionar repositórios",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/56"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "MDQ6VXNlcjgwOTI3ODI5",
+                                                   "login":  "ViniSimoesV",
+                                                   "name":  "Vinícius Simões",
+                                                   "databaseId":  80927829
+                                               }
+                                           ],
+                             "body":  "Usar paginação e identifacação da release anteiror\nUsar de base cód. feito no LAB01",
+                             "number":  55,
+                             "state":  "OPEN",
+                             "title":  "Lab03S01 - Coletar commits entre releases",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/55"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "MDQ6VXNlcjgwOTI3ODI5",
+                                                   "login":  "ViniSimoesV",
+                                                   "name":  "Vinícius Simões",
+                                                   "databaseId":  80927829
+                                               }
+                                           ],
+                             "body":  "Lead Time por release e por commit\ncom fixtures e testes",
+                             "number":  54,
+                             "state":  "OPEN",
+                             "title":  "Lab03S01 - Implementar Lead Time",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/54"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "U_kgDOBqDP0A",
+                                                   "login":  "AulusHZP",
+                                                   "name":  "Áulus",
+                                                   "databaseId":  111202256
+                                               }
+                                           ],
+                             "body":  "Incluia episódios censurados, com fixtures e testes",
+                             "number":  53,
+                             "state":  "CLOSED",
+                             "title":  "Lab03S01 - Implementar Tempo de recuperação por workflow",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/53"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "U_kgDOBqDP0A",
+                                                   "login":  "AulusHZP",
+                                                   "name":  "Áulus",
+                                                   "databaseId":  111202256
+                                               }
+                                           ],
+                             "body":  "Com fixtures e testes unitários",
+                             "number":  52,
+                             "state":  "CLOSED",
+                             "title":  "Lab03S01 - Implementar CFR(a)",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/52"
+                         },
+                         {
+                             "assignees":  [
+                                               {
+                                                   "id":  "U_kgDOBqDP0A",
+                                                   "login":  "AulusHZP",
+                                                   "name":  "Áulus",
+                                                   "databaseId":  111202256
+                                               }
+                                           ],
+                             "body":  "",
+                             "number":  51,
+                             "state":  "CLOSED",
+                             "title":  "Lab03S01 - Implementar cache e retomada",
+                             "url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/51"
+                         }
+                     ],
+    "ci_commit_inicial":  [
+                              {
+                                  "id":  38668538784,
+                                  "name":  "Testes Lab03",
+                                  "event":  "push",
+                                  "conclusion":  "success",
+                                  "head_sha":  "d9ccb5fe2036378a1f3c6edaf430b11c773a5bca",
+                                  "html_url":  "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/actions/runs/38668538784"
+                              }
+                          ]
+}

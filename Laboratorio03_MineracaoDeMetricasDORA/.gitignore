@@ -28,3 +28,16 @@ data/coleta_final/*.tmp
 # Artefatos históricos volumosos ficam locais; manifeste e preserve seus hashes.
 data/historico_2024/metadata_repositorios.json
 data/historico_2024/runs_historicos.json
+
+# Respostas e temporários da execução S03; manifestos, funil e hashes são versionados.
+data/coleta_s03/cache/
+data/coleta_s03/qualificacoes/
+data/coleta_s03/*.tmp
+data/cobertura_s03/cache/
+data/cobertura_s03/*.tmp
+.tmp-runs-coverage/
+data/cobertura_pos_main/cache/
+data/cobertura_pos_main/*.tmp
+
+# Páginas originais do cache permanecem locais; manifesto e hashes versionados.
+data/execucao_amostra_aulus/originais_selecionados60.zip

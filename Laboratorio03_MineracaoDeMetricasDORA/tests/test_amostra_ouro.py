@@ -12,7 +12,10 @@ import gerar_amostra_rotulagem as amostra
 
 
 @pytest.fixture
-def coleta_fixture(tmp_path):
+def coleta_fixture(tmp_path, monkeypatch):
+    # A auditoria de snapshots do bundle é coberta nos testes do coletor. Esta
+    # fixture isolada exercita sorteio, hashes e releases, sem se declarar real.
+    monkeypatch.setattr(amostra, "validar_coleta_final", lambda *args: None)
     repos, releases = [], {}
     for i in range(300):
         nome = f"fixture/projeto-{i:03d}"
@@ -164,3 +167,49 @@ def test_aprovados_duplicados_nao_completam_populacao(coleta_fixture):
         writer.writerows(repos)
     with pytest.raises(ValueError, match="duplicados"):
         amostra.ler_aprovados(repos_csv)
+
+
+def test_auditoria_final_obrigatoria_antes_de_gerar(coleta_fixture, tmp_path, monkeypatch):
+    _, _, repos, releases, provenance, config = coleta_fixture
+
+    def rejeitar(*args):
+        raise ValueError("Snapshots finais ausentes; marcadores não comprovam coleta real.")
+
+    monkeypatch.setattr(amostra, "validar_coleta_final", rejeitar)
+    with pytest.raises(ValueError, match="Snapshots finais"):
+        amostra.gerar_amostra(repos, releases, provenance, config, tmp_path / "ouro")
+    assert not (tmp_path / "ouro").exists()
+
+
+def test_referencia_revalida_sorteio_e_hashes(coleta_fixture, tmp_path):
+    _, _, repos, releases, provenance, config = coleta_fixture
+    destino = tmp_path / "ouro"
+    manifest = amostra.gerar_amostra(repos, releases, provenance, config, destino)
+    comum = destino / "amostra_comum.csv"
+    assert amostra.validar_referencia(comum) == manifest
+    comum.write_bytes(comum.read_bytes() + b"\n")
+    with pytest.raises(ValueError, match="hash"):
+        amostra.validar_referencia(comum)
+
+
+def test_referencia_rejeita_falso_sorteio_mesmo_com_hash_atualizado(coleta_fixture, tmp_path):
+    from rotulagem import ler_csv
+
+    _, _, repos, releases, provenance, config = coleta_fixture
+    destino = tmp_path / "ouro"
+    manifest = amostra.gerar_amostra(repos, releases, provenance, config, destino)
+    comum = destino / "amostra_comum.csv"
+    rows = list(reversed(ler_csv(comum)))
+    with comum.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=amostra.METADADOS + amostra.JULGAMENTOS)
+        writer.writeheader()
+        writer.writerows(rows)
+    manifest["amostra_comum_sha256"] = amostra.sha256(comum)
+    (destino / "selecao.json").write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(ValueError, match="determinística"):
+        amostra.validar_referencia(comum)
+
+
+def test_referencia_exige_manifesto(tmp_path):
+    with pytest.raises(FileNotFoundError):
+        amostra.validar_referencia(tmp_path / "amostra_comum.csv")

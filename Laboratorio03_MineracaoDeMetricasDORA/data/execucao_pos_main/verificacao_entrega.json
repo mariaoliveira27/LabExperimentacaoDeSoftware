@@ -1,0 +1,41 @@
+{
+  "verificado_em": "2026-10-21T14:56:11.119496+00:00",
+  "oito_commits_originais_ancestrais_do_head": [
+    "83917e8d5658fe2da2134a57aa12f22d10ffd0ee",
+    "5a0dc783c1186e27626bf184b93225f323bffc24",
+    "b7988d07868dea48eec47f9639b8c28912a71903",
+    "0dea57b21a9cf0127cc45b85fa0427210b6eb5cf",
+    "29ea20209ca16159a7d1845a57a734fcbee44158",
+    "ba0aa7bbb53d5cd52d47f84b6cc0602e3ed5b4d8",
+    "b3b44c9b8d16fd5ddfd41f5ad4540cb1dc5a3c77",
+    "5eb6463dbf40d6a4a37233bcce979b8ad3cd9d78"
+  ],
+  "origin_main_integrada": "a8920892d70e7118477888535783c0cbb0a1b3e5",
+  "main_local_inalterada": "d9ccb5fe2036378a1f3c6edaf430b11c773a5bca",
+  "amostra_ouro_tracked_no_head": true,
+  "amostra_ouro_ausente_no_worktree": true,
+  "amostra_ouro_fora_do_index": true,
+  "stash_de_protecao_mantido": "stash@{0}: On feat/lab03-s03-aulus-evidencias: preservar-remocao-AMOSTRA_OURO-pre-integracao-2026-10-21",
+  "fontes_e_avaliacoes_recebidas_preservadas": [
+    "data/coleta_final/repositorios_aprovados.csv",
+    "data/coleta_final/releases.json",
+    "data/coleta_final/proveniencia.json",
+    "data/gold_standard/rotulos_maria.csv",
+    "data/gold_standard/rotulos_vinicius.csv",
+    "data/gold_standard/consenso.csv",
+    "consolidar_dataset.py",
+    "seed_data.py"
+  ],
+  "zip_snapshot_crc_e_hashes_conferidos": true,
+  "jsons_validos": true,
+  "fontes_codigo_testadas_sha256": {
+    "pipeline.py": "5f7a9462faaba4eeff344488eb71a15c0849de4423fa04fb60279b72f4c2ea76",
+    "coletor_commits.py": "fdf0e2c935b5d335b9958069f3b564a98fcb1d68b8b1be5abc077e8c67a7f203",
+    "coletor_runs.py": "f41450baa796147459c10579c4eecbd5cdaf5fa2757cc494cf5c1f9d617e1620",
+    "coleta_amostra_real.py": "259521ca79e3d6cf9aed41e8b6863dfdabbf5d20a7d9b24dba730d1b7291b574",
+    "analisar_rqs.py": "8e96ee5db5fe939543259970298a3090ba25e4d11404d295d70c5d38e7f2cdfa",
+    "metricas/analise_rq07.py": "e1a5e5e9f29904c9076e37b174ea1b1a058abdcfe0a87171f6b7f801889c7f1e",
+    "metricas/concordancia.py": "3b685a70c128d7296ac9e136566c7baefb6c3de1f21ec3de7247f6c4959ac214"
+  },
+  "sem_rotulos_aulus_ou_resultados_oficiais": true
+}

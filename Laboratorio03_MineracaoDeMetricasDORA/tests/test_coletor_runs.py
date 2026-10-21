@@ -316,3 +316,115 @@ def test_subdivisao_inconsistente_nao_perde_runs_e_permite_retomada(tmp_path, ru
         collect(client)
     assert [r["id"] for r in collect(client)] == [1, 2]
     assert client.session.get.call_count == 4
+
+
+def test_relatorio_anual_consulta_toda_janela_sem_afirmar_preservacao_historica():
+    client = make_client(lambda *args, **kwargs: payload([]))
+    collector = ColetorRuns(client)
+    report = {"obsoleto": True}
+    start = datetime(2023, 10, 1, tzinfo=timezone.utc)
+    end = datetime(2024, 9, 30, 23, 59, 59, tzinfo=timezone.utc)
+    assert collector.coletar_runs_janela("o", "r", "main", start, end, relatorio_cobertura=report) == []
+    assert collector.ultimo_relatorio_cobertura is report
+    assert "obsoleto" not in report
+    assert report["enumeration_complete"] is True
+    assert report["historical_coverage"] == "unknown"
+    assert report["historico_anual_completo"] is False
+    assert report["workflow_run_count"] == 0
+    assert report["repository"] == "o/r"
+    assert report["branch"] == "main" and report["event"] == "push"
+    assert len(report["completed_intervals"]) == 12
+    assert len(report["queries"]) == 12
+    assert all(query["state"] == "received" for query in report["queries"])
+    intervals = report["completed_intervals"]
+    assert intervals[0]["start"] == "2023-10-01T00:00:00Z"
+    assert intervals[-1]["end"] == "2024-09-30T23:59:59Z"
+    for previous, following in zip(intervals, intervals[1:]):
+        assert datetime.fromisoformat(previous["end"]) + timedelta(seconds=1) == datetime.fromisoformat(following["start"])
+
+
+def test_relatorio_falha_preserva_folhas_concluidas_e_nao_oferece_total_parcial(run_factory):
+    client = make_client([payload([run_factory(1)]), (503, {}, {})])
+    collector = ColetorRuns(client)
+    report = {}
+    with pytest.raises(ColetaIncompletaError, match="HTTP 503"):
+        collector.coletar_runs_janela(
+            "o", "r", "main", START, datetime(2024, 2, 1, tzinfo=timezone.utc),
+            relatorio_cobertura=report,
+        )
+    assert report["enumeration_complete"] is False
+    assert report["workflow_run_count"] is None
+    assert "HTTP 503" in report["error"]
+    assert len(report["completed_intervals"]) == 1
+    assert report["completed_intervals"][0]["selected_runs"] == 1
+    assert [query["state"] for query in report["queries"]] == ["received", "failed"]
+
+
+def test_relatorio_diferencia_total_enumerado_e_filtro_local(run_factory):
+    client = make_client([payload([run_factory(1), run_factory(2, event="pull_request")])])
+    collector = ColetorRuns(client)
+    assert len(collector.coletar_runs_janela("o", "r", "main", START, END)) == 1
+    interval = collector.ultimo_relatorio_cobertura["completed_intervals"][0]
+    assert interval["unique_ids"] == interval["total_count"] == 2
+    assert interval["selected_runs"] == 1
+
+
+def test_teto_exato_subdivide_e_relata_apenas_folhas_enumeradas(run_factory):
+    end = START + timedelta(seconds=1)
+    records = [run_factory(i + 1, START if i < 600 else end) for i in range(1200)]
+
+    def dispatch(endpoint, params):
+        first, last = params["created"].split("..")
+        matches = [run for run in records if first <= run["created_at"] <= last]
+        offset = (params["page"] - 1) * 100
+        visible = matches[:1000]
+        headers = next_link(params["page"] + 1) if offset + 100 < len(visible) else {}
+        # O pai fica truncado exatamente em 1000; somente os filhos revelam 1200.
+        return payload(visible[offset:offset + 100], min(len(matches), 1000), headers)
+
+    collector = ColetorRuns(make_client(dispatch))
+    assert len(collector.coletar_runs_janela("o", "r", "main", START, end)) == 1200
+    report = collector.ultimo_relatorio_cobertura
+    assert report["enumeration_complete"] is True
+    assert report["workflow_run_count"] == 1200
+    assert len(report["queries"]) == 13
+    assert len(report["completed_intervals"]) == 2
+    assert [interval["total_count"] for interval in report["completed_intervals"]] == [600, 600]
+    assert [interval["pages"] for interval in report["completed_intervals"]] == [6, 6]
+
+
+def test_relatorio_novo_nao_herda_conclusao_da_chamada_anterior():
+    client = make_client([payload([]), (503, {}, {})])
+    collector = ColetorRuns(client)
+    collector.coletar_runs_janela("o", "r", "main", START, END)
+    previous = collector.ultimo_relatorio_cobertura
+    with pytest.raises(ColetaIncompletaError):
+        collector.coletar_runs_janela("o", "outro", "main", START, END)
+    assert previous["enumeration_complete"] is True
+    assert collector.ultimo_relatorio_cobertura is not previous
+    assert collector.ultimo_relatorio_cobertura["enumeration_complete"] is False
+    assert collector.ultimo_relatorio_cobertura["completed_intervals"] == []
+
+
+def test_janela_sem_segundo_inteiro_nao_fabrica_consulta():
+    client = make_client([])
+    collector = ColetorRuns(client)
+    assert collector.coletar_runs_janela(
+        "o", "r", "main", START + timedelta(microseconds=1), START + timedelta(microseconds=999),
+    ) == []
+    report = collector.ultimo_relatorio_cobertura
+    assert report["enumeration_complete"] is True
+    assert report["query_window"] is None
+    assert report["queries"] == []
+    client.request.assert_not_called()
+
+
+@pytest.mark.parametrize("headers", [None, [], {"Link": None}, {"link": 3}])
+def test_cabecalhos_invalidos_sinalizam_coleta_incompleta(headers):
+    client = make_client([(200, {"total_count": 0, "workflow_runs": []}, headers)])
+    collector = ColetorRuns(client)
+    with pytest.raises(ColetaIncompletaError, match="cabeçalhos"):
+        collector.coletar_runs_janela("o", "r", "main", START, END)
+    assert collector.ultimo_relatorio_cobertura["enumeration_complete"] is False
+    assert collector.ultimo_relatorio_cobertura["queries"][0]["state"] == "failed"
+    client.invalidate_cache.assert_called_once()

@@ -1,0 +1,66 @@
+{
+  "tipo_fonte": "csv_main_adotado",
+  "amostra_linhas": 300,
+  "amostra_repositorios": 60,
+  "random_state": 42,
+  "flags_auditoria": {
+    "releases_originais_api_auditadas": false,
+    "criterios_aprovacao_auditados": false,
+    "cobertura_historica_verificada": false
+  },
+  "formularios_humanos": {
+    "rotulos_aulus.csv": {
+      "sha256": "e840b15eac4cebb1211a6b3e6a906bc30c36acf8c0e5b90952a5c4bf3aab3264",
+      "linhas": 300,
+      "campos_julgamento_preenchidos": 0
+    },
+    "rotulos_maria_independente.csv": {
+      "sha256": "e840b15eac4cebb1211a6b3e6a906bc30c36acf8c0e5b90952a5c4bf3aab3264",
+      "linhas": 300,
+      "campos_julgamento_preenchidos": 0
+    },
+    "rotulos_vinicius_independente.csv": {
+      "sha256": "e840b15eac4cebb1211a6b3e6a906bc30c36acf8c0e5b90952a5c4bf3aab3264",
+      "linhas": 300,
+      "campos_julgamento_preenchidos": 0
+    }
+  },
+  "decisoes_consenso_vazias": 420,
+  "avaliacoes_completas": 0,
+  "kappa_calculado": false,
+  "divergencias_geradas": false,
+  "arquivos_legados_preservados_sha256": {
+    "data/gold_standard/consenso.csv": "6f6fd4110c027e61f93b42606a032f745b49b0a34deafe8a121b93aac55455f4",
+    "data/gold_standard/rotulos_maria.csv": "04649184077538e849559ffcbe19b38ced50538d3334a1e1684f377bfdfc8731",
+    "data/gold_standard/rotulos_vinicius.csv": "ecfce3e511d5b255eeb7735b45cafa04b13ad609e36a995056f023a9f26f6b0e",
+    "data/output/consenso_amostra_ouro.csv": "6f6fd4110c027e61f93b42606a032f745b49b0a34deafe8a121b93aac55455f4",
+    "data/rotulos_maria.csv": "04649184077538e849559ffcbe19b38ced50538d3334a1e1684f377bfdfc8731",
+    "data/rotulos_vinicius.csv": "ecfce3e511d5b255eeb7735b45cafa04b13ad609e36a995056f023a9f26f6b0e",
+    "rotulos_maria.csv": "04649184077538e849559ffcbe19b38ced50538d3334a1e1684f377bfdfc8731",
+    "rotulos_vinicius.csv": "ecfce3e511d5b255eeb7735b45cafa04b13ad609e36a995056f023a9f26f6b0e"
+  },
+  "testes": {
+    "suite_completa": 552,
+    "cobertura_metricas": 83.13373253493015,
+    "relevantes": 154,
+    "fluxo_humano_isolado": 13
+  },
+  "inputs_snapshots": {
+    "csv": {
+      "arquivo": "fontes_entrada/csv.csv",
+      "sha256": "766d01fbb52cea4685270c7a215121c9073e21ad216e32a3c004d8b80445bf9d"
+    },
+    "releases": {
+      "arquivo": "fontes_entrada/releases.json",
+      "sha256": "789f5fb78846cc5f63b4ad9a0f10f0d5ef42f2d4d3b6679fe7f3253bd4b8e769"
+    },
+    "proveniencia": {
+      "arquivo": "fontes_entrada/proveniencia.json",
+      "sha256": "f42c3c129170c9addf65221375a37880b0f58ac0da84a5c7f4426cbd09b3219a"
+    },
+    "config": {
+      "arquivo": "fontes_entrada/config.yaml",
+      "sha256": "63c6222c46c145273ee9dc39cde3c86da40355fd08d1c401cfff0dd29078fbab"
+    }
+  }
+}

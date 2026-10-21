@@ -1,6 +1,6 @@
 """Sorteia a referência para avaliação humana; nunca inventa releases ou rótulos.
 
-Entradas e comandos: AMOSTRA_OURO.md. A coleta final é uma entrada deste
+Entradas e comandos: ROTULAGEM_AULUS.md. A coleta final é uma entrada deste
 script; os dados de demonstração da Sprint 01 não são uma amostra empírica.
 """
 
@@ -165,6 +165,78 @@ def sortear(aprovados, releases, inicio, fim):
     return linhas, evidencias
 
 
+def validar_coleta_final(repos_csv, releases_json, proveniencia_json, config_yaml):
+    """Reaproveite a auditoria dos snapshots finais, sem rede ou escrita.
+
+    Marcadores origem_coleta=github_api e hashes autoconsistentes sozinhos não
+    comprovam qualificação. Os três arquivos precisam pertencer ao mesmo bundle
+    publicado pelo coletor, com os snapshots correspondentes.
+    """
+    from coleta_amostra_real import auditar_bundle_final
+
+    repos_csv, releases_json, proveniencia_json = map(
+        Path, (repos_csv, releases_json, proveniencia_json),
+    )
+    pasta = repos_csv.resolve().parent
+    esperados = ("repositorios_aprovados.csv", "releases.json", "proveniencia.json")
+    for arquivo, nome in zip((repos_csv, releases_json, proveniencia_json), esperados):
+        if arquivo.resolve() != pasta / nome:
+            raise ValueError("Entradas devem pertencer ao mesmo bundle final publicado pelo coletor.")
+    return auditar_bundle_final(pasta, config_yaml)
+
+
+def validar_referencia(amostra_csv, manifesto_json=None):
+    """Vincule a referência ao bundle auditado e reproduza o sorteio original.
+
+    Usado pelas CLIs humanas: um CSV estrutural de exemplo não pode virar uma
+    referência oficial. O algoritmo numérico permanece disponível para fixtures.
+    """
+    from rotulagem import ler_csv, validar_amostra
+
+    amostra_csv = Path(amostra_csv)
+    manifesto_json = Path(manifesto_json) if manifesto_json else amostra_csv.parent / "selecao.json"
+    manifesto = json.loads(manifesto_json.read_text(encoding="utf-8"))
+    if isinstance(manifesto, dict) and manifesto.get("tipo_fonte") == "csv_main_adotado":
+        from amostra_csv_main import validar_referencia_fornecida
+        return validar_referencia_fornecida(amostra_csv, manifesto_json)
+    contrato = {"schema_version": 1, "random_state": SEMENTE,
+                "n_repositorios": N_REPOSITORIOS, "n_releases": N_REPOSITORIOS * RELEASES_POR_REPOSITORIO,
+                "releases_por_repositorio": RELEASES_POR_REPOSITORIO}
+    if not isinstance(manifesto, dict) or any(manifesto.get(campo) != valor for campo, valor in contrato.items()):
+        raise ValueError("Manifesto de seleção ausente ou incompatível com o protocolo 60×5.")
+    if manifesto.get("amostra_comum_sha256") != sha256(amostra_csv):
+        raise ValueError("Referência comum diverge do hash preservado no manifesto.")
+    entradas = manifesto.get("entradas")
+    if not isinstance(entradas, dict):
+        raise ValueError("Manifesto sem as entradas auditáveis da seleção.")
+    caminhos = {}
+    for nome in ("aprovados", "releases", "proveniencia", "config"):
+        registro = entradas.get(nome)
+        if not isinstance(registro, dict) or not isinstance(registro.get("arquivo"), str):
+            raise ValueError(f"Entrada da seleção ausente ou inválida: {nome}.")
+        caminho = Path(registro["arquivo"])
+        if registro.get("sha256") != sha256(caminho):
+            raise ValueError(f"Entrada original da seleção alterada: {nome}.")
+        caminhos[nome] = caminho
+    validar_coleta_final(caminhos["aprovados"], caminhos["releases"], caminhos["proveniencia"], caminhos["config"])
+    aprovados = ler_aprovados(caminhos["aprovados"])
+    if manifesto.get("n_populacao") != len(aprovados):
+        raise ValueError("População do manifesto difere da coleta final auditada.")
+    config = yaml.safe_load(caminhos["config"].read_text(encoding="utf-8"))
+    inicio, fim = (instante(config["window"][campo]) for campo in ("start_date", "end_date"))
+    releases = json.loads(caminhos["releases"].read_text(encoding="utf-8"))
+    esperadas, evidencias = sortear(aprovados, releases, inicio, fim)
+    rows = ler_csv(amostra_csv)
+    validar_amostra(rows)
+    if rows != esperadas:
+        raise ValueError("Referência comum não reproduz a seleção determinística do bundle final.")
+    evidencias_path = manifesto_json.parent / "evidencias_releases.json"
+    if (manifesto.get("evidencias_releases_sha256") != sha256(evidencias_path)
+            or json.loads(evidencias_path.read_text(encoding="utf-8")) != evidencias):
+        raise ValueError("Evidências de releases divergentes da seleção original.")
+    return manifesto
+
+
 def gerar_amostra(repos_csv, releases_json, proveniencia_json, config_yaml, saida):
     aprovados = ler_aprovados(repos_csv)  # Falha antes de qualquer geração ou fallback.
     with Path(config_yaml).open(encoding="utf-8") as stream:
@@ -176,6 +248,7 @@ def gerar_amostra(repos_csv, releases_json, proveniencia_json, config_yaml, said
     with Path(proveniencia_json).open(encoding="utf-8") as stream:
         proveniencia = json.load(stream)
     validar_proveniencia(proveniencia, repos_csv, releases_json, inicio, fim)
+    validar_coleta_final(repos_csv, releases_json, proveniencia_json, config_yaml)
     with Path(releases_json).open(encoding="utf-8") as stream:
         releases = json.load(stream)
     linhas, evidencias = sortear(aprovados, releases, inicio, fim)

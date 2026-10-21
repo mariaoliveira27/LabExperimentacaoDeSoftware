@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "origem": "github_api",
+  "modo_referencia": false,
+  "fonte_candidatos": "github_search_api",
+  "coletado_em": "2024-10-01T00:00:00Z",
+  "n_aprovados": 300,
+  "janela": {
+    "inicio": "2023-10-01T00:00:00Z",
+    "fim": "2024-09-30T23:59:59Z"
+  },
+  "criterios": {
+    "min_stars": 1000,
+    "min_releases": 5,
+    "min_workflow_runs": 50
+  },
+  "repositorios_sha256": "766d01fbb52cea4685270c7a215121c9073e21ad216e32a3c004d8b80445bf9d",
+  "releases_sha256": "789f5fb78846cc5f63b4ad9a0f10f0d5ef42f2d4d3b6679fe7f3253bd4b8e769"
+}

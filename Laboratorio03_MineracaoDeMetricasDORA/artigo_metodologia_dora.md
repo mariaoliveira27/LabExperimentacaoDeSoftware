@@ -1,8 +1,13 @@
 # Metodologia: Definições Operacionais das Métricas DORA e Protocolo de Validação Humana
 
-**Disciplina:** Laboratório de Experimentação de Software  
-**Responsáveis:** Vinícius Simões (definições operacionais, CFR(b) e RQ07); Maria Clara Gomes (infraestrutura, funil e testes); Áulus H. Z. Pinto (amostragem, concordância e validação humana).  
-**Contexto:** Lab03 — Mineração de Métricas DORA (Sprint 03 / Lab03S03 — Metodologia e Resultados de Sensibilidade)  
+**Disciplina:** Laboratório de Experimentação de Software
+**Responsáveis:** Vinícius Simões (definições operacionais, CFR(b) e RQ07); Maria Clara Gomes (infraestrutura, funil e testes); Áulus H. Z. Pinto (amostragem, concordância e validação humana).
+
+**Contexto:** Lab03 — Mineração de Métricas DORA (Lab03S03, incluindo pendências da Sprint 02). Issues atuais de Áulus, verificadas em 21/10/2026: #74 (runs e primeiros 100 aprovados), #75 (sorteio, Fleiss e consenso), #76 (RQ01–RQ04) e #77 (artigo). As Issues #61, #70, #62, #63 e #59 preservam o histórico das entregas anteriores.
+
+**Estado da validação humana:** referência fornecida da main preparada em 60 × 5, por escolha de Áulus, com todos os julgamentos vazios e 0/3 avaliações completas. A comprovação da população por coleta real e o consenso humano continuam pendentes.
+
+**Auditoria após integrar `origin/main` (`a892089`):** os 300 registros novos e suas 5.189 releases correspondem ao gerador `consolidar_dataset.py`, que usa seeds e fórmulas e declara `origem=github_api`. O bundle foi rejeitado pela auditoria real. Os números de benchmark e RQ07 preservados nas seções 4–5 abaixo são resultados do material recebido, **sem validação empírica nesta entrega**. Não comprovam rótulos humanos, aprovações, cobertura ou desempenho oficial. Ver [auditoria pós-main](data/execucao_pos_main/auditoria_dados.json) e [entrega](ENTREGA_LAB03S03_AULUS.md).
 
 ---
 
@@ -42,11 +47,11 @@ Para assegurar reprodutibilidade estrita e comparabilidade entre replicações i
 - **Unidade Operacional:** Dias corridos ($\text{dias}$).
 - **Data do Commit:** Utiliza-se `commit.author.date` (momento da escrita original da alteração pelo desenvolvedor).
 - **Variantes Obrigatórias:**
-  1. **Variante (a) — Por Release:**  
+  1. **Variante (a) — Por Release:**
      Para cada release $R$, calcula-se o tempo transcorrido desde o commit mais antigo incorporado em $R$ até a publicação da release:
      $$\text{LT}_a(R) = \text{published\_at}(R) - \min_{c \in \text{Commits}(R)} \text{author\_date}(c)$$
      O valor consolidado do repositório é a **mediana** de $\text{LT}_a(R)$ entre todas as suas releases.
-  2. **Variante (b) — Por Commit:**  
+  2. **Variante (b) — Por Commit:**
      Cada commit individual $c$ pertencente a $R$ possui um lead time individual:
      $$\text{LT}_b(c) = \text{published\_at}(R) - \text{author\_date}(c)$$
      O valor do repositório é a **mediana de todos os commits** agregados de todas as releases da janela.
@@ -59,17 +64,17 @@ Para assegurar reprodutibilidade estrita e comparabilidade entre replicações i
 - **Conceito:** A fração de mudanças entregues que resultam em falhas funcionais imediatas, demandando intervenção corretiva.
 - **Unidade Operacional:** Proporção adimensional no intervalo $[0{,}0, 1{,}0]$.
 - **Variantes Obrigatórias:**
-  1. **Variante (a) — Proxy de CI:**  
+  1. **Variante (a) — Proxy de CI:**
      Mede a taxa de falha na esteira de testes automatizados do default branch disparada por eventos de `push`:
      $$\text{CFR}_{\text{CI}} = \frac{N_{\text{falhas}}}{N_{\text{falhas}} + N_{\text{sucessos}}}$$
      - *Falhas:* `conclusion ∈ {failure, timed_out, startup_failure}`;
      - *Sucessos:* `conclusion = success`;
      - *Ignorados:* `conclusion ∈ {cancelled, skipped, neutral, action_required, stale}` ou execuções em andamento (não entram no numerador nem no denominador).
-  2. **Variante (b) — Proxy de Entrega (Releases Corretivas):**  
+  2. **Variante (b) — Proxy de Entrega (Releases Corretivas):**
      Uma release $R$ é categorizada como **falha** se for sucedida, em uma janela de até **7 dias corridos** ($7 \times 86.400\text{ s}$), por uma **release corretiva** ($R_{\text{prox}}$):
      $$\text{CFR}_{\text{Release}} = \frac{N_{\text{releases com falha}}}{N_{\text{releases avaliadas}}}$$
      - **Regra de Censura:** Releases publicadas nos últimos 7 dias da janela de observação são classificadas formalmente como **censuradas à direita** e excluídas do denominador ($N_{\text{releases avaliadas}}$), pois não se dispõe do tempo de observação necessário para averiguar a ocorrência de hotfix posterior.
-  3. **Métrica Bônus (RQ 08) — Deployment Rework Rate:**  
+  3. **Métrica Bônus (RQ 08) — Deployment Rework Rate:**
      Proporção de releases corretivas sobre o volume total de releases:
      $$\text{Rework Rate} = \frac{N_{\text{releases corretivas}}}{N_{\text{releases totais}}}$$
 
@@ -124,29 +129,33 @@ Para cada par de combinações (C1 $\times$ C2, C1 $\times$ C3, C2 $\times$ C3),
 Em conformidade com a Seção 6 do protocolo experimental, a avaliação de heurísticas automáticas requer um padrão de referência humano (*Gold Standard*).
 
 ### 3.1 Desenho Amostral e Rotulagem Independente
-- Sorteamos **60 repositórios** da amostra aprovada com semente reproduzível (`random_state=42`);
-- Para cada repositório sorteado, selecionamos **5 releases reais** da janela anual com `random_state=42`, totalizando **300 releases**;
-- Cada integrante realizou a avaliação de forma independente e cega em relação às saídas da heurística;
-- Foram julgadas três dimensões:
+- No protocolo de coleta auditada, `executar_amostra_ouro.py` exige bundle final auditável de pelo menos 300 aprovados. Esse requisito permanece preservado;
+- Para a entrada adotada expressamente por Áulus, `amostra_csv_main.py` usa os 300 nomes de `data/coleta_final/repositorios_aprovados.csv` e `releases.json` do mesmo bundle. O manifesto registra `tipo_fonte=csv_main_adotado` e mantém falsos os indicadores de releases originais auditadas, critérios de aprovação auditados e cobertura histórica verificada;
+- Ordena-se a população por `full_name` e sorteiam-se **60 repositórios** com `random_state=42`. Ordenam-se as releases estáveis fornecidas por publicação UTC e ID e sorteiam-se **5 registros por repositório** com `random_state=42`, totalizando **300 unidades**, sem reposição e mantendo 01/10/2023–30/09/2024 UTC;
+- A seleção está em `data/amostra_ouro_csv_main/amostra_comum.csv`, com registros associados, cópias das entradas e manifesto de hashes e identificadores. A validação reproduz o sorteio e a integridade dos arquivos; não converte a origem gerada identificada na auditoria em evidência empírica;
+- Cada integrante deverá avaliar independentemente, sem consultar colegas ou saídas da heurística. O gerador deixa os julgamentos vazios;
+- Serão julgadas três dimensões:
   1. `tipo_projeto` (60 unidades): biblioteca/framework, aplicação/serviço, ferramenta CLI ou outro;
   2. `entrega_real` (60 unidades): sim, não ou incerto;
   3. `corretiva` (300 releases): sim ou não.
 
 ### 3.2 Consenso de Referência
-Os arquivos de rotulagem independente de Vinícius (`rotulos_vinicius.csv`) e Maria (`rotulos_maria.csv`) atingiram **100% de concordância na dimensão de release corretiva** sobre as 300 releases, consolidando a referência humana unânime em `data/gold_standard/consenso.csv`.
+Os arquivos antigos de Maria e Vinícius foram preservados e não foram copiados para a nova referência. Foram preparados `rotulos_aulus.csv`, `rotulos_maria_independente.csv` e `rotulos_vinicius_independente.csv`, com as mesmas 300 unidades e todos os julgamentos vazios. O estado atual é **0/3 avaliações completas**. Cada pessoa deverá registrar suas decisões independentemente; casos sem fonte real verificável permanecem pendentes.
+
+`preparar_concordancia_aulus.py` registra a prontidão e gera `consenso_formulario.csv`, com 420 decisões vazias (60 + 60 + 300). Somente após os três arquivos completos executa o cálculo de Fleiss **pré-consenso** e gera `kappas_pre_consenso.json`, `divergencias.csv` e `consenso.csv`. Os relatórios preservam a origem fornecida e seus limites. A reunião registra decisões, evidências, responsáveis e data, inclusive nas unidades unânimes; empate 1–1–1 exige resolução explícita. `metricas.concordancia calcular` só emite o relatório final após validar esse consenso. Igualdade de conteúdo e integridade estrutural não comprovam independência humana. Nenhum kappa ou decisão de reunião foi produzido nesta preparação.
 
 ---
 
 ## 4. Avaliação e Benchmark da Heurística de Releases Corretivas
 
-Com a amostra-ouro de 300 releases consolidada pelo consenso humano, executamos o benchmark comparativo das versões da heurística em `benchmark_heuristica.py`.
+O módulo `benchmark_heuristica.py` recebido permite comparar versões da heurística. Sua execução numérica preexistente não comprova uma amostra-ouro humana validada; a origem do conjunto precisa ser resolvida antes de reutilizá-la como evidência.
 
 ### 4.1 Especificação das Versões da Heurística
 1. **Heurística v1 (Baseline — SemVer Estrito):** Marca como corretiva somente tags no padrão estrito `MAJOR.MINOR.PATCH` onde exclusivamente o patch é incrementado.
 2. **Heurística v2 (SemVer Básico + Palavras-Chave):** SemVer básico combinado à presença de `fix`, `hotfix`, `revert` ou `bugfix` nos commits.
 3. **Heurística v3 (Refinada):** SemVer flexível (prefixos `v`, sufixos `.post`, `-patch`), suporte formal a Conventional Commits (`fix:`, `bugfix:`, `revert:`), inspeção de release notes (`## Bug Fixes`) e filtro de ruídos cosméticos (`fix typo`, `fix readme`).
 
-### 4.2 Resultados Empíricos do Benchmark
+### 4.2 Resultados recebidos do benchmark — não validados como humanos
 
 | Versão da Heurística | TP | FP | TN | FN | Precisão | Recall | F1-Score | Meta ($F1 \ge 0{,}70$) |
 |---|---|---|---|---|---|---|---|---|
@@ -154,13 +163,13 @@ Com a amostra-ouro de 300 releases consolidada pelo consenso humano, executamos 
 | **Heurística v2 (SemVer Básico + Palavras-Chave)** | 189 | 0 | 111 | 0 | 1.0000 | 1.0000 | **1.0000** | Atingida ✅ |
 | **Heurística v3 (Refinada)** | 185 | 0 | 111 | 4 | 1.0000 | 0.9788 | **0.9893** | Atingida ✅ |
 
-A Heurística Refinada (v3) atingiu **$F1 = 0{,}9893$** com **100% de precisão**, superando amplamente a meta de $F1 \ge 0{,}70$ e garantindo fundamentação empírica para o cálculo do CFR(b).
+O material recebido reporta **$F1 = 0{,}9893$** para v3. Esse número não fundamenta empiricamente CFR(b) enquanto faltarem referência auditada, três avaliações humanas completas e consenso documentado.
 
 ---
 
-## 5. Resultados da Análise de Sensibilidade DORA (RQ07)
+## 5. Resultados recebidos da análise de sensibilidade DORA (RQ07)
 
-A execução do módulo `metricas/analise_rq07.py` sobre os 300 repositórios aprovados gerou os seguintes resultados empíricos:
+A execução preexistente do módulo `metricas/analise_rq07.py` sobre o CSV recebido gerou os números abaixo. A auditoria rejeitou a procedência empírica desse CSV; tabelas e interpretações recebidas ficam preservadas para revisão do grupo e não são resultados oficiais.
 
 ### 5.1 Concordância e Estabilidade Pareada
 
@@ -179,7 +188,7 @@ A execução do módulo `metricas/analise_rq07.py` sobre os 300 repositórios ap
 | **C3 (Tags)** | 0 (0.0%) | 243 (81.0%) | 57 (19.0%) | 0 (0.0%) |
 
 ### 5.3 Análise das Matrizes de Transição
-A transição de C1 para C2 ou C3 provocou a migração de 119 e 117 repositórios do patamar *Medium* para *High*, respectivamente. Isso ocorre principalmente porque a Variante (b) de Lead Time reduz drasticamente a mediana de tempo de ciclo (de 8,57 dias para 3,86 dias), impulsionando o escore dessa métrica para *High*. 
+A transição de C1 para C2 ou C3 provocou a migração de 119 e 117 repositórios do patamar *Medium* para *High*, respectivamente. Isso ocorre principalmente porque a Variante (b) de Lead Time reduz drasticamente a mediana de tempo de ciclo (de 8,57 dias para 3,86 dias), impulsionando o escore dessa métrica para *High*.
 
 Importante destacar que **não houve nenhuma migração extrema** (nenhum repositório transitou entre Elite e Low). Todas as alterações de classificação deram-se estritamente entre patamares adjacentes (*Medium* $\leftrightarrow$ *High*), comprovando que o modelo consolidado DORA baseado na mediana arredondada amortece ruídos e oferece estabilidade metodológica.
 
@@ -196,4 +205,91 @@ Importante destacar que **não houve nenhuma migração extrema** (nenhum reposi
 
 ## 7. Conclusão
 
-A metodologia padronizada adotada neste estudo assegurou rigor e reprodutibilidade ao processo de mineração. A validação manual de 300 releases comprovou a acurácia da heurística de releases corretivas ($F1 = 0{,}9893$), e a análise de sensibilidade evidenciou que, apesar de variações operacionais nos proxies atômicos, a maturidade DORA agregada preserva estabilidade conceitual.
+As definições em [`metricas/calculo_metricas.py`](metricas/calculo_metricas.py) e o protocolo de amostragem, rotulagem, concordância e consenso fornecem uma estrutura para a validação. A seleção comum da fonte fornecida está preparada; faltam as avaliações pessoais de Áulus, Maria e Vinícius e o consenso da reunião. A base empírica continua pendente de população final real comprovada e evidências originais. Não há kappa humano, F1 validado por humanos ou conclusão empírica de desempenho a apresentar como resultado nesta preparação.
+
+## 8. Execução e resultados de RQ01–RQ04 na Sprint 03
+
+**Estado: resultados e discussão empírica pendentes.** A nova execução e os
+comandos verificáveis estão em [ENTREGA_LAB03S03_AULUS.md](ENTREGA_LAB03S03_AULUS.md).
+Após a main, a qualificação pontual da fonte histórica revalidada comprovou
+**sete aprovações reais entre 15 candidatos**, com 374 releases estáveis e
+3.141 runs válidos observados. O [índice dos primeiros 100](data/execucao_pos_main/historico_15/primeiros_100_aprovados.json)
+permanece incompleto (7/100); a cobertura é um limite inferior de janeiro a
+setembro de 2024. Esse progresso não valida o bundle gerado de 300, não supre
+outubro–dezembro de 2023 e não autoriza distribuições DORA anuais.
+As evidências do diagnóstico mensal de `microsoft/vscode` cobrem as 12 consultas
+da janela de 01/10/2023 a 30/09/2024 UTC. A API retornou zero runs retidos nessa
+consulta. Esse resultado não estima a atividade histórica do projeto: a
+enumeração dos registros disponíveis terminou, mas a preservação do histórico
+anual continua desconhecida. Não se usa zero como CFR ou tempo de recuperação.
+
+O script [analisar_rqs.py](analisar_rqs.py) revalida a população final, os hashes,
+os snapshots e as releases antes dos cálculos. Nenhuma análise oficial aceita o
+CSV antigo, o modo de referência ou uma população inferior a 300 aprovados.
+Em uma população final válida, falta de dados em determinada métrica é registrada
+como ausência com motivo, sem imputação de zero. As tabelas principais usam o
+repositório como unidade: mediana, Q1, Q3, IQR (Q3 − Q1), número de valores
+válidos, ausentes e censurados. Os quartis usam interpolação linear tipo 7.
+
+| Questão | Procedimento pronto | Resultado empírico nesta entrega |
+|---|---|---|
+| RQ01 — Frequência | Releases estáveis na janela divididas pelas 52,14 semanas fixadas na configuração; distribuição entre repositórios. | Pendente da população final validada. |
+| RQ02 — Lead Time | Mediana por release e mediana por commit; `commit.author.date` nas comparações paginadas com a predecessora cronológica; primeira release sem predecessora e comparações indisponíveis identificadas. | Código paginado recebido e integrado. Pendentes população e páginas originais completas das comparações. |
+| RQ03 — CFR | Proxy de CI com conclusões válidas; proxy de releases com a heurística v3 existente, janela corretiva de sete dias e exclusão das releases censuradas do denominador. Mensagens ausentes não equivalem a ausência de correção. | Pendente da população, da cobertura anual para CI e das comparações para CFR(b). A validação humana da heurística também permanece pendente. |
+| RQ04 — Recuperação | Episódios por workflow; mediana/IQR dos recuperados, contagens e proporções censuradas separadas; repositórios sem recuperação observada não recebem duração zero. | Pendente da população e de evidências anuais de runs. |
+
+As saídas serão `metricas_por_repositorio.csv`, `sumarios_rq01_rq04.csv`,
+`dados_ausentes.csv`, `rq03_censura_releases.csv`, `rq04_episodios.csv`, quatro figuras
+`rq01_mediana_iqr.svg` a `rq04_mediana_iqr.svg` e `analise.json`, com hashes de
+entradas, código e saídas. A distribuição agregada de episódios é identificada
+separadamente e não substitui a distribuição por repositório. A mediana dos
+recuperados é condicional à recuperação observada; não é uma estimativa de
+sobrevivência incluindo censurados. Não se estabelece associação, tendência ou
+confirmação de hipóteses antes da execução real.
+
+### 8.1 Auditoria da amostra e concordância antes do consenso
+
+O fluxo de coleta real exige a auditoria de leitura do bundle final e das
+qualificações de todos os aprovados. A seleção adotada da main usa o modo
+separado `csv_main_adotado`, com origem gerada declarada e verificações de
+integridade e reprodução, sem certificar a coleta. O manifesto da seleção é
+revalidado pelos comandos de rotulagem e concordância segundo seu tipo de
+fonte; os indicadores de ausência de auditoria acompanham os resultados.
+O guia [ROTULAGEM_AULUS.md](ROTULAGEM_AULUS.md) estabelece o preenchimento pessoal
+e cego de 60 decisões por dimensão de repositório e 300 decisões por release.
+Os campos de julgamento são deixados vazios na geração.
+
+O comando `metricas.concordancia avaliar` calcula os três kappas de Fleiss dos
+arquivos independentes completos **antes da reunião**, preserva os hashes das
+entradas e produz divergências e um formulário vazio de consenso. O comando
+`calcular` exige as decisões humanas consolidadas. Nomes de avaliadores
+equivalentes e o mesmo arquivo físico usado mais de uma vez são rejeitados.
+Arquivos distintos com decisões iguais podem representar concordância legítima;
+o software não certifica, sozinho, que o cegamento foi respeitado. Empates 1–1–1
+continuam dependentes de discussão e evidência, e toda decisão não resolvida
+permanece pendente. Nenhum kappa ou consenso foi calculado nesta entrega a
+partir de exemplos ou de uma única avaliação.
+
+## 9. Análise descritiva do CSV adotado da main
+
+Por escolha de Áulus, os 300 registros de
+`data/output/repositorios_aprovados.csv` da main `a892089` também foram
+analisados como valores fornecidos, usando `analisar_csv_main.py`. O
+[relatório dessa análise](RESULTADOS_CSV_MAIN.md) apresenta RQ01–RQ04,
+quartis, unidades, contagens declaradas e os limites da interpretação.
+Os arquivos originais e o protocolo de auditoria anterior foram preservados.
+
+| RQ | Resultado descritivo do CSV adotado | Limite de interpretação |
+|---|---|---|
+| RQ01 | Mediana de 0,269 release/semana; Q1 = 0,153; Q3 = 0,460. | Contagem e frequência fornecidas, sem recontar releases originais. |
+| RQ02 | Medianas de 8,57 dias (a) e 3,86 dias (b); IQRs de 10,00 e 4,50 dias. | Valores reproduzem fórmulas do gerador; faltam datas e comparações originais para interpretação empírica. |
+| RQ03 | Medianas de 13,3% no proxy de CI e 8,0% no proxy de releases. | Taxas fornecidas; CFR de CI diverge das contagens além do arredondamento em 159 registros. |
+| RQ04 | Mediana entre projetos de 9,70 horas; Q1 = 3,70; Q3 = 14,90; IQR = 11,20. | Medianas e contagens fornecidas; não há durações individuais ou comprovação de cobertura anual nesse CSV. |
+
+As quatro figuras em `data/analises_csv_main/` identificam a origem não
+validada empiricamente dos valores. O manifesto associa o hash da entrada ao
+parecer anterior, que identificou seeds e fórmulas de `consolidar_dataset.py`.
+Não se transformou a declaração `github_api` do CSV em comprovação de coleta,
+nem se inferiram eventos, rótulos humanos ou hipóteses confirmadas desses
+agregados. A diferença entre as variantes de Lead Time descreve o arquivo
+adotado; as fórmulas que o produziram também determinam essa diferença.

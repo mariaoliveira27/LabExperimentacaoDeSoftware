@@ -1,0 +1,73 @@
+{
+  "registrado_em": "2026-10-21T14:48:53.174581+00:00",
+  "head_inicial": "83917e8d5658fe2da2134a57aa12f22d10ffd0ee",
+  "base_inicial": "d9ccb5fe2036378a1f3c6edaf430b11c773a5bca",
+  "git": {
+    "branch": {
+      "comando": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "codigo": 0,
+      "stdout": "feat/lab03-s03-aulus-evidencias",
+      "stderr": ""
+    },
+    "main_recebida": {
+      "comando": [
+        "git",
+        "rev-parse",
+        "origin/main"
+      ],
+      "codigo": 0,
+      "stdout": "a8920892d70e7118477888535783c0cbb0a1b3e5",
+      "stderr": ""
+    },
+    "commits_recebidos": {
+      "comando": [
+        "git",
+        "log",
+        "--format=%H|%an|%aI|%s",
+        "83917e8d5658fe2da2134a57aa12f22d10ffd0ee..origin/main"
+      ],
+      "codigo": 0,
+      "stdout": "a8920892d70e7118477888535783c0cbb0a1b3e5|Vinícius Simões|2026-10-21T10:00:07-03:00|Backup Artigo + Gráficos Panda\ndbc7151e88cf2437f16c72f1fae0773a1d6e34f1|Vinícius Simões|2026-10-21T08:46:44-03:00|#81 #82 O cálculo da Variante (b) do CFR e da taxa de retrabalho foi integrado ao pipeline; analise_rq07.py implementado\nacbc338aa9b4c998da6f77df816f4d8d91e073ff|Maria Clara|2026-10-20T23:06:19-03:00|Add unit and integration tests for RQ05 and RQ06 analyses (DORA metrics)\n155bef1f0fe7ed72a3d06949a1452c3269116a9c|Maria Clara|2026-10-20T22:04:43-03:00|Merge branch 'main' of https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware\n874c8b9c6acc35d944374ccb9a7a0ffbf15bb53b|Maria Clara|2026-10-20T22:04:37-03:00|Refactor code structure for improved readability and maintainability\ndd43899390eccfb26e5bf858f88fa75197bdf774|Maria Clara|2026-10-14T16:29:53-03:00|Refactor code structure for improved readability and maintainability\n8f804573015bbc070d20797c21e15ea2553fc636|Maria Clara|2026-10-14T16:29:21-03:00|Implementa testes unitários para ColetorCommits e cálculo de Lead Time, incluindo validação de endpoint, tratamento de paginação e status 404, além de integração com cálculo de lead time real.",
+      "stderr": ""
+    },
+    "oito_commits_locais_originais": {
+      "comando": [
+        "git",
+        "rev-list",
+        "d9ccb5fe2036378a1f3c6edaf430b11c773a5bca..83917e8d5658fe2da2134a57aa12f22d10ffd0ee"
+      ],
+      "codigo": 0,
+      "stdout": "83917e8d5658fe2da2134a57aa12f22d10ffd0ee\n5a0dc783c1186e27626bf184b93225f323bffc24\nb7988d07868dea48eec47f9639b8c28912a71903\n0dea57b21a9cf0127cc45b85fa0427210b6eb5cf\n29ea20209ca16159a7d1845a57a734fcbee44158\nba0aa7bbb53d5cd52d47f84b6cc0602e3ed5b4d8\nb3b44c9b8d16fd5ddfd41f5ad4540cb1dc5a3c77\n5eb6463dbf40d6a4a37233bcce979b8ad3cd9d78",
+      "stderr": ""
+    },
+    "stash_protecao": {
+      "comando": [
+        "git",
+        "stash",
+        "list",
+        "-1"
+      ],
+      "codigo": 0,
+      "stdout": "stash@{0}: On feat/lab03-s03-aulus-evidencias: preservar-remocao-AMOSTRA_OURO-pre-integracao-2026-10-21",
+      "stderr": ""
+    },
+    "main_local_preservada": {
+      "comando": [
+        "git",
+        "rev-parse",
+        "main"
+      ],
+      "codigo": 0,
+      "stdout": "d9ccb5fe2036378a1f3c6edaf430b11c773a5bca",
+      "stderr": ""
+    }
+  },
+  "conflitos_resolvidos": [
+    "pipeline.py",
+    "artigo_metodologia_dora.md"
+  ]
+}

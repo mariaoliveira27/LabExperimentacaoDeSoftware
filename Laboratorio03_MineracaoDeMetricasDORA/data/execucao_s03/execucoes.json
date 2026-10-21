@@ -1,0 +1,101 @@
+{
+  "registrado_em_utc": "2026-10-20T14:15:20.494197+00:00",
+  "fuso_relatorio": "America/Sao_Paulo",
+  "comandos": [
+    {
+      "comando": ".venv/Scripts/python.exe -X utf8 executar_amostra_ouro.py --config config.yaml --coleta data/coleta_s03 --saida data/amostra_ouro --rotulos rotulos_aulus.csv",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "Preparação interrompida: São necessários pelo menos 300 repositórios aprovados por coleta real, as releases e a proveniência completas antes de preparar a rotulagem. Faltam em data\\coleta_s03: repositorios_aprovados.csv, releases.json, proveniencia.json. Estado da coleta: 0 aprovados.\n"
+    },
+    {
+      "comando": ".venv/Scripts/python.exe -X utf8 analisar_rqs.py --config config.yaml --coleta data/coleta_s03 --saida data/analises_rqs",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "Análise interrompida sem resultados oficiais: Bundle final ausente/incompleto em C:\\Users\\aulus\\Documents\\GitHub\\LabExperimentacaoDeSoftware\\Laboratorio03_MineracaoDeMetricasDORA\\data\\coleta_s03: repositorios_aprovados.csv, releases.json, proveniencia.json; exige >=300 aprovados reais.\n"
+    },
+    {
+      "comando": ".venv/Scripts/python.exe coleta_amostra_real.py --config config.yaml --saida data/coleta_s03 --alvo 300 --limite-candidatos 100 --usar-gh-auth",
+      "exit_code": 2,
+      "resultado": "100 candidatos, 0 aprovados; insuficiente; coleta autenticada nova",
+      "log_sha256": "8bf8335641d85db0099555b424f5467cfb3bec8e8ac853962ed3763b2f88ddd7"
+    },
+    {
+      "comando": ".venv/Scripts/python.exe coleta_amostra_real.py --config config.yaml --saida data/coleta_s03 --alvo 300 --limite-candidatos 100 --usar-gh-auth",
+      "exit_code": 2,
+      "resultado": "Retomada com os 100 snapshots revalidados; 8 consultas de busca lidas do cache; nenhuma nova requisição HTTP de qualificação",
+      "log_sha256": "39cf844fdee8d6dc1884a08d7a02605e94bd2b763bba7180077c885bdfee4941"
+    },
+    {
+      "comando": ".venv/Scripts/python.exe verificar_cobertura_runs.py --repositorio microsoft/vscode --saida data/cobertura_s03/microsoft_vscode.json --usar-gh-auth",
+      "exit_code": 0,
+      "resultado": "12 intervalos mensais enumerados; zero runs retidos; histórico anual desconhecido; repositório diagnóstico, não aprovado"
+    },
+    {
+      "comando": ".venv/Scripts/python.exe -X utf8 -m pytest tests/test_coletor_runs.py tests/test_verificar_cobertura_runs.py tests/test_pipeline.py tests/test_coleta_amostra_real.py tests/test_amostra_ouro.py tests/test_executar_amostra_ouro.py tests/test_rotulagem.py tests/test_concordancia.py tests/test_analisar_rqs.py -q --tb=short --basetemp .cache/pytest_s03_relevantes_final -p no:cacheprovider",
+      "exit_code": 0,
+      "stdout": "........................................................................ [ 25%]\r\n........................................................................ [ 50%]\r\n........................................................................ [ 75%]\r\n......................................................................   [100%]\r\n286 passed in 37.03s\r\n"
+    },
+    {
+      "comando": ".venv/Scripts/python.exe -X utf8 -m pytest --cov=metricas --cov-report=term-missing --cov-report=json:.cache/coverage_s03_final.json --cov-fail-under=80 -q --tb=short --basetemp .cache/pytest_s03_final -p no:cacheprovider",
+      "exit_code": 0,
+      "stdout": "........................................................................ [ 15%]\r\n........................................................................ [ 31%]\r\n........................................................................ [ 47%]\r\n........................................................................ [ 63%]\r\n........................................................................ [ 79%]\r\n........................................................................ [ 94%]\r\n.......................                                                  [100%]\r\n=============================== tests coverage ================================\r\n______________ coverage: platform win32, python 3.12.10-final-0 _______________\r\n\r\nName                           Stmts   Miss  Cover   Missing\r\n------------------------------------------------------------\r\nmetricas\\__init__.py               2      0   100%\r\nmetricas\\calculo_metricas.py     306      4    99%   22, 285-286, 588\r\nmetricas\\concordancia.py         198      4    98%   41, 170, 189, 309\r\n------------------------------------------------------------\r\nTOTAL                            506      8    98%\r\nCoverage JSON written to file .cache/coverage_s03_final.json\r\nRequired test coverage of 80% reached. Total coverage: 98.42%\r\n455 passed in 61.92s (0:01:01)\r\n"
+    }
+  ],
+  "auditoria_coleta": {
+    "n_requisicoes": 597,
+    "http": 589,
+    "cache": 8,
+    "ultimas_8_consultas_todas_cache": true
+  },
+  "artefatos_sha256": {
+    "data/coleta_s03/arquivo_snapshots.json": "8363dd7df20d391d8afb10530ef18a90bee0fd40df021f459992bb10fda60657",
+    "data/coleta_s03/busca.json": "bb4b9bff2543e1fecc9531198c3a7dabd5290cfa8d89c49dc4326c052f26ece1",
+    "data/coleta_s03/candidatos.json": "fd9d2dd46904450105611c540e4913cba43a04441aad4435baf4de8f1bbec002",
+    "data/coleta_s03/config_coleta.json": "100b0006480df828d6fb06d9b3dc42ba0d5491c95778789f5ac7b165271f19cd",
+    "data/coleta_s03/descartes.csv": "28f6b058ac5ff3c1c68272b88936c097f9312cb04b99f71dd0925abb21438f23",
+    "data/coleta_s03/estado.json": "70f5d7d78da220b479f5408b63a5ec0b24e1cc6daecf267ae79c1b4b925e6c3e",
+    "data/coleta_s03/evidencias_qualificacoes.json": "002649d38299181968d7f44382467ef5b424f75d26c30458229e3a122b6cfdc6",
+    "data/coleta_s03/funil_selecao.csv": "c063933698c9b381d50c152972fa8effbc51d71207f28b3a86bb38c97491d76d",
+    "data/coleta_s03/funil_selecao.md": "f31c6febc44f4b7d61202cbcc6686ab5cd6de7beb705b6672a9c3b2161d10e4d",
+    "data/coleta_s03/primeiros_100_aprovados.json": "5f2115f9452674e0687380e88faa955c156b471b8f72582d121a11023c739255",
+    "data/coleta_s03/repositorios_aprovados_parcial.csv": "dd50aa4e87b1597522e941a766dafea58235b528583552f2684edcfd25b5f63c",
+    "data/coleta_s03/requisicoes.jsonl": "38bd65f4d0b77eff46da423f43820c1cde6f8b132ab3ef87e5b2c427a1185f47",
+    "data/cobertura_s03/microsoft_vscode.json": "03a4588375004b77088c2834ecdf21cb10ec9955d8fe2ef4ae7a44d9c76d54c7",
+    "data/cobertura_s03/requisicoes.jsonl": "75ea1190dcf632189fe52ad143798e591d18159e4ef187b8f57f21b07622ff1a"
+  },
+  "codigo_sha256": {
+    "analisar_rqs.py": "8e96ee5db5fe939543259970298a3090ba25e4d11404d295d70c5d38e7f2cdfa",
+    "api_client.py": "5e49b16de323c94370f1e4a36fe79117f5021962421a5e776d730555a551f248",
+    "baixar_historico.py": "e1e90c4d30a43acaa8542fabd218384499acf4c5778de9913d347b9ad30cf36e",
+    "benchmark_heuristica.py": "b379ce3b260ca2e0d748c840b5160132f0aada2f620cc97cbe6cb817687ad8f8",
+    "busca_candidatos.py": "1f368f7e9d52763c93417f96a4b4f1ef293d5d1c8460658eaf22f551f604b562",
+    "coleta_amostra_real.py": "259521ca79e3d6cf9aed41e8b6863dfdabbf5d20a7d9b24dba730d1b7291b574",
+    "coletor_commits.py": "6b11f4d36fdcb6ce87a5d2e46be45c6c39873869cb6234dfca6e5fa3877c16bd",
+    "coletor_metadados.py": "e9acb84d28d68c25676673d7b963596b7a66260f105b7f0b8f1ab6695893e4e3",
+    "coletor_releases.py": "c280a96be2d47b0494176d1549a4e89c2ca27789c66ade422da9ff15c57504c9",
+    "coletor_runs.py": "f41450baa796147459c10579c4eecbd5cdaf5fa2757cc494cf5c1f9d617e1620",
+    "executar_amostra_ouro.py": "2f3432d5975eab72a00765e89ad336bf8d7c93e69118693307a5b47611921af1",
+    "funil.py": "c30b38a7a43032dff21667cff09f0e20c2ced9dd328ee6ff3d0a0f819465b916",
+    "gerador_graficos.py": "97ae547b0e2ce72ed5f6cc4392032025fae58c568ac7c6429a36de878feef4f7",
+    "gerar_amostra_rotulagem.py": "e5f109ebfaca06f87a5206575707c713f172cf3f4878a2913799b62985a04c0f",
+    "pipeline.py": "108386bc5a3ec9eaa1ffa331324ab5257e9461913f2fc81b6f1eba0a0f136f3f",
+    "recuperar_historico.py": "5aa6133d0891e35ef9919e7524b138711f992bb01e09b78e5f9a2bdb73e6eb35",
+    "rotulagem.py": "1f6a9bb9d087b5811df6c0fda2aef49b2a28a72d336fd94d8a94d829759d33bd",
+    "seed_data.py": "2bc71f015eac619316a8a57b0c0cc3c27600576e7d7e086e21a1ccfa88a358e9",
+    "verificar_cobertura_runs.py": "a945f5ca66dae7110d24cb4ad60e671bcc45ab966885a8744b491e5bee0040c4",
+    "metricas/calculo_metricas.py": "8f550cf6862d025924e80feab5018eb561d3a7f820bb6d13cf5ff138f0c8d7f4",
+    "metricas/concordancia.py": "3b685a70c128d7296ac9e136566c7baefb6c3de1f21ec3de7247f6c4959ac214",
+    "metricas/__init__.py": "d5869f77ef927efd87bbd246c3572af27c8612bc067c457c0a66ff478e0cccab"
+  },
+  "preexistentes_preservados_sha256": {
+    "rotulos_vinicius.csv": "ecfce3e511d5b255eeb7735b45cafa04b13ad609e36a995056f023a9f26f6b0e",
+    "data/rotulos_vinicius.csv": "ecfce3e511d5b255eeb7735b45cafa04b13ad609e36a995056f023a9f26f6b0e",
+    "data/output/repositorios_aprovados.csv": "4dd5831158b00edb623608ea4fa176ee5a48f3f6582754b71fd52cbecacb8e40",
+    "artigo_introducao_e_hipoteses.md": "54a3b0204e3aee0916459ad2305b079703aac3abe22a5d939744bea2e9879020"
+  },
+  "amostra_ouro_md_permanece_removido": true,
+  "formulario_aulus_criado": false,
+  "analises_oficiais_criadas": false,
+  "resultados_humanos_calculados": false
+}

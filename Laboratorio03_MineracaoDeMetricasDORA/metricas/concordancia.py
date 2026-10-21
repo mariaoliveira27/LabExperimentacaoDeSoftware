@@ -14,6 +14,7 @@ import json
 import math
 from pathlib import Path
 from typing import Mapping, Sequence
+import unicodedata
 
 import numpy as np
 from statsmodels.stats.inter_rater import aggregate_raters, fleiss_kappa
@@ -43,6 +44,11 @@ def _validar_avaliadores(amostra: Sequence[Row], avaliadores: Avaliacoes) -> Non
         for nome in avaliadores
     ):
         raise ValueError("São necessários exatamente três avaliadores identificados.")
+    nomes_normalizados = {unicodedata.normalize("NFKC", nome).casefold() for nome in avaliadores}
+    if len(nomes_normalizados) != 3:
+        raise ValueError("Os três avaliadores precisam de identificadores distintos, inclusive na caixa Unicode.")
+    if len({id(rows) for rows in avaliadores.values()}) != 3:
+        raise ValueError("O mesmo conjunto de rótulos não pode representar mais de um avaliador independente.")
     for nome, rotulos in avaliadores.items():
         try:
             validar_rotulos(amostra, rotulos)
@@ -99,8 +105,8 @@ def calcular_kappa(rotulos: Sequence[Sequence[str]], categorias: Sequence[str]) 
 def calcular_kappas(amostra: Sequence[Row], avaliadores: Avaliacoes) -> dict[str, dict]:
     """Kappas separados, sem multiplicar por cinco as decisões de repositório.
 
-    API numérica; a emissão do relatório final pela CLI ocorre apenas através
-    de finalizar(), que exige também um consenso completo e documentado.
+    O comando avaliar emite este resultado antes da reunião de consenso. A
+    consolidação final requer também as decisões humanas documentadas.
     """
     _validar_avaliadores(amostra, avaliadores)
     indices = _indices(avaliadores)
@@ -129,7 +135,7 @@ def preparar_consenso(amostra: Sequence[Row], avaliadores: Avaliacoes) -> tuple[
     """Retorna divergências e um formulário de consenso inteiramente vazio."""
     _validar_avaliadores(amostra, avaliadores)
     indices = _indices(avaliadores)
-    divergencias, consenso = [], []
+    divergencias = []
     for dimensao, repo, release in _unidades(amostra):
         linhas = {nome: _row_unidade(indice, repo, release) for nome, indice in indices.items()}
         if len({row[dimensao].strip() for row in linhas.values()}) > 1:
@@ -141,11 +147,24 @@ def preparar_consenso(amostra: Sequence[Row], avaliadores: Avaliacoes) -> tuple[
                     "html_url": row["html_url"], "release_notes_url": row["release_notes_url"],
                     "commits_url": row["commits_url"],
                 })
-        consenso.append({
+    return divergencias, formulario_consenso(amostra)
+
+
+def formulario_consenso(amostra: Sequence[Row]) -> list[dict]:
+    """Prepare as 420 decisões vazias sem exigir ou inferir votos humanos.
+
+    Esta preparação estrutural não é um consenso validado. Os comandos de
+    arquivo verificam separadamente o manifesto da referência comum antes de
+    disponibilizar o formulário para a reunião futura.
+    """
+    validar_amostra(amostra)
+    return [
+        {
             **dict.fromkeys(CAMPOS_CONSENSO, ""),
             "dimensao": dimensao, "full_name": repo, "release_id": release,
-        })
-    return divergencias, consenso
+        }
+        for dimensao, repo, release in _unidades(amostra)
+    ]
 
 
 def validar_consenso(amostra: Sequence[Row], avaliadores: Avaliacoes, consenso: Sequence[Row]) -> None:
@@ -214,7 +233,7 @@ def _checar_saidas(saidas: Sequence[Path], entradas: Sequence[Path]) -> None:
     if set(resolvidas) & {path.resolve() for path in entradas}:
         raise ValueError("Uma saída não pode substituir um arquivo de entrada ou de avaliador.")
     for path in saidas:
-        if path.exists():
+        if path.exists() or path.is_symlink():
             raise FileExistsError(f"Saída já existe e será preservada: {path}.")
 
 
@@ -233,34 +252,61 @@ def _sha256(path: Path) -> str:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     comandos = parser.add_subparsers(dest="comando", required=True)
-    for comando in ("preparar", "calcular"):
+    for comando in ("preparar", "avaliar", "calcular"):
         subparser = comandos.add_parser(comando)
         subparser.add_argument("--amostra", type=Path, required=True)
+        subparser.add_argument("--manifesto", type=Path, help="Padrão: selecao.json ao lado da referência comum")
         for nome in ("aulus", "maria", "vinicius"):
             subparser.add_argument(f"--{nome}", type=Path, required=True)
         subparser.add_argument("--consenso", type=Path, required=True)
-        if comando == "preparar":
+        if comando in ("preparar", "avaliar"):
             subparser.add_argument("--divergencias", type=Path, required=True)
-        else:
+        if comando in ("avaliar", "calcular"):
             subparser.add_argument("--saida", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
         humanos = {nome: getattr(args, nome) for nome in ("aulus", "maria", "vinicius")}
-        if len({path.resolve() for path in humanos.values()}) != 3:
+        paths = list(humanos.values())
+        if (len({path.resolve() for path in paths}) != 3
+                or any(esquerda.samefile(direita) for indice, esquerda in enumerate(paths)
+                       for direita in paths[indice + 1:])):
             raise ValueError("Informe três arquivos distintos de rotulagem independente.")
+        from gerar_amostra_rotulagem import validar_referencia
+        manifesto_path = args.manifesto or args.amostra.parent / "selecao.json"
+        origem_referencia = validar_referencia(args.amostra, manifesto_path)
         entradas = [args.amostra, *humanos.values()]
         amostra = ler_csv(args.amostra)
         avaliadores = {nome: ler_csv(path) for nome, path in humanos.items()}
-        if args.comando == "preparar":
-            _checar_saidas([args.divergencias, args.consenso], entradas)
+        if args.comando in ("preparar", "avaliar"):
+            saidas = [args.divergencias, args.consenso]
+            if args.comando == "avaliar":
+                saidas.append(args.saida)
+            _checar_saidas(saidas, [*entradas, manifesto_path])
             divergencias, consenso = preparar_consenso(amostra, avaliadores)
+            resultado = None
+            if args.comando == "avaliar":
+                resultado = {
+                    "status": "rotulos_independentes_completos_aguardando_consenso",
+                    "base_kappa": "rotulos_independentes_anteriores_ao_consenso",
+                    "avaliadores": sorted(avaliadores),
+                    "origem_referencia": origem_referencia,
+                    "kappas": calcular_kappas(amostra, avaliadores),
+                    "arquivos_fontes": [{"arquivo": str(path), "sha256": _sha256(path)}
+                                         for path in [*entradas, manifesto_path]],
+                }
             _salvar_csv(args.divergencias, divergencias, CAMPOS_DIVERGENCIAS)
             _salvar_csv(args.consenso, consenso, CAMPOS_CONSENSO)
+            if resultado is not None:
+                args.saida.parent.mkdir(parents=True, exist_ok=True)
+                with args.saida.open("x", encoding="utf-8") as arquivo:
+                    json.dump(resultado, arquivo, ensure_ascii=False, indent=2, allow_nan=False)
+                    arquivo.write("\n")
             print(f"Relatório de divergências: {args.divergencias}. Consenso: {len(consenso)} decisões vazias em {args.consenso}.")
         else:
             entradas.append(args.consenso)
-            _checar_saidas([args.saida], entradas)
+            _checar_saidas([args.saida], [*entradas, manifesto_path])
             resultado = finalizar(amostra, avaliadores, ler_csv(args.consenso))
+            resultado["origem_referencia"] = origem_referencia
             resultado["arquivos_fontes"] = [
                 {"arquivo": str(path), "sha256": _sha256(path)} for path in entradas
             ]
@@ -269,7 +315,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 json.dump(resultado, arquivo, ensure_ascii=False, indent=2, allow_nan=False)
                 arquivo.write("\n")
             print(f"Kappas dos rótulos independentes e frequências do consenso: {args.saida}.")
-    except (ValueError, OSError) as exc:
+    except (ValueError, OSError, KeyError, TypeError, csv.Error) as exc:
         parser.exit(2, f"Não foi possível {args.comando}: {exc}\n")
     return 0
 

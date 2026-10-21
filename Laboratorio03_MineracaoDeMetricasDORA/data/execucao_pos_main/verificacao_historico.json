@@ -1,0 +1,108 @@
+{
+  "iniciado_em_utc": "2026-10-21T14:46:49.835547+00:00",
+  "comando": "_carregar_historico_zenodo('data/historico_2024', instante('2023-10-01T00:00:00Z'), instante('2024-09-30T23:59:59Z'))",
+  "somente_leitura_fontes": true,
+  "status": "verificado_contra_zip_original",
+  "referencia": {
+    "diretorio": "C:\\Users\\aulus\\Documents\\GitHub\\LabExperimentacaoDeSoftware\\Laboratorio03_MineracaoDeMetricasDORA\\data\\historico_2024",
+    "source_doi": "10.5281/zenodo.20414642",
+    "source_url": "https://zenodo.org/records/20414642/files/cicd_env_results.zip?download=1",
+    "arquivo_fonte": "C:\\Users\\aulus\\Documents\\GitHub\\LabExperimentacaoDeSoftware\\Laboratorio03_MineracaoDeMetricasDORA\\.cache\\arquivos_historicos\\2024\\cicd_env_results.zip",
+    "arquivo_sha256": "285e9ad9ed0ecee07ebbf2cf3e0ccbc3f8075b5bcba2fbb48183886b7f9506c6",
+    "md5_verificado": "df0e00311cdfa611e784c373d20bacd5",
+    "proveniencia_sha256": "27f72e0761e3b8bf696466fec854443434e9065bff0b82945d116a024b123643",
+    "saidas_sha256": {
+      "metadata_repositorios.json": "7878a86eae2d5bd4e20ec31afed82edd645eba111497861e09f5943a9f02002c",
+      "runs_historicos.json": "0f0a2dfbbf16e25abbb1518f16acc8bc7062cab380a8abca5f1ebf3091eb6a4f"
+    },
+    "cobertura": "limite_inferior_observado",
+    "dados_empiricos": true,
+    "historico_anual_completo": false,
+    "permite_metricas_dora_anuais": false,
+    "intervalo_observado": {
+      "inicio": "2024-01-01T00:00:00+00:00",
+      "fim": "2024-09-30T23:59:59+00:00"
+    }
+  },
+  "n_metadata": 19849,
+  "n_repositorios_runs": 15,
+  "n_runs": 6708,
+  "repositorios": [
+    {
+      "id": 86057635,
+      "full_name": "gajus/slonik",
+      "runs": 168
+    },
+    {
+      "id": 2253830,
+      "full_name": "PHPMailer/PHPMailer",
+      "runs": 93
+    },
+    {
+      "id": 206427,
+      "full_name": "apache/tika",
+      "runs": 1706
+    },
+    {
+      "id": 91797088,
+      "full_name": "nuclio/nuclio",
+      "runs": 188
+    },
+    {
+      "id": 115192595,
+      "full_name": "badeball/cypress-cucumber-preprocessor",
+      "runs": 62
+    },
+    {
+      "id": 3933868,
+      "full_name": "JuliaNLSolvers/Optim.jl",
+      "runs": 220
+    },
+    {
+      "id": 83446927,
+      "full_name": "easy-coding-standard/easy-coding-standard",
+      "runs": 130
+    },
+    {
+      "id": 23029617,
+      "full_name": "h2o/h2o",
+      "runs": 52
+    },
+    {
+      "id": 171915396,
+      "full_name": "microsoft/msticpy",
+      "runs": 71
+    },
+    {
+      "id": 185901023,
+      "full_name": "open-telemetry/opentelemetry-js",
+      "runs": 1644
+    },
+    {
+      "id": 61579222,
+      "full_name": "owlbarn/owl",
+      "runs": 102
+    },
+    {
+      "id": 88674404,
+      "full_name": "GoogleContainerTools/distroless",
+      "runs": 238
+    },
+    {
+      "id": 432598139,
+      "full_name": "plugdata-team/plugdata",
+      "runs": 1077
+    },
+    {
+      "id": 5025286,
+      "full_name": "kewisch/ical.js",
+      "runs": 169
+    },
+    {
+      "id": 440577490,
+      "full_name": "lunarphp/lunar",
+      "runs": 788
+    }
+  ],
+  "duracao_segundos": 9.547
+}

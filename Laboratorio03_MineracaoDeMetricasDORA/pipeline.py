@@ -9,7 +9,7 @@ Executa de ponta a ponta:
 3. Aplicação do funil de seleção com rastreio de descartes
 4. Coleta de releases, commits entre releases e workflow runs
 5. Cálculo das métricas DORA (RQ01 a RQ04) e classificação DORA
-6. Exportação do dataset final (100 repositórios aprovados) e documentação do funil
+6. Exportação dos repositórios aprovados e documentação do funil
 """
 
 import os
@@ -54,7 +54,7 @@ def carregar_config(caminho_config: str = "config.yaml") -> Dict[str, Any]:
             "min_stars": 1000,
             "min_releases": 5,
             "min_workflow_runs": 50,
-            "target_approved_repos": 100,
+            "target_approved_repos": 300,
         },
         "api": {
             "base_url": "https://api.github.com",
@@ -242,6 +242,12 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False, bus
         # Cálculo das Métricas DORA para o repositório aprovado
         dep_freq = calcular_deployment_frequency(n_releases, weeks)
 
+        comparacoes_esperadas = max(0, len(releases_validas) - 1)
+        comparacoes_completas = 0
+        releases_com_lead_time = 0
+        commits_com_lead_time = 0
+        falhas_b = avaliadas_b = censuradas_b = None
+
         if modo_referencia:
             # Simulação determinística baseada nos metadados reais para o modo de referência
             lead_time_a = round(max(0.5, (120.0 / max(1, n_releases))), 2)
@@ -261,36 +267,53 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False, bus
             for i in range(1, len(releases_validas)):
                 tag_ant = releases_validas[i - 1].get("tag_name")
                 tag_curr = releases_validas[i].get("tag_name")
-                if tag_ant and tag_curr:
-                    commits = coletor_comm.coletar_commits_entre_releases(
-                        owner, repo_name, tag_ant, tag_curr
-                    )
-                    if commits:
-                        releases_validas[i]["commit_messages"] = [
-                            c.get("message", "") for c in commits
-                        ]
-                        releases_validas[i]["commits"] = commits
-                        c_dates = [c["author_date"] for c in commits if c.get("author_date")]
-                        if c_dates:
-                            releases_data_lt.append({
-                                "release_date": releases_validas[i]["published_at"],
-                                "commit_dates": c_dates,
-                            })
-                    else:
-                        releases_validas[i]["commit_messages"] = []
-                        releases_validas[i]["commits"] = []
+                if not tag_ant or not tag_curr:
+                    continue
+                commits = coletor_comm.coletar_commits_entre_releases(
+                    owner, repo_name, tag_ant, tag_curr
+                )
+                # None significa indisponibilidade; [] comprova comparação
+                # completa sem commits. Ausência não pode virar evidência negativa.
+                if commits is None:
+                    continue
+                comparacoes_completas += 1
+                releases_validas[i]["commit_messages"] = [
+                    c.get("message", "") for c in commits
+                ]
+                releases_validas[i]["commits"] = commits
+                c_dates = [c["author_date"] for c in commits if c.get("author_date")]
+                if c_dates:
+                    releases_data_lt.append({
+                        "release_date": releases_validas[i]["published_at"],
+                        "commit_dates": c_dates,
+                    })
 
             # Cálculo empírico real de Lead Time for Changes (RQ02 - Variantes a e b)
-            lt_a_med, lt_b_med, _ = calcular_lead_time_repositorio(releases_data_lt)
+            releases_com_lead_time = len(releases_data_lt)
+            lt_a_med, lt_b_med, commits_com_lead_time = calcular_lead_time_repositorio(releases_data_lt)
             lead_time_a = round(lt_a_med, 2) if lt_a_med is not None else None
             lead_time_b = round(lt_b_med, 2) if lt_b_med is not None else None
 
-            cfr_b_val, falhas_b, avaliadas_b, censuradas_b = calcular_cfr_releases(
-                releases_validas, window_end
+            cfr_releases = rework_rate = None
+            if comparacoes_completas == comparacoes_esperadas:
+                cfr_b_val, falhas_b, avaliadas_b, censuradas_b = calcular_cfr_releases(
+                    releases_validas, window_end
+                )
+                cfr_releases = round(cfr_b_val, 3) if cfr_b_val is not None else None
+                taxa_rework = calcular_rework_rate(releases_validas)
+                rework_rate = round(taxa_rework, 3) if taxa_rework is not None else None
+
+        if modo_referencia:
+            origem_lead_time = origem_cfr_releases = "referencia_simulada"
+        else:
+            origem_lead_time = (
+                "compare_paginado" if releases_com_lead_time
+                else "indisponivel_sem_commits_comparaveis"
             )
-            cfr_releases = round(cfr_b_val, 3) if cfr_b_val is not None else None
-            taxa_rework = calcular_rework_rate(releases_validas)
-            rework_rate = round(taxa_rework, 3) if taxa_rework is not None else 0.0
+            origem_cfr_releases = (
+                "releases_e_compares_paginados" if comparacoes_completas == comparacoes_esperadas
+                else "indisponivel_comparacoes_incompletas"
+            )
 
         # Classificação DORA
         tier_geral, tiers_indiv = classificar_dora_repositorio(
@@ -299,6 +322,17 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False, bus
             cfr=cfr_ci,
             recovery_hours=recovery_hours,
         )
+        if not modo_referencia:
+            # Ausência é informação desconhecida, sem patamar de desempenho.
+            valores_classificados = {
+                "deployment_frequency": dep_freq, "lead_time": lead_time_a,
+                "change_failure_rate": cfr_ci, "recovery_time": recovery_hours,
+            }
+            for metrica, valor in valores_classificados.items():
+                if valor is None:
+                    tiers_indiv[metrica] = None
+            if any(valor is None for valor in valores_classificados.values()):
+                tier_geral = None
 
         created_dt = parse_datetime(item["created"])
         agora = datetime.now(timezone.utc)
@@ -321,8 +355,17 @@ def executar_pipeline(config: Dict[str, Any], modo_referencia: bool = False, bus
             "deployment_frequency_semana": round(dep_freq, 3),
             "lead_time_release_mediana_dias": lead_time_a,
             "lead_time_commit_mediana_dias": lead_time_b,
+            "origem_lead_time": origem_lead_time,
+            "comparacoes_esperadas": comparacoes_esperadas if not modo_referencia else None,
+            "comparacoes_completas": comparacoes_completas if not modo_referencia else None,
+            "releases_com_lead_time": releases_com_lead_time if not modo_referencia else None,
+            "commits_com_lead_time": commits_com_lead_time if not modo_referencia else None,
             "cfr_ci_proxy": cfr_ci,
             "cfr_releases_proxy": cfr_releases,
+            "origem_cfr_releases": origem_cfr_releases,
+            "releases_com_falha": falhas_b,
+            "releases_avaliadas_cfr": avaliadas_b,
+            "releases_censuradas_cfr": censuradas_b,
             "tempo_recuperacao_mediana_horas": recovery_hours,
             "origem_metricas_estabilidade": "referencia_simulada" if modo_referencia else "workflow_runs",
             "runs_sucessos": resultado_cfr.sucessos if resultado_cfr else None,

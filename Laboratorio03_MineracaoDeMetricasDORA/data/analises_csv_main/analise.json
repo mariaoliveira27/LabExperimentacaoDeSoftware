@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "status": "analise_descritiva_de_valores_fornecidos",
+  "aviso": "Valores fornecidos; origem empírica não validada",
+  "origem_dos_valores": "csv_fornecido_pela_main",
+  "origem_identificada": "seed_data.py/consolidar_dataset.py; valores gerados por fórmulas",
+  "fonte_declarada": "github_api",
+  "fonte_declarada_por": "campo origem_coleta do CSV; declaração não verificada",
+  "evidencia_coleta_real_verificada": false,
+  "criterios_inclusao_verificados": false,
+  "cobertura_historica_verificada": false,
+  "comparacoes_originais_verificadas": false,
+  "janela_declarada_na_config": {
+    "inicio": "2023-10-01T00:00:00+00:00",
+    "fim": "2024-09-30T23:59:59+00:00",
+    "semanas": 52.14
+  },
+  "janela_do_csv_verificada": false,
+  "n_unidades_no_csv": 300,
+  "commit_origem_declarado": "a8920892d70e7118477888535783c0cbb0a1b3e5",
+  "commit_origem_verificado_por_este_comando": false,
+  "arquivo_csv": "C:\\Users\\aulus\\Documents\\GitHub\\LabExperimentacaoDeSoftware\\Laboratorio03_MineracaoDeMetricasDORA\\data\\output\\repositorios_aprovados.csv",
+  "entradas_sha256": {
+    "csv": "766d01fbb52cea4685270c7a215121c9073e21ad216e32a3c004d8b80445bf9d",
+    "config": "63c6222c46c145273ee9dc39cde3c86da40355fd08d1c401cfff0dd29078fbab"
+  },
+  "codigo_sha256": {
+    "analisar_csv_main.py": "caab62e65e78585842c40577990fd96be6a5024d86ab9fa79945d4914e711f3d",
+    "analisar_rqs.py": "8e96ee5db5fe939543259970298a3090ba25e4d11404d295d70c5d38e7f2cdfa"
+  },
+  "versoes": {
+    "python": "3.12.10",
+    "PyYAML": "6.0.3",
+    "matplotlib": "3.11.2"
+  },
+  "parecer_auditoria_preexistente": {
+    "arquivo": "data/execucao_pos_main/auditoria_dados.json",
+    "sha256": "d06f226dfd5bf7d742094fe690024b81ea906574f2871bb35dab1b8c38dd0ab7"
+  },
+  "quantis": "interpolacao_linear_tipo_7",
+  "agregacao": "cada full_name tem peso igual; métricas lidas sem recalcular commits ou runs",
+  "cfr_releases": "proxy declarado no CSV; versão da heurística não comprovada",
+  "rq04": "contagens e medianas declaradas por projeto; sem episódios individuais ou estimativa de sobrevivência; não se infere mediana de episódios a partir de medianas",
+  "contagens_presentes_no_csv": [
+    "episodios_recuperados",
+    "episodios_censurados"
+  ],
+  "cobertura_por_metrica": [
+    {
+      "rq": "RQ01",
+      "metrica": "deployment_frequency_semana",
+      "n_total": 300,
+      "n_validos": 300,
+      "n_ausentes": 0
+    },
+    {
+      "rq": "RQ02",
+      "metrica": "lead_time_release_mediana_dias",
+      "n_total": 300,
+      "n_validos": 300,
+      "n_ausentes": 0
+    },
+    {
+      "rq": "RQ02",
+      "metrica": "lead_time_commit_mediana_dias",
+      "n_total": 300,
+      "n_validos": 300,
+      "n_ausentes": 0
+    },
+    {
+      "rq": "RQ03",
+      "metrica": "cfr_ci_proxy",
+      "n_total": 300,
+      "n_validos": 300,
+      "n_ausentes": 0
+    },
+    {
+      "rq": "RQ03",
+      "metrica": "cfr_releases_proxy",
+      "n_total": 300,
+      "n_validos": 300,
+      "n_ausentes": 0
+    },
+    {
+      "rq": "RQ04",
+      "metrica": "tempo_recuperacao_mediana_horas",
+      "n_total": 300,
+      "n_validos": 300,
+      "n_ausentes": 0
+    },
+    {
+      "rq": "RQ04",
+      "metrica": "proporcao_episodios_censurados",
+      "n_total": 300,
+      "n_validos": 300,
+      "n_ausentes": 0
+    }
+  ],
+  "saidas_sha256": {
+    "metricas_lidas.csv": "766d01fbb52cea4685270c7a215121c9073e21ad216e32a3c004d8b80445bf9d",
+    "rq01_mediana_iqr.png": "e99f5bc396e5fa739809dc9c66baa6d0c3881689c465341a6f75daea97a15801",
+    "rq01_mediana_iqr.svg": "ff280c19d0fb1d9d360d4f21793399680dbdf66d387c761f67dd4a697416f2b8",
+    "rq02_mediana_iqr.png": "0b09d658c7c5ce223d0517e62db93fe96f12c6e54ec9384f6da6ac5564914913",
+    "rq02_mediana_iqr.svg": "224d9a7b3ee6f652ce4d0df281d512830367bafc99a496428bdc4196a2c21f95",
+    "rq03_mediana_iqr.png": "daa775f6c0154e39bebd71a908ad7c83f5c956649abd3e1e56beab51f45c629c",
+    "rq03_mediana_iqr.svg": "bf61a4c0282dd9fde73b6a1b76aeb2e76e07b621986a1ff0aaef406c3b56b780",
+    "rq04_contagens_declaradas.csv": "0a44ed1f7693b66190d08f78112cc016b966543c6df05a15a4b4b2eff9633c1c",
+    "rq04_mediana_iqr.png": "03ee4fb3049c08f7f47dcd17da21e64a442536926df80255aa4523985432c70d",
+    "rq04_mediana_iqr.svg": "acf7e2be8ba3dbfa7028e87d9320d25bdce154e12c6d90af96ba7aded88fac99",
+    "sumarios_rq01_rq04.csv": "7fd64adab13e6e950b7cd57ce0992c2a5ad60419c278bbe688b554c3011041d6"
+  }
+}

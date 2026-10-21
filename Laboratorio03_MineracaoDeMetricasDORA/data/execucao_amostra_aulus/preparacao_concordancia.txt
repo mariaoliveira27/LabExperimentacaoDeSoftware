@@ -1,0 +1,1 @@
+Estado: aguardando_tres_avaliacoes_humanas_completas; 0/3 contratos humanos completos. Formul�rio: 420 decis�es vazias. Evid�ncia e prontid�o em data\concordancia_aulus\estado.json.

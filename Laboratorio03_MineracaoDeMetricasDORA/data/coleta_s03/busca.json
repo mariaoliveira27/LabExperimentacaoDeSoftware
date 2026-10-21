@@ -1,0 +1,88 @@
+{
+  "fonte": "github_search_api",
+  "endpoint": "/search/repositories",
+  "min_stars": 1000,
+  "criado_ate": "2024-09-30",
+  "max_candidatos": 100,
+  "total_count_raiz": 58506,
+  "candidatos_coletados": 219,
+  "candidatos_retornados": 100,
+  "limitado_por_max_candidatos": true,
+  "busca_completa": false,
+  "ordenacao": "stargazers_count desc, full_name casefold asc, id asc",
+  "consultas": [
+    {
+      "q": "stars:>=1000 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 58506,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:277867..554733 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 11,
+      "items_recebidos": 11
+    },
+    {
+      "q": "stars:1000..277866 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 58495,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:139434..277866 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 46,
+      "items_recebidos": 46
+    },
+    {
+      "q": "stars:1000..139433 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 58449,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:70217..139433 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 162,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:1000..70216 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 1,
+      "total_count": 58287,
+      "items_recebidos": 100
+    },
+    {
+      "q": "stars:70217..139433 created:<=2024-09-30 is:public",
+      "sort": "stars",
+      "order": "desc",
+      "per_page": 100,
+      "page": 2,
+      "total_count": 162,
+      "items_recebidos": 62
+    }
+  ],
+  "observacao": "Candidatos de busca; a aprovação por releases e runs ainda não foi realizada."
+}

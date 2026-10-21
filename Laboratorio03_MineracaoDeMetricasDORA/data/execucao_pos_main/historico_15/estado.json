@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "origem": "github_api",
+  "alvo": 300,
+  "janela": {
+    "inicio": "2023-10-01T00:00:00+00:00",
+    "fim": "2024-09-30T23:59:59+00:00"
+  },
+  "criterios": {
+    "min_stars": 1000,
+    "min_releases": 5,
+    "min_workflow_runs": 50
+  },
+  "historico_zenodo": {
+    "diretorio": "C:\\Users\\aulus\\Documents\\GitHub\\LabExperimentacaoDeSoftware\\Laboratorio03_MineracaoDeMetricasDORA\\data\\historico_2024",
+    "source_doi": "10.5281/zenodo.20414642",
+    "source_url": "https://zenodo.org/records/20414642/files/cicd_env_results.zip?download=1",
+    "arquivo_fonte": "C:\\Users\\aulus\\Documents\\GitHub\\LabExperimentacaoDeSoftware\\Laboratorio03_MineracaoDeMetricasDORA\\.cache\\arquivos_historicos\\2024\\cicd_env_results.zip",
+    "arquivo_sha256": "285e9ad9ed0ecee07ebbf2cf3e0ccbc3f8075b5bcba2fbb48183886b7f9506c6",
+    "md5_verificado": "df0e00311cdfa611e784c373d20bacd5",
+    "proveniencia_sha256": "27f72e0761e3b8bf696466fec854443434e9065bff0b82945d116a024b123643",
+    "saidas_sha256": {
+      "metadata_repositorios.json": "7878a86eae2d5bd4e20ec31afed82edd645eba111497861e09f5943a9f02002c",
+      "runs_historicos.json": "0f0a2dfbbf16e25abbb1518f16acc8bc7062cab380a8abca5f1ebf3091eb6a4f"
+    },
+    "cobertura": "limite_inferior_observado",
+    "dados_empiricos": true,
+    "historico_anual_completo": false,
+    "permite_metricas_dora_anuais": false,
+    "intervalo_observado": {
+      "inicio": "2024-01-01T00:00:00+00:00",
+      "fim": "2024-09-30T23:59:59+00:00"
+    }
+  },
+  "status": "insuficiente",
+  "atualizado_em": "2026-10-21T14:52:13.813394+00:00",
+  "n_processados": 15,
+  "n_aprovados": 7,
+  "busca": {
+    "fonte": "subconjunto_arquivo_publico_zenodo_verificado",
+    "n_candidatos": 15,
+    "criterio_preselecao": "ao menos 50 runs validos observados no default branch do snapshot",
+    "nao_substitui_busca_final": true
+  },
+  "erro": null,
+  "snapshots": {
+    "86057635.json": "6c969575425e91d474c97bf07b3745f6a51839279b7825212c0fc620e949f2c0",
+    "2253830.json": "09c3688bfc7378f64d86b8e096e6f3dba1025c5d20c77d34fb560820f5da4258",
+    "206427.json": "c2dc4bafdf66d8e04053dd320f25b9ddd864214e235c0fb146a9434a3aa591d1",
+    "91797088.json": "adf555953f47a31539961496206d367bf67e71067bdf7a579e49ce1b039d390a",
+    "115192595.json": "e15589a2b53c3d5b592918c7a13ef77d5f0a9e232a891b073e2cc40b04031f90",
+    "3933868.json": "8e38773c992ffd5c24ee73b38665a1ab8749eaa378e576883c4d78ba7961949f",
+    "83446927.json": "108def3357ea6645192dc6af849a64b51388d459b01b9e48b2334a30b138d625",
+    "23029617.json": "94d3c061836a4374e97d222264266fd7825c54406b953457b9939ba11320d589",
+    "171915396.json": "3fe25939b252d1b238f00016152dc5a4b8e86bb052c4b6b6112777dab57167af",
+    "185901023.json": "373ac6f453345b1a3612d1e50993cfbfda9432c77151a9b19eeae5f550d2f94e",
+    "61579222.json": "8fba56ab7427405bc4fa8c3f498bb300d7fcefe98bed0559f3a366add98ae0d7",
+    "88674404.json": "1bcb13f89b420b101a1c58a001d201bce7369fd5eae693e1e39a8e34c5525b42",
+    "432598139.json": "be1a8ca7e6a72d4f01734d3f4ab9316e48e1ddb9aabe4d3c14388eb5e37d460d",
+    "5025286.json": "0e4c3d107e1470264c54b25bf84422a466b77eaf3fe1e0b7e6d51d68a08e9211",
+    "440577490.json": "1a503916d6f6c7ecd1252925318aca5f644704a9ce4dc0d5e41a2bc07bee2eab"
+  },
+  "pendencia": "Obter pelo menos 300 aprovados reais na janela; não gerar rotulagem com a coleta parcial."
+}
