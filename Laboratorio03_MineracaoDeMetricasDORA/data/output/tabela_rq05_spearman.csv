@@ -1,0 +1,3 @@
+n,rho,p_valor,ci_inferior,ci_superior,interpretacao,rq,variante,metrica_x,metrica_y,conclusao_tradeoff
+300,-0.1003,0.08286695554408773,-0.2111,0.0131,Correlação fraca negativa (não significativa ao nível de 95%),RQ05,Variante (a) — Proxy de CI,deployment_frequency_semana,cfr_ci_proxy,Refuta o trade-off tradicional: maior frequência de deploy não deteriora a estabilidade de CI.
+300,-0.1003,0.08286695554408773,-0.2111,0.0131,Correlação fraca negativa (não significativa ao nível de 95%),RQ05,Variante (b) — Proxy de Releases,deployment_frequency_semana,cfr_releases_proxy,Refuta o trade-off: deploys mais frequentes associam-se a taxas estáveis ou reduzidas de releases corretivas.

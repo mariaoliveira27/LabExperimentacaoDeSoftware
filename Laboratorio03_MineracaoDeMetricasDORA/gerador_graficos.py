@@ -138,7 +138,7 @@ def main():
     cores_tiers = ['#2ca02c', '#1f77b4', '#ff7f0e', '#d62728']
     
     # Conta quantos repositórios estão em cada Tier
-    sns.countplot(data=df, x='tier_dora_geral', order=ordem_tiers, palette=cores_tiers)
+    sns.countplot(data=df, x='tier_dora_geral', order=ordem_tiers, hue='tier_dora_geral', legend=False, palette=cores_tiers)
     plt.title("Classificação Geral DORA dos Repositórios")
     plt.xlabel("Categoria DORA")
     plt.ylabel("Quantidade de Repositórios")
@@ -146,7 +146,14 @@ def main():
     plt.savefig(os.path.join(pasta_graficos, "dora_classificacao_geral.png"), dpi=300)
     plt.close()
 
-    print(f"Sucesso! 4 gráficos foram gerados na pasta '{pasta_graficos}/'")
+    # Gera também os gráficos aprofundados de RQ05 e RQ06
+    try:
+        from metricas.analise_rq05_rq06 import gerar_graficos_completos
+        gerar_graficos_completos(df, pasta_graficos=pasta_graficos)
+    except Exception as e:
+        print(f"Aviso ao gerar gráficos detalhados de RQ05/RQ06: {e}")
+
+    print(f"Sucesso! Gráficos foram gerados na pasta '{pasta_graficos}/'")
 
 if __name__ == "__main__":
     main()

@@ -47,6 +47,15 @@ Armazena a população final de repositórios que atenderam a todos os critério
 | `tier_lead_time` | String (Enum) | - | Classificação de lead time para mudanças | Elite: $<1$ dia; High: $1 \dots <7$ dias; Medium: $7 \dots <30$ dias; Low: $\ge 30$ dias |
 | `tier_cfr` | String (Enum) | - | Classificação de taxa de falha de mudança | Elite: $\le 15\%$; High: $>15\%$ e $\le 30\%$; Medium: $>30\%$ e $\le 45\%$; Low: $>45\%$ |
 | `tier_recovery_time` | String (Enum) | - | Classificação de tempo de recuperação | Elite: $<1$ hora; High: $1 \dots <24$ horas; Medium: $24 \dots <168$ horas; Low: $\ge 168$ horas |
+| `escopo_contagem_runs` | String | - | Delimitação do escopo dos runs observados no cálculo | `execucoes_observadas_janela` |
+| `tipo_projeto` | String (Enum) | - | Natureza arquitetural e de distribuição do software | `biblioteca/framework`, `aplicação/serviço`, `ferramenta CLI`, `outro` |
+| `total_prereleases_janela` | Inteiro | pré-releases | Total de pré-releases (`prerelease=true`, `draft=false`) na janela de 12 meses | Suporte à análise de sensibilidade da RQ07 |
+| `total_releases_com_prereleases_janela` | Inteiro | entregas | Total de releases estáveis acrescido das pré-releases na janela | Unidade de deploy da Combinação C2 da RQ07 |
+| `deployment_frequency_prereleases_semana` | Float | releases/semana | Frequência de deploy considerando releases + pré-releases | `total_releases_com_prereleases_janela / 52.14` |
+| `total_tags_janela` | Inteiro | tags | Total de tags Git geradas no período anual | Unidade de deploy da Combinação C3 da RQ07 |
+| `deployment_frequency_tags_semana` | Float | tags/semana | Frequência de deploy considerando todas as tags | `total_tags_janela / 52.14` |
+| `tier_deployment_frequency_prereleases` | String (Enum) | - | Tier DORA de frequência com pré-releases | Classificação DORA (Combinação C2) |
+| `tier_deployment_frequency_tags` | String (Enum) | - | Tier DORA de frequência com tags | Classificação DORA (Combinação C3) |
 
 ### Semântica de Valores Nulos, Censura e Limitações (`None` vs `0`)
 - **Indisponibilidade vs Zero:** Células vazias (`None`) em `cfr_ci_proxy` e `tempo_recuperacao_mediana_horas` significam *ausência de episódios observáveis*, e não taxa zero ou tempo zero. Por exemplo, se um repositório não apresentou nenhuma falha no período, seu tempo de recuperação é indefinido (`None`), visto que não houve evento disparador de recuperação. Atribuir zero nesses casos distorceria as medianas agregadas para valores superestimados de eficiência.
@@ -142,3 +151,30 @@ Estruturam a avaliação empírica das três versões da heurística automatizad
 | `revocacao` (Recall) | Float [0, 1] | Capacidade da heurística de encontrar todas as releases corretivas reais do padrão-ouro |
 | `f1_score` | Float [0, 1] | Média harmônica entre precisão e revocação (critério de qualidade exigindo $F1 \ge 0.70$) |
 | `matriz_confusao` | Objeto / Matriz $2 \times 2$ | Frequência de `VP`, `FP`, `VN`, `FN` |
+
+---
+
+## 6. Dataset de Apoio à RQ07: `dados_rq07_sensibilidade.csv`
+
+Desenvolvido para abastecer a análise de sensibilidade e estabilidade das classificações DORA sob responsabilidade de Vinícius (RQ07), confrontando as combinações operacionais C1, C2 e C3.
+
+| Coluna | Tipo Primitivo | Descrição |
+|---|---|---|
+| `full_name` | String | Identificador unívoco do repositório (`owner/repo`) |
+| `tier_c1_referencia` | String (Enum) | Classificação DORA geral na Combinação C1 (Release + Lead Time a + CFR a) |
+| `tier_c2_prereleases` | String (Enum) | Classificação DORA geral na Combinação C2 (Release + Pré-release + Lead Time b + CFR b) |
+| `tier_c3_tags` | String (Enum) | Classificação DORA geral na Combinação C3 (Tags + Lead Time b + CFR a) |
+| `df_c1_releases` | Float | Frequência de deploy semanal baseada em releases estáveis |
+| `df_c2_prereleases` | Float | Frequência de deploy semanal considerando releases e pré-releases |
+| `df_c3_tags` | Float | Frequência de deploy semanal considerando tags |
+| `lt_c1_variante_a` | Float | Lead time mediano por release (dias) |
+| `lt_c2_variante_b` | Float | Lead time mediano por commit (dias) |
+| `lt_c3_variante_b` | Float | Lead time mediano por commit (dias) |
+| `cfr_c1_variante_a` | Float | Taxa de falha proxy de CI |
+| `cfr_c2_variante_b` | Float | Taxa de falha proxy de releases corretivas |
+| `cfr_c3_variante_a` | Float | Taxa de falha proxy de CI |
+| `recovery_hours` | Float | Tempo de recuperação mediano em horas |
+| `mudou_c1_c2` | Booleano | Indica se o repositório alterou de patamar DORA entre C1 e C2 |
+| `mudou_c1_c3` | Booleano | Indica se o repositório alterou de patamar DORA entre C1 e C3 |
+| `mudou_c2_c3` | Booleano | Indica se o repositório alterou de patamar DORA entre C2 e C3 |
+

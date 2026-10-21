@@ -1,0 +1,217 @@
+fator,metrica,comparacao,grupo_1,grupo_2,n1,n2,mediana_g1,mediana_g2,u_stat,p_valor_bruto,cliffs_delta,magnitude_delta,p_valor_holm,significativo_holm
+Popularidade (Estrelas),Deployment Frequency,Q1 (Baixa) vs Q2 (Média-Baixa),Q1 (Baixa),Q2 (Média-Baixa),75,75,0.153,0.23,1747.5,5.8766270612079457e-05,-0.3787,médio,0.00017629881183623837,True
+Popularidade (Estrelas),Deployment Frequency,Q1 (Baixa) vs Q3 (Média-Alta),Q1 (Baixa),Q3 (Média-Alta),75,76,0.153,0.384,725.5,2.3764878885536737e-15,-0.7454,grande,1.4258927331322042e-14,True
+Popularidade (Estrelas),Deployment Frequency,Q1 (Baixa) vs Q4 (Alta),Q1 (Baixa),Q4 (Alta),75,74,0.153,0.345,978.0,8.12976708241669e-12,-0.6476,grande,4.0648835412083444e-11,True
+Popularidade (Estrelas),Deployment Frequency,Q2 (Média-Baixa) vs Q3 (Média-Alta),Q2 (Média-Baixa),Q3 (Média-Alta),75,76,0.23,0.384,1582.5,2.34042457384427e-06,-0.4447,médio,9.36169829537708e-06,True
+Popularidade (Estrelas),Deployment Frequency,Q2 (Média-Baixa) vs Q4 (Alta),Q2 (Média-Baixa),Q4 (Alta),75,74,0.23,0.345,1828.5,0.00032253145928826923,-0.3411,médio,0.0006450629185765385,True
+Popularidade (Estrelas),Deployment Frequency,Q3 (Média-Alta) vs Q4 (Alta),Q3 (Média-Alta),Q4 (Alta),76,74,0.384,0.345,3020.0,0.43495747814742236,0.074,desprezível,0.43495747814742236,False
+Popularidade (Estrelas),Lead Time (Por Release),Q1 (Baixa) vs Q2 (Média-Baixa),Q1 (Baixa),Q2 (Média-Baixa),75,75,15.0,10.0,3877.5,5.8766270612079457e-05,0.3787,médio,0.00017629881183623837,True
+Popularidade (Estrelas),Lead Time (Por Release),Q1 (Baixa) vs Q3 (Média-Alta),Q1 (Baixa),Q3 (Média-Alta),75,76,15.0,6.0,4974.5,2.3764878885536737e-15,0.7454,grande,1.4258927331322042e-14,True
+Popularidade (Estrelas),Lead Time (Por Release),Q1 (Baixa) vs Q4 (Alta),Q1 (Baixa),Q4 (Alta),75,74,15.0,6.67,4572.0,8.12976708241669e-12,0.6476,grande,4.0648835412083444e-11,True
+Popularidade (Estrelas),Lead Time (Por Release),Q2 (Média-Baixa) vs Q3 (Média-Alta),Q2 (Média-Baixa),Q3 (Média-Alta),75,76,10.0,6.0,4117.5,2.34042457384427e-06,0.4447,médio,9.36169829537708e-06,True
+Popularidade (Estrelas),Lead Time (Por Release),Q2 (Média-Baixa) vs Q4 (Alta),Q2 (Média-Baixa),Q4 (Alta),75,74,10.0,6.67,3721.5,0.00032253145928826923,0.3411,médio,0.0006450629185765385,True
+Popularidade (Estrelas),Lead Time (Por Release),Q3 (Média-Alta) vs Q4 (Alta),Q3 (Média-Alta),Q4 (Alta),76,74,6.0,6.67,2604.0,0.43495747814742236,-0.074,desprezível,0.43495747814742236,False
+Popularidade (Estrelas),Lead Time (Por Commit),Q1 (Baixa) vs Q2 (Média-Baixa),Q1 (Baixa),Q2 (Média-Baixa),75,75,6.75,4.5,3877.5,5.8766270612079457e-05,0.3787,médio,0.00017629881183623837,True
+Popularidade (Estrelas),Lead Time (Por Commit),Q1 (Baixa) vs Q3 (Média-Alta),Q1 (Baixa),Q3 (Média-Alta),75,76,6.75,2.7,4974.5,2.3764878885536737e-15,0.7454,grande,1.4258927331322042e-14,True
+Popularidade (Estrelas),Lead Time (Por Commit),Q1 (Baixa) vs Q4 (Alta),Q1 (Baixa),Q4 (Alta),75,74,6.75,3.0,4572.0,8.12976708241669e-12,0.6476,grande,4.0648835412083444e-11,True
+Popularidade (Estrelas),Lead Time (Por Commit),Q2 (Média-Baixa) vs Q3 (Média-Alta),Q2 (Média-Baixa),Q3 (Média-Alta),75,76,4.5,2.7,4117.5,2.34042457384427e-06,0.4447,médio,9.36169829537708e-06,True
+Popularidade (Estrelas),Lead Time (Por Commit),Q2 (Média-Baixa) vs Q4 (Alta),Q2 (Média-Baixa),Q4 (Alta),75,74,4.5,3.0,3721.5,0.00032253145928826923,0.3411,médio,0.0006450629185765385,True
+Popularidade (Estrelas),Lead Time (Por Commit),Q3 (Média-Alta) vs Q4 (Alta),Q3 (Média-Alta),Q4 (Alta),76,74,2.7,3.0,2604.0,0.43495747814742236,-0.074,desprezível,0.43495747814742236,False
+Popularidade (Estrelas),Change Failure Rate (CI),Q1 (Baixa) vs Q2 (Média-Baixa),Q1 (Baixa),Q2 (Média-Baixa),75,75,0.15,0.133,2679.0,0.6159242849531859,-0.0475,desprezível,1.0,False
+Popularidade (Estrelas),Change Failure Rate (CI),Q1 (Baixa) vs Q3 (Média-Alta),Q1 (Baixa),Q3 (Média-Alta),75,76,0.15,0.117,3156.5,0.25257250528729214,0.1075,desprezível,0.762274571513045,False
+Popularidade (Estrelas),Change Failure Rate (CI),Q1 (Baixa) vs Q4 (Alta),Q1 (Baixa),Q4 (Alta),75,74,0.15,0.117,3118.5,0.19056864287826125,0.1238,desprezível,0.762274571513045,False
+Popularidade (Estrelas),Change Failure Rate (CI),Q2 (Média-Baixa) vs Q3 (Média-Alta),Q2 (Média-Baixa),Q3 (Média-Alta),75,76,0.133,0.117,3312.0,0.08474991205379602,0.1621,pequeno,0.4597496202530681,False
+Popularidade (Estrelas),Change Failure Rate (CI),Q2 (Média-Baixa) vs Q4 (Alta),Q2 (Média-Baixa),Q4 (Alta),75,74,0.133,0.117,3240.0,0.07662493670884468,0.1676,pequeno,0.4597496202530681,False
+Popularidade (Estrelas),Change Failure Rate (CI),Q3 (Média-Alta) vs Q4 (Alta),Q3 (Média-Alta),Q4 (Alta),76,74,0.117,0.117,2801.0,0.9683222261889379,-0.0039,desprezível,1.0,False
+Popularidade (Estrelas),Change Failure Rate (Releases),Q1 (Baixa) vs Q2 (Média-Baixa),Q1 (Baixa),Q2 (Média-Baixa),75,75,0.09,0.08,2679.0,0.6159242849531859,-0.0475,desprezível,1.0,False
+Popularidade (Estrelas),Change Failure Rate (Releases),Q1 (Baixa) vs Q3 (Média-Alta),Q1 (Baixa),Q3 (Média-Alta),75,76,0.09,0.07,3156.5,0.25257250528729214,0.1075,desprezível,0.762274571513045,False
+Popularidade (Estrelas),Change Failure Rate (Releases),Q1 (Baixa) vs Q4 (Alta),Q1 (Baixa),Q4 (Alta),75,74,0.09,0.07,3118.5,0.19056864287826125,0.1238,desprezível,0.762274571513045,False
+Popularidade (Estrelas),Change Failure Rate (Releases),Q2 (Média-Baixa) vs Q3 (Média-Alta),Q2 (Média-Baixa),Q3 (Média-Alta),75,76,0.08,0.07,3312.0,0.08474991205379602,0.1621,pequeno,0.4597496202530681,False
+Popularidade (Estrelas),Change Failure Rate (Releases),Q2 (Média-Baixa) vs Q4 (Alta),Q2 (Média-Baixa),Q4 (Alta),75,74,0.08,0.07,3240.0,0.07662493670884468,0.1676,pequeno,0.4597496202530681,False
+Popularidade (Estrelas),Change Failure Rate (Releases),Q3 (Média-Alta) vs Q4 (Alta),Q3 (Média-Alta),Q4 (Alta),76,74,0.07,0.07,2801.0,0.9683222261889379,-0.0039,desprezível,1.0,False
+Popularidade (Estrelas),Tempo de Recuperação,Q1 (Baixa) vs Q2 (Média-Baixa),Q1 (Baixa),Q2 (Média-Baixa),75,75,10.1,10.1,2948.5,0.6090482971810156,0.0484,desprezível,0.7648346294851744,False
+Popularidade (Estrelas),Tempo de Recuperação,Q1 (Baixa) vs Q3 (Média-Alta),Q1 (Baixa),Q3 (Média-Alta),75,76,10.1,8.5,3244.5,0.14118305082203797,0.1384,desprezível,0.46337989962421244,False
+Popularidade (Estrelas),Tempo de Recuperação,Q1 (Baixa) vs Q4 (Alta),Q1 (Baixa),Q4 (Alta),75,74,10.1,6.9,3533.5,0.0038324583043806886,0.2733,pequeno,0.022994749826284133,True
+Popularidade (Estrelas),Tempo de Recuperação,Q2 (Média-Baixa) vs Q3 (Média-Alta),Q2 (Média-Baixa),Q3 (Média-Alta),75,76,10.1,8.5,3084.0,0.3824173147425872,0.0821,desprezível,0.7648346294851744,False
+Popularidade (Estrelas),Tempo de Recuperação,Q2 (Média-Baixa) vs Q4 (Alta),Q2 (Média-Baixa),Q4 (Alta),75,74,10.1,6.9,3387.0,0.01941873458864353,0.2205,pequeno,0.09709367294321765,False
+Popularidade (Estrelas),Tempo de Recuperação,Q3 (Média-Alta) vs Q4 (Alta),Q3 (Média-Alta),Q4 (Alta),76,74,8.5,6.9,3228.0,0.11584497490605311,0.1479,pequeno,0.46337989962421244,False
+Tamanho da Equipe (Contribuidores),Deployment Frequency,Q1 (Pequena) vs Q2 (Média-Pequena),Q1 (Pequena),Q2 (Média-Pequena),76,74,0.153,0.269,1542.0,1.6716743182343664e-06,-0.4516,médio,6.686697272937466e-06,True
+Tamanho da Equipe (Contribuidores),Deployment Frequency,Q1 (Pequena) vs Q3 (Média-Grande),Q1 (Pequena),Q3 (Média-Grande),76,76,0.153,0.345,1069.5,1.8195884376217354e-11,-0.6297,grande,9.097942188108677e-11,True
+Tamanho da Equipe (Contribuidores),Deployment Frequency,Q1 (Pequena) vs Q4 (Grande),Q1 (Pequena),Q4 (Grande),76,74,0.153,0.403,617.5,1.4085198876565598e-16,-0.7804,grande,8.451119325939359e-16,True
+Tamanho da Equipe (Contribuidores),Deployment Frequency,Q2 (Média-Pequena) vs Q3 (Média-Grande),Q2 (Média-Pequena),Q3 (Média-Grande),74,76,0.269,0.345,2165.0,0.014942255618737313,-0.2301,pequeno,0.029884511237474626,True
+Tamanho da Equipe (Contribuidores),Deployment Frequency,Q2 (Média-Pequena) vs Q4 (Grande),Q2 (Média-Pequena),Q4 (Grande),74,74,0.269,0.403,1608.0,1.4495271493392418e-05,-0.4127,médio,4.348581448017725e-05,True
+Tamanho da Equipe (Contribuidores),Deployment Frequency,Q3 (Média-Grande) vs Q4 (Grande),Q3 (Média-Grande),Q4 (Grande),76,74,0.345,0.403,2268.0,0.04083224546959527,-0.1935,pequeno,0.04083224546959527,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Release),Q1 (Pequena) vs Q2 (Média-Pequena),Q1 (Pequena),Q2 (Média-Pequena),76,74,15.0,8.57,4082.0,1.6716743182343664e-06,0.4516,médio,6.686697272937466e-06,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Release),Q1 (Pequena) vs Q3 (Média-Grande),Q1 (Pequena),Q3 (Média-Grande),76,76,15.0,6.67,4706.5,1.8195884376217354e-11,0.6297,grande,9.097942188108677e-11,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Release),Q1 (Pequena) vs Q4 (Grande),Q1 (Pequena),Q4 (Grande),76,74,15.0,5.725,5006.5,1.4085198876565598e-16,0.7804,grande,8.451119325939359e-16,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Release),Q2 (Média-Pequena) vs Q3 (Média-Grande),Q2 (Média-Pequena),Q3 (Média-Grande),74,76,8.57,6.67,3459.0,0.014942255618737313,0.2301,pequeno,0.029884511237474626,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Release),Q2 (Média-Pequena) vs Q4 (Grande),Q2 (Média-Pequena),Q4 (Grande),74,74,8.57,5.725,3868.0,1.4495271493392418e-05,0.4127,médio,4.348581448017725e-05,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Release),Q3 (Média-Grande) vs Q4 (Grande),Q3 (Média-Grande),Q4 (Grande),76,74,6.67,5.725,3356.0,0.04083224546959527,0.1935,pequeno,0.04083224546959527,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Commit),Q1 (Pequena) vs Q2 (Média-Pequena),Q1 (Pequena),Q2 (Média-Pequena),76,74,6.75,3.86,4082.0,1.6716743182343664e-06,0.4516,médio,6.686697272937466e-06,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Commit),Q1 (Pequena) vs Q3 (Média-Grande),Q1 (Pequena),Q3 (Média-Grande),76,76,6.75,3.0,4706.5,1.8195884376217354e-11,0.6297,grande,9.097942188108677e-11,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Commit),Q1 (Pequena) vs Q4 (Grande),Q1 (Pequena),Q4 (Grande),76,74,6.75,2.575,5006.5,1.4085198876565598e-16,0.7804,grande,8.451119325939359e-16,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Commit),Q2 (Média-Pequena) vs Q3 (Média-Grande),Q2 (Média-Pequena),Q3 (Média-Grande),74,76,3.86,3.0,3459.0,0.014942255618737313,0.2301,pequeno,0.029884511237474626,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Commit),Q2 (Média-Pequena) vs Q4 (Grande),Q2 (Média-Pequena),Q4 (Grande),74,74,3.86,2.575,3868.0,1.4495271493392418e-05,0.4127,médio,4.348581448017725e-05,True
+Tamanho da Equipe (Contribuidores),Lead Time (Por Commit),Q3 (Média-Grande) vs Q4 (Grande),Q3 (Média-Grande),Q4 (Grande),76,74,3.0,2.575,3356.0,0.04083224546959527,0.1935,pequeno,0.04083224546959527,True
+Tamanho da Equipe (Contribuidores),Change Failure Rate (CI),Q1 (Pequena) vs Q2 (Média-Pequena),Q1 (Pequena),Q2 (Média-Pequena),76,74,0.15,0.117,3200.5,0.14319753267561017,0.1382,desprezível,0.7159876633780509,False
+Tamanho da Equipe (Contribuidores),Change Failure Rate (CI),Q1 (Pequena) vs Q3 (Média-Grande),Q1 (Pequena),Q3 (Média-Grande),76,76,0.15,0.133,3002.5,0.6732673279764856,0.0396,desprezível,1.0,False
+Tamanho da Equipe (Contribuidores),Change Failure Rate (CI),Q1 (Pequena) vs Q4 (Grande),Q1 (Pequena),Q4 (Grande),76,74,0.15,0.117,3306.0,0.062544503459768,0.1757,pequeno,0.375267020758608,False
+Tamanho da Equipe (Contribuidores),Change Failure Rate (CI),Q2 (Média-Pequena) vs Q3 (Média-Grande),Q2 (Média-Pequena),Q3 (Média-Grande),74,76,0.117,0.133,2562.0,0.3457871694983383,-0.0889,desprezível,1.0,False
+Tamanho da Equipe (Contribuidores),Change Failure Rate (CI),Q2 (Média-Pequena) vs Q4 (Grande),Q2 (Média-Pequena),Q4 (Grande),74,74,0.117,0.117,2790.5,0.8410813059696794,0.0192,desprezível,1.0,False
+Tamanho da Equipe (Contribuidores),Change Failure Rate (CI),Q3 (Média-Grande) vs Q4 (Grande),Q3 (Média-Grande),Q4 (Grande),76,74,0.133,0.117,3127.5,0.23397977858621843,0.1122,desprezível,0.9359191143448737,False
+Tamanho da Equipe (Contribuidores),Change Failure Rate (Releases),Q1 (Pequena) vs Q2 (Média-Pequena),Q1 (Pequena),Q2 (Média-Pequena),76,74,0.09,0.07,3200.5,0.14319753267561017,0.1382,desprezível,0.7159876633780509,False
+Tamanho da Equipe (Contribuidores),Change Failure Rate (Releases),Q1 (Pequena) vs Q3 (Média-Grande),Q1 (Pequena),Q3 (Média-Grande),76,76,0.09,0.08,3002.5,0.6732673279764856,0.0396,desprezível,1.0,False
+Tamanho da Equipe (Contribuidores),Change Failure Rate (Releases),Q1 (Pequena) vs Q4 (Grande),Q1 (Pequena),Q4 (Grande),76,74,0.09,0.07,3306.0,0.062544503459768,0.1757,pequeno,0.375267020758608,False
+Tamanho da Equipe (Contribuidores),Change Failure Rate (Releases),Q2 (Média-Pequena) vs Q3 (Média-Grande),Q2 (Média-Pequena),Q3 (Média-Grande),74,76,0.07,0.08,2562.0,0.3457871694983383,-0.0889,desprezível,1.0,False
+Tamanho da Equipe (Contribuidores),Change Failure Rate (Releases),Q2 (Média-Pequena) vs Q4 (Grande),Q2 (Média-Pequena),Q4 (Grande),74,74,0.07,0.07,2790.5,0.8410813059696794,0.0192,desprezível,1.0,False
+Tamanho da Equipe (Contribuidores),Change Failure Rate (Releases),Q3 (Média-Grande) vs Q4 (Grande),Q3 (Média-Grande),Q4 (Grande),76,74,0.08,0.07,3127.5,0.23397977858621843,0.1122,desprezível,0.9359191143448737,False
+Tamanho da Equipe (Contribuidores),Tempo de Recuperação,Q1 (Pequena) vs Q2 (Média-Pequena),Q1 (Pequena),Q2 (Média-Pequena),76,74,14.9,6.9,3877.0,5.796160867730933e-05,0.3787,médio,0.00023184643470923732,True
+Tamanho da Equipe (Contribuidores),Tempo de Recuperação,Q1 (Pequena) vs Q3 (Média-Grande),Q1 (Pequena),Q3 (Média-Grande),76,76,14.9,5.3,4594.0,2.6437547379572887e-10,0.5907,grande,1.586252842774373e-09,True
+Tamanho da Equipe (Contribuidores),Tempo de Recuperação,Q1 (Pequena) vs Q4 (Grande),Q1 (Pequena),Q4 (Grande),76,74,14.9,8.5,3970.5,1.2038476428956095e-05,0.412,médio,6.0192382144780476e-05,True
+Tamanho da Equipe (Contribuidores),Tempo de Recuperação,Q2 (Média-Pequena) vs Q3 (Média-Grande),Q2 (Média-Pequena),Q3 (Média-Grande),74,76,6.9,5.3,3189.5,0.15367272986105365,0.1342,desprezível,0.3073454597221073,False
+Tamanho da Equipe (Contribuidores),Tempo de Recuperação,Q2 (Média-Pequena) vs Q4 (Grande),Q2 (Média-Pequena),Q4 (Grande),74,74,6.9,8.5,2615.5,0.6370807327148309,-0.0447,desprezível,0.6370807327148309,False
+Tamanho da Equipe (Contribuidores),Tempo de Recuperação,Q3 (Média-Grande) vs Q4 (Grande),Q3 (Média-Grande),Q4 (Grande),76,74,5.3,8.5,2235.5,0.02931940243030215,-0.205,pequeno,0.08795820729090645,False
+Idade do Repositório (Anos),Deployment Frequency,Q1 (Recente) vs Q2 (Jovem),Q1 (Recente),Q2 (Jovem),75,76,0.422,0.269,3688.5,0.0017939514540157304,0.2942,pequeno,0.004094307064734023,True
+Idade do Repositório (Anos),Deployment Frequency,Q1 (Recente) vs Q3 (Maduro),Q1 (Recente),Q3 (Maduro),75,74,0.422,0.269,3785.5,0.00012353728670725292,0.3641,médio,0.0004941491468290117,True
+Idade do Repositório (Anos),Deployment Frequency,Q1 (Recente) vs Q4 (Veterano),Q1 (Recente),Q4 (Veterano),75,75,0.422,0.153,4582.5,2.712565973184725e-11,0.6293,grande,1.627539583910835e-10,True
+Idade do Repositório (Anos),Deployment Frequency,Q2 (Jovem) vs Q3 (Maduro),Q2 (Jovem),Q3 (Maduro),76,74,0.269,0.269,3026.5,0.4203722931286006,0.0763,desprezível,0.4203722931286006,False
+Idade do Repositório (Anos),Deployment Frequency,Q2 (Jovem) vs Q4 (Veterano),Q2 (Jovem),Q4 (Veterano),76,75,0.269,0.153,3958.0,3.5713196784155365e-05,0.3888,médio,0.00017856598392077683,True
+Idade do Repositório (Anos),Deployment Frequency,Q3 (Maduro) vs Q4 (Veterano),Q3 (Maduro),Q4 (Veterano),74,75,0.269,0.153,3616.5,0.0013647690215780077,0.3032,pequeno,0.004094307064734023,True
+Idade do Repositório (Anos),Lead Time (Por Release),Q1 (Recente) vs Q2 (Jovem),Q1 (Recente),Q2 (Jovem),75,76,5.45,8.57,2011.5,0.0017939514540157304,-0.2942,pequeno,0.004094307064734023,True
+Idade do Repositório (Anos),Lead Time (Por Release),Q1 (Recente) vs Q3 (Maduro),Q1 (Recente),Q3 (Maduro),75,74,5.45,8.57,1764.5,0.00012353728670725292,-0.3641,médio,0.0004941491468290117,True
+Idade do Repositório (Anos),Lead Time (Por Release),Q1 (Recente) vs Q4 (Veterano),Q1 (Recente),Q4 (Veterano),75,75,5.45,15.0,1042.5,2.712565973184725e-11,-0.6293,grande,1.627539583910835e-10,True
+Idade do Repositório (Anos),Lead Time (Por Release),Q2 (Jovem) vs Q3 (Maduro),Q2 (Jovem),Q3 (Maduro),76,74,8.57,8.57,2597.5,0.4203722931286006,-0.0763,desprezível,0.4203722931286006,False
+Idade do Repositório (Anos),Lead Time (Por Release),Q2 (Jovem) vs Q4 (Veterano),Q2 (Jovem),Q4 (Veterano),76,75,8.57,15.0,1742.0,3.5713196784155365e-05,-0.3888,médio,0.00017856598392077683,True
+Idade do Repositório (Anos),Lead Time (Por Release),Q3 (Maduro) vs Q4 (Veterano),Q3 (Maduro),Q4 (Veterano),74,75,8.57,15.0,1933.5,0.0013647690215780077,-0.3032,pequeno,0.004094307064734023,True
+Idade do Repositório (Anos),Lead Time (Por Commit),Q1 (Recente) vs Q2 (Jovem),Q1 (Recente),Q2 (Jovem),75,76,2.45,3.86,2011.5,0.0017939514540157304,-0.2942,pequeno,0.004094307064734023,True
+Idade do Repositório (Anos),Lead Time (Por Commit),Q1 (Recente) vs Q3 (Maduro),Q1 (Recente),Q3 (Maduro),75,74,2.45,3.86,1764.5,0.00012353728670725292,-0.3641,médio,0.0004941491468290117,True
+Idade do Repositório (Anos),Lead Time (Por Commit),Q1 (Recente) vs Q4 (Veterano),Q1 (Recente),Q4 (Veterano),75,75,2.45,6.75,1042.5,2.712565973184725e-11,-0.6293,grande,1.627539583910835e-10,True
+Idade do Repositório (Anos),Lead Time (Por Commit),Q2 (Jovem) vs Q3 (Maduro),Q2 (Jovem),Q3 (Maduro),76,74,3.86,3.86,2597.5,0.4203722931286006,-0.0763,desprezível,0.4203722931286006,False
+Idade do Repositório (Anos),Lead Time (Por Commit),Q2 (Jovem) vs Q4 (Veterano),Q2 (Jovem),Q4 (Veterano),76,75,3.86,6.75,1742.0,3.5713196784155365e-05,-0.3888,médio,0.00017856598392077683,True
+Idade do Repositório (Anos),Lead Time (Por Commit),Q3 (Maduro) vs Q4 (Veterano),Q3 (Maduro),Q4 (Veterano),74,75,3.86,6.75,1933.5,0.0013647690215780077,-0.3032,pequeno,0.004094307064734023,True
+Idade do Repositório (Anos),Change Failure Rate (CI),Q1 (Recente) vs Q2 (Jovem),Q1 (Recente),Q2 (Jovem),75,76,0.117,0.133,2552.0,0.26619368757911543,-0.1046,desprezível,1.0,False
+Idade do Repositório (Anos),Change Failure Rate (CI),Q1 (Recente) vs Q3 (Maduro),Q1 (Recente),Q3 (Maduro),75,74,0.117,0.125,2624.0,0.5662413564840167,-0.0544,desprezível,1.0,False
+Idade do Repositório (Anos),Change Failure Rate (CI),Q1 (Recente) vs Q4 (Veterano),Q1 (Recente),Q4 (Veterano),75,75,0.117,0.133,2524.0,0.2768634089528782,-0.1026,desprezível,1.0,False
+Idade do Repositório (Anos),Change Failure Rate (CI),Q2 (Jovem) vs Q3 (Maduro),Q2 (Jovem),Q3 (Maduro),76,74,0.133,0.125,2905.5,0.7255069301672977,0.0333,desprezível,1.0,False
+Idade do Repositório (Anos),Change Failure Rate (CI),Q2 (Jovem) vs Q4 (Veterano),Q2 (Jovem),Q4 (Veterano),76,75,0.133,0.133,2889.0,0.8855141280703294,0.0137,desprezível,1.0,False
+Idade do Repositório (Anos),Change Failure Rate (CI),Q3 (Maduro) vs Q4 (Veterano),Q3 (Maduro),Q4 (Veterano),74,75,0.125,0.133,2694.0,0.7588103153202869,-0.0292,desprezível,1.0,False
+Idade do Repositório (Anos),Change Failure Rate (Releases),Q1 (Recente) vs Q2 (Jovem),Q1 (Recente),Q2 (Jovem),75,76,0.07,0.08,2552.0,0.26619368757911543,-0.1046,desprezível,1.0,False
+Idade do Repositório (Anos),Change Failure Rate (Releases),Q1 (Recente) vs Q3 (Maduro),Q1 (Recente),Q3 (Maduro),75,74,0.07,0.075,2624.0,0.5662413564840167,-0.0544,desprezível,1.0,False
+Idade do Repositório (Anos),Change Failure Rate (Releases),Q1 (Recente) vs Q4 (Veterano),Q1 (Recente),Q4 (Veterano),75,75,0.07,0.08,2524.0,0.2768634089528782,-0.1026,desprezível,1.0,False
+Idade do Repositório (Anos),Change Failure Rate (Releases),Q2 (Jovem) vs Q3 (Maduro),Q2 (Jovem),Q3 (Maduro),76,74,0.08,0.075,2905.5,0.7255069301672977,0.0333,desprezível,1.0,False
+Idade do Repositório (Anos),Change Failure Rate (Releases),Q2 (Jovem) vs Q4 (Veterano),Q2 (Jovem),Q4 (Veterano),76,75,0.08,0.08,2889.0,0.8855141280703294,0.0137,desprezível,1.0,False
+Idade do Repositório (Anos),Change Failure Rate (Releases),Q3 (Maduro) vs Q4 (Veterano),Q3 (Maduro),Q4 (Veterano),74,75,0.075,0.08,2694.0,0.7588103153202869,-0.0292,desprezível,1.0,False
+Idade do Repositório (Anos),Tempo de Recuperação,Q1 (Recente) vs Q2 (Jovem),Q1 (Recente),Q2 (Jovem),75,76,10.9,8.5,3084.0,0.3826291984224939,0.0821,desprezível,1.0,False
+Idade do Repositório (Anos),Tempo de Recuperação,Q1 (Recente) vs Q3 (Maduro),Q1 (Recente),Q3 (Maduro),75,74,10.9,10.1,2928.0,0.5607320357542884,0.0551,desprezível,1.0,False
+Idade do Repositório (Anos),Tempo de Recuperação,Q1 (Recente) vs Q4 (Veterano),Q1 (Recente),Q4 (Veterano),75,75,10.9,6.9,3116.5,0.2513994371527718,0.1081,desprezível,1.0,False
+Idade do Repositório (Anos),Tempo de Recuperação,Q2 (Jovem) vs Q3 (Maduro),Q2 (Jovem),Q3 (Maduro),76,74,8.5,10.1,2723.5,0.7395222161961073,-0.0315,desprezível,1.0,False
+Idade do Repositório (Anos),Tempo de Recuperação,Q2 (Jovem) vs Q4 (Veterano),Q2 (Jovem),Q4 (Veterano),76,75,8.5,6.9,2969.0,0.6576569636572556,0.0418,desprezível,1.0,False
+Idade do Repositório (Anos),Tempo de Recuperação,Q3 (Maduro) vs Q4 (Veterano),Q3 (Maduro),Q4 (Veterano),74,75,10.1,6.9,2971.5,0.45441235620023224,0.0708,desprezível,1.0,False
+Tipo de Projeto,Deployment Frequency,aplicação/serviço vs biblioteca/framework,aplicação/serviço,biblioteca/framework,45,205,0.307,0.269,5111.0,0.2562205924788601,0.1081,desprezível,0.7686617774365803,False
+Tipo de Projeto,Deployment Frequency,aplicação/serviço vs ferramenta CLI,aplicação/serviço,ferramenta CLI,45,50,0.307,0.269,1245.0,0.37230906855105683,0.1067,desprezível,0.7686617774365803,False
+Tipo de Projeto,Deployment Frequency,biblioteca/framework vs ferramenta CLI,biblioteca/framework,ferramenta CLI,205,50,0.269,0.269,5011.0,0.8079125629255471,-0.0222,desprezível,0.8079125629255471,False
+Tipo de Projeto,Lead Time (Por Release),aplicação/serviço vs biblioteca/framework,aplicação/serviço,biblioteca/framework,45,205,7.5,8.57,4114.0,0.2562205924788601,-0.1081,desprezível,0.7686617774365803,False
+Tipo de Projeto,Lead Time (Por Release),aplicação/serviço vs ferramenta CLI,aplicação/serviço,ferramenta CLI,45,50,7.5,8.57,1005.0,0.37230906855105683,-0.1067,desprezível,0.7686617774365803,False
+Tipo de Projeto,Lead Time (Por Release),biblioteca/framework vs ferramenta CLI,biblioteca/framework,ferramenta CLI,205,50,8.57,8.57,5239.0,0.8079125629255471,0.0222,desprezível,0.8079125629255471,False
+Tipo de Projeto,Lead Time (Por Commit),aplicação/serviço vs biblioteca/framework,aplicação/serviço,biblioteca/framework,45,205,3.38,3.86,4114.0,0.2562205924788601,-0.1081,desprezível,0.7686617774365803,False
+Tipo de Projeto,Lead Time (Por Commit),aplicação/serviço vs ferramenta CLI,aplicação/serviço,ferramenta CLI,45,50,3.38,3.86,1005.0,0.37230906855105683,-0.1067,desprezível,0.7686617774365803,False
+Tipo de Projeto,Lead Time (Por Commit),biblioteca/framework vs ferramenta CLI,biblioteca/framework,ferramenta CLI,205,50,3.86,3.86,5239.0,0.8079125629255471,0.0222,desprezível,0.8079125629255471,False
+Tipo de Projeto,Change Failure Rate (CI),aplicação/serviço vs biblioteca/framework,aplicação/serviço,biblioteca/framework,45,205,0.117,0.133,4261.0,0.4222425852416647,-0.0762,desprezível,0.9839479170620817,False
+Tipo de Projeto,Change Failure Rate (CI),aplicação/serviço vs ferramenta CLI,aplicação/serviço,ferramenta CLI,45,50,0.117,0.133,994.0,0.3279826390206939,-0.1164,desprezível,0.9839479170620817,False
+Tipo de Projeto,Change Failure Rate (CI),biblioteca/framework vs ferramenta CLI,biblioteca/framework,ferramenta CLI,205,50,0.133,0.133,4849.0,0.5543082492937864,-0.0539,desprezível,0.9839479170620817,False
+Tipo de Projeto,Change Failure Rate (Releases),aplicação/serviço vs biblioteca/framework,aplicação/serviço,biblioteca/framework,45,205,0.07,0.08,4261.0,0.4222425852416647,-0.0762,desprezível,0.9839479170620817,False
+Tipo de Projeto,Change Failure Rate (Releases),aplicação/serviço vs ferramenta CLI,aplicação/serviço,ferramenta CLI,45,50,0.07,0.08,994.0,0.3279826390206939,-0.1164,desprezível,0.9839479170620817,False
+Tipo de Projeto,Change Failure Rate (Releases),biblioteca/framework vs ferramenta CLI,biblioteca/framework,ferramenta CLI,205,50,0.08,0.08,4849.0,0.5543082492937864,-0.0539,desprezível,0.9839479170620817,False
+Tipo de Projeto,Tempo de Recuperação,aplicação/serviço vs biblioteca/framework,aplicação/serviço,biblioteca/framework,45,205,8.5,10.1,4134.0,0.27412557484432365,-0.1037,desprezível,0.822376724532971,False
+Tipo de Projeto,Tempo de Recuperação,aplicação/serviço vs ferramenta CLI,aplicação/serviço,ferramenta CLI,45,50,8.5,10.1,981.0,0.2823144648271567,-0.128,desprezível,0.822376724532971,False
+Tipo de Projeto,Tempo de Recuperação,biblioteca/framework vs ferramenta CLI,biblioteca/framework,ferramenta CLI,205,50,10.1,10.1,4983.5,0.7619283875399925,-0.0276,desprezível,0.822376724532971,False
+Linguagem Principal,Deployment Frequency,Go vs JavaScript,Go,JavaScript,44,20,0.269,0.278,368.0,0.2995779129619438,-0.1636,pequeno,1.0,False
+Linguagem Principal,Deployment Frequency,Go vs Outras,Go,Outras,44,49,0.269,0.269,1105.0,0.8381198680464952,0.025,desprezível,1.0,False
+Linguagem Principal,Deployment Frequency,Go vs Python,Go,Python,44,99,0.269,0.173,2889.5,0.0018110537639493029,0.3267,pequeno,0.018110537639493027,True
+Linguagem Principal,Deployment Frequency,Go vs Rust,Go,Rust,44,34,0.269,0.345,578.0,0.08710428643383994,-0.2273,pequeno,0.4355214321691997,False
+Linguagem Principal,Deployment Frequency,Go vs TypeScript,Go,TypeScript,44,54,0.269,0.46,574.5,1.1739345446200845e-05,-0.5164,grande,0.000152611490800611,True
+Linguagem Principal,Deployment Frequency,JavaScript vs Outras,JavaScript,Outras,20,49,0.278,0.269,566.0,0.31704969236556624,0.1551,pequeno,1.0,False
+Linguagem Principal,Deployment Frequency,JavaScript vs Python,JavaScript,Python,20,99,0.278,0.173,1403.5,0.0032228276821532277,0.4177,médio,0.02900544913937905,True
+Linguagem Principal,Deployment Frequency,JavaScript vs Rust,JavaScript,Rust,20,34,0.278,0.345,316.0,0.6733451060110416,-0.0706,desprezível,1.0,False
+Linguagem Principal,Deployment Frequency,JavaScript vs TypeScript,JavaScript,TypeScript,20,54,0.278,0.46,362.5,0.03105710839111209,-0.3287,pequeno,0.24845686712889672,False
+Linguagem Principal,Deployment Frequency,Outras vs Python,Outras,Python,49,99,0.269,0.173,3206.5,0.001420457345272084,0.322,pequeno,0.015625030797992923,True
+Linguagem Principal,Deployment Frequency,Outras vs Rust,Outras,Rust,49,34,0.269,0.345,631.0,0.06151295989082311,-0.2425,pequeno,0.36907775934493864,False
+Linguagem Principal,Deployment Frequency,Outras vs TypeScript,Outras,TypeScript,49,54,0.269,0.46,645.5,7.6127093458320425e-06,-0.5121,grande,0.0001065779308416486,True
+Linguagem Principal,Deployment Frequency,Python vs Rust,Python,Rust,99,34,0.173,0.345,876.0,3.0093361276057618e-05,-0.4795,grande,0.0003611203353126914,True
+Linguagem Principal,Deployment Frequency,Python vs TypeScript,Python,TypeScript,99,54,0.173,0.46,854.5,3.5676212730219087e-12,-0.6803,grande,5.351431909532863e-11,True
+Linguagem Principal,Deployment Frequency,Rust vs TypeScript,Rust,TypeScript,34,54,0.345,0.46,672.0,0.035189696194671376,-0.268,pequeno,0.24845686712889672,False
+Linguagem Principal,Lead Time (Por Release),Go vs JavaScript,Go,JavaScript,44,20,8.57,8.285,512.0,0.2995779129619438,0.1636,pequeno,1.0,False
+Linguagem Principal,Lead Time (Por Release),Go vs Outras,Go,Outras,44,49,8.57,8.57,1051.0,0.8381198680464952,-0.025,desprezível,1.0,False
+Linguagem Principal,Lead Time (Por Release),Go vs Python,Go,Python,44,99,8.57,13.33,1466.5,0.0018110537639493029,-0.3267,pequeno,0.018110537639493027,True
+Linguagem Principal,Lead Time (Por Release),Go vs Rust,Go,Rust,44,34,8.57,6.67,918.0,0.08710428643383994,0.2273,pequeno,0.4355214321691997,False
+Linguagem Principal,Lead Time (Por Release),Go vs TypeScript,Go,TypeScript,44,54,8.57,5.0,1801.5,1.1739345446200845e-05,0.5164,grande,0.000152611490800611,True
+Linguagem Principal,Lead Time (Por Release),JavaScript vs Outras,JavaScript,Outras,20,49,8.285,8.57,414.0,0.31704969236556624,-0.1551,pequeno,1.0,False
+Linguagem Principal,Lead Time (Por Release),JavaScript vs Python,JavaScript,Python,20,99,8.285,13.33,576.5,0.0032228276821532277,-0.4177,médio,0.02900544913937905,True
+Linguagem Principal,Lead Time (Por Release),JavaScript vs Rust,JavaScript,Rust,20,34,8.285,6.67,364.0,0.6733451060110416,0.0706,desprezível,1.0,False
+Linguagem Principal,Lead Time (Por Release),JavaScript vs TypeScript,JavaScript,TypeScript,20,54,8.285,5.0,717.5,0.03105710839111209,0.3287,pequeno,0.24845686712889672,False
+Linguagem Principal,Lead Time (Por Release),Outras vs Python,Outras,Python,49,99,8.57,13.33,1644.5,0.001420457345272084,-0.322,pequeno,0.015625030797992923,True
+Linguagem Principal,Lead Time (Por Release),Outras vs Rust,Outras,Rust,49,34,8.57,6.67,1035.0,0.06151295989082311,0.2425,pequeno,0.36907775934493864,False
+Linguagem Principal,Lead Time (Por Release),Outras vs TypeScript,Outras,TypeScript,49,54,8.57,5.0,2000.5,7.6127093458320425e-06,0.5121,grande,0.0001065779308416486,True
+Linguagem Principal,Lead Time (Por Release),Python vs Rust,Python,Rust,99,34,13.33,6.67,2490.0,3.0093361276057618e-05,0.4795,grande,0.0003611203353126914,True
+Linguagem Principal,Lead Time (Por Release),Python vs TypeScript,Python,TypeScript,99,54,13.33,5.0,4491.5,3.5676212730219087e-12,0.6803,grande,5.351431909532863e-11,True
+Linguagem Principal,Lead Time (Por Release),Rust vs TypeScript,Rust,TypeScript,34,54,6.67,5.0,1164.0,0.035189696194671376,0.268,pequeno,0.24845686712889672,False
+Linguagem Principal,Lead Time (Por Commit),Go vs JavaScript,Go,JavaScript,44,20,3.86,3.73,512.0,0.2995779129619438,0.1636,pequeno,1.0,False
+Linguagem Principal,Lead Time (Por Commit),Go vs Outras,Go,Outras,44,49,3.86,3.86,1051.0,0.8381198680464952,-0.025,desprezível,1.0,False
+Linguagem Principal,Lead Time (Por Commit),Go vs Python,Go,Python,44,99,3.86,6.0,1466.5,0.0018110537639493029,-0.3267,pequeno,0.018110537639493027,True
+Linguagem Principal,Lead Time (Por Commit),Go vs Rust,Go,Rust,44,34,3.86,3.0,918.0,0.08710428643383994,0.2273,pequeno,0.4355214321691997,False
+Linguagem Principal,Lead Time (Por Commit),Go vs TypeScript,Go,TypeScript,44,54,3.86,2.25,1801.5,1.1739345446200845e-05,0.5164,grande,0.000152611490800611,True
+Linguagem Principal,Lead Time (Por Commit),JavaScript vs Outras,JavaScript,Outras,20,49,3.73,3.86,414.0,0.31704969236556624,-0.1551,pequeno,1.0,False
+Linguagem Principal,Lead Time (Por Commit),JavaScript vs Python,JavaScript,Python,20,99,3.73,6.0,576.5,0.0032228276821532277,-0.4177,médio,0.02900544913937905,True
+Linguagem Principal,Lead Time (Por Commit),JavaScript vs Rust,JavaScript,Rust,20,34,3.73,3.0,364.0,0.6733451060110416,0.0706,desprezível,1.0,False
+Linguagem Principal,Lead Time (Por Commit),JavaScript vs TypeScript,JavaScript,TypeScript,20,54,3.73,2.25,717.5,0.03105710839111209,0.3287,pequeno,0.24845686712889672,False
+Linguagem Principal,Lead Time (Por Commit),Outras vs Python,Outras,Python,49,99,3.86,6.0,1644.5,0.001420457345272084,-0.322,pequeno,0.015625030797992923,True
+Linguagem Principal,Lead Time (Por Commit),Outras vs Rust,Outras,Rust,49,34,3.86,3.0,1035.0,0.06151295989082311,0.2425,pequeno,0.36907775934493864,False
+Linguagem Principal,Lead Time (Por Commit),Outras vs TypeScript,Outras,TypeScript,49,54,3.86,2.25,2000.5,7.6127093458320425e-06,0.5121,grande,0.0001065779308416486,True
+Linguagem Principal,Lead Time (Por Commit),Python vs Rust,Python,Rust,99,34,6.0,3.0,2490.0,3.0093361276057618e-05,0.4795,grande,0.0003611203353126914,True
+Linguagem Principal,Lead Time (Por Commit),Python vs TypeScript,Python,TypeScript,99,54,6.0,2.25,4491.5,3.5676212730219087e-12,0.6803,grande,5.351431909532863e-11,True
+Linguagem Principal,Lead Time (Por Commit),Rust vs TypeScript,Rust,TypeScript,34,54,3.0,2.25,1164.0,0.035189696194671376,0.268,pequeno,0.24845686712889672,False
+Linguagem Principal,Change Failure Rate (CI),Go vs JavaScript,Go,JavaScript,44,20,0.109,0.125,437.5,0.9767033273770676,-0.0057,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (CI),Go vs Outras,Go,Outras,44,49,0.109,0.133,860.0,0.09302153067251488,-0.2022,pequeno,1.0,False
+Linguagem Principal,Change Failure Rate (CI),Go vs Python,Go,Python,44,99,0.109,0.133,1950.0,0.31717931983195513,-0.1047,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (CI),Go vs Rust,Go,Rust,44,34,0.109,0.133,633.5,0.24802965518293318,-0.1531,pequeno,1.0,False
+Linguagem Principal,Change Failure Rate (CI),Go vs TypeScript,Go,TypeScript,44,54,0.109,0.117,1116.0,0.6080153171650502,-0.0606,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (CI),JavaScript vs Outras,JavaScript,Outras,20,49,0.125,0.133,410.0,0.2908123086845811,-0.1633,pequeno,1.0,False
+Linguagem Principal,Change Failure Rate (CI),JavaScript vs Python,JavaScript,Python,20,99,0.125,0.133,897.5,0.5104806162039602,-0.0934,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (CI),JavaScript vs Rust,JavaScript,Rust,20,34,0.125,0.133,304.0,0.5213328699067568,-0.1059,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (CI),JavaScript vs TypeScript,JavaScript,TypeScript,20,54,0.125,0.117,516.5,0.7782993781626858,-0.0435,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (CI),Outras vs Python,Outras,Python,49,99,0.133,0.133,2660.5,0.3374971276140375,0.0969,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (CI),Outras vs Rust,Outras,Rust,49,34,0.133,0.133,875.0,0.6999305056116034,0.0504,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (CI),Outras vs TypeScript,Outras,TypeScript,49,54,0.133,0.117,1492.0,0.2643873762865959,0.1277,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (CI),Python vs Rust,Python,Rust,99,34,0.133,0.133,1635.0,0.8054511094656611,-0.0285,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (CI),Python vs TypeScript,Python,TypeScript,99,54,0.133,0.117,2740.0,0.7987473128116479,0.0251,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (CI),Rust vs TypeScript,Rust,TypeScript,34,54,0.133,0.117,987.0,0.5556418712621183,0.0752,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),Go vs JavaScript,Go,JavaScript,44,20,0.065,0.075,437.5,0.9767033273770676,-0.0057,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),Go vs Outras,Go,Outras,44,49,0.065,0.08,860.0,0.09302153067251488,-0.2022,pequeno,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),Go vs Python,Go,Python,44,99,0.065,0.08,1950.0,0.31717931983195513,-0.1047,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),Go vs Rust,Go,Rust,44,34,0.065,0.08,633.5,0.24802965518293318,-0.1531,pequeno,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),Go vs TypeScript,Go,TypeScript,44,54,0.065,0.07,1116.0,0.6080153171650502,-0.0606,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),JavaScript vs Outras,JavaScript,Outras,20,49,0.075,0.08,410.0,0.2908123086845811,-0.1633,pequeno,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),JavaScript vs Python,JavaScript,Python,20,99,0.075,0.08,897.5,0.5104806162039602,-0.0934,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),JavaScript vs Rust,JavaScript,Rust,20,34,0.075,0.08,304.0,0.5213328699067568,-0.1059,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),JavaScript vs TypeScript,JavaScript,TypeScript,20,54,0.075,0.07,516.5,0.7782993781626858,-0.0435,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),Outras vs Python,Outras,Python,49,99,0.08,0.08,2660.5,0.3374971276140375,0.0969,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),Outras vs Rust,Outras,Rust,49,34,0.08,0.08,875.0,0.6999305056116034,0.0504,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),Outras vs TypeScript,Outras,TypeScript,49,54,0.08,0.07,1492.0,0.2643873762865959,0.1277,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),Python vs Rust,Python,Rust,99,34,0.08,0.08,1635.0,0.8054511094656611,-0.0285,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),Python vs TypeScript,Python,TypeScript,99,54,0.08,0.07,2740.0,0.7987473128116479,0.0251,desprezível,1.0,False
+Linguagem Principal,Change Failure Rate (Releases),Rust vs TypeScript,Rust,TypeScript,34,54,0.08,0.07,987.0,0.5556418712621183,0.0752,desprezível,1.0,False
+Linguagem Principal,Tempo de Recuperação,Go vs JavaScript,Go,JavaScript,44,20,10.9,10.1,486.5,0.5017663656106788,0.1057,desprezível,1.0,False
+Linguagem Principal,Tempo de Recuperação,Go vs Outras,Go,Outras,44,49,10.9,10.1,1200.5,0.3432720317985949,0.1136,desprezível,1.0,False
+Linguagem Principal,Tempo de Recuperação,Go vs Python,Go,Python,44,99,10.9,8.5,2455.0,0.2244835936317785,0.1272,desprezível,1.0,False
+Linguagem Principal,Tempo de Recuperação,Go vs Rust,Go,Rust,44,34,10.9,12.5,720.5,0.7837287682753764,-0.0368,desprezível,1.0,False
+Linguagem Principal,Tempo de Recuperação,Go vs TypeScript,Go,TypeScript,44,54,10.9,5.3,1499.5,0.025318861398623785,0.2622,pequeno,0.3797829209793568,False
+Linguagem Principal,Tempo de Recuperação,JavaScript vs Outras,JavaScript,Outras,20,49,10.1,10.1,523.0,0.6651249100479815,0.0673,desprezível,1.0,False
+Linguagem Principal,Tempo de Recuperação,JavaScript vs Python,JavaScript,Python,20,99,10.1,8.5,1024.5,0.8084453967430902,0.0348,desprezível,1.0,False
+Linguagem Principal,Tempo de Recuperação,JavaScript vs Rust,JavaScript,Rust,20,34,10.1,12.5,300.0,0.4770215441520066,-0.1176,desprezível,1.0,False
+Linguagem Principal,Tempo de Recuperação,JavaScript vs TypeScript,JavaScript,TypeScript,20,54,10.1,5.3,643.5,0.20748951175761088,0.1917,pequeno,1.0,False
+Linguagem Principal,Tempo de Recuperação,Outras vs Python,Outras,Python,49,99,10.1,8.5,2350.0,0.7589405618862897,-0.0311,desprezível,1.0,False
+Linguagem Principal,Tempo de Recuperação,Outras vs Rust,Outras,Rust,49,34,10.1,12.5,704.0,0.23081892739506116,-0.1549,pequeno,1.0,False
+Linguagem Principal,Tempo de Recuperação,Outras vs TypeScript,Outras,TypeScript,49,54,10.1,5.3,1453.5,0.38702467670729757,0.0986,desprezível,1.0,False
+Linguagem Principal,Tempo de Recuperação,Python vs Rust,Python,Rust,99,34,8.5,12.5,1461.5,0.2526579823035059,-0.1316,desprezível,1.0,False
+Linguagem Principal,Tempo de Recuperação,Python vs TypeScript,Python,TypeScript,99,54,8.5,5.3,3087.0,0.11296430738678391,0.1549,pequeno,1.0,False
+Linguagem Principal,Tempo de Recuperação,Rust vs TypeScript,Rust,TypeScript,34,54,12.5,5.3,1147.0,0.04895446420147502,0.2495,pequeno,0.6853624988206503,False
