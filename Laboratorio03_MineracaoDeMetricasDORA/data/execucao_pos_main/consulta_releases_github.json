@@ -1,0 +1,16 @@
+{
+  "consultado_em_utc": "2026-10-21T14:46:08.2245895Z",
+  "objetivo": "Contrastar uma release gerada com uma release real na janela, sem tratar HTTP 404 como prova isolada de inexistencia historica",
+  "consultas": [
+    {
+      "comando": "gh api repos/psf/black/releases/1001 --jq '{id, tag_name, published_at, html_url}'",
+      "codigo": 1,
+      "saida": "gh: Not Found (HTTP 404)\n{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/releases/releases#get-a-release\",\"status\":\"404\"}"
+    },
+    {
+      "comando": "gh api repos/psf/black/releases/tags/24.8.0 --jq '{id, tag_name, published_at, html_url, draft, prerelease}'",
+      "codigo": 0,
+      "saida": "{\"draft\":false,\"html_url\":\"https://github.com/psf/black/releases/tag/24.8.0\",\"id\":168486939,\"prerelease\":false,\"published_at\":\"2024-08-02T17:42:53Z\",\"tag_name\":\"24.8.0\"}"
+    }
+  ]
+}

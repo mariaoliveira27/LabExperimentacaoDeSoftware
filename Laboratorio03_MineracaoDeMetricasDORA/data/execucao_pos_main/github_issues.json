@@ -1,0 +1,291 @@
+{
+  "consultado_em": "2026-10-21T14:48:52.993238+00:00",
+  "issues": [
+    {
+      "assignees": [
+        "ViniSimoesV"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/83",
+      "number": 83,
+      "state": "open",
+      "title": "Lab03S03 - (Artigo) Hipóteses pendentes, Definições Operacionais e Resultados de RQ07"
+    },
+    {
+      "assignees": [
+        "ViniSimoesV"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/82",
+      "number": 82,
+      "state": "open",
+      "title": "Lab03S03 - Script de análise de sensibilidade da RQ07 (combinações e Kappa de Cohen ponderado)"
+    },
+    {
+      "assignees": [
+        "ViniSimoesV"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/81",
+      "number": 81,
+      "state": "open",
+      "title": "Lab03S03 - Script integração de CFR(b) real e validação da heurística contra o consenso"
+    },
+    {
+      "assignees": [
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/80",
+      "number": 80,
+      "state": "open",
+      "title": "Lab03S03 - (Artigo) Metodologia de Coleta e Resultados/Discussão de RQ05-RQ06"
+    },
+    {
+      "assignees": [
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/79",
+      "number": 79,
+      "state": "open",
+      "title": "Lab03S03 - Script de análise estatística de RQ05 e RQ06 (Spearman, Kruskal-Wallis e Holm)"
+    },
+    {
+      "assignees": [
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/78",
+      "number": 78,
+      "state": "open",
+      "title": "Lab03S03 - Script ampliação da busca (≥ 300 repositórios), dataset final e correção da CI"
+    },
+    {
+      "assignees": [
+        "AulusHZP"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/77",
+      "number": 77,
+      "state": "open",
+      "title": "Lab03S03 - (Artigo) Metodologia da Amostra-Ouro e Resultados/Discussão de RQ01-RQ04"
+    },
+    {
+      "assignees": [
+        "AulusHZP"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/76",
+      "number": 76,
+      "state": "open",
+      "title": "Lab03S03 - Script de análise das RQ01 a RQ04 e classificação DORA de referência"
+    },
+    {
+      "assignees": [
+        "AulusHZP"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/75",
+      "number": 75,
+      "state": "open",
+      "title": "Lab03S03 - Script de sorteio da amostra-ouro, Kappa de Fleiss e consenso"
+    },
+    {
+      "assignees": [
+        "AulusHZP"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/74",
+      "number": 74,
+      "state": "open",
+      "title": "Lab03S03 - Script de coleta completa de workflow runs e validação dos 100 repositórios"
+    },
+    {
+      "assignees": [
+        "AulusHZP"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/70",
+      "number": 70,
+      "state": "closed",
+      "title": "Lab03S02 - Script cálculo de Kappa de Fleiss e geração do consenso"
+    },
+    {
+      "assignees": [
+        "ViniSimoesV"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/69",
+      "number": 69,
+      "state": "open",
+      "title": "Lab03S02 - (Artigo) Metodologia: Definições Operacionais das Métricas DORA"
+    },
+    {
+      "assignees": [
+        "ViniSimoesV"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/68",
+      "number": 68,
+      "state": "open",
+      "title": "Lab03S02 - Script de benchmarking da heurística"
+    },
+    {
+      "assignees": [
+        "ViniSimoesV"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/67",
+      "number": 67,
+      "state": "open",
+      "title": "Lab03S02 - Script Integração de CFR(b) no Pipeline"
+    },
+    {
+      "assignees": [
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/66",
+      "number": 66,
+      "state": "open",
+      "title": "Lab03S02 - (Artigo) Metodologia: Coleta de Dados e Funil de Seleção"
+    },
+    {
+      "assignees": [
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/65",
+      "number": 65,
+      "state": "open",
+      "title": "Lab03S02 - Script integração do Lead Time com paginação"
+    },
+    {
+      "assignees": [
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/64",
+      "number": 64,
+      "state": "open",
+      "title": "Lab03S02 - Script busca particionada de candidatos"
+    },
+    {
+      "assignees": [
+        "AulusHZP"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/63",
+      "number": 63,
+      "state": "closed",
+      "title": "Lab03S02 - (Artigo) Metodologia: Protocolo da Amostra-ouro, cegamente, desempate"
+    },
+    {
+      "assignees": [
+        "ViniSimoesV",
+        "AulusHZP",
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/62",
+      "number": 62,
+      "state": "open",
+      "title": "Lab03S02 - Rotulagem independente de 60 repositórios / 300 releases"
+    },
+    {
+      "assignees": [
+        "AulusHZP"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/61",
+      "number": 61,
+      "state": "closed",
+      "title": "Lab03S02 - Script sorteio repoduzível da amostra-ouro"
+    },
+    {
+      "assignees": [
+        "ViniSimoesV",
+        "AulusHZP",
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/59",
+      "number": 59,
+      "state": "open",
+      "title": "Lab03S01 - Iniciar Relatório Final"
+    },
+    {
+      "assignees": [
+        "ViniSimoesV",
+        "AulusHZP",
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/58",
+      "number": 58,
+      "state": "open",
+      "title": "Lab03S01 - Fomular hipóteses informais"
+    },
+    {
+      "assignees": [
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/57",
+      "number": 57,
+      "state": "open",
+      "title": "Lab03S01 - Implementar cliente compartilhado da API"
+    },
+    {
+      "assignees": [
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/56",
+      "number": 56,
+      "state": "open",
+      "title": "Lab03S01 - Selecionar repositórios"
+    },
+    {
+      "assignees": [
+        "ViniSimoesV"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/55",
+      "number": 55,
+      "state": "open",
+      "title": "Lab03S01 - Coletar commits entre releases"
+    },
+    {
+      "assignees": [
+        "ViniSimoesV"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/54",
+      "number": 54,
+      "state": "open",
+      "title": "Lab03S01 - Implementar Lead Time"
+    },
+    {
+      "assignees": [
+        "AulusHZP"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/53",
+      "number": 53,
+      "state": "closed",
+      "title": "Lab03S01 - Implementar Tempo de recuperação por workflow"
+    },
+    {
+      "assignees": [
+        "AulusHZP"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/52",
+      "number": 52,
+      "state": "closed",
+      "title": "Lab03S01 - Implementar CFR(a)"
+    },
+    {
+      "assignees": [
+        "AulusHZP"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/51",
+      "number": 51,
+      "state": "closed",
+      "title": "Lab03S01 - Implementar cache e retomada"
+    },
+    {
+      "assignees": [
+        "ViniSimoesV",
+        "AulusHZP",
+        "mariaoliveira27"
+      ],
+      "html_url": "https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/49",
+      "number": 49,
+      "state": "closed",
+      "title": "Lab02S03 - Preencher Ralatório Final"
+    }
+  ],
+  "comando": [
+    "gh",
+    "api",
+    "repos/mariaoliveira27/LabExperimentacaoDeSoftware/issues?state=all",
+    "--paginate",
+    "--jq",
+    ".[] | select(.number >= 49 and .pull_request == null) | {number,title,state,html_url,assignees:[.assignees[].login]}"
+  ]
+}

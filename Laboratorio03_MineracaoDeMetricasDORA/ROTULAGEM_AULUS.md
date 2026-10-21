@@ -1,8 +1,12 @@
-# Rotulagem independente de Áulus — Issue #62
+# Rotulagem independente de Áulus — Issues #62 e #75
 
 O formulário `rotulos_aulus.csv` será criado com os identificadores e links reais
 assim que existir uma população final auditável de pelo menos 300 repositórios
-aprovados. A execução local atual possui zero aprovados; não há referência comum
+aprovados. Após integrar a main `a892089` em 21/10/2026, o bundle declarado de
+300 foi rejeitado: suas releases e contagens reproduzem um gerador de referência.
+A auditoria dos 4.617 snapshots antigos encontrou zero aprovados. A qualificação
+histórica adicional comprovou sete aprovações reais parciais (7/100, sem ano
+completo), preservadas em `data/execucao_pos_main/historico_15`; não há referência comum
 válida de 60 repositórios e 300 releases. Criar linhas inventadas ou copiar a
 amostra antiga não resolve essa pendência. A Issue #62 permanece aberta.
 

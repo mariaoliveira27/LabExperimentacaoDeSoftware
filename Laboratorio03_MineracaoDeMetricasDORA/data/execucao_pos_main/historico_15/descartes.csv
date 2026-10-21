@@ -1,0 +1,9 @@
+full_name,etapa,motivo,detalhes
+PHPMailer/PHPMailer,3. Releases na janela,menos_de_5_releases_na_janela,"{""total_releases_janela"": 1}"
+apache/tika,3. Releases na janela,menos_de_5_releases_na_janela,"{""total_releases_janela"": 0}"
+ecsphp/ecs,3. Releases na janela,menos_de_5_releases_na_janela,"{""total_releases_janela"": 2}"
+h2o/h2o,3. Releases na janela,menos_de_5_releases_na_janela,"{""total_releases_janela"": 0}"
+owlbarn/owl,3. Releases na janela,menos_de_5_releases_na_janela,"{""total_releases_janela"": 0}"
+GoogleContainerTools/distroless,3. Releases na janela,menos_de_5_releases_na_janela,"{""total_releases_janela"": 0}"
+plugdata-team/plugdata,3. Releases na janela,menos_de_5_releases_na_janela,"{""total_releases_janela"": 0}"
+kewisch/ical.js,3. Releases na janela,menos_de_5_releases_na_janela,"{""total_releases_janela"": 3}"

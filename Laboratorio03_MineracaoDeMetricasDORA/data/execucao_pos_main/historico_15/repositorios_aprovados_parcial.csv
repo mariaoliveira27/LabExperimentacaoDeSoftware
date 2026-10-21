@@ -1,0 +1,8 @@
+full_name,owner,repo,stars,language,default_branch,created_at,total_releases_janela,total_runs_janela,origem_coleta,origem_metricas_estabilidade,escopo_contagem_runs
+gajus/slonik,gajus,slonik,4940,TypeScript,main,2017-03-24T10:45:50Z,272,168,github_api,workflow_runs_arquivo_historico,limite_inferior_arquivo_historico
+nuclio/nuclio,nuclio,nuclio,5766,Go,development,2017-05-19T10:55:09Z,26,188,github_api,workflow_runs_arquivo_historico,limite_inferior_arquivo_historico
+badeball/cypress-cucumber-preprocessor,badeball,cypress-cucumber-preprocessor,1360,TypeScript,master,2017-12-23T11:56:45Z,17,62,github_api,workflow_runs_arquivo_historico,limite_inferior_arquivo_historico
+JuliaNLSolvers/Optim.jl,JuliaNLSolvers,Optim.jl,1206,Julia,master,2012-04-04T22:19:35Z,8,220,github_api,workflow_runs_arquivo_historico,limite_inferior_arquivo_historico
+microsoft/msticpy,microsoft,msticpy,2019,Python,main,2019-02-21T17:30:03Z,7,71,github_api,workflow_runs_arquivo_historico,limite_inferior_arquivo_historico
+open-telemetry/opentelemetry-js,open-telemetry,opentelemetry-js,3499,TypeScript,main,2019-05-10T02:01:43Z,32,1644,github_api,workflow_runs_arquivo_historico,limite_inferior_arquivo_historico
+lunarphp/lunar,lunarphp,lunar,3759,PHP,1.x,2021-12-21T16:14:38Z,12,788,github_api,workflow_runs_arquivo_historico,limite_inferior_arquivo_historico

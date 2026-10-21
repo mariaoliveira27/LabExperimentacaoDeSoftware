@@ -1,0 +1,28 @@
+{
+  "arquivo": "data/execucao_pos_main/historico_15/originais_qualificacoes.zip",
+  "bytes": 3334254,
+  "sha256": "2cd2b9efb840f0fa01aa10748349c8a758384893cf704827c1b91a6dcf3b7a25",
+  "conteudo": "15 snapshots de qualificacao + requisicoes; sem cache DB ou ZIP Zenodo",
+  "diretorio_original_do_checkpoint": ".cache/coleta_historico_pos_main",
+  "config_sha256": "63c6222c46c145273ee9dc39cde3c86da40355fd08d1c401cfff0dd29078fbab",
+  "fonte_historica_sha256": "285e9ad9ed0ecee07ebbf2cf3e0ccbc3f8075b5bcba2fbb48183886b7f9506c6",
+  "snapshots": {
+    "qualificacoes/115192595.json": "e15589a2b53c3d5b592918c7a13ef77d5f0a9e232a891b073e2cc40b04031f90",
+    "qualificacoes/171915396.json": "3fe25939b252d1b238f00016152dc5a4b8e86bb052c4b6b6112777dab57167af",
+    "qualificacoes/185901023.json": "373ac6f453345b1a3612d1e50993cfbfda9432c77151a9b19eeae5f550d2f94e",
+    "qualificacoes/206427.json": "c2dc4bafdf66d8e04053dd320f25b9ddd864214e235c0fb146a9434a3aa591d1",
+    "qualificacoes/2253830.json": "09c3688bfc7378f64d86b8e096e6f3dba1025c5d20c77d34fb560820f5da4258",
+    "qualificacoes/23029617.json": "94d3c061836a4374e97d222264266fd7825c54406b953457b9939ba11320d589",
+    "qualificacoes/3933868.json": "8e38773c992ffd5c24ee73b38665a1ab8749eaa378e576883c4d78ba7961949f",
+    "qualificacoes/432598139.json": "be1a8ca7e6a72d4f01734d3f4ab9316e48e1ddb9aabe4d3c14388eb5e37d460d",
+    "qualificacoes/440577490.json": "1a503916d6f6c7ecd1252925318aca5f644704a9ce4dc0d5e41a2bc07bee2eab",
+    "qualificacoes/5025286.json": "0e4c3d107e1470264c54b25bf84422a466b77eaf3fe1e0b7e6d51d68a08e9211",
+    "qualificacoes/61579222.json": "8fba56ab7427405bc4fa8c3f498bb300d7fcefe98bed0559f3a366add98ae0d7",
+    "qualificacoes/83446927.json": "108def3357ea6645192dc6af849a64b51388d459b01b9e48b2334a30b138d625",
+    "qualificacoes/86057635.json": "6c969575425e91d474c97bf07b3745f6a51839279b7825212c0fc620e949f2c0",
+    "qualificacoes/88674404.json": "1bcb13f89b420b101a1c58a001d201bce7369fd5eae693e1e39a8e34c5525b42",
+    "qualificacoes/91797088.json": "adf555953f47a31539961496206d367bf67e71067bdf7a579e49ce1b039d390a"
+  },
+  "extrair_na_raiz_do_laboratorio": "python -m zipfile -e data/execucao_pos_main/historico_15/originais_qualificacoes.zip .cache/coleta_historico_pos_main",
+  "limitacao": "Os checkpoints espelhados referenciam qualificacoes/ neste diretorio original. Para revalidar derivacao dos runs tambem e necessario o ZIP Zenodo de 952289386 bytes com checksum publicado; a amostra continua parcial."
+}

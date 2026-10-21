@@ -2,9 +2,16 @@
 
 Consulte [a entrega e as evidências da execução](ENTREGA_LAB03S03_AULUS.md),
 [as instruções de rotulagem pessoal](ROTULAGEM_AULUS.md) e
-[a metodologia e o estado das RQ01–RQ04](artigo_metodologia_dora.md#7-execução-e-resultados-de-rq01rq04-na-sprint-03).
-O dataset antigo de 100 linhas não comprova a população final. O modo real do
-pipeline registra Lead Time como ausente até a integração paginada da #65.
+[a metodologia e o estado das RQ01–RQ04](artigo_metodologia_dora.md#8-execução-e-resultados-de-rq01rq04-na-sprint-03).
+A main `a892089` foi integrada preservando os oito commits locais. Lead Time
+paginado, CFR(b) e retrabalho estão integrados. O bundle recebido declara 300
+aprovados, mas sua auditoria foi rejeitada: nomes, contagens e 5.189 releases
+reproduzem seeds e fórmulas de `consolidar_dataset.py`, apesar da declaração
+`github_api`. Consulte a [auditoria pós-main](data/execucao_pos_main/auditoria_dados.json).
+Uma qualificação adicional sobre a fonte histórica validada comprovou
+**sete aprovados reais parciais**, 3.141 runs observados e 374 releases estáveis.
+O [índice dos primeiros 100](data/execucao_pos_main/historico_15/primeiros_100_aprovados.json)
+continua incompleto (7/100); o histórico anual não foi comprovado.
 As análises oficiais usam `analisar_rqs.py`, que exige o bundle final auditado
 com pelo menos 300 aprovados. A execução S03 não conclui a sprint sem esses
 dados e as três avaliações humanas independentes.
@@ -28,8 +35,8 @@ dados e as três avaliações humanas independentes.
 **Workflows, cache e estabilidade:** consulte [o guia de execução e retomada](WORKFLOWS_ESTABILIDADE.md).
 A execução normal calcula CFR(a) e recuperação a partir dos workflow runs. `--reference-mode`
 é opcional, desativado por padrão e produz dados de demonstração identificados no CSV.
-Os cálculos preexistentes de lead time, CFR(b), rework e classificação ainda precisam da
-integração dos respectivos responsáveis; o CSV completo não deve ser tratado como resultado
+Lead Time paginado, CFR(b) e rework estão integrados; comparações incompletas
+permanecem ausentes. O CSV recebido não deve ser tratado como resultado
 empírico final. A CI do Lab03 executa os testes e a cobertura a partir do workflow na raiz do repositório.
 
 ### 1. Instalação de Dependências
@@ -48,7 +55,7 @@ $env:GITHUB_TOKEN="ghp_seu_token_aqui"
 ```
 
 ### 3. Execução do Pipeline com Comando Único
-Para executar a seleção, funil, coleta e cálculo das métricas DORA dos 100 repositórios aprovados:
+Para executar a seleção, funil, coleta e cálculo com alvo configurado de 300 repositórios (a aprovação depende da evidência real):
 ```bash
 python pipeline.py --config config.yaml
 ```
@@ -59,7 +66,7 @@ python -m pytest --cov=metricas --cov-report=term-missing --cov-fail-under=80
 ```
 
 ### 5. Artefatos e Resultados Produzidos
-- **Dataset Principal (100 repositórios):** [`data/output/repositorios_aprovados.csv`](data/output/repositorios_aprovados.csv)
+- **Dataset recebido (300 linhas, procedência empírica rejeitada):** [`data/output/repositorios_aprovados.csv`](data/output/repositorios_aprovados.csv)
 - **Funil de Seleção:** [`data/output/funil_selecao.md`](data/output/funil_selecao.md) e [`data/output/funil_selecao.csv`](data/output/funil_selecao.csv)
 - **Log de Descartes com Motivos:** [`data/output/descartes.csv`](data/output/descartes.csv)
 - **Dicionário de Dados:** [`dicionario_dados.md`](dicionario_dados.md)
@@ -72,7 +79,7 @@ python -m pytest --cov=metricas --cov-report=term-missing --cov-fail-under=80
 
 As tarefas de Áulus correspondem às Issues GitHub **#61** (sorteio), **#70** (kappa e consenso), **#62** (rotulagem independente) e **#63** (metodologia); os números 01, 02 e 03 da divisão de tarefas não são os identificadores do GitHub. O protocolo detalhado e a tabela de kappa pendente estão em [`artigo_metodologia_dora.md`](artigo_metodologia_dora.md).
 
-**Estado dos dados:** o arquivo legado `data/output/repositorios_aprovados.csv` tem 100 repositórios e não comprova a procedência de uma amostra final real. O piloto anterior da nova coleta, registrado em `data/coleta_final/estado.json`, consultou **100 candidatos e não comprovou nenhum aprovado**; isso descreve somente o piloto, sem concluir ausência histórica de Actions nos demais projetos.
+**Estado dos dados após a main:** o CSV recebido tem 300 linhas sem aprovações auditáveis. O piloto pessoal preservado em `data/coleta_s03/estado.json` consultou **100 candidatos e não comprovou nenhum aprovado**. Os 4.617 snapshots locais de `data/coleta_final/qualificacoes` também têm zero aprovações; a main substituiu seu estado por um resumo gerado, sem índice dos snapshots. Não extrapole a falta de comprovação para ausência histórica de Actions nos projetos. Não execute `consolidar_dataset.py` para completar dados reais.
 
 O ZIP histórico foi baixado integralmente (**952.289.386 bytes**) e seu MD5 publicado foi verificado. A recuperação documentada em `data/historico_2024/proveniencia_historico.json` preservou 19.849 metadados e identificou 15 repositórios com pelo menos 50 runs válidos observados, exportando 6.708 runs de janeiro a setembro de 2024. Esses repositórios ainda dependem dos filtros atuais e das releases reais; **não constituem a população final de 300 aprovados**. A qualificação final continua em curso. As releases e os rótulos fixos da versão anterior do gerador não servem como amostra-ouro. `rotulos_vinicius.csv` está preservado. Não há kappa ou F1 humano verificável nesta entrega.
 
@@ -98,19 +105,19 @@ python recuperar_historico.py --arquivo .cache/arquivos_historicos/2024/cicd_env
 
 Nesta execução, `data/historico_2024/` já contém a recuperação verificada: reutilize-a na etapa seguinte. O comando acima documenta a reprodução em um diretório ausente; para recuperar novamente, escolha outro `--saida` e preserve o conjunto existente.
 
-Em seguida, execute a coleta com a fonte histórica verificada. `--reavaliar` preserva as qualificações do piloto anterior e repete os filtros com as respostas em cache e a nova evidência histórica:
+Em seguida, execute a coleta em um diretório novo com a fonte histórica verificada, preservando o bundle recebido que a auditoria rejeitou. Repita o mesmo comando para retomar os checkpoints:
 
 ```bash
-python coleta_amostra_real.py --config config.yaml --saida data/coleta_final --alvo 300 --limite-candidatos 5000 --usar-gh-auth --historico-zenodo data/historico_2024 --reavaliar
+python coleta_amostra_real.py --config config.yaml --saida data/coleta_revalidacao --alvo 300 --limite-candidatos 5000 --usar-gh-auth --historico-zenodo data/historico_2024
 ```
 
 Pelo menos 50 runs distintos observados na janela e válidos para `push`, default branch e conclusão comprovam o mínimo de elegibilidade; uma cobertura parcial não comprova métricas anuais DORA. Os artefatos históricos e os estados parciais **não autorizam o sorteio nem a rotulagem** por si só. A coleta preserva `estado.json`, descartes, funil e cache; o status continuará insuficiente até comprovar os filtros e pelo menos 300 aprovados reais. Consultas sem registros preservados não comprovam ausência histórica de Actions. Somente depois de `estado.json` indicar `status=completa` e os arquivos finais estarem disponíveis, execute o preparo único:
 
 ```bash
-python executar_amostra_ouro.py --config config.yaml --coleta data/coleta_final --saida data/amostra_ouro --rotulos rotulos_aulus.csv
+python executar_amostra_ouro.py --config config.yaml --coleta data/coleta_revalidacao --saida data/amostra_ouro --rotulos rotulos_aulus.csv
 ```
 
-O preparo validará `data/coleta_final/repositorios_aprovados.csv`, `releases.json` e `proveniencia.json`, sorteará 60 repositórios com `random_state=42` e cinco releases reais por repositório e criará a cópia vazia de Áulus. Salvará `data/amostra_ouro/amostra_comum.csv`, `evidencias_releases.json` (conteúdo original das releases) e `selecao.json` (semente, algoritmo, versões, janela, hashes e IDs). A população é ordenada por `full_name` e as releases por publicação UTC e ID; cada sorteio usa `random_state=42` sem reposição. A referência incluirá identificadores, datas, tags e links para releases, notas e commits, com julgamentos vazios. Para releases sem predecessora elegível na janela, o link de commits aponta para o histórico da tag; consulte a história anterior quando necessário para identificar as mudanças. Se faltarem a amostra final ou os arquivos reais, a execução terminará com uma mensagem indicando a entrada necessária. **Os 100 registros atuais e uma coleta parcial não geram uma seleção substituta.**
+O preparo validará `data/coleta_revalidacao/repositorios_aprovados.csv`, `releases.json` e `proveniencia.json`, sorteará 60 repositórios com `random_state=42` e cinco releases reais por repositório e criará a cópia vazia de Áulus. Salvará `data/amostra_ouro/amostra_comum.csv`, `evidencias_releases.json` (conteúdo original das releases) e `selecao.json` (semente, algoritmo, versões, janela, hashes e IDs). A população é ordenada por `full_name` e as releases por publicação UTC e ID; cada sorteio usa `random_state=42` sem reposição. A referência incluirá identificadores, datas, tags e links para releases, notas e commits, com julgamentos vazios. Para releases sem predecessora elegível na janela, o link de commits aponta para o histórico da tag; consulte a história anterior quando necessário para identificar as mudanças. Se faltarem a amostra final ou os arquivos reais, a execução terminará com uma mensagem indicando a entrada necessária. **Os 300 registros recebidos sem procedência e as sete aprovações parciais novas não geram uma seleção substituta.**
 
 ### 2. Gerar, preencher e validar o arquivo de Áulus
 

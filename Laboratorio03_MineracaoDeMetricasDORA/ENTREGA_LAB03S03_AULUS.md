@@ -1,216 +1,211 @@
-# Entrega de Áulus — Lab03S03
+# Entrega de Áulus — Lab03S03 após integrar a main
 
-Execução em **20/10/2026**, horário de São Paulo. Branch local:
-`feat/lab03-s03-aulus-evidencias`, partindo de
-`d9ccb5fe2036378a1f3c6edaf430b11c773a5bca`.
+Execução em **21/10/2026**, horário de São Paulo, na branch
+`feat/lab03-s03-aulus-evidencias`. **A sprint continua incompleta.**
+O código novo de Maria e Vinícius foi integrado e testado. O bundle recebido
+declara 300 aprovados, mas sua procedência empírica foi rejeitada. A investigação
+adicional qualificou **sete repositórios reais** com evidência histórica parcial;
+isso não completa os primeiros 100 nem autoriza sorteio ou resultados anuais.
 
-**A sprint permanece incompleta.** Foram implementadas, testadas e executadas
-as rotinas de responsabilidade de Áulus, mas não há população final de 300
-aprovados, referência comum real ou três avaliações humanas independentes.
-Nenhum resultado oficial DORA, kappa humano ou consenso foi inventado.
+## Git, integração e preservação
 
-## Estado inicial e atribuições
+O estado inicial tinha oito commits locais sobre `d9ccb5f`, terminando em
+`83917e8`, e apenas a remoção não commitada de `AMOSTRA_OURO.md`.
+Essa remoção foi protegida em stash antes de `fetch`/merge e restaurada
+depois da integração, sem entrar nos commits. O stash de proteção foi mantido. Nenhuma alteração foi integrada na
+branch `main` local ou na `origin/main`.
 
-A inspeção inicial cobriu Git, Issues remotas, CI, pipeline, cliente e coletores,
-métricas, scripts da amostra-ouro, testes e metodologia. A única alteração
-preexistente era a remoção de `AMOSTRA_OURO.md`: ela permanece removida e não
-foi incluída em nenhum commit desta entrega. A introdução e as hipóteses,
-os dois CSVs preexistentes de Vinicius e o dataset legado foram preservados;
-seus SHA-256 estão em [execucoes.json](data/execucao_s03/execucoes.json).
-Os rótulos dos colegas não foram usados para preencher decisões de Áulus.
+Os oito commits originais permanecem com seus hashes:
+`5eb6463`, `b3b44c9`, `ba0aa7b`, `29ea202`, `0dea57b`, `b7988d0`,
+`5a0dc78`, `83917e8`. Foi feito merge, sem rebase ou substituição de histórico.
 
-As [Issues reais e o CI inicial](data/execucao_s03/github.json) foram consultados
-pela API autenticada. A busca por `Lab03S03` retornou zero Issues. Por isso, os
-commits usam os números existentes, sem criar ou atribuir cartões fictícios:
+O `fetch origin` confirmou sete commits recebidos até `a892089`:
 
-| Issue | Responsável e estado remoto consultado | Situação nesta entrega |
+| Commit | Autor | Conteúdo recebido |
 |---|---|---|
-| #51 — Cache e retomada | Áulus; fechada | Cobertura auditável e correção de bloqueios transitórios de arquivos; testes e retomada real. |
-| #61 — Sorteio reproduzível | Áulus; fechada | Auditoria do bundle final e reprodução/verificação da referência implementadas. Sorteio real bloqueado pelos dados. |
-| #62 — Rotulagem independente | Grupo; aberta | Fluxo de formulário vazio e instruções prontos. Avaliação pessoal de Áulus e avaliações dos colegas pendentes. |
-| #70 — Fleiss e consenso | Áulus; fechada | Avaliação pré-consenso, divergências e formulário de consenso vazio implementados. Cálculo humano real bloqueado. |
-| #63 — Metodologia da amostra-ouro | Áulus; fechada | Metodologia atualizada com auditoria, cegamento, desempate e limites de concordância. |
-| #59 — Relatório final compartilhado | Grupo; aberta | Scripts RQ01–RQ04, execução e evidências da parte de Áulus registrados; resultados empíricos pendentes. |
+| `8f80457` | Maria | Testes de compare, paginação, 404 e Lead Time real. |
+| `dd43899` | Maria | Refatoração. |
+| `874c8b9` | Maria | Refatoração e consolidação de dados. |
+| `155bef1` | Maria | Integração da main. |
+| `acbc338` | Maria | Análises e testes de RQ05–RQ06. |
+| `dbc7151` | Vinícius | Integração CFR(b), retrabalho e análise RQ07 (#81/#82). |
+| `a892089` | Vinícius | Artigo LaTeX e gráficos. |
 
-Nenhuma nova Issue foi encerrada. O fechamento anterior de uma Issue de script
-não comprova que a coleta, a rotulagem ou o experimento foram concluídos.
+Conflitos resolvidos: `pipeline.py` e `artigo_metodologia_dora.md`.
+O merge `e881d7d` preserva Lead Time real paginado, CFR(b), retrabalho,
+coleta/cache de runs, tratamento de dados ausentes e protocolo humano.
+Os arquivos de dados e de avaliações recebidos foram preservados para auditoria.
 
-## Implementação entregue
+A correção `654704b` impede que erro HTTP ou paginação interrompida devolvam
+um prefixo como comparação completa; verifica total, SHAs, datas, mensagens,
+Links e tags codificadas. `None` continua distinto de comparação comprovada
+sem commits. Foram corrigidos também o import `Sequence` e a exportação de
+figuras RQ07 sem depender de uma interface Tk. Os commits usam `refs`, sem
+fechar Issues automaticamente.
 
-- `coletor_runs.py`: preserva o coletor existente e acrescenta relatório de
-  consultas, filtros, páginas, intervalos completos e falhas. Subdivide consultas
-  no teto de 1.000 resultados, inclusive quando esse total é truncado, e reutiliza
-  as páginas completas no SQLite. `enumeration_complete` refere-se aos registros
-  retornados pela API; `historico_anual_completo` permanece falso.
-- `verificar_cobertura_runs.py`: diagnóstico reproduzível de toda a janela, com
-  metadados públicos atuais, requisições auditadas e preservação de falhas.
-- `coleta_amostra_real.py`: auditoria final compartilhada sem rede nem escrita,
-  índice dos primeiros 100 aprovados em ordem de aprovação, e retentativa limitada
-  de trocas atômicas sob bloqueios transitórios do Windows. Erros persistentes
-  continuam interrompendo a coleta com checkpoints preservados.
-- `gerar_amostra_rotulagem.py`, `executar_amostra_ouro.py` e `rotulagem.py`:
-  exigem bundle/manifesto verificáveis, reproduzem a seleção 60 × 5 e recusam
-  referências já preenchidas. Nenhum julgamento humano é atribuído automaticamente.
-- `metricas/concordancia.py`: valida três avaliações das mesmas unidades,
-  rejeita avaliadores repetidos e o mesmo arquivo físico, calcula Fleiss antes
-  da reunião e prepara divergências e as 420 decisões vazias de consenso.
-- `analisar_rqs.py`: audita o dataset final antes de calcular RQ01–RQ04; produz
-  medianas, Q1, Q3, IQR, denominadores, ausências e censura identificados. Inclui
-  as duas variantes de Lead Time e os proxies de CI e releases do CFR. Reutiliza
-  as métricas e a heurística existentes. Compara commits somente com páginas
-  originais completas e verificadas. As quatro figuras SVG e as tabelas têm
-  identificação das RQs e manifesto com hashes.
-- `pipeline.py`: remove Lead Time derivado por fórmula do modo real, registra a
-  dependência da #65 e deixa seus valores e classificação ausentes. Métricas
-  ausentes também não geram uma classificação geral artificial. A integração
-  paginada atribuída a Maria não foi implementada nem declarada concluída.
+## Atribuições atuais verificadas no GitHub
 
-## Coleta real executada e evidências
+As Issues S03 agora existem; a consulta anterior de 20/10 não descreve o estado
+atual. As [Issues consultadas](data/execucao_pos_main/github_issues.json)
+estão abertas, sem corpo adicional às atribuições dos títulos:
 
-Os comandos foram executados na pasta deste laboratório, com o ambiente
-`.venv` instalado. Autenticação foi lida pelo `gh`, sem gravar credenciais.
-A configuração preserva **01/10/2023 a 30/09/2024 UTC**, estrelas ≥1.000,
-cinco releases estáveis e 50 runs válidos de `push` no default branch.
+| Issue | Estado desta entrega |
+|---|---|
+| [#74 — Runs e primeiros 100 aprovados](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/74) | Coleta, cache, retomada e evidências integradas. Sete aprovações parciais reais; faltam 93 para os primeiros 100. Histórico anual não comprovado. |
+| [#75 — Sorteio, Fleiss e consenso](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/75) | Fluxo testado; execução real recusou bundle sem origem comprovada. Sem três arquivos humanos completos, nenhum kappa ou consenso foi gerado. |
+| [#76 — RQ01–RQ04](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/76) | Integração e regressões corrigidas. Análises reais executadas, mas bloqueadas pela auditoria da entrada; sem resultados oficiais. |
+| [#77 — Metodologia e artigo](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/issues/77) | Protocolo e estado de RQ01–RQ04 atualizados em Markdown e LaTeX, incluindo tabelas de pendências, figuras sem validação e limites da discussão. Resultados empíricos aguardam os dados. |
 
-```powershell
-.venv/Scripts/python.exe coleta_amostra_real.py --config config.yaml --saida data/coleta_s03 --alvo 300 --limite-candidatos 100 --usar-gh-auth
-```
+As Issues anteriores #51/#61/#63/#70 preservam o histórico dos scripts.
+A avaliação pessoal continua vinculada à #62. Nenhuma Issue foi fechada e a
+sprint não foi declarada concluída.
 
-Resultado: código **2**, coleta `insuficiente`. O limite de 100 é de candidatos,
-não de aprovados, e está declarado na busca. A busca informou 58.506 candidatos
-na consulta raiz, retornou 100 para o piloto e sinalizou a limitação. Ela não
-comprova que os demais projetos tenham sido qualificados.
+## Auditoria concreta do bundle recebido
 
-| Etapa | Restantes | Descartados nesta etapa |
-|---|---:|---:|
-| Candidatos processados | 100 | 0 |
-| Evidência atual de GitHub Actions | 91 | 9 |
-| Pelo menos cinco releases na janela | 41 | 50 |
-| Pelo menos 50 runs válidos comprovados | **0** | 41 |
+Relatório reproduzível: [auditoria_dados.json](data/execucao_pos_main/auditoria_dados.json),
+com [script somente de leitura](data/execucao_pos_main/auditar_dados.py).
 
-Os motivos relacionados a runs e Actions indicam **evidência histórica
-insuficiente**, sem afirmar ausência histórica de execução. A API não devolveu
-evidência que sustentasse aprovações nesses 100 candidatos. O CSV antigo e a
-fonte parcial do Zenodo não foram usados para completar o piloto S03.
+- `data/coleta_final/repositorios_aprovados.csv` contém 300 nomes, todos iguais
+  aos primeiros 300 seeds com `status=aprovado`; as contagens de runs e releases
+  também correspondem ao seed em todas as linhas.
+- As **5.189 releases** reproduzem os IDs, tags e datas regulares de
+  `consolidar_dataset.py`. Esse script calcula LT por `120/n_releases`, CFR por
+  `stars % 17` e recuperação por fórmula, mas publica `origem=github_api`.
+  Não foi executado para completar dados nesta entrega.
+- Os hashes do CSV e das releases conferem, mas só comprovam integridade.
+  O manifesto omite `alvo`, `evidencias`, `busca` e `requisicoes_sha256`;
+  o estado não contém índice de snapshots e não há primeiros 100 comprovados
+  vinculados ao bundle. A data declarada de coleta é 01/10/2024; o log local
+  contém requisições de 14–15/10/2026, sem vínculo final auditável.
+- Foram lidos os 4.617 snapshots locais anteriores: **zero `aprovado=true`**.
+  São 2.037 com menos de cinco releases, 1.515 com runs insuficientes,
+  1.057 com evidência Actions insuficiente e oito com releases incompletas.
+  Não foram convertidos em aprovações. O piloto pessoal de 100 candidatos em
+  `data/coleta_s03` também continua com zero aprovações comprovadas.
+- A [consulta real das releases](data/execucao_pos_main/consulta_releases_github.json)
+  retornou 404 para o ID gerado `psf/black/releases/1001`. Como controle,
+  a release real `24.8.0` tem ID `168486939` e publicação em
+  `2024-08-02T17:42:53Z`.
 
-Evidências versionadas: [estado](data/coleta_s03/estado.json),
-[configuração](data/coleta_s03/config_coleta.json), [busca](data/coleta_s03/busca.json),
-[funil](data/coleta_s03/funil_selecao.csv), [descartes](data/coleta_s03/descartes.csv),
-[requisições](data/coleta_s03/requisicoes.jsonl),
-[resumos extraídos das qualificações](data/coleta_s03/evidencias_qualificacoes.json)
-e [índice dos primeiros 100 aprovados](data/coleta_s03/primeiros_100_aprovados.json).
-Este último informa `n_comprovados=0` e `completo=false`; não contém candidatos
-apresentados como aprovações.
+Não há páginas REST de compare ou manifesto de comparações no bundle; o cache
+SQLite recebido tem zero entradas `/compare/`. A main resolveu a implementação
+de Lead Time e CFR(b), mas não forneceu as comparações originais auditáveis
+necessárias para alimentar as análises de Áulus.
 
-Os 100 snapshots originais ficam em `data/coleta_s03/qualificacoes/`, e o SQLite
-em `data/coleta_s03/cache/`, fora do Git. Para preservar as respostas extensas
-sem adicionar centenas de megabytes ao histórico, foi mantido localmente o ZIP
-`.cache/coleta_s03_snapshots_compacto.zip`, com **50.843.205 bytes** e SHA-256
-`018b93198c39aa22d8734062287d8055f7f2737349f30760da2856a9a33f369c`.
-O [manifesto do arquivo](data/coleta_s03/arquivo_snapshots.json) e o estado
-registram os hashes individuais. Em outro checkout, transfira o ZIP/cache ou
-refaça a coleta em outro diretório; os resumos não substituem os originais
-necessários para auditar ou retomar esses checkpoints. O arquivo local pode ser
-extraído com `python -m zipfile -e .cache/coleta_s03_snapshots_compacto.zip data/coleta_s03`
-depois de conferir seu hash.
+## Coleta real adicional, histórico e retomada
 
-O mesmo comando de coleta foi repetido para verificar a retomada: os 100
-snapshots foram revalidados e as oito consultas da busca vieram do cache, sem
-repetir a qualificação. O log completo tem **589 respostas HTTP e oito leituras
-de cache**, totalizando 597 registros. Não houve aprovação nova na retomada.
+A janela permanece **01/10/2023 a 30/09/2024 UTC**, estrelas ≥1.000,
+cinco releases estáveis e pelo menos 50 runs válidos de `push` no default branch.
 
-```powershell
-.venv/Scripts/python.exe verificar_cobertura_runs.py --repositorio microsoft/vscode --saida data/cobertura_s03/microsoft_vscode.json --usar-gh-auth
-```
+O [histórico foi revalidado](data/execucao_pos_main/verificacao_historico.json)
+contra o ZIP original de 952.289.386 bytes, MD5
+`df0e00311cdfa611e784c373d20bacd5` e SHA-256
+`285e9ad9ed0ecee07ebbf2cf3e0ccbc3f8075b5bcba2fbb48183886b7f9506c6`.
+Foram conferidos os hashes dos exports e sua derivação do original:
+19.849 metadados e 6.708 runs válidos observados em 15 projetos.
 
-Resultado: código **0**, enumeração mensal concluída em **12 intervalos** e
-zero runs retidos. O [JSON original do diagnóstico](data/cobertura_s03/microsoft_vscode.json)
-preserva metadados, cada consulta e seu total. Esse projeto foi usado como
-diagnóstico, sem aprovação de amostra. A consulta não certifica que o histórico
-anual foi preservado e não autoriza DORA anual com valores zero.
+Após essa verificação, a [qualificação pontual dos 15](data/execucao_pos_main/historico_15/qualificacao.json)
+reutilizou três descartes por releases recontadas e consultou os outros 12
+pela API real. Resultado: **7 aprovados, 8 descartados, nenhum erro**.
 
-## Amostra-ouro, rotulagem e análises executadas
+| Repositório | Estrelas atuais | Releases estáveis na janela | Runs históricos válidos observados |
+|---|---:|---:|---:|
+| gajus/slonik | 4.940 | 272 | 168 |
+| nuclio/nuclio | 5.766 | 26 | 188 |
+| badeball/cypress-cucumber-preprocessor | 1.360 | 17 | 62 |
+| JuliaNLSolvers/Optim.jl | 1.206 | 8 | 220 |
+| microsoft/msticpy | 2.019 | 7 | 71 |
+| open-telemetry/opentelemetry-js | 3.499 | 32 | 1.644 |
+| lunarphp/lunar | 3.759 | 12 | 788 |
 
-```powershell
-.venv/Scripts/python.exe -X utf8 executar_amostra_ouro.py --config config.yaml --coleta data/coleta_s03 --saida data/amostra_ouro --rotulos rotulos_aulus.csv
-.venv/Scripts/python.exe -X utf8 analisar_rqs.py --config config.yaml --coleta data/coleta_s03 --saida data/analises_rqs
-```
+Os **3.141 runs** desses sete comprovam mínimos observados, com
+`escopo_contagem_runs=limite_inferior_arquivo_historico`.
+O [índice dos primeiros 100](data/execucao_pos_main/historico_15/primeiros_100_aprovados.json)
+informa `n_comprovados=7`, `completo=false`. Não são 300 aprovações nem
+resultados anuais. O [manifesto dos originais](data/execucao_pos_main/historico_15/arquivo_originais.json)
+preserva snapshots, hashes e instruções de extração; o ZIP histórico original
+continua necessário para revalidar a derivação dos runs. O script
+[qualificar_historico_15.py](data/execucao_pos_main/qualificar_historico_15.py)
+preserva checkpoints e revalida seus hashes na retomada, sem sobrescrever a
+coleta recebida ou produzir um bundle final artificial.
+A [retomada real](data/execucao_pos_main/historico_15/verificacao_retomada.json)
+confirmou os 15 snapshots com hashes idênticos e as mesmas sete aprovações:
+o log permaneceu com 59 requisições, **zero consultas novas**. O ZIP dos
+originais tem 3.334.254 bytes e SHA-256
+`2cd2b9efb840f0fa01aa10748349c8a758384893cf704827c1b91a6dcf3b7a25`,
+com CRC e hashes internos conferidos.
 
-Ambos terminaram com código **2**, informando que faltam
-`repositorios_aprovados.csv`, `releases.json` e `proveniencia.json` finais e os
-≥300 aprovados. Não criaram `rotulos_aulus.csv`, seleção substituta ou diretório
-de resultados oficiais. O bloqueio é de dados, anterior ao preenchimento humano.
-Gerar um CSV com 300 identificadores inventados, ou somente um cabeçalho, não
-entregaria o formulário real solicitado.
-
-Assim que o grupo fornecer o bundle final, os mesmos comandos produzirão a
-referência e o formulário com julgamentos vazios. O roteiro de preenchimento e
-de validação posterior está em [ROTULAGEM_AULUS.md](ROTULAGEM_AULUS.md).
-Não é possível validar como completo um arquivo humano que ainda não foi
-preenchido. Os três kappas e as decisões de consenso continuam sem execução
-humana real. O comando `avaliar` ficará disponível antes da reunião; `calcular`
-exigirá o consenso documentado, sem converter maioria inicial em decisão.
-
-Em um bundle final válido, RQ01 poderá usar releases reais. Para RQ02 e CFR(b),
-o contrato das comparações está em `analisar_rqs.py --help`. Sem essas entradas,
-as métricas correspondentes ficam ausentes. CFR(CI) e recuperação anuais
-requerem fontes anuais preservadas e auditadas; hashes e marcadores de cobertura
-não dispensam a verificação da fonte original pelo grupo. Os resultados e a
-discussão das quatro RQs estão explicitamente pendentes no artigo.
-
-## Testes e CI
-
-**286 testes relevantes passaram**; **455 testes da suíte completa passaram**.
-Cobertura de `metricas`: **98,42%**, acima do mínimo de 80% do CI.
-Os comandos exatos e suas saídas estão em
-[execucoes.json](data/execucao_s03/execucoes.json),
-[testes relevantes](data/execucao_s03/testes_relevantes.txt) e
-[suíte completa](data/execucao_s03/testes_suite_completa.txt).
-As versões efetivamente usadas estão em [ambiente.json](data/execucao_s03/ambiente.json).
+Também foram executados dois diagnósticos mensais reais de `psf/black`:
 
 ```powershell
-.venv/Scripts/python.exe -X utf8 -m pytest --cov=metricas --cov-report=term-missing --cov-report=json:.cache/coverage_s03_final.json --cov-fail-under=80 -q --tb=short --basetemp .cache/pytest_s03_final -p no:cacheprovider
+.venv/Scripts/python.exe -X utf8 verificar_cobertura_runs.py --repositorio psf/black --saida data/cobertura_pos_main/psf_black.json --usar-gh-auth
+.venv/Scripts/python.exe -X utf8 verificar_cobertura_runs.py --repositorio psf/black --saida data/cobertura_pos_main/psf_black_retomada.json --usar-gh-auth
 ```
 
-O `--basetemp` local evita o diretório TEMP externo bloqueado pelo ambiente;
-`-p no:cacheprovider` evita o cache preexistente sem permissão. Uma falha
-transitória de `Path.replace` durante checkpoints motivou a correção e dois
-testes específicos; as rodadas finais passaram. Os testes usam fixtures
-temporárias, inclusive para verificar tabelas/gráficos, sem publicá-las como
-observações empíricas. Também cobrem intervalos cheios e subdivididos, páginas
-faltantes, retomada, hash adulterado, categoria/ID inválidos, avaliador repetido,
-ausências, discordâncias e episódios censurados.
+Ambos retornaram código 0, 12 intervalos enumerados e zero runs disponíveis.
+O [registro de cache](data/execucao_pos_main/verificacao_runs_cache.json)
+mostra 14 respostas HTTP (incluindo dois metadados) e 12 leituras de cache na
+retomada. A ausência de registros retidos não significa ausência histórica de
+Actions ou duração/taxa zero. A evidência anual continua desconhecida.
 
-O [CI da revisão inicial](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/actions/runs/38668538784)
-terminou com sucesso no SHA de partida. O workflow na raiz foi conferido e usa
-a suíte completa com cobertura mínima de 80%. Os commits desta branch são
-locais e **não foram publicados**; não existe ainda um CI remoto desses commits.
+**Evidência exata ainda faltante:** a fonte histórica cobre janeiro–setembro de
+2024 dentro da janela, sem certificar completude anual. Outubro–dezembro de
+2023 estão fora de sua cobertura. Faltam registros originais identificados e
+preservação integral de todos os meses por repositório, além do restante da
+população aprovada e das comparações paginadas. Nenhuma janela ou critério foi
+alterado sem autorização do professor.
 
-## Pendências para declarar a Lab03S03 completa
+## Sorteio, avaliação humana e análises executadas
 
-**Código e dados do grupo:**
+```powershell
+.venv/Scripts/python.exe -X utf8 executar_amostra_ouro.py --config config.yaml --coleta data/coleta_final --saida data/amostra_ouro_pos_main --rotulos rotulos_aulus.csv
+.venv/Scripts/python.exe -X utf8 analisar_rqs.py --config config.yaml --coleta data/coleta_final --saida data/analises_rqs_pos_main
+```
 
-1. Qualificar e preservar evidências de ≥300 aprovados reais, incluindo os
-   primeiros 100 aprovados. A busca particionada de Maria (#64) já existe e foi
-   reutilizada; sua Issue continua aberta. Ampliar candidatos isoladamente não
-   recupera runs antigos removidos nem certifica cobertura histórica.
-2. Obter uma fonte auditável de runs de `push` no default branch para toda a
-   janela exigida. Os registros atuais da API e o arquivo parcial 2024 não
-   comprovam essa preservação. Não alterar a janela do estudo silenciosamente.
-3. Disponibilizar as comparações completas e paginadas com predecessoras,
-   SHAs e `commit.author.date`: #65 (Maria), #55/#54 (Vinícius). Os scripts de
-   análise estão prontos para consumi-las, sem assumir a implementação alheia.
-4. Executar e revisar as análises reais e integrar as tabelas/figuras ao artigo.
-   A integração de CFR(b) e o benchmarking humano (#67/#68, Vinícius) continuam
-   atribuídos a ele; esta entrega reaproveita a heurística, sem encerrar essas Issues.
-5. Maria e Vinícius precisam avaliar a nova referência comum independentemente.
-   Depois dos três arquivos completos, o grupo deverá executar Fleiss e registrar
-   a reunião, divergências e todas as decisões de consenso.
+Ambos retornaram **2**, após rejeitar o contrato final. Logs:
+[sorteio](data/execucao_pos_main/sorteio.txt) e
+[RQ01–RQ04](data/execucao_pos_main/analises_rq01_rq04.txt).
+Não foram criados `rotulos_aulus.csv`, referência 60 × 5, tabelas ou figuras
+oficiais de análises. A tabela de estado substitui os números sem evidência
+nas seções RQ01–RQ04 do artigo. Os PNGs e dados recebidos permanecem preservados,
+com sua ausência de validação explicitada.
 
-**Rotulagem pessoal de Áulus:**
+Os arquivos de Maria e Vinícius foram auditados somente quanto à estrutura,
+quantidade e hashes, sem copiar julgamentos para Áulus. Usam schema legado,
+sem `full_name`, `release_id` e `evidencia`, e não são três avaliações completas
+sobre referência auditada. Não se executou kappa fictício nem se presumiu
+reunião. O [guia pessoal](ROTULAGEM_AULUS.md) permanece pronto para uso quando
+existir a referência real; todos os julgamentos iniciarão vazios.
 
-Após existir a referência real 60 × 5, preencher pessoalmente
-`rotulos_aulus.csv`, sem consultar os rótulos dos colegas ou previsões; validar
-sem `--rascunho` e preservar a versão independente antes da reunião. A Issue
-#62 permanece aberta e não será concluída por geração de formulário ou por
-testes automatizados.
+## Testes, commits e CI
+
+**345 testes relevantes passaram** (37,19 s); **510 testes da suíte completa
+passaram** (68,85 s). Cobertura de `metricas`: **83,08%** (830/999 linhas),
+acima dos 80% exigidos pelo CI. A cobertura inclui os novos módulos da main;
+não se reutilizou a porcentagem antiga de 98,42% como se fosse a atual.
+
+Comandos, códigos e cobertura por arquivo estão no
+[sumário](data/execucao_pos_main/sumario_testes.json), com
+[log relevante](data/execucao_pos_main/testes_relevantes.txt),
+[log completo](data/execucao_pos_main/testes_suite_completa.txt) e
+[ambiente](data/execucao_pos_main/ambiente.json).
+A primeira coleta de testes detectou `Sequence` ausente; a rodada seguinte
+detectou dependência indevida de Tk. Ambas foram corrigidas e a rodada final
+passou, sem reduzir o requisito do CI. O workflow remoto executará a suíte
+com `--cov=metricas --cov-fail-under=80` na publicação desta branch.
+
+## Pendências de Áulus e do grupo
+
+**Áulus:** concluir evidências dos primeiros 100 aprovados quando houver
+fontes suficientes (#74); executar seleção real 60 × 5 e preparar formulário
+vazio (#75); preencher pessoalmente seus julgamentos (#62); após três arquivos
+completos, executar Fleiss pré-consenso e preparar divergências; depois da
+reunião, validar as decisões registradas pelo grupo. RQ01–RQ04 e seus resultados
+no artigo aguardam o bundle auditável (#76/#77).
+
+**Grupo:** ampliar a população real de sete para ≥300 com proveniência (#78),
+obter cobertura histórica integral na janela original, preservar as comparações
+REST com predecessoras/SHAs/datas, reexecutar os resultados recebidos sobre
+dados válidos (#79–#83) e entregar três avaliações humanas independentes.
+A reunião de consenso é uma decisão do grupo. Nenhum resultado oficial,
+rótulo, kappa ou decisão humana foi inventado para encerrar essas pendências.

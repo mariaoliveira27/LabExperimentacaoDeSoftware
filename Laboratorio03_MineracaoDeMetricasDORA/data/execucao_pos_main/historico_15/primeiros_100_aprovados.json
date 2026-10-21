@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "objetivo": 100,
+  "n_comprovados": 7,
+  "completo": false,
+  "janela": {
+    "inicio": "2023-10-01T00:00:00+00:00",
+    "fim": "2024-09-30T23:59:59+00:00"
+  },
+  "ordem": "ordem de aprovação no processamento auditado de candidatos",
+  "repositorios": [
+    {
+      "full_name": "gajus/slonik",
+      "candidate_id": 86057635,
+      "snapshot": "qualificacoes/86057635.json",
+      "sha256": "6c969575425e91d474c97bf07b3745f6a51839279b7825212c0fc620e949f2c0",
+      "total_runs_janela": 168,
+      "total_releases_janela": 272,
+      "escopo_contagem_runs": "limite_inferior_arquivo_historico"
+    },
+    {
+      "full_name": "nuclio/nuclio",
+      "candidate_id": 91797088,
+      "snapshot": "qualificacoes/91797088.json",
+      "sha256": "adf555953f47a31539961496206d367bf67e71067bdf7a579e49ce1b039d390a",
+      "total_runs_janela": 188,
+      "total_releases_janela": 26,
+      "escopo_contagem_runs": "limite_inferior_arquivo_historico"
+    },
+    {
+      "full_name": "badeball/cypress-cucumber-preprocessor",
+      "candidate_id": 115192595,
+      "snapshot": "qualificacoes/115192595.json",
+      "sha256": "e15589a2b53c3d5b592918c7a13ef77d5f0a9e232a891b073e2cc40b04031f90",
+      "total_runs_janela": 62,
+      "total_releases_janela": 17,
+      "escopo_contagem_runs": "limite_inferior_arquivo_historico"
+    },
+    {
+      "full_name": "JuliaNLSolvers/Optim.jl",
+      "candidate_id": 3933868,
+      "snapshot": "qualificacoes/3933868.json",
+      "sha256": "8e38773c992ffd5c24ee73b38665a1ab8749eaa378e576883c4d78ba7961949f",
+      "total_runs_janela": 220,
+      "total_releases_janela": 8,
+      "escopo_contagem_runs": "limite_inferior_arquivo_historico"
+    },
+    {
+      "full_name": "microsoft/msticpy",
+      "candidate_id": 171915396,
+      "snapshot": "qualificacoes/171915396.json",
+      "sha256": "3fe25939b252d1b238f00016152dc5a4b8e86bb052c4b6b6112777dab57167af",
+      "total_runs_janela": 71,
+      "total_releases_janela": 7,
+      "escopo_contagem_runs": "limite_inferior_arquivo_historico"
+    },
+    {
+      "full_name": "open-telemetry/opentelemetry-js",
+      "candidate_id": 185901023,
+      "snapshot": "qualificacoes/185901023.json",
+      "sha256": "373ac6f453345b1a3612d1e50993cfbfda9432c77151a9b19eeae5f550d2f94e",
+      "total_runs_janela": 1644,
+      "total_releases_janela": 32,
+      "escopo_contagem_runs": "limite_inferior_arquivo_historico"
+    },
+    {
+      "full_name": "lunarphp/lunar",
+      "candidate_id": 440577490,
+      "snapshot": "qualificacoes/440577490.json",
+      "sha256": "1a503916d6f6c7ecd1252925318aca5f644704a9ce4dc0d5e41a2bc07bee2eab",
+      "total_runs_janela": 788,
+      "total_releases_janela": 12,
+      "escopo_contagem_runs": "limite_inferior_arquivo_historico"
+    }
+  ],
+  "pendencia": "Ainda não há evidência de 100 repositórios aprovados; candidatos processados não são aprovações."
+}

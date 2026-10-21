@@ -36,3 +36,5 @@ data/coleta_s03/*.tmp
 data/cobertura_s03/cache/
 data/cobertura_s03/*.tmp
 .tmp-runs-coverage/
+data/cobertura_pos_main/cache/
+data/cobertura_pos_main/*.tmp

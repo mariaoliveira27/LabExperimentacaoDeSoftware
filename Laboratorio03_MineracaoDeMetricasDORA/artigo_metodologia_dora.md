@@ -207,6 +207,12 @@ As definições em [`metricas/calculo_metricas.py`](metricas/calculo_metricas.py
 
 **Estado: resultados e discussão empírica pendentes.** A nova execução e os
 comandos verificáveis estão em [ENTREGA_LAB03S03_AULUS.md](ENTREGA_LAB03S03_AULUS.md).
+Após a main, a qualificação pontual da fonte histórica revalidada comprovou
+**sete aprovações reais entre 15 candidatos**, com 374 releases estáveis e
+3.141 runs válidos observados. O [índice dos primeiros 100](data/execucao_pos_main/historico_15/primeiros_100_aprovados.json)
+permanece incompleto (7/100); a cobertura é um limite inferior de janeiro a
+setembro de 2024. Esse progresso não valida o bundle gerado de 300, não supre
+outubro–dezembro de 2023 e não autoriza distribuições DORA anuais.
 As evidências do diagnóstico mensal de `microsoft/vscode` cobrem as 12 consultas
 da janela de 01/10/2023 a 30/09/2024 UTC. A API retornou zero runs retidos nessa
 consulta. Esse resultado não estima a atividade histórica do projeto: a
@@ -224,7 +230,7 @@ válidos, ausentes e censurados. Os quartis usam interpolação linear tipo 7.
 | Questão | Procedimento pronto | Resultado empírico nesta entrega |
 |---|---|---|
 | RQ01 — Frequência | Releases estáveis na janela divididas pelas 52,14 semanas fixadas na configuração; distribuição entre repositórios. | Pendente da população final validada. |
-| RQ02 — Lead Time | Mediana por release e mediana por commit; `commit.author.date` nas comparações paginadas com a predecessora cronológica; primeira release sem predecessora e comparações indisponíveis identificadas. | Pendente da população e das comparações completas das Issues #65 (Maria) e #55 (Vinícius). |
+| RQ02 — Lead Time | Mediana por release e mediana por commit; `commit.author.date` nas comparações paginadas com a predecessora cronológica; primeira release sem predecessora e comparações indisponíveis identificadas. | Código paginado recebido e integrado. Pendentes população e páginas originais completas das comparações. |
 | RQ03 — CFR | Proxy de CI com conclusões válidas; proxy de releases com a heurística v3 existente, janela corretiva de sete dias e exclusão das releases censuradas do denominador. Mensagens ausentes não equivalem a ausência de correção. | Pendente da população, da cobertura anual para CI e das comparações para CFR(b). A validação humana da heurística também permanece pendente. |
 | RQ04 — Recuperação | Episódios por workflow; mediana/IQR dos recuperados, contagens e proporções censuradas separadas; repositórios sem recuperação observada não recebem duração zero. | Pendente da população e de evidências anuais de runs. |
 

@@ -1,0 +1,23 @@
+{
+  "verificado_em_utc": "2026-10-21T14:52:48.900405+00:00",
+  "comando_retomada": ".venv/Scripts/python.exe -B -X utf8 data/execucao_pos_main/qualificar_historico_15.py",
+  "codigo_retomada": 0,
+  "observacao": "Uma tentativa inicial sem rede abortou antes do processamento pela autenticacao gh indisponivel no sandbox; o cliente foi tornado lazy. A retomada efetiva validou todos os snapshots sem autenticacao nem HTTP.",
+  "n_snapshots_antes": 15,
+  "n_snapshots_depois": 15,
+  "todos_15_sha256_identicos": true,
+  "todos_reutilizados": true,
+  "n_requisicoes_antes": 59,
+  "n_requisicoes_depois": 59,
+  "novas_requisicoes": 0,
+  "n_aprovados": 7,
+  "n_processados": 15,
+  "primeiros_100_n_comprovados": 7,
+  "primeiros_100_completo": false,
+  "runs_nos_7_aprovados": 3141,
+  "releases_estaveis_nos_7_aprovados": 374,
+  "zip_bytes": 3334254,
+  "zip_crc_integro": true,
+  "hashes_snapshots_no_zip_conferem": true,
+  "cobertura_anual_completa": false
+}

@@ -1,0 +1,34 @@
+{
+  "repositorio": "psf/black",
+  "escopo": "diagnostico; nao aprovado; nao estima atividade historica",
+  "execucoes": [
+    {
+      "comando": ".venv/Scripts/python.exe -X utf8 verificar_cobertura_runs.py --repositorio psf/black --saida data/cobertura_pos_main/psf_black.json --usar-gh-auth",
+      "codigo": 0
+    },
+    {
+      "comando": ".venv/Scripts/python.exe -X utf8 verificar_cobertura_runs.py --repositorio psf/black --saida data/cobertura_pos_main/psf_black_retomada.json --usar-gh-auth",
+      "codigo": 0
+    }
+  ],
+  "requisicoes": {
+    "http": 14,
+    "cache": 12
+  },
+  "resultados": {
+    "psf_black.json": {
+      "n_runs": 0,
+      "n_intervalos": 12,
+      "enumeration_complete": true,
+      "permite_metricas_dora_anuais": false,
+      "sha256": "cd57c132bac13bae4dd05cd10fc1324d0ee498b54df9a1c3279c3cc4c438b494"
+    },
+    "psf_black_retomada.json": {
+      "n_runs": 0,
+      "n_intervalos": 12,
+      "enumeration_complete": true,
+      "permite_metricas_dora_anuais": false,
+      "sha256": "232bf5bd1e2c2a3133d9a94d7073c63abb19519c90af570a75d627ba1e72e322"
+    }
+  }
+}
