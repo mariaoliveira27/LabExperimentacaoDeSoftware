@@ -3,6 +3,7 @@
 import csv
 import json
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 import pytest
 import requests
@@ -24,6 +25,7 @@ def fluxo_local(tmp_path, monkeypatch):
     monkeypatch.delenv("GITHUB_TOKEN", raising=False)
     monkeypatch.chdir(tmp_path)
     runs = json.loads((Path(__file__).parent / "fixtures/workflow_runs.json").read_text(encoding="utf-8"))
+    releases = [{"id": 1, "tag_name": "v1.0.0", "published_at": "2024-05-11T00:00:00Z", "draft": False, "prerelease": False}]
     calls = []
 
     def get(session, url, params=None, **kwargs):
@@ -36,7 +38,7 @@ def fluxo_local(tmp_path, monkeypatch):
         elif url.endswith("/actions/workflows"):
             payload = {"total_count": 1, "workflows": [{"id": 10}]}
         elif url.endswith("/releases"):
-            payload = [{"id": 1, "tag_name": "v1.0.0", "published_at": "2024-05-11T00:00:00Z", "draft": False, "prerelease": False}]
+            payload = releases
         elif url.endswith("/repos/fixture/offline"):
             payload = {"default_branch": "trunk"}
         else:
@@ -47,12 +49,12 @@ def fluxo_local(tmp_path, monkeypatch):
         return response
 
     monkeypatch.setattr(requests.Session, "get", get)
-    return config, candidate, runs, calls
+    return config, candidate, runs, calls, releases
 
 
 @pytest.mark.parametrize("stars,contributors", [(1020, 7), (11111, 96)])
 def test_pipeline_exporta_metricas_reais_e_reutiliza_cache(fluxo_local, stars, contributors, monkeypatch):
-    config, candidate, runs, calls = fluxo_local
+    config, candidate, runs, calls, _ = fluxo_local
     candidate.update(stars=stars, contribs=contributors)
     rows, _ = pipeline.executar_pipeline(config)
     row = rows[0]
@@ -68,7 +70,8 @@ def test_pipeline_exporta_metricas_reais_e_reutiliza_cache(fluxo_local, stars, c
     assert row["origem_metricas_estabilidade"] == "workflow_runs"
     assert row["lead_time_release_mediana_dias"] is None
     assert row["lead_time_commit_mediana_dias"] is None
-    assert row["origem_lead_time"] == "pendente_integracao_paginada_issue_65"
+    assert row["origem_lead_time"] == "indisponivel_sem_commits_comparaveis"
+    assert row["comparacoes_esperadas"] == row["comparacoes_completas"] == 0
     assert row["tier_lead_time"] is None and row["tier_dora_geral"] is None
     with open(config["storage"]["repos_csv"], encoding="utf-8", newline="") as stream:
         exported = next(csv.DictReader(stream))
@@ -87,7 +90,7 @@ def test_pipeline_exporta_metricas_reais_e_reutiliza_cache(fluxo_local, stars, c
 
 
 def test_pipeline_ignorados_nao_contam_para_minimo(fluxo_local):
-    config, _, runs, _ = fluxo_local
+    config, _, runs, _, _ = fluxo_local
     runs[1]["conclusion"] = "cancelled"
     rows, funnel = pipeline.executar_pipeline(config)
     assert rows == []
@@ -95,7 +98,7 @@ def test_pipeline_ignorados_nao_contam_para_minimo(fluxo_local):
 
 
 def test_pipeline_indisponivel_exportado_vazio(fluxo_local):
-    config, _, runs, _ = fluxo_local
+    config, _, runs, _, _ = fluxo_local
     config["criteria"]["min_workflow_runs"] = 0
     for run in runs:
         run["conclusion"] = None
@@ -112,7 +115,7 @@ def test_pipeline_indisponivel_exportado_vazio(fluxo_local):
 
 
 def test_pipeline_falha_coleta_nao_exporta_parcial(fluxo_local, monkeypatch):
-    config, _, _, _ = fluxo_local
+    config, _, _, _, _ = fluxo_local
 
     def interrupted(*args, **kwargs):
         raise RuntimeError("Página pendente")
@@ -124,7 +127,7 @@ def test_pipeline_falha_coleta_nao_exporta_parcial(fluxo_local, monkeypatch):
 
 
 def test_pipeline_censura_sucesso_concluido_depois_do_corte(fluxo_local):
-    config, _, runs, _ = fluxo_local
+    config, _, runs, _, _ = fluxo_local
     runs[2]["updated_at"] = "2024-06-01T00:00:00Z"
     rows, _ = pipeline.executar_pipeline(config)
     assert rows[0]["tempo_recuperacao_mediana_horas"] is None
@@ -143,8 +146,84 @@ def test_cli_referencia_somente_quando_explicita(monkeypatch, args, reference):
 
 
 def test_referencia_identifica_simulacao_sem_rede(fluxo_local, monkeypatch):
-    config, _, _, _ = fluxo_local
+    config, _, _, _, _ = fluxo_local
     monkeypatch.setattr(requests.Session, "get", lambda *a, **kw: pytest.fail("Referência deve ser local"))
     rows, _ = pipeline.executar_pipeline(config, modo_referencia=True)
     assert rows[0]["origem_metricas_estabilidade"] == "referencia_simulada"
     assert rows[0]["runs_sucessos"] is None
+
+
+def test_pipeline_compare_paginado_lead_time_cfr_censura_e_cache(fluxo_local, monkeypatch):
+    config, _, _, calls, releases = fluxo_local
+    releases.extend([
+        {"id": 2, "tag_name": "v1.0.1", "published_at": "2024-05-15T00:00:00Z", "draft": False, "prerelease": False},
+        {"id": 3, "tag_name": "v1.1.0", "published_at": "2024-05-29T00:00:00Z", "draft": False, "prerelease": False},
+    ])
+    previous_get = requests.Session.get
+    compare_calls = []
+
+    def commit(number, date, message):
+        return {"sha": f"{number:040x}", "commit": {"author": {"date": date}, "message": message}}
+
+    def get(session, url, params=None, **kwargs):
+        if "/compare/" not in url:
+            return previous_get(session, url, params=params, **kwargs)
+        page = int((params or {}).get("page", parse_qs(urlparse(url).query).get("page", [1])[0]))
+        compare_calls.append((url, page))
+        response = requests.Response()
+        response.status_code = 200
+        if "v1.0.0...v1.0.1" in url:
+            commits = (
+                [commit(i, "2024-05-12T00:00:00Z", "feat: implementa recurso") for i in range(1, 101)]
+                if page == 1 else [commit(101, "2024-05-14T00:00:00Z", "fix: corrige falha")]
+            )
+            payload = {"total_commits": 101, "commits": commits}
+            if page == 1:
+                response.headers["Link"] = '<https://api.github.com/repos/fixture/offline/compare/v1.0.0...v1.0.1?page=2&per_page=100>; rel="next"'
+        else:
+            assert "v1.0.1...v1.1.0" in url
+            payload = {"total_commits": 1, "commits": [commit(102, "2024-05-20T00:00:00Z", "feat: novo recurso")]}
+        response._content = json.dumps(payload).encode()
+        return response
+
+    monkeypatch.setattr(requests.Session, "get", get)
+    rows, _ = pipeline.executar_pipeline(config)
+    row = rows[0]
+    assert row["lead_time_release_mediana_dias"] == 6.0
+    assert row["lead_time_commit_mediana_dias"] == 3.0
+    assert row["origem_lead_time"] == "compare_paginado"
+    assert row["comparacoes_esperadas"] == row["comparacoes_completas"] == 2
+    assert row["releases_com_lead_time"] == 2
+    assert row["commits_com_lead_time"] == 102
+    assert row["cfr_releases_proxy"] == 0.5
+    assert row["releases_com_falha"] == 1
+    assert row["releases_avaliadas_cfr"] == 2
+    assert row["releases_censuradas_cfr"] == 1
+    assert row["origem_cfr_releases"] == "releases_e_compares_paginados"
+    assert row["rework_rate"] == 0.333
+    assert len(calls) == 4 and len(compare_calls) == 3
+
+    monkeypatch.setattr(requests.Session, "get", lambda *a, **kw: pytest.fail("Resposta completa deveria estar em cache"))
+    resumed, _ = pipeline.executar_pipeline(config)
+    assert resumed == rows
+
+
+@pytest.mark.parametrize("commits,expected_cfr,expected_complete", [(None, None, 0), ([], 0.0, 1)])
+def test_pipeline_compare_indisponivel_difere_de_completo_vazio(fluxo_local, monkeypatch, commits, expected_cfr, expected_complete):
+    config, _, _, _, releases = fluxo_local
+    releases.append({"id": 2, "tag_name": "v1.1.0", "published_at": "2024-05-15T00:00:00Z", "draft": False, "prerelease": False})
+    monkeypatch.setattr(pipeline.ColetorCommits, "coletar_commits_entre_releases", lambda *args: commits)
+    rows, _ = pipeline.executar_pipeline(config)
+    row = rows[0]
+    assert row["lead_time_release_mediana_dias"] is None
+    assert row["lead_time_commit_mediana_dias"] is None
+    assert row["comparacoes_esperadas"] == 1
+    assert row["comparacoes_completas"] == expected_complete
+    assert row["cfr_releases_proxy"] == expected_cfr
+    assert row["rework_rate"] == expected_cfr
+    if commits is None:
+        assert row["origem_cfr_releases"] == "indisponivel_comparacoes_incompletas"
+        assert row["releases_avaliadas_cfr"] is None
+        with open(config["storage"]["repos_csv"], encoding="utf-8", newline="") as stream:
+            exported = next(csv.DictReader(stream))
+        assert exported["cfr_releases_proxy"] == exported["rework_rate"] == ""

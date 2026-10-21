@@ -19,10 +19,14 @@ Implementa:
 import os
 import csv
 from pathlib import Path
-from typing import Dict, List, Tuple, Any, Optional
+from typing import Dict, List, Tuple, Any, Optional, Sequence
 
 import numpy as np
 import pandas as pd
+import matplotlib
+
+# A análise exporta arquivos e deve funcionar no CI sem sessão gráfica/Tk.
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import cohen_kappa_score, confusion_matrix
