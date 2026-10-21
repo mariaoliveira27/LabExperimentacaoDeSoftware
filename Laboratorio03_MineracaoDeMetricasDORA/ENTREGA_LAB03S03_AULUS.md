@@ -1,5 +1,20 @@
 # Entrega de Áulus — Lab03S03 após integrar a main
 
+**Atualização de 21/10/2026 — CSV adotado para análise:** por escolha expressa
+de Áulus, `data/output/repositorios_aprovados.csv` da main `a892089` passou a
+ser a entrada de uma análise descritiva dos 300 registros fornecidos.
+Os resultados e sua interpretação estão em [RESULTADOS_CSV_MAIN.md](RESULTADOS_CSV_MAIN.md)
+e os artefatos em `data/analises_csv_main/`. O arquivo original foi preservado.
+A origem por seeds/fórmulas identificada na auditoria permanece declarada;
+não foram produzidas comparações ou runs inexistentes para converter os
+agregados em coleta real. O fluxo `analisar_rqs.py` conserva sua auditoria.
+A remoção de `AMOSTRA_OURO.md`, que estava fora dos commits na execução abaixo,
+foi posteriormente registrada por Áulus em `ec27244`; esse commit foi preservado.
+Validação desta atualização: **82 testes relevantes e 527 testes da suíte
+completa passaram**, com **83,08% de cobertura de `metricas`**. Os comandos,
+códigos de saída e hashes antes/depois da entrada estão em
+[execucoes.json](data/execucao_csv_main/execucoes.json).
+
 Execução em **21/10/2026**, horário de São Paulo, na branch
 `feat/lab03-s03-aulus-evidencias`. **A sprint continua incompleta.**
 O código novo de Maria e Vinícius foi integrado e testado. O bundle recebido

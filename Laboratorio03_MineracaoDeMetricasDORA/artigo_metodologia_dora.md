@@ -263,3 +263,27 @@ o software não certifica, sozinho, que o cegamento foi respeitado. Empates 1–
 continuam dependentes de discussão e evidência, e toda decisão não resolvida
 permanece pendente. Nenhum kappa ou consenso foi calculado nesta entrega a
 partir de exemplos ou de uma única avaliação.
+
+## 9. Análise descritiva do CSV adotado da main
+
+Por escolha de Áulus, os 300 registros de
+`data/output/repositorios_aprovados.csv` da main `a892089` também foram
+analisados como valores fornecidos, usando `analisar_csv_main.py`. O
+[relatório dessa análise](RESULTADOS_CSV_MAIN.md) apresenta RQ01–RQ04,
+quartis, unidades, contagens declaradas e os limites da interpretação.
+Os arquivos originais e o protocolo de auditoria anterior foram preservados.
+
+| RQ | Resultado descritivo do CSV adotado | Limite de interpretação |
+|---|---|---|
+| RQ01 | Mediana de 0,269 release/semana; Q1 = 0,153; Q3 = 0,460. | Contagem e frequência fornecidas, sem recontar releases originais. |
+| RQ02 | Medianas de 8,57 dias (a) e 3,86 dias (b); IQRs de 10,00 e 4,50 dias. | Valores reproduzem fórmulas do gerador; faltam datas e comparações originais para interpretação empírica. |
+| RQ03 | Medianas de 13,3% no proxy de CI e 8,0% no proxy de releases. | Taxas fornecidas; CFR de CI diverge das contagens além do arredondamento em 159 registros. |
+| RQ04 | Mediana entre projetos de 9,70 horas; Q1 = 3,70; Q3 = 14,90; IQR = 11,20. | Medianas e contagens fornecidas; não há durações individuais ou comprovação de cobertura anual nesse CSV. |
+
+As quatro figuras em `data/analises_csv_main/` identificam a origem não
+validada empiricamente dos valores. O manifesto associa o hash da entrada ao
+parecer anterior, que identificou seeds e fórmulas de `consolidar_dataset.py`.
+Não se transformou a declaração `github_api` do CSV em comprovação de coleta,
+nem se inferiram eventos, rótulos humanos ou hipóteses confirmadas desses
+agregados. A diferença entre as variantes de Lead Time descreve o arquivo
+adotado; as fórmulas que o produziram também determinam essa diferença.

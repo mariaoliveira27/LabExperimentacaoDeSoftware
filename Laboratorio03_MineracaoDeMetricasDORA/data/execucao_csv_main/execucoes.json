@@ -1,0 +1,70 @@
+{
+  "registrado_em": "2026-10-21T15:37:52.992171+00:00",
+  "csv_sha256_antes": "766d01fbb52cea4685270c7a215121c9073e21ad216e32a3c004d8b80445bf9d",
+  "csv_sha256_depois": "766d01fbb52cea4685270c7a215121c9073e21ad216e32a3c004d8b80445bf9d",
+  "fonte_preservada": true,
+  "execucoes": [
+    {
+      "nome": "analise",
+      "comando": [
+        "C:\\Users\\aulus\\Documents\\GitHub\\LabExperimentacaoDeSoftware\\Laboratorio03_MineracaoDeMetricasDORA\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "analisar_csv_main.py",
+        "--csv",
+        "data/output/repositorios_aprovados.csv",
+        "--config",
+        "config.yaml",
+        "--commit-origem",
+        "a8920892d70e7118477888535783c0cbb0a1b3e5",
+        "--saida",
+        "data/analises_csv_main"
+      ],
+      "codigo": 0,
+      "log": "data/execucao_csv_main/analise.txt"
+    },
+    {
+      "nome": "testes_relevantes",
+      "comando": [
+        "C:\\Users\\aulus\\Documents\\GitHub\\LabExperimentacaoDeSoftware\\Laboratorio03_MineracaoDeMetricasDORA\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-m",
+        "pytest",
+        "tests/test_analisar_csv_main.py",
+        "tests/test_analisar_rqs.py",
+        "tests/test_coleta_amostra_real.py",
+        "-q",
+        "--tb=short",
+        "--basetemp",
+        ".cache/pytest_csv_main_relevantes_01",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "codigo": 0,
+      "log": "data/execucao_csv_main/testes_relevantes.txt"
+    },
+    {
+      "nome": "testes_completos",
+      "comando": [
+        "C:\\Users\\aulus\\Documents\\GitHub\\LabExperimentacaoDeSoftware\\Laboratorio03_MineracaoDeMetricasDORA\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-m",
+        "pytest",
+        "--cov=metricas",
+        "--cov-report=term-missing",
+        "--cov-report=json:.cache/coverage_csv_main.json",
+        "--cov-fail-under=80",
+        "-q",
+        "--tb=short",
+        "--basetemp",
+        ".cache/pytest_csv_main_completos_01",
+        "-p",
+        "no:cacheprovider"
+      ],
+      "codigo": 0,
+      "log": "data/execucao_csv_main/testes_completos.txt"
+    }
+  ]
+}

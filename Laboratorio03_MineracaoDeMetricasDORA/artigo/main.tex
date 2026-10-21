@@ -164,6 +164,50 @@ Para cada par de combinações (C1$\times$C2, C1$\times$C3 e C2$\times$C3), calc
 
 \section{Estado dos Resultados após Auditoria}
 
+\subsection{Análise descritiva do CSV adotado da main}
+Em 21/10/2026, Áulus adotou como entrada analítica os 300 registros de
+\texttt{data/output/repositorios\_aprovados.csv}, da main \texttt{a892089}.
+Recalculamos as estatísticas das colunas fornecidas com
+\texttt{analisar\_csv\_main.py}, preservando o arquivo e sua proveniência.
+A auditoria anterior identificou correspondência desses valores com seeds e
+fórmulas de \texttt{consolidar\_dataset.py}. Os resultados desta subseção
+descrevem esse CSV; não comprovam medições originais de commits ou runs.
+
+Para RQ01, a frequência fornecida tem mediana de 0,269 release/semana
+(Q1 = 0,153; Q3 = 0,460). Para RQ03, as medianas fornecidas são 13,3\%
+para CI e 8,0\% para releases. Em 159 linhas, a taxa de CI publicada diverge
+da razão derivada das contagens além de 0,000501; preservamos os valores
+publicados, sem substituí-los por taxas recalculadas.
+
+Para RQ02, a mediana entre repositórios é 8,57 dias na variante por release
+(Q1 = 5,00; Q3 = 15,00; IQR = 10,00) e 3,86 dias na variante por commit
+(Q1 = 2,25; Q3 = 6,75; IQR = 4,50). A primeira coluna é maior nos 300 projetos;
+a mediana das diferenças pareadas é 4,71 dias. Como os valores reproduzem
+\texttt{LT(a)=round(max(0.5,120/n\_releases),2)} e
+\texttt{LT(b)=round(max(0.2,LT(a)*0.45),2)}, essa diferença também decorre
+da construção dos dados, sem fornecer evidência independente para H02.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.88\textwidth]{../data/analises_csv_main/rq02_mediana_iqr.png}
+\caption{RQ02: mediana e quartis dos valores fornecidos no CSV adotado; origem por fórmulas registrada na auditoria.}
+\label{fig:rq02_csv_adotado}
+\end{figure}
+
+Para RQ04, a mediana entre repositórios das medianas fornecidas é 9,70 horas
+(Q1 = 3,70; Q3 = 14,90; IQR = 11,20). O CSV declara 10.172 episódios recuperados
+e 1.129 censurados, com proporção agrupada de 9,9903\%. Esse agregado não
+permite calcular a mediana das durações de todos os episódios. As durações
+por projeto também correspondem à fórmula do gerador baseada em contribuidores;
+faltam IDs, timestamps e sequências originais para validar a recuperação anual.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.88\textwidth]{../data/analises_csv_main/rq04_mediana_iqr.png}
+\caption{RQ04: medianas e proporções declaradas por repositório no CSV adotado; eventos originais não reconstituídos.}
+\label{fig:rq04_csv_adotado}
+\end{figure}
+
 \subsection{Frequência de Deploy e Lead Time (RQ01 e RQ02)}
 Não há população final auditável para executar os resultados oficiais. O sorteio e o script de RQ01--RQ04 foram executados contra o bundle novo e recusaram sua procedência. A implementação recebida de Maria usa comparações paginadas e datas reais de autoria para Lead Time; isso resolve a capacidade de cálculo, mas não fornece as páginas originais completas de cada comparação no bundle.
 

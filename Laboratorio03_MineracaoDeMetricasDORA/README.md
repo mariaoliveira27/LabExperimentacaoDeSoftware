@@ -1,5 +1,11 @@
 ## Entrega de Áulus — Lab03S03
 
+O CSV da main foi adotado como entrada analítica por escolha de Áulus.
+Consulte [os resultados descritivos de RQ01–RQ04](RESULTADOS_CSV_MAIN.md),
+incluindo RQ02 (8,57 e 3,86 dias) e RQ04 (9,70 horas), com origem e limites
+registrados. A análise dos valores fornecidos não substitui a auditoria das
+respostas originais da coleta. Os arquivos de entrada foram preservados.
+
 Consulte [a entrega e as evidências da execução](ENTREGA_LAB03S03_AULUS.md),
 [as instruções de rotulagem pessoal](ROTULAGEM_AULUS.md) e
 [a metodologia e o estado das RQ01–RQ04](artigo_metodologia_dora.md#8-execução-e-resultados-de-rq01rq04-na-sprint-03).
