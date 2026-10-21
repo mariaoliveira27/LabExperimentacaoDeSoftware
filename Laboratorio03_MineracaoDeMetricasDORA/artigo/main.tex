@@ -7,6 +7,7 @@
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{placeins}
 
 \sloppy
 
@@ -208,6 +209,7 @@ A Figura~\ref{fig:rq01_rq02_velocidade} ilustra a distribuição da frequência 
 \caption{Distribuição da Frequência de Deploy (RQ01) e Comparação do Lead Time entre Variantes (RQ02)}
 \label{fig:rq01_rq02_velocidade}
 \end{figure}
+\FloatBarrier
 
 \subsection{Taxa de Falha e Tempo de Recuperação (RQ03 e RQ04)}
 Na RQ03, observamos que o proxy de CI resultou em mediana de $13{,}3\%$ de falhas ($\text{IQR} = [6{,}7\%; 20{,}0\%]$), enquanto o proxy de releases corretivas apresentou mediana de $8{,}0\%$ ($\text{IQR} = [4{,}0\%; 12{,}0\%]$). Embora ambas as medianas se situem na faixa \textit{Elite} ($\le 15\%$), a taxa de falha de CI é cerca de $1{,}66$ vez a taxa observada no proxy de releases. A diferença é consistente com H03: o CI registra falhas ainda durante o desenvolvimento, enquanto o proxy de releases contabiliza apenas problemas que atravessam as barreiras de validação e exigem uma correção publicada em até sete dias. Portanto, os valores não representam exatamente o mesmo evento, mas sugerem que a automação atua como mecanismo de contenção antes da distribuição ao público.
@@ -238,6 +240,7 @@ Tempo de Recuperação (horas) & $9{,}70$h & $3{,}70$h & $14{,}90$h & High & 0\%
 \caption{Comparação das Taxas de Falha de Mudanças (RQ03) e Distribuição do Tempo de Recuperação de CI (RQ04)}
 \label{fig:rq03_rq04_estabilidade}
 \end{figure}
+\FloatBarrier
 
 \subsection{Velocidade versus Estabilidade (RQ05)}
 Para responder à RQ05, calculamos a correlação de postos de Spearman entre a Frequência de Deploy e as duas variantes de taxa de falha. Obtivemos $\rho = -0{,}1003$ ($p = 0{,}0829$, $\text{IC}_{95\%} = [-0{,}211; 0{,}013]$) tanto para $\text{CFR}_{\text{CI}}$ quanto para $\text{CFR}_{\text{Release}}$. 
@@ -265,6 +268,7 @@ Variante (b) [Releases] & $-0{,}1003$ & $0{,}0829$ & $[-0{,}211; 0{,}013]$ & Sem
 \caption{Dispersão entre Frequência de Deploy e Taxa de Falha de Mudanças (RQ05)}
 \label{fig:rq05_dispersao}
 \end{figure}
+\FloatBarrier
 
 \subsection{Fatores Associados ao Desempenho DORA (RQ06)}
 Aplicamos o teste omnibus de Kruskal-Wallis com correção de Holm-Bonferroni para avaliar a influência de cinco características dos repositórios sobre as métricas DORA: Popularidade (estrelas), Contribuidores, Idade, Linguagem e Tipo de Projeto rotulado manualmente.
@@ -279,6 +283,7 @@ Em contrapartida, nenhuma das características analisadas exerceu influência es
 \caption{Influência da Popularidade em Estrelas sobre Frequência de Deploy, Lead Time e Taxa de Falha (RQ06)}
 \label{fig:rq06_fatores_estrelas}
 \end{figure}
+\FloatBarrier
 
 \subsection{Análise de Sensibilidade da Classificação DORA (RQ07)}
 A Tabela~\ref{tab:rq07_sensibilidade} apresenta a comparação pareada entre as três combinações operacionais delineadas. Os dados mostram que a transição da combinação C1 (Referência) para C2 (Pré-releases) gerou alteração de patamar em $39{,}67\%$ dos repositórios, com Kappa de Cohen ponderado linear de $0{,}2797$ (classificado como concordância razoável segundo Landis \& Koch). Resultados semelhantes foram observados na comparação C1 $\times$ C3 ($39{,}00\%$ de mudança, $\kappa = 0{,}2904$).
@@ -309,6 +314,7 @@ A Figura~\ref{fig:rq07_graficos} apresenta a distribuição comparativa dos pata
 \caption{Matrizes de Transição e Sensibilidade dos Patamares DORA (RQ07)}
 \label{fig:rq07_graficos}
 \end{figure}
+\FloatBarrier
 
 \section{Discussão e Ameaças à Validade}
 
