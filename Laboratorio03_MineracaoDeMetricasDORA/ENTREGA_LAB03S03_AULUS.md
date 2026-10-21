@@ -61,8 +61,18 @@ As contagens das execuções históricas abaixo descrevem as rodadas anteriores.
 O `fetch` mais recente identificou dois commits adicionais de `origin/main`,
 até `4e05345`: `17224e5` (Maria, resumo/conclusão e comentários da heurística)
 e `4e05345` (Vinícius, `FloatBarrier`). Ambos alteram somente `artigo/main.tex`.
-A publicação desta preparação também deverá incorporar esses commits na branch
-de Áulus, preservando os oito commits locais e os formulários preparados.
+Esses commits foram integrados na branch de Áulus, preservando os oito commits
+locais e os formulários preparados. Quatro blocos de conflito em `artigo/main.tex`
+foram combinados: resumo/abstract, RQ01, interpretação de RQ02–RQ04 e conclusão.
+As melhorias de interpretação de Maria e os `FloatBarrier` de Vinícius foram
+mantidos, com os números recebidos identificados como material pendente de
+validação. A afirmação de censura zero foi confrontada com os 1.129 censurados
+declarados no CSV. A nova seção recebida de F1 foi preservada como relato do
+grupo, sem certificá-la como avaliação humana desta referência.
+
+A main recente alterou somente o artigo, sem código ou dados novos. As
+verificações estruturais de LaTeX, figuras e referências internas passaram;
+não há compilador LaTeX instalado para gerar uma nova versão PDF local.
 
 ## Histórico: análise do CSV e integração da main
 

@@ -18,7 +18,8 @@ respostas originais da coleta. Os arquivos de entrada foram preservados.
 Consulte [a entrega e as evidências da execução](ENTREGA_LAB03S03_AULUS.md),
 [as instruções de rotulagem pessoal](ROTULAGEM_AULUS.md) e
 [a metodologia e o estado das RQ01–RQ04](artigo_metodologia_dora.md#8-execução-e-resultados-de-rq01rq04-na-sprint-03).
-A main `a892089` foi integrada preservando os oito commits locais. Lead Time
+A main foi integrada até `4e05345`, incluindo as revisões do artigo de Maria e
+Vinícius, preservando os oito commits locais. Lead Time
 paginado, CFR(b) e retrabalho estão integrados. O bundle recebido declara 300
 aprovados, mas sua auditoria foi rejeitada: nomes, contagens e 5.189 releases
 reproduzem seeds e fórmulas de `consolidar_dataset.py`, apesar da declaração

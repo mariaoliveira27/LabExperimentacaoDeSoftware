@@ -7,6 +7,7 @@
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{placeins}
 
 \sloppy
 
@@ -23,16 +24,16 @@
 
 \maketitle
 \begin{quote}
-\textbf{Estado após auditoria da main a892089 (21/10/2026).}
+\textbf{Estado após integrar a main 4e05345 (21/10/2026).}
 Os números e figuras recebidos para RQ05--RQ07 são preservados como material do grupo ainda não validado empiricamente. Não sustentam conclusões oficiais nem validação humana. A evidência exata e os comandos estão em \texttt{ENTREGA\_LAB03S03\_AULUS.md} e \texttt{data/execucao\_pos\_main/}. A sprint continua incompleta.
 \end{quote}
 
 \begin{abstract}
-  This report describes operational proxies and analysis tools for DORA metrics in open-source projects. The post-integration audit on 21 October 2026 rejected the provenance of the supplied 300-repository bundle: its releases and metrics match a generator based on seeds and formulas. Consequently, RQ01--RQ04 have no validated empirical results, and human labeling, agreement and consensus remain pending. The original observation window and inclusion criteria are preserved.
+  DORA metrics in open-source projects require operational proxies based on releases, commits and CI workflows. This report preserves the group's revised interpretations and presents descriptive statistics from the 300-record CSV adopted by Áulus. The audit identified seeds and formulas in that source, so these statistics do not establish empirical results for the repository population. A reproducible 60-by-5 reference and blank assessment forms have been prepared from the supplied source. Three independent human assessments, pre-consensus agreement and the consensus meeting remain pending. The original observation window is preserved.
 \end{abstract}
-     
+
 \begin{resumo}
-  Este relatório apresenta proxies operacionais e ferramentas de análise de métricas DORA em projetos de código aberto. A auditoria após integrar a main, em 21/10/2026, rejeitou a procedência do bundle recebido de 300 repositórios: releases e métricas correspondem a um gerador baseado em seeds e fórmulas. RQ01--RQ04 permanecem sem resultados empíricos validados; rotulagem humana, concordância e consenso estão pendentes. A janela e os critérios originais foram preservados.
+  Métricas DORA em projetos de código aberto exigem proxies operacionais baseados em releases, commits e execuções de CI. Este relatório preserva as interpretações revisadas do grupo e apresenta estatísticas descritivas do CSV de 300 registros adotado por Áulus. A auditoria identificou seeds e fórmulas nessa fonte, de modo que essas estatísticas não estabelecem resultados empíricos para a população de repositórios. Foram preparados uma referência reproduzível de 60 projetos e cinco registros por projeto e formulários de avaliação vazios. As três avaliações humanas independentes, a concordância pré-consenso e a reunião de consenso continuam pendentes. A janela original foi preservada.
 \end{resumo} 
 
 \section{Introdução}
@@ -93,7 +94,7 @@ Antes de executarmos as análises estatísticas finais, formulamos hipóteses in
 
 \subsection{RQ 07. O quanto a classificação DORA de um repositório depende da definição operacional escolhida?}
 \begin{itemize}
-    \item \textbf{Hipótese H07 (Informal):} Esperamos que a variação das definições operacionais (combinações C1, C2 e C3) que causem alteração de patamar consideráveis dos repositórios, resultando em um Kappa de Cohen ponderado linear entre 0,25 e 0,40 (concordância razoável), porém sem migrações extremas (\textit{Elite} para \textit{Low}).
+    \item \textbf{Hipótese H07 (Informal):} Esperamos que a variação das definições operacionais (combinações C1, C2 e C3) cause alterações de patamar em uma parcela considerável dos repositórios, resultando em um Kappa de Cohen ponderado linear entre 0,25 e 0,40 (concordância razoável), porém sem migrações extremas (\textit{Elite} para \textit{Low}).
     \item \textbf{Justificativa:} Como a classificação geral utiliza a mediana dos quatro escores, variações em uma única métrica atômica são amortecidas no patamar consolidado.
 \end{itemize}
 
@@ -149,6 +150,8 @@ Recovery Time (mediana) & $< 1\text{ hora}$ & $1\text{ a } < 24\text{ horas}$ & 
 \subsection{Validação Manual da Heurística (Amostra-Ouro)}
 O protocolo exige um bundle final auditado de pelo menos 300 aprovados, seguido de sorteio reproduzível de 60 repositórios e cinco releases estáveis por projeto (semente 42). A lista é ordenada antes de cada sorteio. O manifesto preserva algoritmo, versões e hashes. O formulário de Áulus deverá conter julgamentos vazios na geração.
 
+Por escolha expressa de Áulus, foi também preparada a referência da fonte fornecida da main, no modo \texttt{csv\_main\_adotado}. O sorteio de 60 projetos e cinco registros por projeto usa semente 42 e preserva a janela original, as entradas exatas e seus hashes. Os três formulários estão vazios; há 0/3 avaliações completas e um formulário com 420 decisões de consenso vazias. O manifesto identifica a origem gerada e mantém falsos os indicadores de releases originais auditadas, critérios auditados e cobertura histórica verificada. Esse preparo não substitui o bundle empírico previsto no protocolo.
+
 Após três avaliações humanas independentes e completas sobre a mesma referência, serão calculados três kappas de Fleiss pré-consenso (tipo de projeto, entrega real e release corretiva). Serão preparados divergências e formulário com 420 decisões vazias. A reunião registra decisões, justificativas, evidências, responsáveis e data; empates exigem decisão explícita. Os arquivos recebidos de Maria e Vinícius não substituem o arquivo pessoal de Áulus nem comprovam esse fluxo. Não há F1 humano validado nesta entrega.
 
 \subsection{Procedimento Estatístico e Análise de Sensibilidade (RQ07)}
@@ -193,6 +196,7 @@ da construção dos dados, sem fornecer evidência independente para H02.
 \caption{RQ02: mediana e quartis dos valores fornecidos no CSV adotado; origem por fórmulas registrada na auditoria.}
 \label{fig:rq02_csv_adotado}
 \end{figure}
+\FloatBarrier
 
 Para RQ04, a mediana entre repositórios das medianas fornecidas é 9,70 horas
 (Q1 = 3,70; Q3 = 14,90; IQR = 11,20). O CSV declara 10.172 episódios recuperados
@@ -207,9 +211,19 @@ faltam IDs, timestamps e sequências originais para validar a recuperação anua
 \caption{RQ04: medianas e proporções declaradas por repositório no CSV adotado; eventos originais não reconstituídos.}
 \label{fig:rq04_csv_adotado}
 \end{figure}
+\FloatBarrier
+
+\subsection{Resultados da heurística recebidos, pendentes de validação humana}
+O texto recebido de Maria relata os resultados abaixo para uma referência anterior. Eles são preservados para revisão, sem constituir validação humana desta entrega: os arquivos legados não comprovam três avaliações independentes da seleção atual. O estado atual é 0/3 avaliações completas; não recalculamos F1, kappa ou consenso humano a partir desses números.
+
+No material recebido, a validação da heurística é descrita sobre 300 releases apresentadas pelo grupo como rotuladas manualmente. As três versões atingiram a meta mínima de $F1 \ge 0{,}70$, mas apresentaram níveis diferentes de cobertura. A versão v1 foi totalmente precisa, porém deixou de identificar 10 releases corretivas (recall de $0{,}9471$). A v2 identificou todas as ocorrências da amostra, alcançando $F1=1{,}0000$, enquanto a v3 refinada obteve precisão de $1{,}0000$, recall de $0{,}9788$ e $F1=0{,}9893$.
+
+Esse resultado indica que a heurística refinada não introduziu falsos positivos no conjunto avaliado e deixou de recuperar apenas quatro releases corretivas. Embora a v2 tenha apresentado desempenho perfeito na amostra-ouro, a v3 foi adotada por incorporar regras mais robustas para prefixos de versão, Conventional Commits e filtros de ruídos cosméticos. Esse é o argumento de escolha relatado pelo grupo; a auditoria desta entrega não confirma suporte empírico para esses números. A validação depende das avaliações independentes e do consenso documentado.
 
 \subsection{Frequência de Deploy e Lead Time (RQ01 e RQ02)}
-Não há população final auditável para executar os resultados oficiais. O sorteio e o script de RQ01--RQ04 foram executados contra o bundle novo e recusaram sua procedência. A implementação recebida de Maria usa comparações paginadas e datas reais de autoria para Lead Time; isso resolve a capacidade de cálculo, mas não fornece as páginas originais completas de cada comparação no bundle.
+Não há população final auditável para executar os resultados oficiais. O sorteio e o script de RQ01--RQ04 recusaram a procedência empírica do bundle. A implementação recebida de Maria usa comparações paginadas e datas reais de autoria para Lead Time; isso resolve a capacidade de cálculo, mas não fornece as páginas originais completas de cada comparação no bundle.
+
+No CSV adotado, a frequência tem mediana de $0{,}269$ release/semana ($\text{IQR}=[0{,}153;0{,}460]$), aproximadamente uma release a cada três a quatro semanas. A interpretação revisada por Maria situa a região central abaixo de uma release semanal e relaciona essa cadência ao empacotamento público de versões. Essa interpretação descreve os valores fornecidos; a procedência identificada impede usá-la para confirmar H01 ou comparar empiricamente esses projetos com produtos SaaS.
 
 \begin{table}[ht]
 \centering
@@ -228,20 +242,24 @@ RQ04 & Runs originais anuais por workflow e censura explícita & Pendente \\
 \end{tabularx}
 \end{table}
 
-As figuras recebidas \texttt{rq01\_rq02\_velocidade\_dora.png} e \texttt{rq03\_rq04\_estabilidade\_dora.png} permanecem preservadas no repositório, mas foram retiradas da apresentação empírica: foram produzidas sobre dados cuja procedência não foi validada. Novas figuras serão geradas por \texttt{analisar\_rqs.py} somente após a auditoria aprovar as entradas.
+As figuras recebidas \texttt{rq01\_rq02\_velocidade\_dora.png} e \texttt{rq03\_rq04\_estabilidade\_dora.png} permanecem preservadas como material do grupo. As figuras do CSV adotado, apresentadas anteriormente, têm a origem explicitada. Resultados oficiais serão gerados por \texttt{analisar\_rqs.py} somente após a auditoria aprovar as entradas.
+
+A revisão de Maria destaca a sensibilidade do Lead Time à unidade de análise. Nas colunas fornecidas, a mediana passa de $8{,}57$ para $3{,}86$ dias, redução aproximada de $55\%$, entre as variantes (a) e (b). O commit mais antigo pode elevar a variante por release, enquanto a variante por commit considera cada alteração. A diferença observada nas colunas é descritiva; não comprova branches longos ou commits esquecidos nos projetos, porque as comparações originais ainda faltam.
 
 \subsection{Taxa de Falha e Tempo de Recuperação (RQ03 e RQ04)}
-O CFR(b) e a taxa de retrabalho recebidos de Vinícius foram integrados, preservando a janela corretiva de sete dias e a censura. Sua existência no código não comprova os valores do CSV. Para CI e recuperação, a nova consulta de \texttt{psf/black} enumerou 12 meses e retornou zero runs disponíveis; a retomada reutilizou o cache. Esse diagnóstico não mede ausência de atividade em 2023--2024 nem permite atribuir CFR ou recuperação zero.
+O CFR(b) e a taxa de retrabalho recebidos de Vinícius foram integrados, preservando a janela corretiva de sete dias e a censura. Sua existência no código não comprova os valores do CSV. Para CI e recuperação, a consulta de \texttt{psf/black} enumerou 12 meses e retornou zero runs disponíveis; a retomada reutilizou o cache. Esse diagnóstico não mede ausência de atividade em 2023--2024 nem permite atribuir CFR ou recuperação zero.
 
-A fonte histórica local preserva 6.708 runs de 15 projetos entre janeiro e setembro de 2024, sem completude anual. Sua revalidação e a qualificação atual comprovaram sete aprovações parciais, com 3.141 runs observados e 374 releases estáveis; oito projetos tiveram menos de cinco releases. O índice dos primeiros 100 permanece em 7/100. Faltam outubro--dezembro de 2023 e evidência de preservação integral de toda a janela por repositório. A mediana e o IQR dos episódios recuperados, quando calculáveis, serão apresentados com censurados e denominadores separados, sem duração zero para ausência de recuperação.
+A revisão de Maria distingue os eventos capturados pelos dois proxies: falha durante CI e release que exige correção posterior não representam o mesmo evento. No CSV adotado, $13{,}3\%$ é aproximadamente $1{,}66$ vez $8{,}0\%$. Essa diferença entre colunas não comprova o efeito causal de barreiras de validação. Para RQ04, a mediana entre projetos é $9{,}70$ horas, com metade central entre $3{,}70$ e $14{,}90$ horas; a métrica usa falhas de CI como proxy, sem identificar incidentes de produção. A afirmação recebida de censura zero foi confrontada com o CSV: ele declara 1.129 episódios censurados e 10.172 recuperados, proporção agrupada de $9{,}9903\%$. Essas contagens declaradas ainda não têm sequências originais auditáveis.
+
+A fonte histórica local preserva 6.708 runs de 15 projetos entre janeiro e setembro de 2024, sem completude anual. Sua revalidação e a qualificação atual comprovaram sete aprovações parciais, com 3.141 runs observados e 374 releases estáveis; oito projetos tiveram menos de cinco releases. O índice dos primeiros 100 permanece em 7/100. Faltam outubro--dezembro de 2023 e evidência de preservação integral de toda a janela por repositório. Episódios recuperados e censurados devem ter denominadores separados, sem duração zero para ausência de recuperação.
 
 \subsection*{Material recebido para RQ05--RQ07, pendente de validação}
-As seções seguintes preservam os números do artigo recebido para revisão por Maria e Vinícius. A procedência rejeitada impede tratá-los como achados oficiais; suas afirmações não estão confirmadas pela auditoria desta entrega.
+As seções seguintes preservam os números e as revisões interpretativas do artigo recebido de Maria e Vinícius. A procedência rejeitada impede tratá-los como achados oficiais; suas afirmações não estão confirmadas pela auditoria desta entrega. O kappa ponderado de RQ07 compara definições operacionais e não substitui os três kappas de Fleiss entre avaliadores humanos.
 
 \subsection{Velocidade versus Estabilidade (RQ05)}
 Para responder à RQ05, calculamos a correlação de postos de Spearman entre a Frequência de Deploy e as duas variantes de taxa de falha. Obtivemos $\rho = -0{,}1003$ ($p = 0{,}0829$, $\text{IC}_{95\%} = [-0{,}211; 0{,}013]$) tanto para $\text{CFR}_{\text{CI}}$ quanto para $\text{CFR}_{\text{Release}}$. 
 
-O coeficiente fraco e ligeiramente negativo confirma a Hipótese H05 e refuta a hipótese de \textit{trade-off}: projetos open-source que publicam releases com maior frequência não apresentam maiores taxas de defeito. A Tabela~\ref{tab:rq05_spearman} e a Figura~\ref{fig:rq05_dispersao} sintetizam esses resultados e a distribuição com reta de regressão.
+O coeficiente fraco e ligeiramente negativo é compatível com H05 e não sustenta a hipótese de \textit{trade-off}: projetos open-source que publicam releases com maior frequência não apresentaram maiores taxas de falha. Entretanto, como $p=0{,}0829$ e o intervalo de confiança inclui zero, não há evidência estatística suficiente para afirmar uma associação monotônica na população. A conclusão apropriada é a ausência de evidência de deterioração da estabilidade, e não a prova de que aumentar a frequência necessariamente reduz falhas. A Tabela~\ref{tab:rq05_spearman} e a Figura~\ref{fig:rq05_dispersao} sintetizam esses resultados e a distribuição com reta de regressão.
 
 \begin{table}[ht]
 \centering
@@ -264,13 +282,14 @@ Variante (b) [Releases] & $-0{,}1003$ & $0{,}0829$ & $[-0{,}211; 0{,}013]$ & Sem
 \caption{Dispersão entre Frequência de Deploy e Taxa de Falha de Mudanças (RQ05)}
 \label{fig:rq05_dispersao}
 \end{figure}
+\FloatBarrier
 
 \subsection{Fatores Associados ao Desempenho DORA (RQ06)}
 Aplicamos o teste omnibus de Kruskal-Wallis com correção de Holm-Bonferroni para avaliar a influência de cinco características dos repositórios sobre as métricas DORA: Popularidade (estrelas), Contribuidores, Idade, Linguagem e Tipo de Projeto rotulado manualmente.
 
-Os resultados apontam que a Popularidade em estrelas ($H = 80{,}84$, $p_{\text{Holm}} < 10^{-15}$, $\epsilon^2 = 0{,}270$) e o número de Contribuidores ($H = 82{,}84$, $p_{\text{Holm}} < 10^{-15}$, $\epsilon^2 = 0{,}277$) exercem impacto de grande sobre a Frequência de Deploy e o Lead Time. O teste post-hoc de Cliff indicou diferenças expressivas entre o primeiro e o terceiro quartil de estrelas ($\delta = -0{,}745$, efeito grande), demonstrando que projetos com comunidades mais amplas conseguem manter ciclos de entrega substancialmente mais rápidos. 
+Os resultados apontam associações fortes entre Popularidade em estrelas e Frequência de Deploy/Lead Time ($H = 80{,}84$, $p_{\text{Holm}} < 10^{-15}$, $\epsilon^2 = 0{,}270$) e entre número de Contribuidores e essas mesmas métricas ($H = 82{,}84$, $p_{\text{Holm}} < 10^{-15}$, $\epsilon^2 = 0{,}277$). O teste post-hoc de Cliff indicou diferença grande entre o primeiro e o terceiro quartil de estrelas ($\delta = -0{,}745$ para frequência), coerente com maior frequência e menor Lead Time nos grupos mais populares. A idade do repositório também apresentou associação significativa com as métricas de velocidade ($p_{\text{Holm}} < 0{,}001$, $\epsilon^2 = 0{,}162$), assim como a linguagem principal ($p_{\text{Holm}} < 0{,}001$, $\epsilon^2 = 0{,}211$). Esses resultados sustentam parcialmente H06, mas devem ser interpretados como diferenças entre grupos, e não como evidência de causalidade.
 
-Em contrapartida, nenhuma das características analisadas exerceu influência estatisticamente significante sobre o Change Failure Rate ($p_{\text{Holm}} = 1{,}000$, $\epsilon^2 < 0{,}016$). Além disso, o Tipo de Projeto (biblioteca/framework vs. aplicação vs. CLI) não apresentou diferenças estatisticamente significantes após a correção de Holm ($p_{\text{Holm}} = 1{,}000$), indicando que a maturidade de entrega no GitHub nçao depende da natureza do artefato distribuído. A Figura~\ref{fig:rq06_fatores_estrelas} ilustra de forma clara esse contraste.
+Em contrapartida, nenhuma das características analisadas exerceu influência estatisticamente significativa sobre o Change Failure Rate ($p_{\text{Holm}} = 1{,}000$, $\epsilon^2 < 0{,}016$). O número de contribuidores foi a única característica associada ao Tempo de Recuperação ($p_{\text{Holm}} < 0{,}001$, $\epsilon^2 = 0{,}138$), com efeito moderado; para os demais fatores, não houve evidência significativa nessa métrica. Além disso, o Tipo de Projeto (biblioteca/framework, aplicação ou CLI) não apresentou diferenças significativas em nenhuma métrica após a correção de Holm ($p_{\text{Holm}} = 1{,}000$). Portanto, H06 é confirmada para velocidade e parcialmente rejeitada para estabilidade: popularidade, idade, linguagem e tamanho da comunidade diferenciam a velocidade observada, mas não o CFR. A Figura~\ref{fig:rq06_fatores_estrelas} ilustra esse contraste.
 
 \begin{figure}[ht]
 \centering
@@ -278,6 +297,7 @@ Em contrapartida, nenhuma das características analisadas exerceu influência es
 \caption{Influência da Popularidade em Estrelas sobre Frequência de Deploy, Lead Time e Taxa de Falha (RQ06)}
 \label{fig:rq06_fatores_estrelas}
 \end{figure}
+\FloatBarrier
 
 \subsection{Análise de Sensibilidade da Classificação DORA (RQ07)}
 A Tabela~\ref{tab:rq07_sensibilidade} apresenta a comparação pareada entre as três combinações operacionais delineadas. Os dados mostram que a transição da combinação C1 (Referência) para C2 (Pré-releases) gerou alteração de patamar em $39{,}67\%$ dos repositórios, com Kappa de Cohen ponderado linear de $0{,}2797$ (classificado como concordância razoável segundo Landis \& Koch). Resultados semelhantes foram observados na comparação C1 $\times$ C3 ($39{,}00\%$ de mudança, $\kappa = 0{,}2904$).
@@ -298,9 +318,9 @@ C2 (Pré-releases) $\times$ C3 (Tags) & $99{,}33\%$ & $0{,}67\%$ & $0{,}9780$ & 
 \end{tabular}
 \end{table}
 
-A distribuição percentual dos patamares consolidou essa constatação: em C1, $42{,}0\%$ dos repositórios foram classificados como \textit{High} e $58{,}0\%$ como \textit{Medium}. Ao incorporarmos pré-releases (C2) ou tags (C3), o percentual de projetos em \textit{High} saltou para $81{,}7\%$ e $81{,}0\%$, respectivamente, devido à forte redução no Lead Time decorrente do uso da Variante (b). 
+A distribuição percentual dos patamares mostra que a escolha operacional tem efeito prático relevante: em C1, $42{,}0\%$ dos repositórios foram classificados como \textit{High} e $58{,}0\%$ como \textit{Medium}. Ao incorporarmos pré-releases (C2) ou tags (C3), o percentual de projetos em \textit{High} saltou para $81{,}7\%$ e $81{,}0\%$, respectivamente, devido principalmente à redução no Lead Time decorrente do uso da Variante (b). Assim, a concordância com C1 foi apenas razoável ($\kappa=0{,}2797$ e $0{,}2904$), enquanto C2 e C3 produziram classificações quase idênticas ($\kappa=0{,}9780$). O resultado evidencia sensibilidade da classificação à definição do proxy, mas também mostra que as mudanças ficaram restritas a uma fronteira adjacente.
 
-A Figura~\ref{fig:rq07_graficos} apresenta a distribuição comparativa dos patamares e o mapa de calor das matrizes de transição. É crucial ressaltar que \textbf{não houve nenhuma transição extrema} (como de \textit{Elite} para \textit{Low} ou vice-versa): todas as migrações ocorreram estritamente entre os patamares adjacentes \textit{Medium} e \textit{High}. Isso comprova a Hipótese H07 e confirma que a classificação DORA preserva robustez metodológica.
+A Figura~\ref{fig:rq07_graficos} apresenta a distribuição comparativa dos patamares e o mapa de calor das matrizes de transição. É importante ressaltar que \textbf{não houve nenhuma transição extrema} (como de \textit{Elite} para \textit{Low} ou vice-versa): todas as migrações ocorreram estritamente entre os patamares adjacentes \textit{Medium} e \textit{High}. Desse modo, H07 é apoiada em relação à ausência de migrações extremas e à concentração das mudanças em categorias vizinhas, mas a alteração de aproximadamente 39\% dos repositórios impede afirmar que a classificação seja invariável à definição operacional.
 
 \begin{figure}[ht]
 \centering
@@ -308,6 +328,7 @@ A Figura~\ref{fig:rq07_graficos} apresenta a distribuição comparativa dos pata
 \caption{Matrizes de Transição e Sensibilidade dos Patamares DORA (RQ07)}
 \label{fig:rq07_graficos}
 \end{figure}
+\FloatBarrier
 
 \section{Discussão e Ameaças à Validade}
 
@@ -319,7 +340,9 @@ Os testes verificam os cálculos e a recusa de entradas incompletas, mas não su
 
 \section{Considerações Finais}
 
-Foram integrados os avanços de paginação, Lead Time, CFR(b), retrabalho e ferramentas estatísticas da main, preservando a auditoria e a coleta de runs de Áulus. A execução real identificou as lacunas do bundle novo e impediu a publicação de resultados sem suporte empírico. Permanecem pendentes a população final auditável, o histórico anual, as comparações preservadas e a avaliação humana. A Lab03S03 continua incompleta.
+Foram integrados os avanços de paginação, Lead Time, CFR(b), retrabalho e ferramentas estatísticas, além das revisões de interpretação e organização das figuras da main. O CSV adotado permite descrever os valores fornecidos, mas a auditoria impede promovê-los a resultados empíricos. A referência de 60 projetos e cinco registros por projeto, os três formulários humanos vazios e o fluxo de concordância estão preparados; nenhuma avaliação humana ou decisão da reunião foi produzida automaticamente.
+
+A revisão recebida distingue ausência de evidência de associação de prova de ausência de efeito. O resultado de Spearman relatado no material do grupo, com intervalo incluindo zero, não demonstraria que aumentar a frequência reduz falhas. A interpretação recebida de RQ07 também reconhece sensibilidade à definição operacional: mudanças entre patamares adjacentes e kappas razoáveis não tornam a classificação invariável. Ambas as interpretações dependem de validar a origem das observações antes de se tornarem conclusões do estudo. Permanecem pendentes a população final auditável, o histórico anual, as comparações preservadas e a avaliação humana. A Lab03S03 continua incompleta.
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
