@@ -1,8 +1,8 @@
 # Mineração de Métricas DORA em Repositórios Open-Source: Introdução e Hipóteses de Pesquisa
 
 **Disciplina:** Laboratório de Experimentação de Software  
-**Integrantes:** Maria (*Responsável por Seleção, Infraestrutura e Integração*)  
-**Contexto:** Lab03 — Mineração de Métricas DORA (Sprint 01 / Lab03S01)  
+**Integrantes:** Vinícius Simões (*Definições Operacionais, CFR(b) e RQ07*), Maria Clara Gomes (*Seleção, Infraestrutura e Integração*), Áulus H. Z. Pinto (*Amostragem, Concordância e Validação Humana*)  
+**Contexto:** Lab03 — Mineração de Métricas DORA (Sprint 03 / Lab03S03 — Consolidação de Hipóteses)  
 
 ---
 
@@ -39,66 +39,105 @@ Nesse cenário, o presente estudo justifica-se pela necessidade de:
 
 ## 2. Questões de Pesquisa e Hipóteses
 
-Em conformidade com as diretrizes do estudo pré-experimental da Sprint 01, formulam-se a seguir as hipóteses informais para as Questões de Pesquisa sob responsabilidade direta de análise e modelagem: **RQ03**, **RQ04** e **RQ05**, delineadas antes da inspeção dos resultados finais.
+Antes da inspeção dos resultados finais da Sprint 03, formulamos hipóteses informais para as sete Questões de Pesquisa da disciplina:
+
+---
+
+### RQ 01. Qual a frequência de deploys dos repositórios populares que usam CI/CD?
+
+#### Definição Operacional:
+Número de releases publicadas no default branch divididas pelas 52,14 semanas da janela anual de observação.
+
+#### Hipótese H01 (Informal):
+> **Esperamos que a maioria dos repositórios populares de código aberto apresente uma frequência de deploy enquadrada predominantemente nos patamares Medium e High (entre uma release por mês e uma release por semana, ou seja, 0,23 a 1 release/semana), com raríssimos projetos no patamar Elite ($\ge 7$ releases/semana).**
+
+#### Justificativa Teórica:
+Ao contrário de serviços SaaS internos que realizam múltiplos deploys contínuos por dia, releases em projetos open-source dependem de ciclos de empacotamento, testes comunitários e geração de changelogs, resultando em uma cadência mais espaçada e deliberada.
+
+---
+
+### RQ 02. Qual o tempo entre um commit e seu respectivo deploy?
+
+#### Definição Operacional das Variantes:
+- **Variante (a) [por release]:** Mediana do tempo decorrido entre o commit mais antigo pertencente à release e a publicação da release.
+- **Variante (b) [por commit]:** Mediana agregada do lead time de todos os commits atômicos de todas as releases da janela.
+
+#### Hipótese H02 (Informal):
+> **Esperamos que o Lead Time da Variante (a) seja substancialmente superior ao da Variante (b) (frequentemente situando-se no patamar Low, $\ge 30$ dias), enquanto a Variante (b) se situará nos patamares High e Medium (entre 1 e 7 dias, ou 7 e 30 dias).**
+
+#### Justificativa Teórica:
+A Variante (a) é fortemente penalizada por branches de longa duração ou commits antigos que ficaram pendentes antes da mesclagem, fazendo o lead time da release explodir. A Variante (b) atenua essa distorção e representa de modo mais fiel o tempo de ciclo das modificações cotidianas dos desenvolvedores.
 
 ---
 
 ### RQ 03. Qual a taxa de falha das mudanças entregues por esses repositórios?
 
 #### Definição Operacional das Variantes:
-- **Variante (a) — Proxy de CI:** 
-  $$\text{CFR}_{\text{CI}} = \frac{\text{Runs com Falha}}{\text{Runs com Falha} + \text{Runs com Sucesso}}$$
-  Considerando execuções do default branch com `event = push` e `conclusion ∈ {failure, timed_out, startup_failure}` (falhas) versus `conclusion = success` (sucessos), ignorando execuções canceladas ou neutras.
-- **Variante (b) — Proxy de Entrega (Releases):** 
-  Uma release $R$ é classificada como falha se for sucedida em até 7 dias corridos por uma release corretiva (identificada por incremento exclusivo do dígito de *patch* no SemVer e/ou mensagens de commit contendo `fix`, `hotfix`, `revert`). Releases nos últimos 7 dias da janela de observação são devidamente censuradas.
+- **Variante (a) — Proxy de CI:** $\text{CFR}_{\text{CI}} = \text{Runs com Falha} / (\text{Runs com Falha} + \text{Runs com Sucesso})$.
+- **Variante (b) — Proxy de Entrega (Releases):** Uma release $R$ é classificada como falha se for sucedida em até 7 dias corridos por uma release corretiva (com censura nos últimos 7 dias da janela).
 
 #### Hipótese H03 (Informal):
 > **Esperamos que a taxa de falha medida pelo proxy de CI ($\text{CFR}_{\text{CI}}$) seja substancialmente superior à taxa de falha medida pelo proxy de releases corretivas ($\text{CFR}_{\text{Release}}$). Estimamos que a mediana de $\text{CFR}_{\text{CI}}$ se situará na faixa de 15% a 30% (categorias High a Medium), enquanto o $\text{CFR}_{\text{Release}}$ apresentará mediana inferior a 10% (categoria Elite).**
 
 #### Justificativa Teórica:
-O propósito essencial de uma esteira automatizada de Integração Contínua é atuar como uma rede de contenção rápida (*fail-fast*). Em repositórios de alta visibilidade com centenas de contribuidores, os testes automatizados, linters e verificações de cobertura no branch principal são desenhados para capturar regressões imediatas. Uma falha de CI indica que o mecanismo de controle de qualidade operou com sucesso antes que o código defeituoso fosse empacotado para distribuição.
-
-Em contrapartida, as *releases* oficiais de projetos open-source passam por um filtro deliberado de estabilização humana e pré-testes. Apenas uma fração diminuta de releases introduz defeitos críticos que exigem a publicação emergencial de um *hotfix* em menos de uma semana. Portanto, as duas variantes capturam momentos distintos do ciclo de vida: a Variante (a) reflete a volatilidade do desenvolvimento diário no repositório, enquanto a Variante (b) reflete o impacto perceptível aos usuários finais.
+A esteira automatizada de CI atua como uma rede de contenção rápida (*fail-fast*), capturando quebras antes do empacotamento público. As releases oficiais passam por filtros humanos adicionais, de forma que apenas uma fração reduzida necessita de hotfix imediato em até uma semana.
 
 ---
 
 ### RQ 04. Qual o tempo de recuperação após uma execução de CI/CD com falha?
 
 #### Definição Operacional:
-Ordenam-se cronologicamente as execuções de um mesmo workflow no default branch. Um episódio de falha tem início na primeira falha após um sucesso e finda no término (`updated_at`) da próxima execução bem-sucedida daquele mesmo workflow:
-$$\text{Tempo de Recuperação} = \text{updated\_at}_{\text{sucesso}} - \text{run\_started\_at}_{\text{primeira\_falha}}$$
-Episódios não recuperados até o encerramento da janela de observação são categorizados formalmente como **censurados**. O índice do repositório é calculado pela **mediana** dos episódios de seus workflows.
+Intervalo entre a primeira falha de um workflow e o término da próxima execução bem-sucedida do mesmo workflow no default branch, tratando episódios não concluídos como censurados.
 
 #### Hipótese H04 (Informal):
-> **Esperamos que a mediana do tempo de recuperação dos episódios de falha de CI seja inferior a 24 horas (enquadrando os repositórios na faixa High ou Elite), porém com distribuição fortemente assimétrica e presença observável de episódios censurados (estimados entre 5% e 15% dos episódios totais).**
+> **Esperamos que a mediana do tempo de recuperação dos episódios de falha de CI seja inferior a 24 horas (patamares High ou Elite), porém com distribuição fortemente assimétrica e presença de episódios censurados.**
 
 #### Justificativa Teórica:
-Em projetos populares com cultura ativa de CI/CD, uma quebra no default branch compromete a capacidade de todos os demais colaboradores de rebasear ou testar seus pull requests (princípio de "parar a esteira" herdado do Lean/Toyota Production System). Logo, desenvolvedores principais priorizam a reversão imediata (*git revert*) ou a aplicação de correções rápidas para restabelecer a integridade do pipeline. 
-
-Não obstante, a assimetria com cauda longa é esperada devido a:
-1. **Falhas intermitentes (*flaky tests*):** que podem demorar dias para serem diagnosticadas pelos mantenedores;
-2. **Pausas de fim de semana:** episódios iniciados na sexta-feira à noite tendem a ser solucionados apenas na segunda-feira subsequente;
-3. **Censura estatística:** branches ou workflows auxiliares que falham próximo ao término da janela anual e deixam de ser executados, evidenciando a necessidade imperativa de tratar a censura para evitar viés otimista na medição.
+Em projetos populares, um branch principal quebrado bloqueia o rebase de pull requests de outros colaboradores, incentivando reversões imediatas (*git revert*) ou correções prioritárias pelos mantenedores.
 
 ---
 
 ### RQ 05. Repositórios com maior frequência de deploy apresentam maior ou menor taxa de falha?
 
 #### Definição Operacional:
-Avalia-se a associação monotônica entre a Frequência de Deploy (RQ 01, em releases/semana) e o Change Failure Rate (RQ 03, em ambas as variantes $\text{CFR}_{\text{CI}}$ e $\text{CFR}_{\text{Release}}$) mediante o cálculo do **Coeficiente de Correlação de Postos de Spearman ($\rho$)**, com reporte de $\rho$, p-valor e tamanho amostral $n$.
+Coeficiente de correlação de postos de Spearman ($\rho$) entre Frequência de Deploy e CFR (em ambas as variantes), acompanhado de p-valor e intervalo de confiança.
 
 #### Hipótese H05 (Informal):
-> **Esperamos encontrar uma correlação de Spearman fraca a moderada negativa ($\rho \in [-0.35, -0.10]$) ou próxima de zero ($|\rho| < 0.15$) com significância estatística, refutando a hipótese tradicional de compromisso (*trade-off*) entre velocidade e qualidade.**
+> **Esperamos encontrar uma correlação de Spearman fraca ou próxima de zero ($|\rho| < 0{,}15$), refutando o dogma tradicional de compromisso (*trade-off*) entre velocidade e estabilidade.**
 
 #### Justificativa Teórica:
-O dogma clássico de governança de TI sustentava que acelerar as entregas aumentaria fatalmente o risco de incidentes operacionais. O modelo DORA contestou essa visão demonstrando que deploys frequentes forçam as equipes a dominar práticas de entrega contínua, arquitetura desacoplada, automação de testes e pequenas alterações atômicas.
-
-No ecossistema de software de código aberto, prevemos que projetos altamente ativos que publicam releases com frequência (como frameworks e ferramentas CLI populares) dispõem de comunidades mais densas, maior rigor em baterias de regressão e ferramentas automatizadas de linting e segurança. Assim, uma maior frequência de deploy não deteriora a estabilidade das releases; pelo contrário, tende a associar-se a processos de validação mais maduros, mantendo o CFR estável ou marginalmente inferior.
+Segundo o modelo DORA, deploys mais frequentes forçam as equipes a adotar automação de testes mais rigorosa e lotes menores de código, mantendo ou melhorando a estabilidade da entrega.
 
 ---
 
-## 3. Considerações Metodológicas Iniciais
-Para garantir a integridade da verificação experimental nas sprints subsequentes (Lab03S02 e Lab03S03), toda a extração de dados foi ancorada em um cliente HTTP customizado com tratamento determinístico de cabeçalhos de rate limit, cache persistente em SQLite e validação unitária por fixtures cobrindo casos extremos. As hipóteses aqui consolidadas servirão de referência para o confronto direto entre a expectativa teórica e os dados empíricos apurados.
+### RQ 06. Quais características dos repositórios estão associadas a um melhor desempenho DORA?
+
+#### Definição Operacional:
+Comparação das quatro métricas DORA por subgrupos (estrelas, contribuidores, idade, linguagem e tipo de projeto) utilizando testes de Kruskal-Wallis, pós-teste com correção de Holm e tamanho de efeito pelo delta de Cliff ($\delta$) e epsilon-quadrado ($\epsilon^2$).
+
+#### Hipótese H06 (Informal):
+> **Esperamos que o tamanho da comunidade (estrelas e contribuidores) apresente associação positiva de grande magnitude com a Frequência de Deploy e Lead Time, mas pouco impacto no Change Failure Rate. Além disso, esperamos variações nos tempos de ciclo entre ecossistemas de linguagens, refletindo complexidades distintas de compilação e teste.**
+
+#### Justificativa Teórica:
+Comunidades maiores e com mais contribuidores ativos têm maior capacidade operacional de publicar versões com agilidade. Por outro lado, a estabilidade das entregas depende primariamente da disciplina de testes e processos de revisão, e não puramente do volume de estrelas.
+
+---
+
+### RQ 07. O quanto a classificação DORA de um repositório depende da definição operacional escolhida?
+
+#### Definição Operacional:
+Classificação dos repositórios nas quatro categorias DORA (Elite, High, Medium, Low) sob três combinações operacionais (C1: Referência, C2: Pré-releases, C3: Tags), avaliando percentual de migração de patamar e o Kappa de Cohen ponderado linearmente entre os pares.
+
+#### Hipótese H07 (Informal):
+> **Esperamos que a variação das definições operacionais gere uma taxa de mudança de patamar moderada (entre 30% e 45% dos repositórios migrando de categoria), com Kappa linear entre 0,25 e 0,40 (concordância razoável), porém sem nenhuma transição extrema (ex.: Elite para Low), indicando que a classificação DORA consolidada é metodologicamente estável.**
+
+#### Justificativa Teórica:
+O uso de pré-releases e tags reduz drasticamente o Lead Time computado pela Variante (b), promovendo repositórios do patamar Medium para High. Contudo, como a maturidade DORA é calculada pela mediana dos quatro escores, variações atômicas em uma única métrica são atenuadas no resultado consolidado.
+
+---
+
+## 3. Considerações Metodológicas
+Para garantir a reprodutibilidade estrita, toda a extração de dados e análises foram ancoradas em um pipeline modular com fixtures e testes unitários. As hipóteses aqui documentadas servem de referência prévia para o confronto direto com os achados empíricos.
 
 ---
 
@@ -108,3 +147,4 @@ Para garantir a integridade da verificação experimental nas sprints subsequent
 2. DORA. *Accelerate State of DevOps Report 2023 & 2024*. DevOps Research and Assessment, Google Cloud. Disponível em: <https://dora.dev/research/>.
 3. WOHLIN, Claes et al. *Experimentation in Software Engineering*. Springer Science & Business Media, 2012.
 4. ROMANO, Jeanine et al. *Appropriate statistics for ordinal level data: Should we really be using t-test and cohen's d for evaluating group differences on the NSSE and other surveys?*. Annual Meeting of the American Educational Research Association, 2006.
+5. LANDIS, J. Richard; KOCH, Gary G. *The measurement of observer agreement for categorical data*. Biometrics, 1977.

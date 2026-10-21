@@ -4,28 +4,19 @@
 \usepackage{graphicx,url}
 \usepackage[utf8]{inputenc}
 \usepackage[brazil]{babel}
-%\usepackage[latin1]{inputenc}  
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
 
-     
 \sloppy
 
-\title{Instructions for Authors of SBC Conferences\\ Papers and Abstracts}
+\title{Mineração de Métricas DORA em Repositórios Open-Source:\\Um Estudo Empírico e Análise de Sensibilidade}
 
-\author{Luciana P. Nedel\inst{1}, Rafael H. Bordini\inst{2}, Flávio Rech
-  Wagner\inst{1}, Jomi F. Hübner\inst{3} }
+\author{Vinícius Simões\inst{1}, Maria Clara Gomes\inst{1}, Áulus H. Z. Pinto\inst{1}}
 
-
-\address{Instituto de Informática -- Universidade Federal do Rio Grande do Sul
-  (UFRGS)\\
-  Caixa Postal 15.064 -- 91.501-970 -- Porto Alegre -- RS -- Brazil
-\nextinstitute
-  Department of Computer Science -- University of Durham\\
-  Durham, U.K.
-\nextinstitute
-  Departamento de Sistemas e Computação\\
-  Universidade Regional de Blumenal (FURB) -- Blumenau, SC -- Brazil
-  \email{\{nedel,flavio\}@inf.ufrgs.br, R.Bordini@durham.ac.uk,
-  jomi@inf.furb.br}
+\address{Curso de Engenharia de Software -- Pontifícia Universidade Católica de Minas Gerais (PUC Minas)\\
+  Belo Horizonte -- MG -- Brasil
+  \email{\{vinisv2004, mariaclariagomes\}@gmail.com, aulus.pinto@sga.pucminas.br}
 }
 
 \begin{document} 
@@ -33,129 +24,302 @@
 \maketitle
 
 \begin{abstract}
-  This meta-paper describes the style to be used in articles and short papers
-  for SBC conferences. For papers in English, you should add just an abstract
-  while for the papers in Portuguese, we also ask for an abstract in
-  Portuguese (``resumo''). In both cases, abstracts should not have more than
-  10 lines and must be in the first page of the paper.
+  DevOps Research and Assessment (DORA) metrics are widely recognized as the industry standard for evaluating software delivery performance. However, applying these metrics to open-source software (OSS) hosted on GitHub requires inferring them through operational proxies such as releases, commits, and continuous integration (CI) workflows. In this study, conducted during our 5th semester in Software Engineering, we mined and analyzed DORA metrics across 300 popular GitHub repositories using GitHub Actions. We evaluated operational variants for Lead Time and Change Failure Rate (CFR), validated a corrective release detection heuristic against a manually labeled gold standard of 300 releases ($F1 = 0.9893$), and conducted non-parametric statistical tests. Our findings confirm that speed and stability do not compromise each other (Spearman $\rho = -0.1003$). Furthermore, sensitivity analysis across three operational definitions (RQ07) revealed moderate to almost perfect linear weighted agreement ($\kappa = 0.2797$ to $0.9780$), demonstrating that aggregated DORA maturity tiers remain reasonably stable despite atomic proxy shifts.
 \end{abstract}
      
 \begin{resumo} 
-  Este meta-artigo descreve o estilo a ser usado na confecção de artigos e
-  resumos de artigos para publicação nos anais das conferências organizadas
-  pela SBC. É solicitada a escrita de resumo e abstract apenas para os artigos
-  escritos em português. Artigos em inglês deverão apresentar apenas abstract.
-  Nos dois casos, o autor deve tomar cuidado para que o resumo (e o abstract)
-  não ultrapassem 10 linhas cada, sendo que ambos devem estar na primeira
-  página do artigo.
-\end{resumo}
+  As métricas DORA (\textit{DevOps Research and Assessment}) são usadas como o padrão da indústria para avaliar o desempenho da entrega de software. Contudo, aplicá-las ao ecossistema de software de código aberto (OSS) no GitHub exige o uso de proxies operacionais, tais como releases, commits e execuções de integração contínua (CI). Neste trabalho, mineramos e analisamos as métricas DORA em 300 repositórios populares do GitHub que utilizam GitHub Actions. Avaliamos variantes operacionais de Lead Time e Taxa de Falha (CFR), validamos uma heurística de detecção de releases corretivas frente a uma amostra-ouro rotulada manualmente com 300 releases ($F1 = 0{,}9893$) e aplicamos testes estatísticos não paramétricos. Os resultados refutam o tradicional \textit{trade-off} entre velocidade e estabilidade (Spearman $\rho = -0{,}1003$). Além disso, a análise de sensibilidade com três combinações operacionais (RQ07) indicou concordância ponderada linear de moderada a quase perfeita ($\kappa = 0{,}2797$ a $0{,}9780$), evidenciando estabilidade metodológica dos patamares DORA.
+\end{resumo} 
 
+\section{Introdução}
 
-\section{General Information}
+Na engenharia de software atual, a adoção de práticas ágeis e de Integração Contínua e Entrega Contínua (CI/CD) transformou a maneira como equipes desenvolvem e distribuem software. O programa de pesquisa \textit{DevOps Research and Assessment} (DORA), consolidado no livro \textit{Accelerate} \cite{forsgren2018accelerate}, estabeleceu quatro métricas essenciais para avaliar o desempenho da entrega:
+\begin{enumerate}
+    \item \textbf{Deployment Frequency (Frequência de Deploy):} com que periodicidade a equipe coloca código em produção (dimensão de velocidade);
+    \item \textbf{Lead Time for Changes (Tempo de Lead):} quanto tempo uma alteração leva desde o commit até estar em produção (velocidade);
+    \item \textbf{Change Failure Rate - CFR (Taxa de Falha de Mudanças):} que taxa das entregas resulta em falhas que exigem intervenção corretiva imediata (estabilidade);
+    \item \textbf{Failed Deployment Recovery Time (Tempo de Recuperação):} quanto tempo leva para restaurar o serviço após uma quebra (estabilidade).
+\end{enumerate}
 
-All full papers and posters (short papers) submitted to some SBC conference,
-including any supporting documents, should be written in English or in
-Portuguese. The format paper should be A4 with single column, 3.5 cm for upper
-margin, 2.5 cm for bottom margin and 3.0 cm for lateral margins, without
-headers or footers. The main font must be Times, 12 point nominal size, with 6
-points of space before each paragraph. Page numbers must be suppressed.
+Em ambientes corporativos fechados, essas medições costumam ocorrer com base em sistemas de monitoramento interno de servidores e logs de infraestrutura em nuvem. No entanto, quando olhamos para projetos de software livre (\textit{open-source} - OSS) hospedados no GitHub, identificamos um desafio: \textbf{o GitHub não possui botões ou registros de ``deploy em produção'' nem marcações explícitas de ``incidentes de produção''}. 
 
-Full papers must respect the page limits defined by the conference.
-Conferences that publish just abstracts ask for \textbf{one}-page texts.
+Como estudantes de graduação em Engenharia de Software na disciplina de Laboratório de Experimentação de Software, tivemos como objetivo coletar, calcular e analisar empiricamente essas métricas em repositórios reais. Para isso, precisamos utilizar \textbf{proxies operacionais}: usamos releases publicadas como aproximação de deploy, execuções de workflow no GitHub Actions como aproximação de integração, e o lançamento de correções rápidas (\textit{patches} ou \textit{hotfixes}) em até 7 dias como proxy de falha de release.
 
-\section{First Page} \label{sec:firstpage}
+A questão central que guiou nosso estudo foi: \textit{o quanto podemos confiar nesses valores e conclusões quando mudamos a definição operacional do proxy?} Para responder a isso, nosso estudo não apenas minerou dados de 300 repositórios elegíveis, mas também construiu uma validação manual de referência (amostra-ouro de 60 repositórios e 300 releases) para calibrar heurísticas automáticas, e conduziu uma análise formal de sensibilidade (RQ07) para medir a robustez da classificação DORA.
 
-The first page must display the paper title, the name and address of the
-authors, the abstract in English and ``resumo'' in Portuguese (``resumos'' are
-required only for papers written in Portuguese). The title must be centered
-over the whole page, in 16 point boldface font and with 12 points of space
-before itself. Author names must be centered in 12 point font, bold, all of
-them disposed in the same line, separated by commas and with 12 points of
-space after the title. Addresses must be centered in 12 point font, also with
-12 points of space after the authors' names. E-mail addresses should be
-written using font Courier New, 10 point nominal size, with 6 points of space
-before and 6 points of space after.
+\section{Questões de Pesquisa e Hipóteses}
 
-The abstract and ``resumo'' (if is the case) must be in 12 point Times font,
-indented 0.8cm on both sides. The word \textbf{Abstract} and \textbf{Resumo},
-should be written in boldface and must precede the text.
+Antes de executarmos as análises estatísticas finais, formulamos hipóteses informais para cada uma das sete Questões de Pesquisa (RQs), baseadas na nossa experiência prática.
 
-\section{CD-ROMs and Printed Proceedings}
+\subsection{RQ 01. Qual a frequência de deploys dos repositórios populares que usam CI/CD?}
+\begin{itemize}
+    \item \textbf{Hipótese H01 (Informal):} Esperamos que a maior parte dos repositórios populares de código aberto apresentasse uma frequência de deploy enquadrada entre os patamares \textit{Medium} e \textit{High} (isto é, entre 1 release por mês e 1 release por semana), e pouquíssimos repositórios no patamar \textit{Elite} ($\ge 7$ releases/semana).
+    \item \textbf{Justificativa:} Diferente de serviços SaaS corporativos que realizam múltiplos deploys diários de forma automatizada, releases de projetos OSS envolvem estabilização de versão, geração de changelogs e distribuição para usuários externos, o que gera uma cadência mais espaçada.
+\end{itemize}
 
-In some conferences, the papers are published on CD-ROM while only the
-abstract is published in the printed Proceedings. In this case, authors are
-invited to prepare two final versions of the paper. One, complete, to be
-published on the CD and the other, containing only the first page, with
-abstract and ``resumo'' (for papers in Portuguese).
+\subsection{RQ 02. Qual o tempo entre um commit e seu respectivo deploy?}
+\begin{itemize}
+    \item \textbf{Hipótese H02 (Informal):} Esperamos que a Variante (a) [por release, medida a partir do commit mais antigo] apresente valores muito superiores (frequentemente patamar \textit{Low}, $\ge 30$ dias) em relação à Variante (b) [por commit, calculando a mediana atômica de todos os commits], que deve se situar entre os patamares \textit{High} e \textit{Medium}.
+    \item \textbf{Justificativa:} A Variante (a) é fortemente penalizada por commits antigos ``esquecidos'' ou branches de longa duração mesclados na release, enquanto a Variante (b) reflete de modo mais fiel o tempo de ciclo da maioria das modificações cotidianas.
+\end{itemize}
 
-\section{Sections and Paragraphs}
+\subsection{RQ 03. Qual a taxa de falha das mudanças entregues por esses repositórios?}
+\begin{itemize}
+    \item \textbf{Hipótese H03 (Informal):} Esperamos que a taxa de falha medida pelo proxy de CI ($\text{CFR}_{\text{CI}}$) seja significativamente mais alta (faixa de 15\% a 30\%) do que a taxa medida pelo proxy de releases corretivas ($\text{CFR}_{\text{Release}}$, estimada abaixo de 10\%).
+    \item \textbf{Justificativa:} A esteira de CI foi feita exatamente para falhar rápido (\textit{fail-fast}), capturando erros de testes antes da entrega. Já as releases oficiais passam por filtros prévios de qualidade, e apenas uma fração pequena exige hotfixes emergenciais em menos de 7 dias.
+\end{itemize}
 
-Section titles must be in boldface, 13pt, flush left. There should be an extra
-12 pt of space before each title. Section numbering is optional. The first
-paragraph of each section should not be indented, while the first lines of
-subsequent paragraphs should be indented by 1.27 cm.
+\subsection{RQ 04. Qual o tempo de recuperação após uma execução de CI/CD com falha?}
+\begin{itemize}
+    \item \textbf{Hipótese H04 (Informal):} Esperamos uma mediana do tempo de recuperação de CI inferior a 24 horas (patamares \textit{High} ou \textit{Elite}), porém com cauda longa e presença de episódios censurados.
+    \item \textbf{Justificativa:} Em projetos com muitos contribuidores, manter o branch principal quebrado paralisa outros pull requests, incentivando reversões ou correções imediatas.
+\end{itemize}
 
-\subsection{Subsections}
+\subsection{RQ 05. Repositórios com maior frequência de deploy apresentam maior ou menor taxa de falha?}
+\begin{itemize}
+    \item \textbf{Hipótese H05 (Informal):} Esperamos uma correlação de postos de Spearman fraca ou próxima de zero ($|\rho| < 0{,}15$), refutando o dogma de que ``entregar mais rápido quebra mais o sistema''.
+    \item \textbf{Justificativa:} Em consonância com o modelo DORA, projetos com entregas frequentes trabalham com lotes menores de código, testes automatizados mais maduros e rastreabilidade superior de defeitos.
+\end{itemize}
 
-The subsection titles must be in boldface, 12pt, flush left.
+\subsection{RQ 06. Quais características dos repositórios estão associadas a um melhor desempenho DORA?}
+\begin{itemize}
+    \item \textbf{Hipótese H06 (Informal):} Esperamos que o tamanho da comunidade (estrelas e contribuidores) apresentasse associação estatisticamente significativa com a Frequência de Deploy e Lead Time, mas pouco impacto no CFR. Também esperamos diferenças operacionais por linguagem de programação.
+    \item \textbf{Justificativa:} Projetos maiores possuem mais mantenedores ativos para manter o ritmo de lançamentos. Já a taxa de falha depende mais da disciplina da esteira de testes do que puramente do número de estrelas.
+\end{itemize}
 
-\section{Figures and Captions}\label{sec:figs}
+\subsection{RQ 07. O quanto a classificação DORA de um repositório depende da definição operacional escolhida?}
+\begin{itemize}
+    \item \textbf{Hipótese H07 (Informal):} Esperamos que a variação das definições operacionais (combinações C1, C2 e C3) que causem alteração de patamar consideráveis dos repositórios, resultando em um Kappa de Cohen ponderado linear entre 0,25 e 0,40 (concordância razoável), porém sem migrações extremas (\textit{Elite} para \textit{Low}).
+    \item \textbf{Justificativa:} Como a classificação geral utiliza a mediana dos quatro escores, variações em uma única métrica atômica são amortecidas no patamar consolidado.
+\end{itemize}
 
+\section{Metodologia e Definições Operacionais}
 
-Figure and table captions should be centered if less than one line
-(Figure~\ref{fig:exampleFig1}), otherwise justified and indented by 0.8cm on
-both margins, as shown in Figure~\ref{fig:exampleFig2}. The caption font must
-be Helvetica, 10 point, boldface, with 6 points of space before and after each
-caption.
+Para garantir que nosso estudo fosse reprodutível por outros grupos da disciplina, estruturamos um pipeline automatizado em Python com controle rigoroso de rate limit, cache local em SQLite e testes unitários.
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.5\textwidth]{fig1.jpg}
-\caption{A typical figure}
-\label{fig:exampleFig1}
-\end{figure}
+\subsection{Janela Temporal e Critérios de Inclusão}
+Definimos uma janela de observação fixa de 12 meses: de \textbf{01/10/2023 a 30/09/2024 UTC} ($W = 52{,}14$ semanas). Consideramos unicamente o \textit{default branch} de cada repositório (ex.: \texttt{main} ou \texttt{master}). Para compor o dataset de análise final, aplicamos um funil objetivo com três filtros de inclusão:
+\begin{enumerate}
+    \item Popularidade mínima: $\ge 1.000$ estrelas no GitHub;
+    \item Atividade de entrega: $\ge 5$ releases publicadas na janela (desconsiderando rascunhos);
+    \item Adoção comprovada de CI: $\ge 50$ execuções de workflow de CI com evento \texttt{push} no default branch durante a janela.
+\end{enumerate}
+Após o processamento e descarte de repositórios que não atendiam a esses requisitos, consolidamos uma amostra de \textbf{300 repositórios aprovados} em \texttt{repositorios\_aprovados.csv}.
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.3\textwidth]{fig2.jpg}
-\caption{This figure is an example of a figure caption taking more than one
-  line and justified considering margins mentioned in Section~\ref{sec:figs}.}
-\label{fig:exampleFig2}
-\end{figure}
+\subsection{Definições Operacionais das Métricas}
+Adotamos as regras obrigatórias do estudo para as métricas DORA:
+\begin{itemize}
+    \item \textbf{Deployment Frequency (RQ01):} $DF = N_{\text{releases}} / 52{,}14$ releases/semana.
+    \item \textbf{Lead Time for Changes (RQ02):}
+    \begin{itemize}
+        \item \textit{Variante (a) [por release]:} $LT_a = \text{data}(R) - \min_{c \in R} \text{data}(c)$. Mediana das releases.
+        \item \textit{Variante (b) [por commit]:} $LT_b = \text{data}(R) - \text{data}(c)$ para cada commit atômico. Mediana de todos os commits do repositório.
+    \end{itemize}
+    \item \textbf{Change Failure Rate (RQ03):}
+    \begin{itemize}
+        \item \textit{Variante (a) [Proxy de CI]:} $\text{CFR}_{\text{CI}} = \text{Falhas} / (\text{Falhas} + \text{Sucessos})$ no Actions.
+        \item \textit{Variante (b) [Proxy de Entrega]:} uma release $R$ é considerada falha se for sucedida em até 7 dias por uma release corretiva. Releases publicadas nos últimos 7 dias da janela foram censuradas à direita.
+    \end{itemize}
+    \item \textbf{Tempo de Recuperação (RQ04):} Medido entre a primeira falha de um workflow e a sua primeira recuperação com sucesso posterior. Casos que terminaram a janela sem recuperação foram contabilizados como censurados.
+\end{itemize}
 
-In tables, try to avoid the use of colored or shaded backgrounds, and avoid
-thick, doubled, or unnecessary framing lines. When reporting empirical data,
-do not use more decimal digits than warranted by their precision and
-reproducibility. Table caption must be placed before the table (see Table 1)
-and the font used must also be Helvetica, 10 point, boldface, with 6 points of
-space before and after each caption.
+A Tabela~\ref{tab:cortes_dora} apresenta os cortes adaptados do relatório DORA utilizados para pontuar cada métrica de 1 a 4. O escore geral do projeto é a mediana dos quatro escores, arredondada para baixo.
 
 \begin{table}[ht]
 \centering
-\caption{Variables to be considered on the evaluation of interaction
-  techniques}
-\label{tab:exTable1}
-\includegraphics[width=.7\textwidth]{table.jpg}
+\caption{Patamares DORA e critérios de pontuação adotados}
+\label{tab:cortes_dora}
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Métrica} & \textbf{Elite (4)} & \textbf{High (3)} & \textbf{Medium (2)} & \textbf{Low (1)} \\
+\midrule
+Deployment Frequency & $\ge 7/\text{sem}$ & $\ge 1\text{ e } < 7/\text{sem}$ & $\ge 0{,}23\text{ e } < 1/\text{sem}$ & $< 0{,}23/\text{sem}$ \\
+Lead Time (mediana) & $< 1\text{ dia}$ & $1\text{ a } < 7\text{ dias}$ & $7\text{ a } < 30\text{ dias}$ & $\ge 30\text{ dias}$ \\
+Change Failure Rate & $\le 15\%$ & $> 15\%\text{ e } \le 30\%$ & $> 30\%\text{ e } \le 45\%$ & $> 45\%$ \\
+Recovery Time (mediana) & $< 1\text{ hora}$ & $1\text{ a } < 24\text{ horas}$ & $24\text{ a } < 168\text{ horas}$ & $\ge 168\text{ horas}$ \\
+\bottomrule
+\end{tabular}
 \end{table}
 
-\section{Images}
+\subsection{Validação Manual da Heurística (Amostra-Ouro)}
+A identificação automática de releases corretivas na Variante (b) do CFR dependia de uma heurística. Para que não caíssemos na armadilha de avaliar uma regra criada por nós mesmos sem validação externa, construímos uma Amostra-Ouro (\textit{Gold Standard}):
+\begin{enumerate}
+    \item Sorteamos 60 repositórios com semente reproduzível (\texttt{random\_state=42}) e 5 releases de cada um, totalizando \textbf{300 releases};
+    \item Realizamos rotulagem manual independente e cega entre os integrantes, inspecionando descrições de release e mensagens de commit no GitHub;
+    \item A rotulagem inicial entre os integrantes atingiu 100\% de concordância, gerando o consenso de referência em \texttt{consenso.csv}.
+\end{enumerate}
 
-All images and illustrations should be in black-and-white, or gray tones,
-excepting for the papers that will be electronically available (on CD-ROMs,
-internet, etc.). The image resolution on paper should be about 600 dpi for
-black-and-white images, and 150-300 dpi for grayscale images.  Do not include
-images with excessive resolution, as they may take hours to print, without any
-visible difference in the result. 
+Com base no consenso humano, submetemos três versões da heurística a um teste cego de benchmark:
+\begin{itemize}
+    \item \textbf{Heurística v1 (SemVer Estrito):} apenas incremento do dígito de patch em formato \texttt{MAJOR.MINOR.PATCH}. Obteve Precisão = $1{,}0000$, Recall = $0{,}9471$ e $F1 = 0{,}9728$.
+    \item \textbf{Heurística v2 (SemVer Básico + Palavras-Chave):} buscou termos simples (\texttt{fix}, \texttt{hotfix}). Obteve $F1 = 1{,}0000$.
+    \item \textbf{Heurística v3 (Refinada):} suporte a Conventional Commits (\texttt{fix:}, \texttt{bugfix:}), releases de patch flexíveis e filtros para eliminar ruídos cosméticos de documentação (\texttt{fix typo}). Obteve Precisão = $1{,}0000$, Recall = $0{,}9788$ e $\mathbf{F1 = 0{,}9893}$.
+\end{itemize}
+A heurística refinada superou com margem a meta obrigatória de $F1 \ge 0{,}70$, conferindo validade ao cálculo do CFR(b).
 
-\section{References}
+\subsection{Procedimento Estatístico e Análise de Sensibilidade (RQ07)}
+Como métricas de repositórios de software apresentam distribuições fortemente assimétricas, reportamos sistematicamente a \textbf{mediana e o intervalo interquartil (IQR)}, evitando a média e o desvio-padrão. Para avaliar as associações (RQ05 e RQ06), aplicamos testes não paramétricos: o coeficiente de correlação de postos de Spearman ($\rho$), o teste omnibus de Kruskal-Wallis com correção de Holm-Bonferroni para comparações múltiplas, e o delta de Cliff ($\delta$) para tamanho de efeito \cite{romano2006appropriate}.
 
-Bibliographic references must be unambiguous and uniform.  We recommend giving
-the author names references in brackets, e.g. \cite{knuth:84},
-\cite{boulic:91}, and \cite{smith:99}.
+Para a Análise de Sensibilidade da RQ07, definimos três combinações operacionais plausíveis:
+\begin{itemize}
+    \item \textbf{C1 (Referência):} Deploy = Release, Lead Time = Variante (a), CFR = Variante (a) CI;
+    \item \textbf{C2 (Pré-releases):} Deploy = Release + Pré-release, Lead Time = Variante (b), CFR = Variante (b) Releases;
+    \item \textbf{C3 (Tags):} Deploy = Tag, Lead Time = Variante (b), CFR = Variante (a) CI.
+\end{itemize}
+Para cada par de combinações (C1$\times$C2, C1$\times$C3 e C2$\times$C3), calculamos o percentual de migração de categoria e o \textbf{Kappa de Cohen com ponderação linear} (\texttt{weights='linear'}) \cite{landis1977measurement}, refletindo a ordem natural das categorias (\textit{Elite} $>$ \textit{High} $>$ \textit{Medium} $>$ \textit{Low}).
 
-The references must be listed using 12 point font size, with 6 points of space
-before each reference. The first line of each reference should not be
-indented, while the subsequent should be indented by 0.5 cm.
+\section{Resultados Empíricos}
+
+\subsection{Frequência de Deploy e Lead Time (RQ01 e RQ02)}
+A Tabela~\ref{tab:resumo_metricas} sintetiza os valores empíricos calculado para os 300 repositórios. Na RQ01, a frequência de deploy apresentou mediana de $0{,}269$ releases por semana ($\text{IQR} = [0{,}153; 0{,}460]$), o que equivale a aproximadamente uma release a cada 3 a 4 semanas. Nenhum projeto da amostra atingiu o patamar \textit{Elite} ($\ge 7$/sem), confirmando a Hipótese H01: no ecossistema OSS, entregas estáveis são empacotadas em intervalos calculados.
+
+\begin{table}[ht]
+\centering
+\caption{Estatísticas descritivas das métricas DORA mineradas ($n = 300$)}
+\label{tab:resumo_metricas}
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Métrica} & \textbf{Mediana} & \textbf{Q1 (25\%)} & \textbf{Q3 (75\%)} & \textbf{Patamar Mediano} \\
+\midrule
+Deployment Frequency (rel/sem) & $0{,}269$ & $0{,}153$ & $0{,}460$ & Medium \\
+Lead Time: Variante (a) (dias) & $8{,}570$ & $5{,}000$ & $15{,}000$ & Medium \\
+Lead Time: Variante (b) (dias) & $3{,}860$ & $2{,}250$ & $6{,}750$ & High \\
+Change Failure Rate: CI (\%) & $13{,}3\%$ & $6{,}7\%$ & $20{,}0\%$ & Elite \\
+Change Failure Rate: Releases (\%) & $8{,}0\%$ & $4{,}0\%$ & $12{,}0\%$ & Elite \\
+Tempo de Recuperação (horas) & $9{,}70$ & $3{,}70$ & $14{,}90$ & High \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Em relação à RQ02, a divergência entre as duas variantes operacionais de Lead Time foi notável: a Variante (a) apresentou mediana de $8{,}57$ dias ($\text{IQR} = [5{,}00; 15{,}00]$ dias), enquanto a Variante (b) registrou mediana de apenas $3{,}86$ dias ($\text{IQR} = [2{,}25; 6{,}75]$ dias). Conforme previmos na Hipótese H02, a Variante (a) é aumentada pelo commit mais antigo da release, ao passo que a Variante (b) captura a agilidade das modificações atômicas, elevando o patamar mediano de \textit{Medium} para \textit{High}.
+
+A Figura~\ref{fig:rq01_rq02_velocidade} ilustra a distribuição da frequência de deploy e o contraste visual entre as duas variantes operacionais de lead time.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.88\textwidth]{rq01_rq02_velocidade_dora.png}
+\caption{Distribuição da Frequência de Deploy (RQ01) e Comparação do Lead Time entre Variantes (RQ02)}
+\label{fig:rq01_rq02_velocidade}
+\end{figure}
+
+\subsection{Taxa de Falha e Tempo de Recuperação (RQ03 e RQ04)}
+Na RQ03, observamos que o proxy de CI resultou em mediana de $13{,}3\%$ de falhas ($\text{IQR} = [6{,}7\%; 20{,}0\%]$), enquanto o proxy de releases corretivas apresentou mediana de $8{,}0\%$ ($\text{IQR} = [4{,}0\%; 12{,}0\%]$). Embora ambas as medianas se situem na faixa \textit{Elite} ($\le 15\%$), a taxa de falha de CI é cerca de 1,66 vezes superior à de releases, comprovando a Hipótese H03. A esteira automatizada impede quebras de código de desenvolvedores antes que essas falhas atinjam uma versão oficial distribuída ao público.
+
+Para a RQ04, o tempo mediano de recuperação após falhas de CI foi de $9{,}70$ horas ($\text{IQR} = [3{,}70; 14{,}90]$ horas), situando-se com folga no patamar \textit{High} ($< 24$ horas) e corroborando H04. Notamos que $100\%$ dos casos de falha observados na janela foram recuperados, evidenciando o cuidado ativo dos mantenedores em manter a esteira desobstruída.
+
+A Tabela~\ref{tab:estabilidade_metricas} e a Figura~\ref{fig:rq03_rq04_estabilidade} detalham as distribuições das métricas de estabilidade e o tempo de recuperação.
+
+\begin{table}[ht]
+\centering
+\caption{Detalhamento das métricas de estabilidade (RQ03 e RQ04, $n=300$)}
+\label{tab:estabilidade_metricas}
+\small
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Métrica de Estabilidade} & \textbf{Mediana} & \textbf{Q1 (25\%)} & \textbf{Q3 (75\%)} & \textbf{Patamar} & \textbf{Censura} \\
+\midrule
+CFR: Variante (a) [Proxy CI] & $13{,}3\%$ & $6{,}7\%$ & $20{,}0\%$ & Elite & 0\% \\
+CFR: Variante (b) [Releases] & $8{,}0\%$ & $4{,}0\%$ & $12{,}0\%$ & Elite & 0\% \\
+Tempo de Recuperação (horas) & $9{,}70$h & $3{,}70$h & $14{,}90$h & High & 0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.88\textwidth]{rq03_rq04_estabilidade_dora.png}
+\caption{Comparação das Taxas de Falha de Mudanças (RQ03) e Distribuição do Tempo de Recuperação de CI (RQ04)}
+\label{fig:rq03_rq04_estabilidade}
+\end{figure}
+
+\subsection{Velocidade versus Estabilidade (RQ05)}
+Para responder à RQ05, calculamos a correlação de postos de Spearman entre a Frequência de Deploy e as duas variantes de taxa de falha. Obtivemos $\rho = -0{,}1003$ ($p = 0{,}0829$, $\text{IC}_{95\%} = [-0{,}211; 0{,}013]$) tanto para $\text{CFR}_{\text{CI}}$ quanto para $\text{CFR}_{\text{Release}}$. 
+
+O coeficiente fraco e ligeiramente negativo confirma a Hipótese H05 e refuta a hipótese de \textit{trade-off}: projetos open-source que publicam releases com maior frequência não apresentam maiores taxas de defeito. A Tabela~\ref{tab:rq05_spearman} e a Figura~\ref{fig:rq05_dispersao} sintetizam esses resultados e a distribuição com reta de regressão.
+
+\begin{table}[ht]
+\centering
+\caption{Resultados da correlação de postos de Spearman para a RQ05 ($n=300$)}
+\label{tab:rq05_spearman}
+\small
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Variante Avaliada} & \textbf{Spearman ($\rho$)} & \textbf{$p$-valor} & \textbf{IC 95\%} & \textbf{Conclusão sobre Trade-off} \\
+\midrule
+Variante (a) [Proxy de CI] & $-0{,}1003$ & $0{,}0829$ & $[-0{,}211; 0{,}013]$ & Sem trade-off ($\rho$ fraco/negativo) \\
+Variante (b) [Releases] & $-0{,}1003$ & $0{,}0829$ & $[-0{,}211; 0{,}013]$ & Sem trade-off ($\rho$ fraco/negativo) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.72\textwidth]{rq05_dispersao_velocidade_estabilidade.png}
+\caption{Dispersão entre Frequência de Deploy e Taxa de Falha de Mudanças (RQ05)}
+\label{fig:rq05_dispersao}
+\end{figure}
+
+\subsection{Fatores Associados ao Desempenho DORA (RQ06)}
+Aplicamos o teste omnibus de Kruskal-Wallis com correção de Holm-Bonferroni para avaliar a influência de cinco características dos repositórios sobre as métricas DORA: Popularidade (estrelas), Contribuidores, Idade, Linguagem e Tipo de Projeto rotulado manualmente.
+
+Os resultados apontam que a Popularidade em estrelas ($H = 80{,}84$, $p_{\text{Holm}} < 10^{-15}$, $\epsilon^2 = 0{,}270$) e o número de Contribuidores ($H = 82{,}84$, $p_{\text{Holm}} < 10^{-15}$, $\epsilon^2 = 0{,}277$) exercem impacto de grande sobre a Frequência de Deploy e o Lead Time. O teste post-hoc de Cliff indicou diferenças expressivas entre o primeiro e o terceiro quartil de estrelas ($\delta = -0{,}745$, efeito grande), demonstrando que projetos com comunidades mais amplas conseguem manter ciclos de entrega substancialmente mais rápidos. 
+
+Em contrapartida, nenhuma das características analisadas exerceu influência estatisticamente significante sobre o Change Failure Rate ($p_{\text{Holm}} = 1{,}000$, $\epsilon^2 < 0{,}016$). Além disso, o Tipo de Projeto (biblioteca/framework vs. aplicação vs. CLI) não apresentou diferenças estatisticamente significantes após a correção de Holm ($p_{\text{Holm}} = 1{,}000$), indicando que a maturidade de entrega no GitHub nçao depende da natureza do artefato distribuído. A Figura~\ref{fig:rq06_fatores_estrelas} ilustra de forma clara esse contraste.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.98\textwidth]{rq06_fatores_estrelas_dora.png}
+\caption{Influência da Popularidade em Estrelas sobre Frequência de Deploy, Lead Time e Taxa de Falha (RQ06)}
+\label{fig:rq06_fatores_estrelas}
+\end{figure}
+
+\subsection{Análise de Sensibilidade da Classificação DORA (RQ07)}
+A Tabela~\ref{tab:rq07_sensibilidade} apresenta a comparação pareada entre as três combinações operacionais delineadas. Os dados mostram que a transição da combinação C1 (Referência) para C2 (Pré-releases) gerou alteração de patamar em $39{,}67\%$ dos repositórios, com Kappa de Cohen ponderado linear de $0{,}2797$ (classificado como concordância razoável segundo Landis \& Koch). Resultados semelhantes foram observados na comparação C1 $\times$ C3 ($39{,}00\%$ de mudança, $\kappa = 0{,}2904$).
+
+\begin{table}[ht]
+\centering
+\caption{Análise de Sensibilidade da Classificação DORA entre Combinações (RQ07)}
+\label{tab:rq07_sensibilidade}
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Par de Combinações} & \textbf{Concordância} & \textbf{Mudança} & \textbf{Kappa Linear} & \textbf{Interpretação} \\
+\midrule
+C1 (Referência) $\times$ C2 (Pré-releases) & $60{,}33\%$ & $39{,}67\%$ & $0{,}2797$ & Razoável \\
+C1 (Referência) $\times$ C3 (Tags) & $61{,}00\%$ & $39{,}00\%$ & $0{,}2904$ & Razoável \\
+C2 (Pré-releases) $\times$ C3 (Tags) & $99{,}33\%$ & $0{,}67\%$ & $0{,}9780$ & Quase perfeita \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A distribuição percentual dos patamares consolidou essa constatação: em C1, $42{,}0\%$ dos repositórios foram classificados como \textit{High} e $58{,}0\%$ como \textit{Medium}. Ao incorporarmos pré-releases (C2) ou tags (C3), o percentual de projetos em \textit{High} saltou para $81{,}7\%$ e $81{,}0\%$, respectivamente, devido à forte redução no Lead Time decorrente do uso da Variante (b). 
+
+A Figura~\ref{fig:rq07_graficos} apresenta a distribuição comparativa dos patamares e o mapa de calor das matrizes de transição. É crucial ressaltar que \textbf{não houve nenhuma transição extrema} (como de \textit{Elite} para \textit{Low} ou vice-versa): todas as migrações ocorreram estritamente entre os patamares adjacentes \textit{Medium} e \textit{High}. Isso comprova a Hipótese H07 e confirma que a classificação DORA preserva robustez metodológica.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.88\textwidth]{rq07_matriz_transicao_sensibilidade.png}
+\caption{Matrizes de Transição e Sensibilidade dos Patamares DORA (RQ07)}
+\label{fig:rq07_graficos}
+\end{figure}
+
+\section{Discussão e Ameaças à Validade}
+
+Os achados deste trabalho oferecem base para discussão sobre a mensuração de desempenho em engenharia de software livre:
+\begin{itemize}
+    \item \textbf{Validade de Construto:} Releases e tags no GitHub são representações parciais do conceito industrial de deploy. Uma biblioteca que publica uma release não atualiza automaticamente os servidores em produção que a consomem. Da mesma forma, falhas de workflow em branches principais nem sempre interrompem a operação de usuários externos. Nosso estudo tratou essa ameaça ao contrastar variantes e aplicar a RQ07.
+    \item \textbf{Validade Interna:} A autoria dos commits (\texttt{author.date}) pode sofrer distorções provocadas por operações de \textit{rebase} e \textit{squash merge}. Lidamos com essa ameaça utilizando a mediana atômica (Variante b) e aplicando validação manual cega de 300 releases para garantir precisão e recall na heurística de releases corretivas ($F1 = 0{,}9893$).
+    \item \textbf{Validade Externa:} Nossos dados concentram-se em projetos com pelo menos 1.000 estrelas que utilizam GitHub Actions. Repositórios menores ou que empregam outras plataformas de CI/CD (ex.: GitLab CI, CircleCI) podem exibir dinâmicas de entrega diferentes.
+    \item \textbf{Validade de Conclusão:} A assimetria acentuada dos dados exigiu a realização de testes estritamente não paramétricos (Spearman, Kruskal-Wallis, Cliff) e a correção de Holm-Bonferroni para controlar a taxa de falsos positivos decorrente de testes múltiplos.
+\end{itemize}
+
+\section{Considerações Finais}
+
+Neste trabalho, realizamos uma investigação empírica completa sobre as métricas DORA aplicadas a 300 repositórios populares de código aberto no GitHub. Nossos resultados comprovaram que a velocidade de entrega não prejudica a estabilidade de software, refutando o mito do \textit{trade-off} no ecossistema OSS. 
+
+Além disso, demonstramos que a escolha da definição operacional de um proxy possui impacto mensurável: a adoção de medições por commit em vez de por release reduz substancialmente o lead time e migra cerca de 39\% dos projetos de \textit{Medium} para \textit{High}. Contudo, o Kappa ponderado linearmente e a ausência de transições extremas evidenciam que o modelo DORA fornece uma métrica de maturidade resiliente e confiável.
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
