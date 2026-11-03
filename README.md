@@ -33,6 +33,13 @@ Descreva o propósito das pastas principais.
 │   ├── /metricas                          # 📏 Códigos e scripts de extração das métricas
 │   └── /tests                             # 🧪 Testes das implementações
 │
+├── /Laboratorio04_Simulacao               # 📂 Projeto de Laboratório 04
+│   ├── dashboard.py                       # 📊 Dashboard Streamlit e visualizações G1 & G2
+│   ├── README.md                          # 📘 Documentação e guia de execução com comando único
+│   ├── requirements.txt                   # 📦 Dependências do projeto
+│   ├── run_dashboard.bat                  # 🚀 Script de execução rápida para Windows
+│   └── run_dashboard.ps1                  # 🚀 Script PowerShell de execução rápida
+│
 └── README.md                              # 📘 Documentação dos projetos
 ```
 
