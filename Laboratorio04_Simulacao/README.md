@@ -62,12 +62,18 @@ Ou no PowerShell:
 .\run_dashboard.ps1
 ```
 
-#### Via Streamlit CLI diretamente:
+#### Via Streamlit CLI diretamente (Dashboard Interativo):
 ```bash
 streamlit run dashboard.py
 ```
-
 O dashboard abrirá automaticamente no navegador no endereço `http://localhost:8501`.
+
+#### Execução como Script dos Gráficos G1 e G2 (Headless / CLI):
+Para rodar diretamente o gerador dos gráficos G1 e G2 e exportar as figuras interativas para a pasta `graficos_gerados/`:
+```bash
+python dashboard.py
+```
+Esse comando gera os arquivos `grafico_g1_comparativo.html` e `grafico_g2_distribuicao_h0.html` e exibe o relatório estatístico com teste de hipótese e p-valores diretamente no terminal.
 
 ---
 

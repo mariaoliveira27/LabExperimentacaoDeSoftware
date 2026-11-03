@@ -10,6 +10,7 @@ Integrantes:
 from __future__ import annotations
 
 import sys
+import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
@@ -20,15 +21,11 @@ import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-# Configuração da página do Streamlit
-st.set_page_config(
-    page_title="Lab04S01 - Simulação e Testes Estatísticos",
-    page_icon="📊",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
+# Suprime avisos de execução bare-mode do Streamlit quando executado como script CLI
+logging.getLogger("streamlit.runtime.scriptrunner_utils.script_run_context").setLevel(logging.ERROR)
 
-# Caminho para datasets reais do Lab03 como padrão de entrada
+
+# Configuração da página do Streamlit apenas quando executado sob contexto web
 BASE_DIR = Path(__file__).resolve().parent
 REPO_ROOT = BASE_DIR.parent
 DEFAULT_REAL_CSV = (
@@ -674,6 +671,13 @@ def render_sidebar(df_real: pd.DataFrame) -> Dict[str, Any]:
 
 
 def main() -> None:
+    st.set_page_config(
+        page_title="Lab04S01 - Simulação e Testes Estatísticos",
+        page_icon="📊",
+        layout="wide",
+        initial_sidebar_state="expanded",
+    )
+
     # 1. Carregamento dos dados reais
     df_real = carregar_dados_reais()
 
@@ -954,5 +958,98 @@ def main() -> None:
         st.markdown(f"**Total de observações no dataset:** {len(df_real)} registros.")
 
 
+def executar_modo_script(caminho_saida: Optional[Path] = None) -> None:
+    """Executa o script dos gráficos G1 e G2 diretamente via terminal/CLI (Issue #94),
+
+    salvando as figuras interativas em arquivos HTML e exibindo o sumário analítico no console.
+    """
+    diretorio_saida = caminho_saida or BASE_DIR / "graficos_gerados"
+    diretorio_saida.mkdir(parents=True, exist_ok=True)
+
+    print("=" * 70)
+    print("  Lab04S01 — Execução do Script dos Gráficos G1 e G2 (Issue #94)")
+    print("=" * 70)
+
+    # 1. Carregamento dos dados reais
+    df_real = carregar_dados_reais()
+    metrica = "lead_time_commit_mediana_dias"
+    serie_real = df_real[metrica].dropna().to_numpy()
+    print(f"\n[1/3] Base de dados carregada: {len(df_real)} registros.")
+    print(f"      Métrica analisada: {metrica}")
+
+    # 2. Geração do Gráfico G1
+    print("\n[2/3] Gerando Gráfico G1 (Histogramas Comparativos Real vs. Simulado)...")
+    dados_sim, params_fit = executar_simulacao_dados(
+        dados_reais=serie_real,
+        distribuicao="Lognormal",
+        tamanho_amostra=len(serie_real),
+        semente=42,
+    )
+    fig_g1 = gerar_grafico_g1(
+        dados_reais=serie_real,
+        dados_simulados=dados_sim,
+        nome_metrica=metrica,
+        modo="Lado a Lado",
+    )
+    caminho_g1 = diretorio_saida / "grafico_g1_comparativo.html"
+    fig_g1.write_html(str(caminho_g1))
+    print(f"      -> Salvo com sucesso em: {caminho_g1}")
+
+    stats_r = calcular_estatisticas_descritivas(serie_real)
+    stats_s = calcular_estatisticas_descritivas(dados_sim)
+    print(f"      - Dados Reais:     Média={stats_r['media']:.2f} | Mediana={stats_r['mediana']:.2f} | DP={stats_r['desvio_padrao']:.2f} | Skew={stats_r['assimetria']:.2f}")
+    print(f"      - Dados Simulados: Média={stats_s['media']:.2f} | Mediana={stats_s['mediana']:.2f} | DP={stats_s['desvio_padrao']:.2f} | Skew={stats_s['assimetria']:.2f}")
+
+    # 3. Geração do Gráfico G2
+    print("\n[3/3] Gerando Gráfico G2 (Distribuição sob H0 & Região Crítica de Rejeição)...")
+    if "tier_dora_geral" in df_real.columns:
+        grupo_a = df_real[df_real["tier_dora_geral"].isin(["Elite", "High"])][metrica].dropna().to_numpy()
+        grupo_b = df_real[df_real["tier_dora_geral"].isin(["Medium", "Low"])][metrica].dropna().to_numpy()
+        cenario_label = "Comparação Tiers DORA (Elite/High vs. Medium/Low)"
+    else:
+        grupo_a, grupo_b = serie_real, dados_sim
+        cenario_label = "Amostra Real vs. Amostra Simulada"
+
+    teste_res = executar_teste_estatistico(grupo_a, grupo_b, tipo_teste="t-Student")
+    stat_obs = teste_res["stat_obs"]
+    p_val = teste_res["p_valor"]
+    df_gl = teste_res.get("df", 30.0)
+
+    fig_g2 = gerar_grafico_g2(
+        stat_obs=stat_obs,
+        p_valor=p_val,
+        graus_liberdade=df_gl,
+        alpha=0.05,
+        tipo_teste="t-Student",
+    )
+    caminho_g2 = diretorio_saida / "grafico_g2_distribuicao_h0.html"
+    fig_g2.write_html(str(caminho_g2))
+    print(f"      -> Salvo com sucesso em: {caminho_g2}")
+    print(f"      - Cenário:                 {cenario_label}")
+    print(f"      - Teste Estatístico:       {teste_res['teste']}")
+    print(f"      - Estatística Observada:   t_obs = {stat_obs:.4f}")
+    print(f"      - Graus de Liberdade (gl): {df_gl:.1f}")
+    print(f"      - p-valor:                 {p_val:.4e}")
+    status = "REJEITA H0 (p < 0.05)" if p_val < 0.05 else "NÃO REJEITA H0 (p >= 0.05)"
+    print(f"      - Veredito Estatístico:    {status}")
+
+    print("\n" + "=" * 70)
+    print("  Concluído com êxito! Visualizações interativas exportadas.")
+    print("=" * 70)
+
+
+def is_running_under_streamlit() -> bool:
+    """Verifica se o script está sendo executado através do runner do Streamlit."""
+    try:
+        from streamlit.runtime.scriptrunner import get_script_run_ctx
+        return get_script_run_ctx() is not None
+    except Exception:
+        return False
+
+
 if __name__ == "__main__":
-    main()
+    if is_running_under_streamlit() or (len(sys.argv) > 1 and "--streamlit" in sys.argv):
+        main()
+    else:
+        executar_modo_script()
+
