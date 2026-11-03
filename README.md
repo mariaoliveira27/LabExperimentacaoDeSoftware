@@ -33,12 +33,18 @@ Descreva o propósito das pastas principais.
 │   ├── /metricas                          # 📏 Códigos e scripts de extração das métricas
 │   └── /tests                             # 🧪 Testes das implementações
 │
-├── /Laboratorio04_Simulacao               # 📂 Projeto de Laboratório 04
-│   ├── dashboard.py                       # 📊 Dashboard Streamlit e visualizações G1 & G2
-│   ├── README.md                          # 📘 Documentação e guia de execução com comando único
-│   ├── requirements.txt                   # 📦 Dependências do projeto
-│   ├── run_dashboard.bat                  # 🚀 Script de execução rápida para Windows
-│   └── run_dashboard.ps1                  # 🚀 Script PowerShell de execução rápida
+├── /Laboratorio04_TestesDeHipotese        # 📂 Projeto de Laboratório 04
+│   ├── /dashboard                         # 📊 Dashboard web portátil e visualizações G1 & G2
+│   │   ├── app.js                         # ⚡ Lógica interativa no navegador
+│   │   ├── dados.py                       # 🐍 Pré-processamento e estatísticas descritivas
+│   │   ├── graficos.py                    # 📈 Funções dos gráficos G1 e G2
+│   │   ├── gerar_dashboard.py             # ⚙️ Motor de consolidação e dados JSON
+│   │   ├── index.html                     # 🌐 Interface web
+│   │   ├── styles.css                     # 🎨 Estilos no padrão dos Labs 01 e 02
+│   │   └── README.md                      # 📘 Guia de execução com comando único
+│   ├── data_loader.py                     # 📥 Módulo de dados reais (Maria Clara)
+│   ├── simulation.py                      # 🎲 Módulo de simulação (Áulus)
+│   └── README.md                          # 📘 Documentação geral do Laboratório 04
 │
 └── README.md                              # 📘 Documentação dos projetos
 ```

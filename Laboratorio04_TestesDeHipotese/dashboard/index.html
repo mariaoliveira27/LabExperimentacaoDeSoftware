@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102a43">
+    <meta name="description" content="Dashboard interativa dos resultados do Laboratório 04: Simulação Estatística e Testes de Hipótese (G1 e G2).">
+    <title>Simulação & Testes de Hipótese | Lab 04</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Plotly.js para renderização dos gráficos interativos G1 e G2 -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- Barra lateral de navegação -->
+      <aside class="sidebar" aria-label="Navegação da dashboard">
+        <a class="brand" href="#visao-geral" aria-label="Ir para a visão geral">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none"><path d="M6 26V18M13 26V10M20 26V14M27 26V6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M6 18c4-8 10-12 21-12" stroke="currentColor" stroke-width="2" stroke-dasharray="2 2"/></svg>
+          </span>
+          <span><strong>SimulaStat</strong><small>Lab 04 — Sprint 01</small></span>
+        </a>
+
+        <nav class="section-nav" aria-label="Seções da dashboard">
+          <p class="nav-label">Navegação</p>
+          <a class="nav-link is-active" href="#visao-geral" aria-current="location"><span>01</span>Visão geral</a>
+          <a class="nav-link" href="#grafico-g1"><span>02</span>Gráfico G1 (Real vs. Simulado)</a>
+          <a class="nav-link" href="#grafico-g2"><span>03</span>Gráfico G2 (Distribuição sob H₀)</a>
+          <a class="nav-link" href="#cenario-hipoteses"><span>04</span>Cenário & Hipóteses</a>
+          <a class="nav-link" href="#explorador-dados"><span>05</span>Amostra Real</a>
+        </nav>
+
+        <div class="sidebar-study">
+          <span class="small-label">Equipe do Projeto</span>
+          <div class="team-member">
+            <span>Maria Clara</span>
+            <span class="role-badge">data_loader</span>
+          </div>
+          <div class="team-member">
+            <span>Áulus</span>
+            <span class="role-badge">simulation</span>
+          </div>
+          <div class="team-member">
+            <strong>Vinícius</strong>
+            <span class="role-badge" style="background:#1677c8;color:#fff;">dashboard</span>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <span class="status-dot" id="source-dot" aria-hidden="true"></span>
+          <p id="source-status">Carregando dados analíticos…</p>
+        </div>
+      </aside>
+
+      <!-- Conteúdo principal -->
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Experimentação de Software · PUC Minas</p>
+            <h1>Simulação Estatística & Testes de Hipótese</h1>
+          </div>
+          <div class="data-badge" id="data-meta-badge" style="font-size:0.75rem; color:#486581; background:#ffffff; border:1px solid #dce6ee; padding:6px 14px; border-radius:999px;">
+            <span>Amostra: 300 repositórios</span>
+          </div>
+        </header>
+
+        <!-- Barra de ferramentas e controles de filtro -->
+        <section class="toolbar" aria-label="Filtros da simulação e dos testes">
+          <div class="filter-group">
+            <label for="select-metrica">1. Métrica Analisada</label>
+            <select id="select-metrica" aria-label="Selecionar métrica"></select>
+          </div>
+
+          <div class="filter-group">
+            <label for="select-distribuicao">2. Distribuição Simulada</label>
+            <select id="select-distribuicao">
+              <option value="Lognormal">Lognormal (Ajuste MLE)</option>
+              <option value="Exponencial">Exponencial (Ajuste MLE)</option>
+              <option value="Normal">Normal Gaussiana</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="select-teste">3. Teste Estatístico</label>
+            <select id="select-teste">
+              <option value="t-Student">t-Student (Welch)</option>
+              <option value="Mann-Whitney U">Mann-Whitney U (Z-score)</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="select-alpha">4. Nível de Significância (α)</label>
+            <select id="select-alpha">
+              <option value="0.05" selected>α = 0.05 (5%)</option>
+              <option value="0.01">α = 0.01 (1%)</option>
+              <option value="0.10">α = 0.10 (10%)</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- 01: Visão Geral / KPIs -->
+        <section class="dashboard-section" id="visao-geral" style="border-top:none; padding-top:0;">
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <span class="kpi-label">Observações Reais</span>
+              <span class="kpi-value" id="kpi-n-reais">—</span>
+              <span class="kpi-foot" id="kpi-n-reais-foot">Repositórios de software</span>
+            </div>
+            <div class="kpi-card tone-teal">
+              <span class="kpi-label">Média (Real vs. Simulado)</span>
+              <span class="kpi-value" id="kpi-media">—</span>
+              <span class="kpi-foot" id="kpi-media-foot">Real vs. Sintético</span>
+            </div>
+            <div class="kpi-card tone-violet">
+              <span class="kpi-label">Estatística do Teste</span>
+              <span class="kpi-value" id="kpi-stat">—</span>
+              <span class="kpi-foot" id="kpi-stat-foot">Valor observado</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-label">Decisão sob H₀</span>
+              <span class="kpi-value" id="kpi-decisao">—</span>
+              <span class="kpi-foot" id="kpi-decisao-foot">p-valor calculado</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 02: Gráfico G1 (Real vs. Simulado) -->
+        <section class="dashboard-section" id="grafico-g1">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Visualização Obrigatória G1 (Issue #94)</p>
+              <h2>Histogramas Comparativos: Dados Reais vs. Simulados</h2>
+            </div>
+            <p>Comparação direta da distribuição empírica coletada com a distribuição teórica calibrada via semente determinística (rng=42).</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span style="font-weight:700; font-size:0.9rem;" id="g1-title">Histogramas Comparativos</span>
+              <div class="btn-toggle" aria-label="Modo de exibição do histograma">
+                <button type="button" class="active" id="btn-g1-side">Lado a Lado</button>
+                <button type="button" id="btn-g1-over">Sobreposto</button>
+              </div>
+            </div>
+
+            <div class="chart-container" id="chart-g1-container">
+              <div style="display:flex; justify-content:center; align-items:center; height:380px; color:#7b93aa;">Carregando Gráfico G1…</div>
+            </div>
+
+            <!-- Tabela comparativa de estatísticas descritivas -->
+            <div class="stats-table-wrapper">
+              <table class="data-table" aria-label="Comparativo das estatísticas descritivas">
+                <thead>
+                  <tr>
+                    <th>Conjunto de Dados</th>
+                    <th>N</th>
+                    <th>Média</th>
+                    <th>Mediana</th>
+                    <th>Desvio Padrão</th>
+                    <th>Assimetria (Skewness)</th>
+                  </tr>
+                </thead>
+                <tbody id="g1-stats-body">
+                  <!-- Inserido dinamicamente via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 03: Gráfico G2 (Distribuição sob H0) -->
+        <section class="dashboard-section" id="grafico-g2">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Visualização Obrigatória G2 (Issue #94)</p>
+              <h2>Distribuição da Estatística sob H₀ & Região Crítica</h2>
+            </div>
+            <p>Curva teórica da hipótese nula com região de rejeição sombreada em vermelho e marcação destacada da estatística observada e p-valor.</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span style="font-weight:700; font-size:0.9rem;" id="g2-title">Distribuição sob H₀</span>
+              <span id="g2-status-pill" class="badge-decision">—</span>
+            </div>
+
+            <div class="chart-container" id="chart-g2-container">
+              <div style="display:flex; justify-content:center; align-items:center; height:380px; color:#7b93aa;">Carregando Gráfico G2…</div>
+            </div>
+
+            <div class="callout-box" id="g2-conclusion-box">
+              <!-- Conclusão dinâmica do teste -->
+            </div>
+          </div>
+        </section>
+
+        <!-- 04: Cenário e Hipóteses -->
+        <section class="dashboard-section" id="cenario-hipoteses">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Fundamentação Experimental</p>
+              <h2>Cenário de Pesquisa & Hipóteses Formais</h2>
+            </div>
+            <p>Formulação estatística do experimento conforme requisitos de entrega da Sprint 01.</p>
+          </div>
+
+          <div class="hypo-grid">
+            <div class="hypo-card">
+              <h4>🎯 Hipótese Nula (H₀)</h4>
+              <p><strong>H₀: μ₁ = μ₂ (ou F₁ = F₂)</strong> — Não há diferença estatisticamente significativa no comportamento da métrica de software entre os grupos comparados. As variações observadas decorrem unicamente do acaso amostral.</p>
+            </div>
+            <div class="hypo-card">
+              <h4>⚡ Hipótese Alternativa (H₁)</h4>
+              <p><strong>H₁: μ₁ ≠ μ₂ (ou F₁ ≠ F₂)</strong> — Existe diferença sistemática e estatisticamente significativa no comportamento da métrica entre os grupos comparados ao nível de significância adotado (α = 0.05).</p>
+            </div>
+          </div>
+
+          <div class="callout-box info" style="margin-top:16px;">
+            <strong>📐 Justificativa da Escolha das Distribuições:</strong>
+            Métricas de tempo em engenharia de software (como Lead Time e MTTR) apresentam forte assimetria positiva à direita (cauda longa com presença de outliers) e suporte estritamente não-negativo. Por essa razão empírica, a distribuição <strong>Lognormal</strong> e a <strong>Exponencial</strong> fornecem modelos mais fidedignos que a distribuição Normal tradicional.
+          </div>
+        </section>
+
+        <!-- 05: Explorador de Dados -->
+        <section class="dashboard-section" id="explorador-dados">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Amostra Coletada</p>
+              <h2>Explorador da Amostra Real</h2>
+            </div>
+            <p>Amostra de dados empíricos reais utilizada para calibrar os modelos sintéticos.</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span style="font-weight:700; font-size:0.88rem;">Registros de Repositórios Aprovados</span>
+              <input type="search" id="input-busca-repo" placeholder="Buscar por repositório ou linguagem..." style="border:1px solid #dce6ee; border-radius:8px; padding:6px 12px; font-size:0.8rem; width:260px;">
+            </div>
+
+            <div class="stats-table-wrapper" style="max-height:360px; overflow-y:auto;">
+              <table class="data-table" id="tabela-repos">
+                <thead>
+                  <tr>
+                    <th>Repositório</th>
+                    <th>Linguagem</th>
+                    <th>Tier DORA</th>
+                    <th>Estrelas</th>
+                    <th>Lead Time (dias)</th>
+                    <th>Recuperação (h)</th>
+                    <th>Deploy / semana</th>
+                  </tr>
+                </thead>
+                <tbody id="tabela-repos-body">
+                  <!-- Inserido dinamicamente -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
