@@ -211,13 +211,173 @@ def interpret_example(result: dict[str, Any]) -> str:
     return " ".join(sentences)
 
 
+def simulate_q1(
+    params: SimParams | None = None,
+    n_sims: int = 10_000,
+    alpha: float = 0.05,
+    seed: int = 42,
+) -> dict[str, Any]:
+    """Execute Q1: simulate 10,000 datasets under H0 and measure Type I error rate.
+
+    Returns the rejection proportion and 95% binomial confidence margin.
+    Expected result is approximately 5% for calibrated tests.
+    """
+    p = params if params is not None else SimParams(delta=0.0)
+    if p.delta != 0.0:
+        p = replace(p, delta=0.0)
+
+    rng = np.random.default_rng(seed)
+    sim_res = simulate(p, n_sims=n_sims, alpha=alpha, rng=rng)
+
+    rate_w = sim_res["reject_rate_welch"]
+    rate_mw = sim_res["reject_rate_mw"]
+
+    se_w = 1.96 * np.sqrt(rate_w * (1 - rate_w) / n_sims)
+    se_mw = 1.96 * np.sqrt(rate_mw * (1 - rate_mw) / n_sims)
+
+    return {
+        "question": "Q1: Erro Tipo I sob H0 verdadeira",
+        "n_sims": n_sims,
+        "alpha": alpha,
+        "params": p,
+        "rate_welch": rate_w,
+        "rate_mw": rate_mw,
+        "margin_welch": se_w,
+        "margin_mw": se_mw,
+        "welch_close_to_alpha": bool(abs(rate_w - alpha) <= 0.015),
+        "mw_close_to_alpha": bool(abs(rate_mw - alpha) <= 0.015),
+    }
+
+
+def simulate_q2(
+    effects: list[float] | None = None,
+    base_params: SimParams | None = None,
+    n_sims: int = 2_000,
+    alpha: float = 0.05,
+    seed: int = 42,
+) -> dict[str, Any]:
+    """Execute Q2: simulate power curves for increasing effect sizes."""
+    deltas = effects if effects is not None else [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.5]
+    base = base_params if base_params is not None else SimParams()
+
+    rng = np.random.default_rng(seed)
+    power_welch = []
+    power_mw = []
+
+    for d in deltas:
+        p = replace(base, delta=d)
+        res = simulate(p, n_sims=n_sims, alpha=alpha, rng=rng)
+        power_welch.append(float(res["reject_rate_welch"]))
+        power_mw.append(float(res["reject_rate_mw"]))
+
+    return {
+        "question": "Q2: Curvas de Poder com efeitos crescentes",
+        "n_sims_per_point": n_sims,
+        "alpha": alpha,
+        "deltas": deltas,
+        "power_welch": power_welch,
+        "power_mw": power_mw,
+    }
+
+
+def simulate_q3(
+    n_sims: int = 2_000,
+    alpha: float = 0.05,
+    seed: int = 42,
+) -> dict[str, Any]:
+    """Execute Q3: evaluate behavior when parametric assumptions are violated.
+
+    Violations tested:
+    1. Extreme skewness (lognormal with sigma=1.6)
+    2. Outlier contamination (10% extreme multipliers)
+    3. Small sample size (N=12)
+    """
+    rng = np.random.default_rng(seed)
+    deltas = [0.0, 0.5, 1.0]
+
+    scenarios = {
+        "assimetria_extrema": {
+            "nome": "Assimetria Extrema (σ=1.6)",
+            "fn": lambda r, d: (
+                r.lognormal(mean=np.log(10), sigma=1.6, size=(n_sims, 30)),
+                r.lognormal(mean=np.log(10) + d, sigma=1.6, size=(n_sims, 30)),
+            ),
+        },
+        "amostra_pequena": {
+            "nome": "Amostra Pequena (N=12)",
+            "fn": lambda r, d: (
+                r.lognormal(mean=np.log(10), sigma=1.0, size=(n_sims, 12)),
+                r.lognormal(mean=np.log(10) + d, sigma=1.0, size=(n_sims, 12)),
+            ),
+        },
+        "outliers": {
+            "nome": "Contaminação por Outliers (10%)",
+            "fn": lambda r, d: _draw_with_outliers(r, n_sims, 30, d),
+        },
+    }
+
+    results = {}
+    for key, sc in scenarios.items():
+        welch_rates = []
+        mw_rates = []
+        for d in deltas:
+            a, b = sc["fn"](rng, d)
+            w = stats.ttest_ind(a, b, axis=1, equal_var=False)
+            mw = stats.mannwhitneyu(a, b, axis=1, alternative="two-sided")
+            welch_rates.append(float(np.mean(w.pvalue < alpha)))
+            mw_rates.append(float(np.mean(mw.pvalue < alpha)))
+
+        results[key] = {
+            "nome": sc["nome"],
+            "deltas": deltas,
+            "welch_rates": welch_rates,
+            "mw_rates": mw_rates,
+            "type1_welch": welch_rates[0],
+            "type1_mw": mw_rates[0],
+        }
+
+    return {
+        "question": "Q3: Violação de Pressupostos Paramétricos",
+        "n_sims": n_sims,
+        "alpha": alpha,
+        "scenarios": results,
+    }
+
+
+def _draw_with_outliers(
+    rng: np.random.Generator,
+    n_sims: int,
+    n: int,
+    delta: float,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Draw lognormal samples with 10% outlier contamination."""
+    a = rng.lognormal(mean=np.log(10), sigma=1.0, size=(n_sims, n))
+    b = rng.lognormal(mean=np.log(10) + delta, sigma=1.0, size=(n_sims, n))
+    mask_a = rng.random(size=(n_sims, n)) < 0.10
+    mask_b = rng.random(size=(n_sims, n)) < 0.10
+    a[mask_a] *= 8.0
+    b[mask_b] *= 8.0
+    return a, b
+
+
 if __name__ == "__main__":
-    base_params = SimParams()
-    for effect in (0.0, 0.5):
-        params = replace(base_params, delta=effect)
-        group_a, group_b = generate_groups(params)
-        print(f"delta = {effect:g}")
-        print(interpret_example(run_tests(group_a, group_b, delta=effect)))
-    results = simulate(base_params)
-    print(f"Welch rejection rate: {results['reject_rate_welch']:.2%}")
-    print(f"Mann-Whitney rejection rate: {results['reject_rate_mw']:.2%}")
+    print("=" * 60)
+    print("RELATÓRIO EXPERIMENTAL DE SIMULAÇÕES (Q1, Q2, Q3) - LAB 04")
+    print("=" * 60)
+
+    print("\n--- Executando Q1: Erro Tipo I (N=10.000 iterações sob H0) ---")
+    q1 = simulate_q1(n_sims=10_000)
+    print(f"Taxa Welch: {q1['rate_welch']:.2%} ± {q1['margin_welch']:.2%}")
+    print(f"Taxa Mann-Whitney: {q1['rate_mw']:.2%} ± {q1['margin_mw']:.2%}")
+
+    print("\n--- Executando Q2: Poder Estatístico vs. Efeito Delta ---")
+    q2 = simulate_q2()
+    for d, pw, pmw in zip(q2["deltas"], q2["power_welch"], q2["power_mw"]):
+        print(f"  δ = {d:.1f} -> Welch: {pw:.1%}, Mann-Whitney: {pmw:.1%}")
+
+    print("\n--- Executando Q3: Violações de Pressupostos ---")
+    q3 = simulate_q3()
+    for k, v in q3["scenarios"].items():
+        print(f"  [{v['nome']}] Erro Tipo I: Welch={v['type1_welch']:.2%}, MW={v['type1_mw']:.2%}")
+    print("=" * 60)
+

@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#102a43">
-    <meta name="description" content="Dashboard interativa dos resultados do Laboratório 04: Simulação Estatística e Testes de Hipótese (G1 e G2).">
+    <meta name="description" content="Dashboard interativa dos resultados do Laboratório 04: Simulação Estatística e Testes de Hipótese (G1, G2, G3, G4 e Dados Reais).">
     <title>Simulação & Testes de Hipótese | Lab 04</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Plotly.js para renderização dos gráficos interativos G1 e G2 -->
+    <!-- Plotly.js para renderização dos gráficos interativos G1, G2, G3 e G4 -->
     <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
     <script src="app.js" defer></script>
   </head>
@@ -15,20 +15,25 @@
     <div class="app-shell">
       <!-- Barra lateral de navegação -->
       <aside class="sidebar" aria-label="Navegação da dashboard">
-        <a class="brand" href="#visao-geral" aria-label="Ir para a visão geral">
+        <a class="brand" href="#secao-cenario" aria-label="Ir para o cenário">
           <span class="brand-mark" aria-hidden="true">
             <svg viewBox="0 0 32 32" fill="none"><path d="M6 26V18M13 26V10M20 26V14M27 26V6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M6 18c4-8 10-12 21-12" stroke="currentColor" stroke-width="2" stroke-dasharray="2 2"/></svg>
           </span>
-          <span><strong>SimulaStat</strong><small>Lab 04 — Sprint 01</small></span>
+          <span><strong>SimulaStat</strong><small>Lab 04 — Entrega Final</small></span>
         </a>
 
-        <nav class="section-nav" aria-label="Seções da dashboard">
-          <p class="nav-label">Navegação</p>
-          <a class="nav-link is-active" href="#visao-geral" aria-current="location"><span>01</span>Visão geral</a>
-          <a class="nav-link" href="#grafico-g1"><span>02</span>Gráfico G1 (Real vs. Simulado)</a>
-          <a class="nav-link" href="#grafico-g2"><span>03</span>Gráfico G2 (Distribuição sob H₀)</a>
-          <a class="nav-link" href="#cenario-hipoteses"><span>04</span>Cenário & Hipóteses</a>
-          <a class="nav-link" href="#explorador-dados"><span>05</span>Amostra Real</a>
+        <!-- 7 Seções Oficiais na Ordem Estrita do Edital -->
+        <nav class="section-nav" aria-label="Seções oficiais da dashboard">
+          <p class="nav-label">Seções Obrigatórias</p>
+          <a class="nav-link is-active" href="#secao-cenario" aria-current="location"><span>01</span>1. Cenário</a>
+          <a class="nav-link" href="#secao-dados-g1"><span>02</span>2. Os dados (G1)</a>
+          <a class="nav-link" href="#secao-testes-g2"><span>03</span>3. Testes sob H₀ (G2)</a>
+          <a class="nav-link" href="#secao-erro-tipo-1-g3"><span>04</span>4. Erro tipo I (G3)</a>
+          <a class="nav-link" href="#secao-poder-g4"><span>05</span>5. Poder (G4)</a>
+          <a class="nav-link" href="#secao-dados-reais-tabela"><span>06</span>6. Dados reais (Tabela)</a>
+          <a class="nav-link" href="#secao-conclusao"><span>07</span>7. Conclusão</a>
+          <p class="nav-label" style="margin-top:14px;">Anexo</p>
+          <a class="nav-link" href="#explorador-dados"><span>+</span>Amostra Real</a>
         </nav>
 
         <div class="sidebar-study">
@@ -55,25 +60,36 @@
 
       <!-- Conteúdo principal -->
       <main class="main-content">
+        <!-- Topbar com links exigidos para repositório e GitHub Projects -->
         <header class="topbar">
           <div>
-            <p class="eyebrow">Experimentação de Software · PUC Minas</p>
-            <h1>Simulação Estatística & Testes de Hipótese</h1>
+            <p class="eyebrow">Laboratório de Experimentação de Software · PUC Minas</p>
+            <h1>Testes de Hipótese por Dentro: Simulação & Dashboard</h1>
           </div>
-          <div class="data-badge" id="data-meta-badge" style="font-size:0.75rem; color:#486581; background:#ffffff; border:1px solid #dce6ee; padding:6px 14px; border-radius:999px;">
-            <span>Amostra: 300 repositórios</span>
+          <div class="top-links">
+            <a class="top-link-btn primary" href="https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware" target="_blank" rel="noopener noreferrer">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+              <span>Repositório GitHub</span>
+            </a>
+            <a class="top-link-btn" href="https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/projects" target="_blank" rel="noopener noreferrer">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1.75 0h12.5C15.22 0 16 .78 16 1.75v12.5c0 .97-.78 1.75-1.75 1.75H1.75C.78 16 0 15.22 0 14.25V1.75C0 .78.78 0 1.75 0zm1.5 3a.75.75 0 0 0 0 1.5h2a.75.75 0 0 0 0-1.5h-2zm0 4a.75.75 0 0 0 0 1.5h2a.75.75 0 0 0 0-1.5h-2zm0 4a.75.75 0 0 0 0 1.5h2a.75.75 0 0 0 0-1.5h-2zM7 3.75v8.5c0 .41.34.75.75.75h5.5a.75.75 0 0 0 .75-.75v-8.5a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75z"/></svg>
+              <span>GitHub Projects</span>
+            </a>
+            <div class="top-link-btn" style="background:#f1f5f9; cursor:default;">
+              <span>Amostra: 300 repositórios</span>
+            </div>
           </div>
         </header>
 
-        <!-- Barra de ferramentas e controles de filtro -->
+        <!-- Barra de ferramentas e controles de filtro para os Gráficos G1 e G2 -->
         <section class="toolbar" aria-label="Filtros da simulação e dos testes">
           <div class="filter-group">
-            <label for="select-metrica">1. Métrica Analisada</label>
+            <label for="select-metrica">Métrica Analisada</label>
             <select id="select-metrica" aria-label="Selecionar métrica"></select>
           </div>
 
           <div class="filter-group">
-            <label for="select-distribuicao">2. Distribuição Simulada</label>
+            <label for="select-distribuicao">Distribuição Simulada</label>
             <select id="select-distribuicao">
               <option value="Lognormal">Lognormal (Ajuste MLE)</option>
               <option value="Exponencial">Exponencial (Ajuste MLE)</option>
@@ -82,7 +98,7 @@
           </div>
 
           <div class="filter-group">
-            <label for="select-teste">3. Teste Estatístico</label>
+            <label for="select-teste">Teste Estatístico</label>
             <select id="select-teste">
               <option value="t-Student">t-Student (Welch)</option>
               <option value="Mann-Whitney U">Mann-Whitney U (Z-score)</option>
@@ -90,7 +106,7 @@
           </div>
 
           <div class="filter-group">
-            <label for="select-alpha">4. Nível de Significância (α)</label>
+            <label for="select-alpha">Nível de Significância (α)</label>
             <select id="select-alpha">
               <option value="0.05" selected>α = 0.05 (5%)</option>
               <option value="0.01">α = 0.01 (1%)</option>
@@ -99,13 +115,41 @@
           </div>
         </section>
 
-        <!-- 01: Visão Geral / KPIs -->
-        <section class="dashboard-section" id="visao-geral" style="border-top:none; padding-top:0;">
-          <div class="kpi-grid">
+        <!-- ================================================================= -->
+        <!-- SEÇÃO 1: CENÁRIO (Exigência do Edital) -->
+        <!-- ================================================================= -->
+        <section class="dashboard-section" id="secao-cenario" style="border-top:none; padding-top:0;">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow"><span class="section-badge-num">Seção 1</span>Fundamentação Experimental</p>
+              <h2>Cenário de Engenharia de Software & Hipóteses Formais</h2>
+            </div>
+            <p>Definição formal do problema, hipóteses testadas e caracterização da amostra empírica real.</p>
+          </div>
+
+          <div class="hypo-grid">
+            <div class="hypo-card">
+              <h4>🎯 Hipótese Nula (H₀)</h4>
+              <p><strong>H₀: μ₁ = μ₂ (ou F₁ = F₂)</strong> — A distribuição da métrica de engenharia de software é idêntica entre os grupos comparados (Tiers DORA Elite/High vs. Medium/Low). As variações observadas decorrem unicamente do acaso amostral.</p>
+            </div>
+            <div class="hypo-card">
+              <h4>⚡ Hipótese Alternativa (H₁)</h4>
+              <p><strong>H₁: μ₁ ≠ μ₂ (ou F₁ ≠ F₂)</strong> — Existe diferença sistemática e estatisticamente significativa no comportamento da métrica entre os grupos comparados ao nível de significância de α = 0,05 (teste bicaudal).</p>
+            </div>
+          </div>
+
+          <!-- Texto explicativo de 2 a 4 frases (Edital) -->
+          <div class="callout-box info" style="margin-top:16px;">
+            <strong>📋 Síntese do Cenário (Seção 1):</strong><br>
+            Investigamos se as métricas essenciais de engenharia de software — especificamente Lead Time de Commit, Tempo de Recuperação (MTTR) e Frequência de Deploy — diferem significativamente entre repositórios classificados nos tiers DORA de alto desempenho (Elite/High) e de desempenho moderado/baixo (Medium/Low). A hipótese nula H₀ postula que as distribuições são equivalentes, enquanto H₁ afirma que há diferença sistemática bicaudal. Os dados reais provêm de uma amostra de 300 repositórios de código aberto minerados via GitHub API no Laboratório 03, catalogados após filtragem rigorosa de releases e automação de CI/CD.
+          </div>
+
+          <!-- Cards de KPIs da Amostra -->
+          <div class="kpi-grid" style="margin-top:20px; margin-bottom:0;">
             <div class="kpi-card">
               <span class="kpi-label">Observações Reais</span>
-              <span class="kpi-value" id="kpi-n-reais">—</span>
-              <span class="kpi-foot" id="kpi-n-reais-foot">Repositórios de software</span>
+              <span class="kpi-value" id="kpi-n-reais">300</span>
+              <span class="kpi-foot">Repositórios de software minerados</span>
             </div>
             <div class="kpi-card tone-teal">
               <span class="kpi-label">Média (Real vs. Simulado)</span>
@@ -113,7 +157,7 @@
               <span class="kpi-foot" id="kpi-media-foot">Real vs. Sintético</span>
             </div>
             <div class="kpi-card tone-violet">
-              <span class="kpi-label">Estatística do Teste</span>
+              <span class="kpi-label">Estatística Observada</span>
               <span class="kpi-value" id="kpi-stat">—</span>
               <span class="kpi-foot" id="kpi-stat-foot">Valor observado</span>
             </div>
@@ -125,19 +169,21 @@
           </div>
         </section>
 
-        <!-- 02: Gráfico G1 (Real vs. Simulado) -->
-        <section class="dashboard-section" id="grafico-g1">
+        <!-- ================================================================= -->
+        <!-- SEÇÃO 2: OS DADOS (Gráfico G1) -->
+        <!-- ================================================================= -->
+        <section class="dashboard-section" id="secao-dados-g1">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Visualização Obrigatória G1 (Issue #94)</p>
-              <h2>Histogramas Comparativos: Dados Reais vs. Simulados</h2>
+              <p class="eyebrow"><span class="section-badge-num">Seção 2</span>Visualização Obrigatória G1</p>
+              <h2>Os Dados: Distribuição Empírica vs. Modelo Simulado</h2>
             </div>
             <p>Comparação direta da distribuição empírica coletada com a distribuição teórica calibrada via semente determinística (rng=42).</p>
           </div>
 
           <div class="panel">
             <div class="panel-header">
-              <span style="font-weight:700; font-size:0.9rem;" id="g1-title">Histogramas Comparativos</span>
+              <span style="font-weight:700; font-size:0.9rem;" id="g1-title">Histogramas Comparativos (Real vs. Simulado)</span>
               <div class="btn-toggle" aria-label="Modo de exibição do histograma">
                 <button type="button" class="active" id="btn-g1-side">Lado a Lado</button>
                 <button type="button" id="btn-g1-over">Sobreposto</button>
@@ -166,15 +212,23 @@
                 </tbody>
               </table>
             </div>
+
+            <!-- Texto explicativo de 2 a 4 frases (Edital) -->
+            <div class="callout-box info" style="margin-top:16px;">
+              <strong>📊 Síntese dos Dados (Seção 2):</strong><br>
+              Os dados empíricos reais de tempo em engenharia de software (como Lead Time e MTTR) apresentam acentuada assimetria positiva à direita e caudas longas causadas por incidentes complexos ou atrasos de release extraordinários. Devido a essa natureza estritamente positiva e assimétrica, calibramos os parâmetros da simulação sintética utilizando uma distribuição Lognormal ajustada por Máxima Verossimilhança (MLE), preservando a mediana e a dispersão observadas. A comparação visual e as estatísticas de skewness comprovam que o modelo sintético reproduz com fidelidade a assimetria dos dados reais.
+            </div>
           </div>
         </section>
 
-        <!-- 03: Gráfico G2 (Distribuição sob H0) -->
-        <section class="dashboard-section" id="grafico-g2">
+        <!-- ================================================================= -->
+        <!-- SEÇÃO 3: COMO OS TESTES FUNCIONAM (Gráfico G2) -->
+        <!-- ================================================================= -->
+        <section class="dashboard-section" id="secao-testes-g2">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Visualização Obrigatória G2 (Issue #94)</p>
-              <h2>Distribuição da Estatística sob H₀ & Região Crítica</h2>
+              <p class="eyebrow"><span class="section-badge-num">Seção 3</span>Visualização Obrigatória G2</p>
+              <h2>Como os Testes Funcionam: Distribuição sob H₀ & Região Crítica</h2>
             </div>
             <p>Curva teórica da hipótese nula com região de rejeição sombreada em vermelho e marcação destacada da estatística observada e p-valor.</p>
           </div>
@@ -192,44 +246,175 @@
             <div class="callout-box" id="g2-conclusion-box">
               <!-- Conclusão dinâmica do teste -->
             </div>
+
+            <!-- Texto explicativo de 2 a 4 frases (Edital) -->
+            <div class="callout-box info" style="margin-top:14px;">
+              <strong>🎯 Mecânica dos Testes (Seção 3):</strong><br>
+              O teste t de Welch compara a igualdade das médias amostrais ajustando os graus de liberdade para variâncias desiguais, enquanto o teste não-paramétrico de Mann-Whitney U avalia se a soma de postos ordenados difere entre os grupos, prescindindo de normalidade. A região crítica de rejeição sombreada em vermelho delimita os 5% mais improváveis sob H₀ (|estatística| ≥ valor crítico bicaudal). O p-valor observado mensura a probabilidade exata de se obter um resultado tão extremo quanto o verificado caso H₀ fosse verdadeira, não indicando a probabilidade de H₀ ser verdadeira.
+            </div>
           </div>
         </section>
 
-        <!-- 04: Cenário e Hipóteses -->
-        <section class="dashboard-section" id="cenario-hipoteses">
+        <!-- ================================================================= -->
+        <!-- SEÇÃO 4: ERRO TIPO I (Gráfico G3) -->
+        <!-- ================================================================= -->
+        <section class="dashboard-section" id="secao-erro-tipo-1-g3">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Fundamentação Experimental</p>
-              <h2>Cenário de Pesquisa & Hipóteses Formais</h2>
+              <p class="eyebrow"><span class="section-badge-num">Seção 4</span>Visualização Obrigatória G3 (Q1 & Q3)</p>
+              <h2>Erro Tipo I: Taxa de Falso Positivo sob H₀ Verdadeira</h2>
             </div>
-            <p>Formulação estatística do experimento conforme requisitos de entrega da Sprint 01.</p>
+            <p>Frequência de rejeições incorretas em 10.000 simulações sob H₀ verdadeira em cinco cenários, com linha de referência nominal em 5% (α = 0,05).</p>
           </div>
 
-          <div class="hypo-grid">
-            <div class="hypo-card">
-              <h4>🎯 Hipótese Nula (H₀)</h4>
-              <p><strong>H₀: μ₁ = μ₂ (ou F₁ = F₂)</strong> — Não há diferença estatisticamente significativa no comportamento da métrica de software entre os grupos comparados. As variações observadas decorrem unicamente do acaso amostral.</p>
+          <div class="panel">
+            <div class="panel-header">
+              <span style="font-weight:700; font-size:0.9rem;" id="g3-title">Erro Tipo I em 10.000 Simulações (α = 0.05)</span>
+              <span class="badge-decision" style="background:#e0f2fe; color:#0369a1; border-color:#bae6fd;">10.000 Repetições Monte Carlo</span>
             </div>
-            <div class="hypo-card">
-              <h4>⚡ Hipótese Alternativa (H₁)</h4>
-              <p><strong>H₁: μ₁ ≠ μ₂ (ou F₁ ≠ F₂)</strong> — Existe diferença sistemática e estatisticamente significativa no comportamento da métrica entre os grupos comparados ao nível de significância adotado (α = 0.05).</p>
-            </div>
-          </div>
 
-          <div class="callout-box info" style="margin-top:16px;">
-            <strong>📐 Justificativa da Escolha das Distribuições:</strong>
-            Métricas de tempo em engenharia de software (como Lead Time e MTTR) apresentam forte assimetria positiva à direita (cauda longa com presença de outliers) e suporte estritamente não-negativo. Por essa razão empírica, a distribuição <strong>Lognormal</strong> e a <strong>Exponencial</strong> fornecem modelos mais fidedignos que a distribuição Normal tradicional.
+            <div class="chart-container" id="chart-g3-container">
+              <div style="display:flex; justify-content:center; align-items:center; height:380px; color:#7b93aa;">Carregando Gráfico G3…</div>
+            </div>
+
+            <!-- Texto explicativo de 2 a 4 frases (Edital) -->
+            <div class="callout-box info" id="g3-conclusion-box">
+              <strong>📊 Análise de Erro Tipo I (Seção 4):</strong><br>
+              Sob H₀ verdadeira, o teste não-paramétrico de Mann-Whitney U manteve taxas de erro Tipo I extremamente estáveis e aderentes ao nível nominal de 5% em todos os cinco cenários simulados (oscilando entre 4,3% e 4,8%). Por outro lado, o teste t de Welch revelou-se ligeiramente conservador em distribuições com forte assimetria e na presença de outliers (~2,6% a 3,7%), mantendo a taxa próxima de 5% apenas sob normalidade ideal. Nenhum dos testes demonstrou comportamento liberal descontrolado que inflasse os falsos positivos além do limiar nominal estabelecido.
+            </div>
           </div>
         </section>
 
-        <!-- 05: Explorador de Dados -->
+        <!-- ================================================================= -->
+        <!-- SEÇÃO 5: PODER (Gráfico G4) -->
+        <!-- ================================================================= -->
+        <section class="dashboard-section" id="secao-poder-g4">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow"><span class="section-badge-num">Seção 5</span>Visualização Obrigatória G4 (Q2 & Q3)</p>
+              <h2>Poder Estatístico: Curvas de Detecção de Efeito (Poder vs. δ)</h2>
+            </div>
+            <p>Proporção de rejeições corretas frente a efeitos crescentes (δ) para os dois testes sobrepostos no mesmo gráfico, com limiar convencional de 80%.</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span style="font-weight:700; font-size:0.9rem;" id="g4-title">Curvas de Poder: Welch vs. Mann-Whitney</span>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <label for="select-cenario-g4" style="font-size:0.8rem; font-weight:600; color:#486581;">Cenário:</label>
+                <select id="select-cenario-g4" style="border:1px solid #dce6ee; border-radius:6px; padding:4px 8px; font-size:0.8rem;">
+                  <option value="lognormal_base" selected>Base: Lognormal Realista (N=30)</option>
+                  <option value="normal_ideal">Ideal: Normal Gaussiana (N=30)</option>
+                  <option value="assimetria_extrema">Violação: Assimetria Severa (σ=1.6)</option>
+                  <option value="outliers">Violação: Contaminação por Outliers (10%)</option>
+                  <option value="amostra_pequena">Violação: Amostras Pequenas (N=12)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="chart-container" id="chart-g4-container">
+              <div style="display:flex; justify-content:center; align-items:center; height:380px; color:#7b93aa;">Carregando Gráfico G4…</div>
+            </div>
+
+            <!-- Texto explicativo de 2 a 4 frases (Edital) -->
+            <div class="callout-box info" id="g4-conclusion-box">
+              <strong>⚡ Análise de Poder Estatístico (Seção 5):</strong><br>
+              Na distribuição gaussiana ideal, o teste t de Welch apresenta ligeira vantagem teórica de poder sobre o Mann-Whitney U. Contudo, em distribuições assimétricas típicas de engenharia de software e na presença de outliers, a vantagem inverte-se expressivamente a favor do Mann-Whitney U, que atinge o limiar recomendado de 80% de poder com efeitos substancialmente menores (δ ≈ 0,7 vs. δ ≈ 0,95 no Welch). O teste não-paramétrico demonstra robustez muito superior, preservando alta sensibilidade mesmo quando a média é inflada artificialmente por valores extremos.
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- SEÇÃO 6: DADOS REAIS (Tabela Exigida pelo Edital) -->
+        <!-- ================================================================= -->
+        <section class="dashboard-section" id="secao-dados-reais-tabela">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow"><span class="section-badge-num">Seção 6</span>Amostra Empírica</p>
+              <h2>Aplicação nos Dados Reais: Estatísticas, p-Valores & Tamanho de Efeito</h2>
+            </div>
+            <p>Comparação formal dos testes t de Welch e Mann-Whitney U aplicados aos 300 repositórios reais minerados, acompanhados das medidas padronizadas de Cohen's d e Cliff's Delta.</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span style="font-weight:700; font-size:0.9rem;">Tabela de Resultados Estatísticos na Amostra Real (N = 300)</span>
+              <span class="badge-decision" style="background:#f0fdf4; color:#166534; border:1px solid #bbf7d0;">Tiers DORA: Elite/High vs. Medium/Low</span>
+            </div>
+
+            <div class="stats-table-wrapper">
+              <table class="data-table" id="tabela-dados-reais-testes" aria-label="Tabela de resultados estatísticos nos dados reais">
+                <thead>
+                  <tr>
+                    <th>Métrica Analisada</th>
+                    <th>N (E+H / M+L)</th>
+                    <th>Médias (E+H / M+L)</th>
+                    <th>Medianas (E+H / M+L)</th>
+                    <th>t de Welch (t, p)</th>
+                    <th>Cohen's d (Efeito)</th>
+                    <th>Mann-Whitney (U, p)</th>
+                    <th>Cliff's δ (Efeito)</th>
+                    <th>Conclusão Prática</th>
+                  </tr>
+                </thead>
+                <tbody id="tabela-dados-reais-body">
+                  <!-- Inserido dinamicamente via app.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Texto explicativo de 2 a 4 frases (Edital) -->
+            <div class="callout-box info" style="margin-top:16px;">
+              <strong>📋 Síntese dos Dados Reais (Seção 6):</strong><br>
+              Na amostra empírica de 300 repositórios, ambos os testes rejeitaram H₀ com extrema significância estatística para Lead Time de Commit e Frequência de Deploy (p < 0,001), corroborando que repositórios de alto desempenho diferem drasticamente dos demais. O tamanho de efeito medido revelou-se classificado como Grande (|Cohen's d| > 1,7 e |Cliff's δ| > 0,85), confirmando que a diferença não reflete apenas poder amostral em N=300, mas traduz um impacto prático substancial nos fluxos de entrega contínua. Para métricas com maior sobreposição, Mann-Whitney detectou relevância com menor distorção que o Welch.
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- SEÇÃO 7: CONCLUSÃO (Exigência do Edital) -->
+        <!-- ================================================================= -->
+        <section class="dashboard-section" id="secao-conclusao">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow"><span class="section-badge-num">Seção 7</span>Síntese & Recomendação</p>
+              <h2>Conclusão: Expectativa vs. Descoberta & Recomendação de Teste</h2>
+            </div>
+            <p>Confronto entre as premissas prévias da equipe e os resultados obtidos, recomendação fundamentada e principais limitações metodológicas.</p>
+          </div>
+
+          <div class="hypo-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+            <div class="hypo-card" style="border-top:3px solid #1677c8;">
+              <h4>🤔 Expectativa Prévia vs. Achados</h4>
+              <p>Antes da simulação, esperávamos que o teste t de Welch fosse suficientemente robusto para dados assimétricos apoiado no Teorema Central do Limite em N=30. A simulação revelou que, embora o erro Tipo I seja mantido sob controle, o teste t sofre severa perda de poder estatístico frente a assimetria e outliers, enquanto o Mann-Whitney U supera consistentemente o teste paramétrico.</p>
+            </div>
+            <div class="hypo-card" style="border-top:3px solid #16a34a;">
+              <h4>🏆 Recomendação do Grupo</h4>
+              <p>Recomendamos enfaticamente a adoção do teste <strong>Mann-Whitney U</strong> para hipóteses envolvendo métricas contínuas em Engenharia de Software (Lead Time, MTTR, tempo de revisão de PRs e defeitos). O teste preserva calibração nominal de 5% de Erro Tipo I e alcança 80% de poder com amostras substancialmente menores sob dados assimétricos.</p>
+            </div>
+            <div class="hypo-card" style="border-top:3px solid #ec9b24;">
+              <h4>🔄 Quando a Escolha Mudaria?</h4>
+              <p>A recomendação mudaria a favor do <strong>teste t de Welch</strong> apenas quando a métrica sob estudo possuir distribuição comprovadamente simétrica e unimodal (gaussiana) sem caudas pesadas ou outliers, ou quando o objetivo primário da pesquisa for estritamente a inferência sobre o parâmetro de média populacional contábil em vez de postos ordenados.</p>
+            </div>
+          </div>
+
+          <!-- Texto explicativo de 2 a 4 frases (Edital) -->
+          <div class="callout-box success" style="margin-top:16px;">
+            <strong>📌 Recomendação Final e Limitações (Seção 7):</strong><br>
+            Constatamos que o teste não-paramétrico de Mann-Whitney U é a escolha metodológica superior para experimentação em engenharia de software, superando o Welch em poder e robustez sob as distribuições empíricas assimétricas da área. A recomendação migraria para o teste t de Welch apenas em variáveis comprovadamente gaussianas e desprovidas de outliers. Como limitação principal, destacamos que nossa amostra real baseou-se em repositórios open-source com histórico contínuo de releases, demandando cautela na generalização direta para projetos de software proprietários com ciclos fechados de publicação.
+          </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- ANEXO: EXPLORADOR DA AMOSTRA REAL -->
+        <!-- ================================================================= -->
         <section class="dashboard-section" id="explorador-dados">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">Amostra Coletada</p>
-              <h2>Explorador da Amostra Real</h2>
+              <p class="eyebrow">Anexo Interativo</p>
+              <h2>Explorador da Amostra Real de Repositórios</h2>
             </div>
-            <p>Amostra de dados empíricos reais utilizada para calibrar os modelos sintéticos.</p>
+            <p>Consulta detalhada aos 300 repositórios de software utilizados na calibração e teste empírico.</p>
           </div>
 
           <div class="panel">

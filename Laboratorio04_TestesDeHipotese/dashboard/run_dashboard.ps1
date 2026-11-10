@@ -3,7 +3,8 @@ $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $ScriptDir
 
 Write-Host "========================================================" -ForegroundColor Cyan
-Write-Host "  Iniciando Dashboard - Laboratório 04 (Lab04S01)" -ForegroundColor Cyan
+Write-Host "  Iniciando Dashboard - Laboratório 04 (Entrega Final)" -ForegroundColor Cyan
+Write-Host "  7 Seções: Cenário, G1, G2, G3, G4, Dados Reais & Conclusão" -ForegroundColor Cyan
 Write-Host "========================================================" -ForegroundColor Cyan
 
 $PythonExe = "python"
@@ -14,7 +15,7 @@ if (Test-Path $VenvCandidate) {
 
 $DataFile = Join-Path $ScriptDir "data\dados.json"
 if (-not (Test-Path $DataFile)) {
-    Write-Host "[INFO] Gerando dados analíticos e modelos..." -ForegroundColor Yellow
+    Write-Host "[INFO] Gerando dados analíticos e modelos Monte Carlo (rng=42)..." -ForegroundColor Yellow
     & $PythonExe gerar_dashboard.py
 }
 

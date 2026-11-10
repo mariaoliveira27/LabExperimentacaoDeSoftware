@@ -4,12 +4,40 @@ from pathlib import Path
 import sys
 
 import numpy as np
-import pytest
 from scipy import stats
+
+try:
+    import pytest
+except ImportError:
+    class _Approx:
+        def __init__(self, expected, rel=1e-5, abs=1e-8):
+            self.expected = expected
+            self.rel = rel
+            self.abs = abs
+
+        def __eq__(self, actual):
+            return bool(np.isclose(actual, self.expected, rtol=self.rel, atol=self.abs))
+
+        def __repr__(self):
+            return f"approx({self.expected})"
+
+    class _PytestMock:
+        approx = _Approx
+
+    pytest = _PytestMock()
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from simulation import SimParams, generate_groups, interpret_example, run_tests, simulate
+from simulation import (
+    SimParams,
+    generate_groups,
+    interpret_example,
+    run_tests,
+    simulate,
+    simulate_q1,
+    simulate_q2,
+    simulate_q3,
+)
 
 
 def test_generate_groups_sizes_and_default_seed() -> None:
@@ -102,3 +130,59 @@ def test_interpretation_uses_known_truth_and_selected_alpha() -> None:
     assert "falso positivo" in null.lower()
     assert "corret" in effect.lower()
     assert "desconhecid" in unknown.lower()
+
+
+def test_simulate_q1_type1_error_rate() -> None:
+    res = simulate_q1(n_sims=500, alpha=0.05, seed=42)
+    assert "rate_welch" in res
+    assert "rate_mw" in res
+    assert 0.01 <= res["rate_welch"] <= 0.08
+    assert 0.02 <= res["rate_mw"] <= 0.08
+
+
+def test_simulate_q2_power_curve_monotonicity() -> None:
+    deltas = [0.0, 0.4, 0.8, 1.2]
+    res = simulate_q2(effects=deltas, n_sims=200, alpha=0.05, seed=42)
+    pw = res["power_welch"]
+    pmw = res["power_mw"]
+    assert len(pw) == len(deltas)
+    assert len(pmw) == len(deltas)
+    # Power should increase with effect size
+    assert pw[-1] > pw[0]
+    assert pmw[-1] > pmw[0]
+    assert pmw[-1] >= 0.80
+
+
+def test_simulate_q3_violations_structure() -> None:
+    res = simulate_q3(n_sims=100, alpha=0.05, seed=42)
+    assert "scenarios" in res
+    sc = res["scenarios"]
+    for k in ("assimetria_extrema", "amostra_pequena", "outliers"):
+        assert k in sc
+        assert "type1_welch" in sc[k]
+        assert "type1_mw" in sc[k]
+
+
+if __name__ == "__main__":
+    tests = [
+        test_generate_groups_sizes_and_default_seed,
+        test_simulate_same_seed_produces_identical_results,
+        test_normal_null_rejection_rates_are_near_alpha,
+        test_run_tests_statistics_and_return_keys,
+        test_mann_whitney_z_corrects_variance_for_ties,
+        test_interpretation_uses_known_truth_and_selected_alpha,
+        test_simulate_q1_type1_error_rate,
+        test_simulate_q2_power_curve_monotonicity,
+        test_simulate_q3_violations_structure,
+    ]
+    passed = 0
+    for t in tests:
+        try:
+            t()
+            print(f"[PASS] {t.__name__}")
+            passed += 1
+        except Exception as e:
+            print(f"[FAIL] {t.__name__}: {e}")
+            raise
+    print(f"\nAll {passed} tests passed successfully!")
+

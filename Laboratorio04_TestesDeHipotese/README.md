@@ -1,65 +1,68 @@
-# Laboratório 04 — Testes de Hipótese & Simulação Estatística
+# Laboratório 04 — Testes de Hipótese: Cenário, Simulação e Visualização
 
-Este módulo implementa o estudo experimental do **Laboratório 04**, combinando análise de dados reais de engenharia de software com simulação estatística (Monte Carlo) e testes de hipótese para comparação entre distribuições e grupos experimentais.
-
----
-
-## 👥 Divisão de Atividades da Sprint 01 (Lab04S01)
-
-| Integrante | Módulo / Artefato | Atividades Principais | Issues Associadas |
-|---|---|---|---|
-| **Maria Clara** | `data_loader.py` | Carregamento da amostra real (CSV), pré-processamento, estatísticas descritivas iniciais e escrita formal da pergunta de pesquisa, $H_0$ e $H_1$. | #86, #87, #91 |
-| **Áulus** | `simulation.py` | Motor de simulação (`numpy.random.default_rng(42)`), geração de conjuntos sintéticos, aplicação dos testes estatísticos (`ttest_ind`, `mannwhitneyu`) e proporções de rejeição. | #88, #89, #90, #92 |
-| **Vinícius** | `dashboard/` | Configuração da dashboard web portátil, gráficos **G1** (histogramas comparativos) e **G2** (distribuição sob $H_0$ com região crítica sombreada). | **#93**, **#94** |
+Este repositório contém a implementação do **Laboratório 04** da disciplina *Laboratório de Experimentação de Software* (PUC Minas). O projeto estuda o comportamento comparativo de dois testes estatísticos de hipótese (**t de Welch** $\times$ **Mann-Whitney U**) em cenários de Engenharia de Software, combinando mineração de dados empíricos reais, simulação computacional de Monte Carlo e visualização interativa via Dashboard.
 
 ---
 
-## 🎯 Pergunta de Pesquisa & Hipóteses Experimentais
+## 🔗 Links Oficiais do Projeto
 
-* **Pergunta de Pesquisa (RQ):** *Existe diferença estatisticamente significativa no comportamento das métricas de engenharia de software (como Lead Time, MTTR e Frequência de Deploy) entre diferentes grupos ou em comparação com modelos sintéticos calibrados?*
-* **Hipótese Nula ($H_0$):** $\mu_1 = \mu_2$ (ou $F_1 = F_2$) — Não há diferença no comportamento da métrica entre os grupos comparados.
-* **Hipótese Alternativa ($H_1$):** $\mu_1 \neq \mu_2$ (ou $F_1 \neq F_2$) — Há diferença estatisticamente significativa entre os grupos.
+* 📂 **Repositório GitHub:** [https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware)
+* 📌 **GitHub Projects:** [https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/projects](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/projects)
+* 🌐 **Dashboard:** Disponível localmente em `http://localhost:8000` via comando único de execução.
 
 ---
 
-## 📂 Estrutura de Pastas
+## 👥 Divisão de Atividades da Entrega Final (Com código para todos)
 
+| Integrante | Módulo / Responsabilidade | Atividades de Código e Documentação |
+|---|---|---|
+| **Maria Clara** | `data_loader.py` / Análise Real | Módulo de dados empíricos reais, cálculo padronizado de **tamanho de efeito** (*Cohen's d* e *Cliff's Delta*), formulação do cenário e conclusões das Seções 1, 6 e 7. |
+| **Áulus** | `simulation.py` / Testes | Motor de simulação de Monte Carlo com semente fixa (`numpy.random.default_rng(42)`), simulações das perguntas **Q1** (Erro Tipo I em 10.000 iterações sob $H_0$), **Q2** (Curvas de Poder) e **Q3** (Violações de pressupostos), e suíte de testes automatizados (`tests/test_simulation.py`). |
+| **Vinícius** | `dashboard/` / Visualização & Orquestração | Implementação dos scripts dos gráficos **G1, G2, G3 e G4**, estruturação completa do dashboard nas **7 seções oficiais**, scripts de automação em comando único (`run_dashboard.ps1/.bat`), tabela de dados reais e roteiro da apresentação oral. |
+
+---
+
+## 🚀 Como Executar em Comando Único
+
+Conforme exigido pelo edital (semente fixa e reprodutibilidade com comando único):
+
+### No Windows (PowerShell):
+```powershell
+.\run_lab04.ps1
 ```
-Laboratorio04_TestesDeHipotese/
-├── dashboard/                  # 📊 Dashboard web portátil e visualizações G1 & G2
-│   ├── data/
-│   │   └── dados.json          # 📄 Base analítica consolidada
-│   ├── app.js                  # ⚡ Lógica interativa no navegador
-│   ├── dados.py                # 🐍 Pré-processamento e estatísticas descritivas
-│   ├── graficos.py             # 📈 Funções dos gráficos G1 e G2
-│   ├── gerar_dashboard.py      # ⚙️ Motor de geração dos dados analíticos
-│   ├── dashboard.py            # 🚀 Entrypoint conveniente para geração e servidor
-│   ├── index.html              # 🌐 Interface web
-│   ├── styles.css              # 🎨 Estilos no padrão dos Labs 01 e 02
-│   ├── requirements.txt        # 📦 Dependências do módulo
-│   ├── run_dashboard.bat       # 🪟 Script de execução rápida
-│   ├── run_dashboard.ps1       # 💻 Script PowerShell de execução rápida
-│   └── README.md               # 📘 Documentação detalhada da dashboard
-│
-├── data_loader.py              # 📥 Módulo de carregamento e cenário (Maria Clara)
-├── simulation.py               # 🎲 Módulo de simulação e testes (Áulus)
-└── README.md                   # 📘 Documentação geral do Laboratório 04
+*(Ou acesse a pasta `dashboard` e execute `.\run_dashboard.ps1`)*
+
+### No Windows (Prompt de Comando):
+```cmd
+.\run_lab04.bat
 ```
 
+### Execução via Python:
+```powershell
+python dashboard/dashboard.py
+```
+
+O comando executará automaticamente as simulações determinísticas de Monte Carlo (caso `data/dados.json` não tenha sido gerado), abrirá seu navegador padrão em <http://localhost:8000> e manterá o servidor HTTP local ativo.
+
 ---
 
-## 🚀 Como Executar o Dashboard
+## 🧪 Como Rodar os Testes Automatizados
 
-Para rodar a dashboard web portátil com comando único:
+O motor de simulação possui cobertura de testes unitários para garantir a reprodução determinística dos resultados:
 
 ```powershell
-cd dashboard
-.\run_dashboard.bat
+python tests/test_simulation.py
 ```
-Ou no PowerShell:
-```powershell
-cd dashboard
-.\run_dashboard.ps1
-```
+*(Executa a suíte completa de 9 testes validando geradores, estabilidade de semente, erro tipo I e monotonicidade de poder).*
 
-O dashboard abrirá em seu navegador no endereço <http://localhost:8000>. Para mais detalhes, consulte o [README da dashboard](dashboard/README.md).
+---
+
+## 📊 Estrutura das 7 Seções do Dashboard
+
+1. **Cenário:** Pergunta de pesquisa, hipóteses $H_0$ e $H_1$, e caracterização da amostra minerada ($N=300$).
+2. **Os dados (Gráfico G1):** Histogramas comparativos (Real vs. Simulado) e tabela de estatísticas descritivas.
+3. **Como os testes funcionam (Gráfico G2):** Distribuição da estatística sob $H_0$, região crítica de rejeição ($\alpha = 0{,}05$) e marcação do $p$-valor.
+4. **Erro tipo I (Gráfico G3):** Taxa de falso positivo em 10.000 simulações sob $H_0$ em 5 cenários frente à linha nominal de 5%.
+5. **Poder (Gráfico G4):** Curvas de poder de Welch vs. Mann-Whitney frente a efeitos crescentes ($\delta$) com linha de corte em 80%.
+6. **Dados reais (Tabela):** Tabela completa com estatísticas observadas, $p$-valores, tamanhos de efeito (**Cohen's d** e **Cliff's δ**) e veredito prático.
+7. **Conclusão:** Síntese metodológica confrontando expectativa prévia $\times$ descobertas da simulação e recomendação final de teste para métricas de software.

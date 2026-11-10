@@ -81,7 +81,21 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 .main-content { width: min(1520px, 100%); padding: 0 clamp(20px, 4vw, 54px) 48px; }
 .topbar {
   min-height: 110px; display: flex; align-items: center; justify-content: space-between;
-  gap: 24px; border-bottom: 1px solid var(--line);
+  gap: 24px; border-bottom: 1px solid var(--line); flex-wrap: wrap; padding: 16px 0;
+}
+.top-links { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.top-link-btn {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 650;
+  color: #102a43; background: #ffffff; border: 1px solid #dce6ee; padding: 6px 14px;
+  border-radius: 999px; text-decoration: none; transition: all 160ms ease-out;
+}
+.top-link-btn:hover { background: #f0f4f8; border-color: #1677c8; color: #1677c8; }
+.top-link-btn.primary { background: #1677c8; color: #ffffff; border-color: #1677c8; }
+.top-link-btn.primary:hover { background: #075b9a; }
+
+.section-badge-num {
+  display: inline-block; background: #1677c8; color: #ffffff; font-size: 0.72rem;
+  font-weight: 800; padding: 2px 8px; border-radius: 6px; margin-right: 6px;
 }
 .eyebrow { margin: 0 0 5px; color: var(--blue); font-size: .72rem; font-weight: 750; letter-spacing: .115em; text-transform: uppercase; }
 h1, h2, h3, p { overflow-wrap: break-word; }

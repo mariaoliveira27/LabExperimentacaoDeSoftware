@@ -305,3 +305,167 @@ def gerar_figura_plotly_g2(
         height=450,
     )
     return fig
+
+
+def construir_dados_g3(dados_erro_tipo_1: Dict[str, Any]) -> Dict[str, Any]:
+    """Prepara a estrutura analítica padronizada do Gráfico G3 para o frontend.
+
+    Exibe o Erro Tipo I (taxa de falso positivo) de Welch vs. Mann-Whitney
+    em 5 situações simuladas sob H0, com linha de referência em 5% (alfa=0.05).
+    """
+    cenarios = dados_erro_tipo_1.get("cenarios", [])
+    labels = [c["cenario_nome"] for c in cenarios]
+    welch_rates = [c["taxa_welch"] for c in cenarios]
+    mw_rates = [c["taxa_mw"] for c in cenarios]
+
+    return {
+        "titulo": "Gráfico G3: Taxa de Erro Tipo I sob H₀ em Diferentes Cenários",
+        "eixo_x_nome": "Cenário Simulado",
+        "eixo_y_nome": "Taxa de Falso Positivo (%)",
+        "alpha_nominal": dados_erro_tipo_1.get("alpha_nominal", 5.0),
+        "n_simulacoes": dados_erro_tipo_1.get("n_simulacoes", 10_000),
+        "cenarios_labels": labels,
+        "taxa_welch": welch_rates,
+        "taxa_mw": mw_rates,
+        "cor_welch": "#1677c8",
+        "cor_mw": "#ec9b24",
+        "cor_linha_alfa": "#e36b57",
+        "cenarios_detalhes": cenarios,
+        "texto_explicativo": dados_erro_tipo_1.get(
+            "conclusao_texto",
+            "Sob H₀, o teste de Mann-Whitney U manteve taxas de erro Tipo I extremamente estáveis e aderentes aos 5% nominais em todos os cenários. O teste t de Welch revelou-se ligeiramente conservador em dados assimétricos e contaminados com outliers (~3,7%), mantendo rigor em dados estritamente gaussianos.",
+        ),
+    }
+
+
+def construir_dados_g4(dados_poder: Dict[str, Any]) -> Dict[str, Any]:
+    """Prepara a estrutura analítica padronizada do Gráfico G4 para o frontend.
+
+    Exibe as curvas de poder (proporção de rejeições vs tamanho do efeito delta)
+    para ambos os testes simultaneamente, com seletor interativo de cenários.
+    """
+    cenarios = dados_poder.get("cenarios", {})
+    deltas = dados_poder.get("deltas", [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.5])
+
+    return {
+        "titulo": "Gráfico G4: Curvas de Poder Estatístico (Rejeições vs. Tamanho do Efeito)",
+        "eixo_x_nome": "Tamanho do Efeito (δ)",
+        "eixo_y_nome": "Proporção de Rejeições / Poder Estatístico (%)",
+        "limiar_poder_recomendado": 80.0,
+        "deltas": deltas,
+        "cor_welch": "#1677c8",
+        "cor_mw": "#ec9b24",
+        "cor_linha_80": "#10b981",
+        "cenarios": cenarios,
+        "cenario_padrao": "lognormal_base",
+        "texto_explicativo": dados_poder.get(
+            "conclusao_texto",
+            "Para distribuições normais perfeitas, o teste paramétrico t de Welch possui leve superioridade de poder. Contudo, em distribuições empíricas de software (assimétricas com cauda longa e outliers), o teste de Mann-Whitney U detecta o efeito significativamente mais cedo, alcançando 80% de poder com amostras substancialmente menores.",
+        ),
+    }
+
+
+def gerar_figura_plotly_g3(dados_g3: Dict[str, Any]) -> Any:
+    """Gera figura Plotly do Gráfico G3 caso o pacote esteja disponível."""
+    if not PLOTLY_AVAILABLE:
+        return None
+
+    labels = dados_g3["cenarios_labels"]
+    w_rates = dados_g3["taxa_welch"]
+    mw_rates = dados_g3["taxa_mw"]
+    alfa = dados_g3["alpha_nominal"]
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=labels,
+            y=w_rates,
+            name="t-Student (Welch)",
+            marker_color=dados_g3.get("cor_welch", "#1677c8"),
+            text=[f"{v:.1f}%" for v in w_rates],
+            textposition="auto",
+        )
+    )
+    fig.add_trace(
+        go.Bar(
+            x=labels,
+            y=mw_rates,
+            name="Mann-Whitney U",
+            marker_color=dados_g3.get("cor_mw", "#ec9b24"),
+            text=[f"{v:.1f}%" for v in mw_rates],
+            textposition="auto",
+        )
+    )
+
+    fig.add_hline(
+        y=alfa,
+        line_dash="dash",
+        line_color=dados_g3.get("cor_linha_alfa", "#e36b57"),
+        line_width=2,
+        annotation_text=f"Nível Nominal α = {alfa:.0f}%",
+        annotation_position="top left",
+    )
+
+    fig.update_layout(
+        title=dados_g3["titulo"],
+        xaxis_title=dados_g3["eixo_x_nome"],
+        yaxis_title=dados_g3["eixo_y_nome"],
+        barmode="group",
+        yaxis=dict(range=[0, max(max(w_rates), max(mw_rates), 8)]),
+        template="plotly_white",
+        height=450,
+    )
+    return fig
+
+
+def gerar_figura_plotly_g4(dados_g4: Dict[str, Any], cenario_id: str = "lognormal_base") -> Any:
+    """Gera figura Plotly do Gráfico G4 caso o pacote esteja disponível."""
+    if not PLOTLY_AVAILABLE:
+        return None
+
+    cenario = dados_g4["cenarios"].get(cenario_id) or next(iter(dados_g4["cenarios"].values()))
+    deltas = cenario["deltas"]
+    pw = cenario["poder_welch"]
+    pmw = cenario["poder_mw"]
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=deltas,
+            y=pw,
+            mode="lines+markers",
+            name="t-Student (Welch)",
+            line=dict(color=dados_g4.get("cor_welch", "#1677c8"), width=3),
+            marker=dict(size=7),
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=deltas,
+            y=pmw,
+            mode="lines+markers",
+            name="Mann-Whitney U",
+            line=dict(color=dados_g4.get("cor_mw", "#ec9b24"), width=3),
+            marker=dict(size=7),
+        )
+    )
+
+    fig.add_hline(
+        y=80.0,
+        line_dash="dot",
+        line_color=dados_g4.get("cor_linha_80", "#10b981"),
+        line_width=1.5,
+        annotation_text="Poder Convencional (80%)",
+        annotation_position="bottom right",
+    )
+
+    fig.update_layout(
+        title=f"Gráfico G4: Curvas de Poder — {cenario['nome']}",
+        xaxis_title=dados_g4["eixo_x_nome"],
+        yaxis_title=dados_g4["eixo_y_nome"],
+        yaxis=dict(range=[0, 105]),
+        template="plotly_white",
+        height=450,
+    )
+    return fig
+

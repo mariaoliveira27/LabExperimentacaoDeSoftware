@@ -15,6 +15,7 @@
     testeAtual: "t-Student",
     alphaAtual: "0.05",
     modoG1: "Lado a Lado", // "Lado a Lado" ou "Sobreposto"
+    cenarioG4: "lognormal_base",
   };
 
   // Elementos do DOM
@@ -29,10 +30,17 @@
     btnG1Over: document.getElementById("btn-g1-over"),
     chartG1: document.getElementById("chart-g1-container"),
     chartG2: document.getElementById("chart-g2-container"),
+    chartG3: document.getElementById("chart-g3-container"),
+    chartG4: document.getElementById("chart-g4-container"),
     g1Title: document.getElementById("g1-title"),
     g2Title: document.getElementById("g2-title"),
+    g3Title: document.getElementById("g3-title"),
+    g4Title: document.getElementById("g4-title"),
+    selectCenarioG4: document.getElementById("select-cenario-g4"),
     g1StatsBody: document.getElementById("g1-stats-body"),
     g2ConclusionBox: document.getElementById("g2-conclusion-box"),
+    g3ConclusionBox: document.getElementById("g3-conclusion-box"),
+    g4ConclusionBox: document.getElementById("g4-conclusion-box"),
     g2StatusPill: document.getElementById("g2-status-pill"),
     kpiNReais: document.getElementById("kpi-n-reais"),
     kpiMedia: document.getElementById("kpi-media"),
@@ -41,6 +49,7 @@
     kpiDecisaoFoot: document.getElementById("kpi-decisao-foot"),
     inputBuscaRepo: document.getElementById("input-busca-repo"),
     tabelaReposBody: document.getElementById("tabela-repos-body"),
+    tabelaDadosReaisBody: document.getElementById("tabela-dados-reais-body"),
   };
 
   // Inicialização
@@ -89,6 +98,13 @@
         filtrarTabelaRepositorios(e.target.value.toLowerCase());
       });
     }
+
+    if (dom.selectCenarioG4) {
+      dom.selectCenarioG4.addEventListener("change", (e) => {
+        state.cenarioG4 = e.target.value;
+        renderizarG4();
+      });
+    }
   }
 
   async function carregarDados() {
@@ -105,12 +121,14 @@
   }
 
   function finalizarCarregamento() {
-    if (dom.sourceStatus) dom.sourceStatus.textContent = "Dados carregados (S01)";
+    if (dom.sourceStatus) dom.sourceStatus.textContent = "Dados consolidados (Entrega Final)";
     if (dom.sourceDot) dom.sourceDot.classList.add("is-ready");
 
     preencherSelectMetricas();
+    renderizarTabelaDadosReais();
     renderizarTabelaRepositorios(state.dados.repositorios || []);
     atualizarVisualizacoes();
+    configurarScrollObserver();
   }
 
   function preencherSelectMetricas() {
@@ -136,6 +154,8 @@
     if (!state.dados) return;
     renderizarG1();
     renderizarG2();
+    renderizarG3();
+    renderizarG4();
     atualizarKPIs();
   }
 
@@ -386,6 +406,194 @@
   }
 
   // -------------------------------------------------------------------------
+  // RENDERIZAÇÃO DO GRÁFICO G3 (Taxa de Erro Tipo I sob H0 em Múltiplos Cenários)
+  // -------------------------------------------------------------------------
+  function renderizarG3() {
+    if (!dom.chartG3) return;
+    const g3 = state.dados?.g3;
+    if (!g3) {
+      dom.chartG3.innerHTML = `<p style="padding:20px; color:#7b93aa;">Dados de simulação do Gráfico G3 não disponíveis.</p>`;
+      return;
+    }
+
+    if (dom.g3Title) {
+      dom.g3Title.textContent = `${g3.titulo} (N = ${g3.n_simulacoes.toLocaleString("pt-BR")} repetições)`;
+    }
+
+    if (dom.g3ConclusionBox) {
+      dom.g3ConclusionBox.innerHTML = `
+        <strong>📊 Conclusão Analítica de Erro Tipo I (Q1 & Q3):</strong><br>
+        ${g3.texto_explicativo}
+      `;
+    }
+
+    if (typeof Plotly === "undefined") {
+      dom.chartG3.innerHTML = `<p style="padding:20px; color:#e36b57;">Plotly.js indisponível para renderização do Gráfico G3.</p>`;
+      return;
+    }
+
+    const traceWelch = {
+      x: g3.cenarios_labels,
+      y: g3.taxa_welch,
+      name: "t-Student (Welch)",
+      type: "bar",
+      marker: { color: g3.cor_welch || "#1677c8" },
+      text: g3.taxa_welch.map((v) => `${v.toFixed(1)}%`),
+      textposition: "auto",
+    };
+
+    const traceMW = {
+      x: g3.cenarios_labels,
+      y: g3.taxa_mw,
+      name: "Mann-Whitney U",
+      type: "bar",
+      marker: { color: g3.cor_mw || "#ec9b24" },
+      text: g3.taxa_mw.map((v) => `${v.toFixed(1)}%`),
+      textposition: "auto",
+    };
+
+    const layout = {
+      title: {
+        text: `<b>G3: Taxa de Erro Tipo I sob H₀</b> | Linha Nominal α = ${g3.alpha_nominal}%`,
+        font: { size: 13.5 },
+      },
+      barmode: "group",
+      xaxis: { title: g3.eixo_x_nome, tickangle: -10 },
+      yaxis: {
+        title: g3.eixo_y_nome,
+        range: [0, 8],
+        dtick: 1,
+      },
+      showlegend: true,
+      legend: { orientation: "h", y: 1.15, x: 0.5, xanchor: "center" },
+      margin: { t: 60, b: 65, l: 60, r: 40 },
+      height: 420,
+      shapes: [
+        {
+          type: "line",
+          x0: -0.5,
+          x1: g3.cenarios_labels.length - 0.5,
+          y0: g3.alpha_nominal,
+          y1: g3.alpha_nominal,
+          line: { color: g3.cor_linha_alfa || "#e36b57", width: 2.5, dash: "dash" },
+        },
+      ],
+      annotations: [
+        {
+          x: g3.cenarios_labels[0],
+          y: g3.alpha_nominal + 0.35,
+          text: `<b>α Nominal = ${g3.alpha_nominal}%</b>`,
+          showarrow: false,
+          font: { color: g3.cor_linha_alfa || "#e36b57", size: 11 },
+          bgcolor: "#fff",
+          bordercolor: g3.cor_linha_alfa || "#e36b57",
+          borderwidth: 1,
+        },
+      ],
+    };
+
+    Plotly.newPlot(dom.chartG3, [traceWelch, traceMW], layout, { responsive: true, displayModeBar: false });
+  }
+
+  // -------------------------------------------------------------------------
+  // RENDERIZAÇÃO DO GRÁFICO G4 (Curvas de Poder Estatístico)
+  // -------------------------------------------------------------------------
+  function renderizarG4() {
+    if (!dom.chartG4) return;
+    const g4 = state.dados?.g4;
+    if (!g4) {
+      dom.chartG4.innerHTML = `<p style="padding:20px; color:#7b93aa;">Dados de simulação do Gráfico G4 não disponíveis.</p>`;
+      return;
+    }
+
+    const cenario = g4.cenarios[state.cenarioG4] || Object.values(g4.cenarios)[0];
+    if (!cenario) return;
+
+    if (dom.g4Title) {
+      dom.g4Title.textContent = `Curvas de Poder — ${cenario.nome}`;
+    }
+
+    if (dom.g4ConclusionBox) {
+      dom.g4ConclusionBox.innerHTML = `
+        <strong>⚡ Conclusão Analítica de Poder Estatístico (Q2 & Q3):</strong><br>
+        ${g4.texto_explicativo}
+      `;
+    }
+
+    if (typeof Plotly === "undefined") {
+      dom.chartG4.innerHTML = `<p style="padding:20px; color:#e36b57;">Plotly.js indisponível para renderização do Gráfico G4.</p>`;
+      return;
+    }
+
+    const traceWelch = {
+      x: cenario.deltas,
+      y: cenario.poder_welch,
+      name: "t-Student (Welch)",
+      mode: "lines+markers",
+      line: { color: g4.cor_welch || "#1677c8", width: 3 },
+      marker: { size: 7 },
+      type: "scatter",
+    };
+
+    const traceMW = {
+      x: cenario.deltas,
+      y: cenario.poder_mw,
+      name: "Mann-Whitney U",
+      mode: "lines+markers",
+      line: { color: g4.cor_mw || "#ec9b24", width: 3 },
+      marker: { size: 7 },
+      type: "scatter",
+    };
+
+    const layout = {
+      title: {
+        text: `<b>G4: Curvas de Poder (Rejeições vs. Efeito)</b> — ${cenario.nome}`,
+        font: { size: 13.5 },
+      },
+      xaxis: {
+        title: g4.eixo_x_nome,
+        dtick: 0.2,
+      },
+      yaxis: {
+        title: g4.eixo_y_nome,
+        range: [0, 105],
+        dtick: 20,
+      },
+      showlegend: true,
+      legend: { orientation: "h", y: 1.15, x: 0.5, xanchor: "center" },
+      margin: { t: 60, b: 50, l: 60, r: 40 },
+      height: 420,
+      shapes: [
+        {
+          type: "line",
+          x0: cenario.deltas[0],
+          x1: cenario.deltas[cenario.deltas.length - 1],
+          y0: g4.limiar_poder_recomendado || 80.0,
+          y1: g4.limiar_poder_recomendado || 80.0,
+          line: { color: g4.cor_linha_80 || "#10b981", width: 2, dash: "dot" },
+        },
+      ],
+      annotations: [
+        {
+          x: cenario.deltas[cenario.deltas.length - 1],
+          y: 80.0,
+          text: "<b>Poder 80% (Padrão)</b>",
+          showarrow: true,
+          arrowhead: 2,
+          arrowcolor: g4.cor_linha_80 || "#10b981",
+          ax: -60,
+          ay: 20,
+          font: { color: g4.cor_linha_80 || "#10b981", size: 11 },
+          bgcolor: "#ffffff",
+          bordercolor: g4.cor_linha_80 || "#10b981",
+        },
+      ],
+    };
+
+    Plotly.newPlot(dom.chartG4, [traceWelch, traceMW], layout, { responsive: true, displayModeBar: false });
+  }
+
+  // -------------------------------------------------------------------------
   // ATUALIZAÇÃO DOS KPIS
   // -------------------------------------------------------------------------
   function atualizarKPIs() {
@@ -406,6 +614,67 @@
       dom.kpiDecisao.style.color = g2.rejeita_h0 ? "#dc2626" : "#16a34a";
       dom.kpiDecisaoFoot.textContent = `p = ${g2.p_valor < 0.0001 ? g2.p_valor.toExponential(3) : g2.p_valor.toFixed(4)}`;
     }
+  }
+
+  // -------------------------------------------------------------------------
+  // TABELA DE DADOS REAIS (Seção 6)
+  // -------------------------------------------------------------------------
+  function renderizarTabelaDadosReais() {
+    if (!dom.tabelaDadosReaisBody) return;
+    const dadosReais = state.dados?.dados_reais_testes?.linhas;
+    if (!dadosReais || dadosReais.length === 0) return;
+
+    dom.tabelaDadosReaisBody.innerHTML = "";
+    dadosReais.forEach((row) => {
+      const tr = document.createElement("tr");
+
+      const badgeWelch = row.welch.rejeita
+        ? `<span class="badge-decision reject">t = ${row.welch.stat_t} (p=${row.welch.p_valor_formatado})</span>`
+        : `<span class="badge-decision no-reject">t = ${row.welch.stat_t} (p=${row.welch.p_valor_formatado})</span>`;
+
+      const badgeMW = row.mann_whitney.rejeita
+        ? `<span class="badge-decision reject">U = ${row.mann_whitney.stat_u} (p=${row.mann_whitney.p_valor_formatado})</span>`
+        : `<span class="badge-decision no-reject">U = ${row.mann_whitney.stat_u} (p=${row.mann_whitney.p_valor_formatado})</span>`;
+
+      tr.innerHTML = `
+        <td><strong>${row.metrica}</strong></td>
+        <td>${row.n_elite_high} / ${row.n_medium_low}</td>
+        <td>${row.media_elite_high} vs ${row.media_medium_low}</td>
+        <td>${row.mediana_elite_high} vs ${row.mediana_medium_low}</td>
+        <td>${badgeWelch}</td>
+        <td><strong>d = ${row.welch.cohen_d}</strong> (${row.welch.classificacao_efeito})</td>
+        <td>${badgeMW}</td>
+        <td><strong>δ = ${row.mann_whitney.cliff_delta}</strong> (${row.mann_whitney.classificacao_efeito})</td>
+        <td style="font-size:0.78rem; color:#334e68;">${row.conclusao}</td>
+      `;
+      dom.tabelaDadosReaisBody.appendChild(tr);
+    });
+  }
+
+  // -------------------------------------------------------------------------
+  // SCROLL OBSERVER PARA NAVEGAÇÃO LATERAL
+  // -------------------------------------------------------------------------
+  function configurarScrollObserver() {
+    const secoes = document.querySelectorAll(".dashboard-section");
+    const navLinks = document.querySelectorAll(".section-nav .nav-link");
+
+    window.addEventListener("scroll", () => {
+      let atual = "";
+      const scrollPos = window.scrollY + 120;
+
+      secoes.forEach((secao) => {
+        if (secao.offsetTop <= scrollPos) {
+          atual = secao.getAttribute("id");
+        }
+      });
+
+      navLinks.forEach((link) => {
+        link.classList.remove("is-active");
+        if (link.getAttribute("href") === `#${atual}`) {
+          link.classList.add("is-active");
+        }
+      });
+    });
   }
 
   // -------------------------------------------------------------------------

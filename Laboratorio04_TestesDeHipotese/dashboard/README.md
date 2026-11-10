@@ -1,90 +1,73 @@
-# Dashboard dos Resultados — Laboratório 04 (Lab04S01)
+# Dashboard dos Resultados — Laboratório 04 (Entrega Final)
 
-Dashboard estática interativa para explorar os dados reais de engenharia de software e modelos simulados por Monte Carlo, com cálculo de testes estatísticos de hipótese e visualizações gráficas obrigatórias **G1** e **G2**.
+Dashboard analítica interativa que reúne os resultados do **Laboratório 04: Testes de Hipótese por Dentro — Cenário, Simulação e Visualização**.
 
-Seguindo o padrão arquitetural dos Laboratórios 01 e 02, o processamento analítico e ajuste paramétrico são realizados previamente em Python (`dados.py`, `graficos.py`, `gerar_dashboard.py`), gerando a base consolidada em `data/dados.json`. O navegador consome os recortes prontos de forma instantânea e responsiva, servido via servidor HTTP local sem necessidade de frameworks pesados de interface.
+O projeto atende rigorosamente a todas as exigências do edital:
+1. **7 Seções ordenadas e completas**, cada uma acompanhada de texto explicativo curto (2 a 4 frases).
+2. **Visualizações gráficas obrigatórias G1, G2, G3 e G4** implementadas via Plotly.js com cores consistentes por teste (`#1677c8` para Welch e `#ec9b24` para Mann-Whitney).
+3. **Tabela de dados reais** com cálculo de estatísticas observadas ($t$ e $U$), $p$-valores e tamanhos de efeito padronizados (**Cohen's $d$** e **Cliff's $\delta$**).
+4. **Links oficiais no topo** para o repositório GitHub e GitHub Projects.
+5. **Comando único de execução** e **reprodutibilidade estrita com semente fixa** (`numpy.random.default_rng(42)`).
 
 ---
 
-## 🚀 Como Executar Localmente
+## 🚀 Como Executar em Comando Único
 
-### Opção 1: Comando Único (Recomendado)
-
-#### No Windows (Prompt / Duplo Clique):
-```cmd
-.\run_dashboard.bat
-```
+### Opção 1: Via Script Automático (Recomendado)
 
 #### No Windows (PowerShell):
 ```powershell
 .\run_dashboard.ps1
 ```
 
-O script verifica os dados, abre o navegador automaticamente e inicia o servidor HTTP local na porta `8000`.
+#### No Windows (Prompt de Comando ou Duplo Clique):
+```cmd
+.\run_dashboard.bat
+```
+
+> O script verifica o ambiente, executa a consolidação analítica e as simulações Monte Carlo (caso `data/dados.json` não exista), abre o navegador automaticamente em <http://localhost:8000> e inicia o servidor HTTP local.
 
 ---
 
-### Opção 2: Manualmente via Terminal
+### Opção 2: Via Python diretamente
 
-1. **Instale as dependências (se ainda não instaladas):**
-   ```powershell
-   pip install -r requirements.txt
-   ```
-
-2. **Gere os dados analíticos consolidados:**
-   ```powershell
-   python gerar_dashboard.py
-   ```
-
-3. **Inicie o servidor HTTP local na pasta do dashboard:**
-   ```powershell
-   python -m http.server 8000
-   ```
-
-4. **Acesse no navegador:**
-   Abra <http://localhost:8000>
-
-> **Nota:** Utilize o servidor local (`http.server`). Abrir o arquivo `index.html` diretamente via `file://` pode fazer com que navegadores modernos bloqueiem requisições `fetch` ao arquivo JSON por políticas de CORS locais.
+```powershell
+python dashboard.py
+```
+*(Executa a consolidação completa e sobe o servidor HTTP local na porta 8000).*
 
 ---
 
-## 📈 Visualizações e Recursos
+## 🧭 Estrutura das 7 Seções do Dashboard
 
-### 📊 Gráfico G1: Histogramas Comparativos (Real vs. Simulado)
-- Comparação direta da distribuição empírica coletada de repositórios open-source com a distribuição sintética simulada (ajustada via MLE).
-- Alternância dinâmica entre visualização **Lado a Lado** e **Sobreposta**.
-- Linhas verticais indicando a **média** e a **mediana** de ambos os conjuntos.
-- Tabela de estatísticas descritivas comparativas (Média, Mediana, Desvio Padrão e Assimetria/Skewness).
+A interface web está estruturada estritamente na ordem exigida:
 
-### 🎯 Gráfico G2: Distribuição sob $H_0$ & Região Crítica
-- Exibição da densidade teórica da estatística de teste sob a hipótese nula ($H_0$):
-  - $t$ de Student com graus de liberdade ajustados por Welch para o teste $t$.
-  - Normal padrão $N(0, 1)$ para o teste não-paramétrico de Mann-Whitney U ($Z$-score assintótico).
-- **Região de Rejeição Sombreada:** áreas críticas sombreadas em vermelho correspondentes ao nível de significância $\alpha$ ($0.01$, $0.05$ ou $0.10$).
-- **Estatística Observada:** linha vertical proeminente destacando o valor calculado ($t_{obs}$ ou $Z_{obs}$) e o respectivo $p$-valor.
-- **Veredito Estatístico Automático:** cartão de decisão formal informando se rejeita $H_0$ ou não rejeita $H_0$.
-
-### 🔍 Explorador de Dados
-- Tabela interativa para busca de repositórios por nome e linguagem.
-- Filtro por métrica (Lead Time de Commit, Lead Time de Release, MTTR, Frequência de Deploy e Stars).
+| # | Seção | Artefato / Gráfico | Conteúdo do Texto Acompanhante |
+|---|---|---|---|
+| **01** | **Cenário** | Formulário de Hipóteses & KPIs | A pergunta formal, hipóteses $H_0$ e $H_1$, proveniência dos dados reais (GitHub API, Lab 03) e tamanho amostral ($N=300$). |
+| **02** | **Os dados** | **Gráfico G1** (Histogramas) | Forma dos dados reais (assimetria, outliers) vs. modelo sintético ajustado por MLE (Lognormal) e tabela descritiva (Média, Mediana, DP, Skewness). |
+| **03** | **Como os testes funcionam** | **Gráfico G2** (Distribuição sob $H_0$) | O que cada teste compara (médias vs. postos), localização da região crítica sombreada (|stat| $\ge$ valor crítico) e o significado estrito do $p$-valor. |
+| **04** | **Erro tipo I** | **Gráfico G3** (Barras de Erro Tipo I) | Avaliação empírica sob $H_0$ em 10.000 simulações comparadas à linha nominal de 5% em cinco cenários (padrão, normal e violações). |
+| **05** | **Poder** | **Gráfico G4** (Curvas de Poder) | Curvas sobrepostas de detecção frente a efeitos crescentes ($\delta$), demonstrando a superioridade do Mann-Whitney em dados assimétricos e linha de corte de 80%. |
+| **06** | **Dados reais** | **Tabela Analítica** | Resultados dos dois testes nas métricas reais de repositórios, com estatísticas observadas, $p$-valores, tamanhos de efeito (**Cohen's $d$** e **Cliff's $\delta$**) e conclusões práticas. |
+| **07** | **Conclusão** | Síntese Metodológica | Confronto entre expectativa pré-simulação vs. achados empíricos, recomendação do teste para o cenário de software e condições em que a escolha mudaria. |
 
 ---
 
-## 📁 Estrutura de Arquivos do Módulo
+## 📁 Estrutura de Arquivos
 
 ```
 Laboratorio04_TestesDeHipotese/dashboard/
 ├── data/
-│   └── dados.json          # 📄 Dataset analítico estruturado e pré-calculado
-├── app.js                  # ⚡ Lógica interativa no cliente e renderização Plotly
-├── dados.py                # 🐍 Carregamento e cálculo das estatísticas descritivas
-├── graficos.py             # 📈 Funções dos gráficos G1 e G2 e testes estatísticos
-├── gerar_dashboard.py      # ⚙️ Motor de consolidação e exportação dos dados JSON
-├── dashboard.py            # 🚀 Entrypoint conveniente para geração e servidor
-├── index.html              # 🌐 Estrutura semântica da dashboard web
-├── styles.css              # 🎨 Folha de estilos no padrão dos Labs 01 e 02
-├── requirements.txt        # 📦 Dependências Python do módulo
-├── run_dashboard.bat       # 🪟 Script de execução rápida para Windows
-├── run_dashboard.ps1       # 💻 Script PowerShell de execução rápida
+│   └── dados.json          # 📄 Base analítica e simulações consolidadas
+├── app.js                  # ⚡ Lógica interativa no cliente, renderização Plotly e filtros
+├── dados.py                # 🐍 Módulo analítico: estatísticas descritivas, Q1, Q2, Q3 e tamanhos de efeito
+├── graficos.py             # 📈 Mapeamento de dados estruturados para os gráficos G1, G2, G3 e G4
+├── gerar_dashboard.py      # ⚙️ Motor de consolidação que produz data/dados.json
+├── dashboard.py            # 🚀 Entrypoint conveniente em comando único
+├── index.html              # 🌐 Interface web com as 7 seções oficiais
+├── styles.css              # 🎨 Folha de estilos moderna e responsiva
+├── run_dashboard.bat       # 🪟 Script de inicialização em lote Windows
+├── run_dashboard.ps1       # 💻 Script PowerShell de inicialização
 └── README.md               # 📘 Este documento de guia
 ```

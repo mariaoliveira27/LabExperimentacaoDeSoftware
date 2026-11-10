@@ -18,10 +18,15 @@ from dados import (
     carregar_dados_reais,
     calcular_estatisticas_descritivas,
     simular_distribuicao_sintetica,
+    gerar_simulacoes_g3_erro_tipo_1,
+    gerar_simulacoes_g4_poder,
+    calcular_tabela_dados_reais,
 )
 from graficos import (
     construir_dados_g1,
     construir_dados_g2,
+    construir_dados_g3,
+    construir_dados_g4,
     executar_teste_estatistico,
 )
 
@@ -115,12 +120,27 @@ def gerar_dados_dashboard() -> dict:
     ]
     tabela_rows = df[colunas_tabela].head(100).to_dict(orient="records")
 
+    # Simulações de Monte Carlo para os Gráficos G3 e G4 (Lab04S02 / Final)
+    print("-> Executando simulações Monte Carlo para Gráficos G3 e G4 (Q1, Q2, Q3)...")
+    dados_sim_g3 = gerar_simulacoes_g3_erro_tipo_1(semente=42, n_sims=10_000, alpha=0.05)
+    g3_spec = construir_dados_g3(dados_sim_g3)
+
+    dados_sim_g4 = gerar_simulacoes_g4_poder(semente=42, n_sims=2_000, alpha=0.05)
+    g4_spec = construir_dados_g4(dados_sim_g4)
+
+    # Tabela analítica dos dados reais (Seção 6 do edital)
+    print("-> Consolidando estatísticas, p-valores e tamanhos de efeito nos dados reais (Seção 6)...")
+    dados_reais_testes = calcular_tabela_dados_reais(df, alpha=0.05)
+
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "gerado_em": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "total_repositorios": len(df),
         "metricas": metricas_validas,
         "views": views,
+        "g3": g3_spec,
+        "g4": g4_spec,
+        "dados_reais_testes": dados_reais_testes,
         "repositorios": tabela_rows,
     }
 
