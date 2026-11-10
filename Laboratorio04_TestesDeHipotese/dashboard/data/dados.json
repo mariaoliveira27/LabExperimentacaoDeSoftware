@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "gerado_em": "2026-11-10T18:41:13+00:00",
+  "gerado_em": "2026-11-10T19:13:24+00:00",
   "total_repositorios": 300,
   "metricas": [
     "lead_time_commit_mediana_dias",

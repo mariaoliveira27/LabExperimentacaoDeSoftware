@@ -200,6 +200,9 @@
       return;
     }
 
+    // Limpa qualquer mensagem ou loader residual antes de renderizar
+    dom.chartG1.innerHTML = "";
+
     const corReal = "#1677c8";
     const corSim = "#ec9b24";
 
@@ -228,15 +231,21 @@
 
       const layout = {
         grid: { rows: 1, columns: 2, pattern: "independent" },
-        title: { text: `<b>G1: Distribuição Real vs. Simulada</b> — ${nomeMetrica}`, font: { size: 14 } },
+        title: {
+          text: `<b>G1: Distribuição Real vs. Simulada</b> — ${nomeMetrica}`,
+          font: { size: 14, color: "#102a43" },
+          x: 0.5,
+          xanchor: "center",
+          y: 0.97,
+        },
         xaxis: { title: `${nomeMetrica} (Real)` },
         xaxis2: { title: `${nomeMetrica} (Simulado)` },
         yaxis: { title: "Densidade de Probabilidade" },
         yaxis2: { title: "Densidade de Probabilidade" },
         showlegend: true,
-        legend: { orientation: "h", y: 1.15, x: 0.5, xanchor: "center" },
-        margin: { t: 60, b: 50, l: 60, r: 40 },
-        height: 400,
+        legend: { orientation: "h", y: -0.22, x: 0.5, xanchor: "center", font: { size: 11.5 } },
+        margin: { t: 55, b: 75, l: 60, r: 40 },
+        height: 420,
         shapes: [
           // Linha de média real
           { type: "line", x0: g1.stats_real.media, x1: g1.stats_real.media, y0: 0, y1: 1, yref: "y domain", xref: "x", line: { color: "#075b9a", width: 2, dash: "dash" } },
@@ -268,13 +277,19 @@
 
       const layout = {
         barmode: "overlay",
-        title: { text: `<b>G1: Histogramas Sobrepostos</b> — ${nomeMetrica}`, font: { size: 14 } },
+        title: {
+          text: `<b>G1: Histogramas Sobrepostos</b> — ${nomeMetrica}`,
+          font: { size: 14, color: "#102a43" },
+          x: 0.5,
+          xanchor: "center",
+          y: 0.97,
+        },
         xaxis: { title: nomeMetrica },
         yaxis: { title: "Densidade de Probabilidade" },
         showlegend: true,
-        legend: { orientation: "h", y: 1.15, x: 0.5, xanchor: "center" },
-        margin: { t: 60, b: 50, l: 60, r: 40 },
-        height: 400,
+        legend: { orientation: "h", y: -0.22, x: 0.5, xanchor: "center", font: { size: 11.5 } },
+        margin: { t: 55, b: 75, l: 60, r: 40 },
+        height: 420,
         shapes: [
           { type: "line", x0: g1.stats_real.media, x1: g1.stats_real.media, y0: 0, y1: 1, yref: "paper", line: { color: corReal, width: 2, dash: "dash" } },
           { type: "line", x0: g1.stats_sim.media, x1: g1.stats_sim.media, y0: 0, y1: 1, yref: "paper", line: { color: corSim, width: 2, dash: "dash" } },
@@ -325,6 +340,9 @@
       return;
     }
 
+    // Limpa loader residual
+    dom.chartG2.innerHTML = "";
+
     const xVals = g2.x_grid;
     const yVals = g2.pdf_grid;
     const crit = g2.valor_critico;
@@ -371,13 +389,16 @@
     const layout = {
       title: {
         text: `<b>G2: Distribuição sob H₀</b> | ${g2.nome_stat}<sub>crítico</sub> = ±${crit} | ${g2.nome_stat}<sub>obs</sub> = ${g2.stat_obs} (p = ${g2.p_valor.toExponential(3)})`,
-        font: { size: 13.5 },
+        font: { size: 13.5, color: "#102a43" },
+        x: 0.5,
+        xanchor: "center",
+        y: 0.97,
       },
       xaxis: { title: `Estatística do Teste (${g2.nome_stat})` },
       yaxis: { title: "Densidade de Probabilidade sob H₀" },
       showlegend: true,
-      legend: { orientation: "h", y: 1.15, x: 0.5, xanchor: "center" },
-      margin: { t: 60, b: 50, l: 60, r: 40 },
+      legend: { orientation: "h", y: -0.22, x: 0.5, xanchor: "center", font: { size: 11.5 } },
+      margin: { t: 55, b: 75, l: 60, r: 40 },
       height: 420,
       shapes: [
         // Linhas verticais dos valores críticos
@@ -432,6 +453,9 @@
       return;
     }
 
+    // Limpa loader residual
+    dom.chartG3.innerHTML = "";
+
     const traceWelch = {
       x: g3.cenarios_labels,
       y: g3.taxa_welch,
@@ -455,7 +479,10 @@
     const layout = {
       title: {
         text: `<b>G3: Taxa de Erro Tipo I sob H₀</b> | Linha Nominal α = ${g3.alpha_nominal}%`,
-        font: { size: 13.5 },
+        font: { size: 13.5, color: "#102a43" },
+        x: 0.5,
+        xanchor: "center",
+        y: 0.97,
       },
       barmode: "group",
       xaxis: { title: g3.eixo_x_nome, tickangle: -10 },
@@ -465,8 +492,8 @@
         dtick: 1,
       },
       showlegend: true,
-      legend: { orientation: "h", y: 1.15, x: 0.5, xanchor: "center" },
-      margin: { t: 60, b: 65, l: 60, r: 40 },
+      legend: { orientation: "h", y: -0.25, x: 0.5, xanchor: "center", font: { size: 11.5 } },
+      margin: { t: 55, b: 85, l: 60, r: 40 },
       height: 420,
       shapes: [
         {
@@ -525,6 +552,9 @@
       return;
     }
 
+    // Limpa loader residual
+    dom.chartG4.innerHTML = "";
+
     const traceWelch = {
       x: cenario.deltas,
       y: cenario.poder_welch,
@@ -548,7 +578,10 @@
     const layout = {
       title: {
         text: `<b>G4: Curvas de Poder (Rejeições vs. Efeito)</b> — ${cenario.nome}`,
-        font: { size: 13.5 },
+        font: { size: 13.5, color: "#102a43" },
+        x: 0.5,
+        xanchor: "center",
+        y: 0.97,
       },
       xaxis: {
         title: g4.eixo_x_nome,
@@ -560,8 +593,8 @@
         dtick: 20,
       },
       showlegend: true,
-      legend: { orientation: "h", y: 1.15, x: 0.5, xanchor: "center" },
-      margin: { t: 60, b: 50, l: 60, r: 40 },
+      legend: { orientation: "h", y: -0.22, x: 0.5, xanchor: "center", font: { size: 11.5 } },
+      margin: { t: 55, b: 75, l: 60, r: 40 },
       height: 420,
       shapes: [
         {
