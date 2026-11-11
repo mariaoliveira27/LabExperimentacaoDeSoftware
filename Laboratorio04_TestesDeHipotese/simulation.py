@@ -12,6 +12,8 @@ Public interface:
         ``p_values_welch``, ``p_values_mw``, ``stat_welch`` and ``stat_mw``,
         plus ``reject_rate_welch`` and ``reject_rate_mw``.
     interpret_example(result): interpret one run_tests result in Portuguese.
+    type_i_error(params, n_sims=10_000, alpha=0.05, rng=None): force delta=0
+        and return each test's rejection_rate, mc_se, ci_low and ci_high.
 
 Random functions create a generator seeded with 42 when no generator is given.
 No data from the real sample is loaded or calibrated automatically.
@@ -25,6 +27,9 @@ from typing import Any, Literal
 import numpy as np
 from scipy import stats
 
+
+# Q1 (#95): Monte Carlo interval configuration.
+NORMAL_95_CRITICAL_VALUE: float = 1.96
 
 @dataclass(frozen=True)
 class SimParams:
@@ -209,6 +214,44 @@ def interpret_example(result: dict[str, Any]) -> str:
             f"e {decision} H0 com alfa = {alpha:g}: {outcome}."
         )
     return " ".join(sentences)
+
+
+# Q1 (#95): empirical Type I error and Monte Carlo uncertainty.
+def _rate_summary(rate: float, n_sims: int) -> dict[str, float]:
+    """Summarize a rejection proportion using a 95% normal interval."""
+    mc_se = float(np.sqrt(rate * (1 - rate) / n_sims))
+    margin = NORMAL_95_CRITICAL_VALUE * mc_se
+    return {
+        "rejection_rate": rate,
+        "mc_se": mc_se,
+        "ci_low": max(0.0, rate - margin),
+        "ci_high": min(1.0, rate + margin),
+    }
+
+
+def _simulation_summary(
+    result: dict[str, Any], n_sims: int
+) -> dict[str, dict[str, float]]:
+    return {
+        "welch": _rate_summary(result["reject_rate_welch"], n_sims),
+        "mann_whitney": _rate_summary(result["reject_rate_mw"], n_sims),
+    }
+
+
+def type_i_error(
+    params: SimParams,
+    n_sims: int = 10_000,
+    alpha: float = 0.05,
+    rng: np.random.Generator | None = None,
+) -> dict[str, dict[str, float]]:
+    """Force delta=0 and estimate each test's Type I error and MC uncertainty.
+
+    Return rejection_rate, mc_se, ci_low and ci_high per test. The interval
+    is rate +/- 1.96*sqrt(rate*(1-rate)/n_sims), clipped to [0, 1]. Delta's
+    log-scale/mean-shift units do not affect the identical-distribution null.
+    """
+    result = simulate(replace(params, delta=0.0), n_sims, alpha, rng)
+    return _simulation_summary(result, n_sims)
 
 
 def simulate_q1(

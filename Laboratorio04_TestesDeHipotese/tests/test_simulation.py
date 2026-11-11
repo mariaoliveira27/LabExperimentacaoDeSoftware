@@ -1,5 +1,6 @@
 """Behavioral checks for the Lab 04 simulation engine."""
 
+from dataclasses import replace
 from pathlib import Path
 import sys
 
@@ -30,6 +31,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from simulation import (
     SimParams,
+    type_i_error,
     generate_groups,
     interpret_example,
     run_tests,
@@ -163,6 +165,61 @@ def test_simulate_q3_violations_structure() -> None:
         assert "type1_mw" in sc[k]
 
 
+# Issue #95: Type I error and Monte Carlo uncertainty.
+
+
+def test_type_i_error_forces_null_and_reports_uncertainty() -> None:
+    params = SimParams(dist="normal", delta=1.5)
+    n_sims = 2_000
+
+    result = type_i_error(params, n_sims=n_sims)
+    expected = simulate(replace(params, delta=0.0), n_sims=n_sims)
+
+    assert params.delta == 1.5
+    for test, rate_key in (
+        ("welch", "reject_rate_welch"),
+        ("mann_whitney", "reject_rate_mw"),
+    ):
+        summary = result[test]
+        rate = summary["rejection_rate"]
+        expected_se = np.sqrt(rate * (1 - rate) / n_sims)
+        assert rate == expected[rate_key]
+        assert 0.04 <= rate <= 0.06
+        assert summary["mc_se"] == pytest.approx(expected_se)
+        assert summary["ci_low"] == pytest.approx(
+            max(0.0, rate - 1.96 * expected_se)
+        )
+        assert summary["ci_high"] == pytest.approx(
+            min(1.0, rate + 1.96 * expected_se)
+        )
+        assert 0.0 <= summary["ci_low"] <= rate
+        assert rate <= summary["ci_high"] <= 1.0
+
+
+def test_type_i_error_reproduces_seed_and_respects_alpha() -> None:
+    params = SimParams(dist="normal")
+    first = type_i_error(
+        params, n_sims=2_000, rng=np.random.default_rng(42)
+    )
+    second = type_i_error(
+        params, n_sims=2_000, rng=np.random.default_rng(42)
+    )
+    strict = type_i_error(
+        params, n_sims=2_000, alpha=0.01, rng=np.random.default_rng(42)
+    )
+    expected = simulate(
+        params, n_sims=2_000, alpha=0.01, rng=np.random.default_rng(42)
+    )
+
+    assert first == second
+    for test, rate_key in (
+        ("welch", "reject_rate_welch"),
+        ("mann_whitney", "reject_rate_mw"),
+    ):
+        assert strict[test]["rejection_rate"] == expected[rate_key]
+        assert strict[test]["rejection_rate"] < first[test]["rejection_rate"]
+
+
 if __name__ == "__main__":
     tests = [
         test_generate_groups_sizes_and_default_seed,
@@ -174,6 +231,8 @@ if __name__ == "__main__":
         test_simulate_q1_type1_error_rate,
         test_simulate_q2_power_curve_monotonicity,
         test_simulate_q3_violations_structure,
+        test_type_i_error_forces_null_and_reports_uncertainty,
+        test_type_i_error_reproduces_seed_and_respects_alpha,
     ]
     passed = 0
     for t in tests:
