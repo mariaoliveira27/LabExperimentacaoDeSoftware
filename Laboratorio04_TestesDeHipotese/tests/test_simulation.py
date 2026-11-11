@@ -30,7 +30,9 @@ except ImportError:
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from simulation import (
+    DEFAULT_DELTAS,
     SimParams,
+    power_curve,
     type_i_error,
     generate_groups,
     interpret_example,
@@ -220,6 +222,62 @@ def test_type_i_error_reproduces_seed_and_respects_alpha() -> None:
         assert strict[test]["rejection_rate"] < first[test]["rejection_rate"]
 
 
+# Issue #96: Power curves with configurable effects and significance levels.
+
+
+def test_power_curve_zero_effect_matches_type_i_error_exactly() -> None:
+    params = SimParams(dist="normal", delta=0.8)
+    null = type_i_error(
+        params, n_sims=2_000, rng=np.random.default_rng(42)
+    )
+    points = power_curve(
+        params, n_sims=2_000, rng=np.random.default_rng(42)
+    )
+
+    assert tuple(point["delta"] for point in points) == DEFAULT_DELTAS
+    for test in ("welch", "mann_whitney"):
+        assert points[0][test] == null[test]
+        assert 0.04 <= points[0][test]["rejection_rate"] <= 0.06
+
+
+def test_power_curve_increases_with_monte_carlo_tolerance() -> None:
+    points = power_curve(SimParams(dist="normal"), n_sims=2_000)
+
+    for test in ("welch", "mann_whitney"):
+        rates = [point[test]["rejection_rate"] for point in points]
+        assert rates[-1] > rates[0] + 0.70
+        for previous, current in zip(points, points[1:]):
+            tolerance = 3 * np.sqrt(
+                previous[test]["mc_se"] ** 2 + current[test]["mc_se"] ** 2
+            )
+            assert (
+                current[test]["rejection_rate"]
+                >= previous[test]["rejection_rate"] - tolerance
+            )
+
+
+def test_power_curve_accepts_custom_deltas_and_alpha() -> None:
+    deltas = [0.0, 0.3, 1.0]
+    params = SimParams(dist="normal")
+    usual = power_curve(params, deltas=deltas, n_sims=200, alpha=0.05)
+    strict = power_curve(params, deltas=deltas, n_sims=200, alpha=0.01)
+
+    assert [point["delta"] for point in usual] == deltas
+    assert [point["delta"] for point in strict] == deltas
+    for usual_point, strict_point in zip(usual, strict):
+        for test in ("welch", "mann_whitney"):
+            assert (
+                strict_point[test]["rejection_rate"]
+                <= usual_point[test]["rejection_rate"]
+            )
+
+
+def test_simulate_q2_rejects_invalid_alpha_with_empty_effects() -> None:
+    for alpha in (-0.1, 0.0, 1.0, 1.1, float("nan")):
+        with np.testing.assert_raises(ValueError):
+            simulate_q2(effects=[], n_sims=10, alpha=alpha)
+
+
 if __name__ == "__main__":
     tests = [
         test_generate_groups_sizes_and_default_seed,
@@ -233,6 +291,10 @@ if __name__ == "__main__":
         test_simulate_q3_violations_structure,
         test_type_i_error_forces_null_and_reports_uncertainty,
         test_type_i_error_reproduces_seed_and_respects_alpha,
+        test_power_curve_zero_effect_matches_type_i_error_exactly,
+        test_power_curve_increases_with_monte_carlo_tolerance,
+        test_power_curve_accepts_custom_deltas_and_alpha,
+        test_simulate_q2_rejects_invalid_alpha_with_empty_effects,
     ]
     passed = 0
     for t in tests:

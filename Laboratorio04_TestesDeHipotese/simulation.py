@@ -14,6 +14,8 @@ Public interface:
     interpret_example(result): interpret one run_tests result in Portuguese.
     type_i_error(params, n_sims=10_000, alpha=0.05, rng=None): force delta=0
         and return each test's rejection_rate, mc_se, ci_low and ci_high.
+    power_curve(params, deltas=DEFAULT_DELTAS, n_sims=10_000, alpha=0.05,
+        rng=None): return points with delta and summaries for both tests.
 
 Random functions create a generator seeded with 42 when no generator is given.
 No data from the real sample is loaded or calibrated automatically.
@@ -21,6 +23,7 @@ No data from the real sample is loaded or calibrated automatically.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, replace
 from typing import Any, Literal
 
@@ -30,6 +33,9 @@ from scipy import stats
 
 # Q1 (#95): Monte Carlo interval configuration.
 NORMAL_95_CRITICAL_VALUE: float = 1.96
+
+# Q2 (#96): effects retain the Sprint 1 distribution-specific units.
+DEFAULT_DELTAS: tuple[float, ...] = (0.0, 0.2, 0.5, 0.8, 1.2, 1.5)
 
 @dataclass(frozen=True)
 class SimParams:
@@ -254,6 +260,47 @@ def type_i_error(
     return _simulation_summary(result, n_sims)
 
 
+# Q2 (#96): power at configurable effects, including Q1 at delta=0.
+def _validate_deltas(deltas: Sequence[float]) -> tuple[float, ...]:
+    effects = tuple(float(delta) for delta in deltas)
+    if not effects or not all(np.isfinite(delta) for delta in effects):
+        raise ValueError("deltas must contain finite effects")
+    if len(set(effects)) != len(effects):
+        raise ValueError("deltas must be unique")
+    return effects
+
+
+def power_curve(
+    params: SimParams,
+    deltas: Sequence[float] = DEFAULT_DELTAS,
+    n_sims: int = 10_000,
+    alpha: float = 0.05,
+    rng: np.random.Generator | None = None,
+) -> list[dict[str, Any]]:
+    """Return delta and both tests' rate/MC summaries for each effect.
+
+    Delta shifts log location for lognormal data and the mean in original
+    units for normal/contaminated normal data. It is not standardized when
+    sigma != 1; for contaminated normal it is never standardized by the
+    mixture's standard deviation. With the same initial generator state, a
+    first delta=0 exactly reproduces type_i_error. Subsequent points use
+    fresh datasets.
+    """
+    effects = _validate_deltas(deltas)
+    generator = rng if rng is not None else np.random.default_rng(42)
+    points = []
+    for delta in effects:
+        if delta == 0:
+            summaries = type_i_error(params, n_sims, alpha, generator)
+        else:
+            result = simulate(
+                replace(params, delta=delta), n_sims, alpha, generator
+            )
+            summaries = _simulation_summary(result, n_sims)
+        points.append({"delta": delta, **summaries})
+    return points
+
+
 def simulate_q1(
     params: SimParams | None = None,
     n_sims: int = 10_000,
@@ -300,6 +347,7 @@ def simulate_q2(
     seed: int = 42,
 ) -> dict[str, Any]:
     """Execute Q2: simulate power curves for increasing effect sizes."""
+    _validate_alpha(alpha)
     deltas = effects if effects is not None else [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.5]
     base = base_params if base_params is not None else SimParams()
 
