@@ -18,8 +18,7 @@ REPO_ROOT = HERE.parent.parent
 DEFAULT_DATASET = (
     REPO_ROOT
     / "Laboratorio03_MineracaoDeMetricasDORA"
-    / "data"
-    / "output"
+    / "data" / "coleta_final"
     / "repositorios_aprovados.csv"
 )
 
@@ -437,119 +436,29 @@ def calcular_tabela_dados_reais(
 
     para cada métrica coletada na amostra empírica real (Seção 6 do edital).
     """
-    if coluna_grupo not in df.columns:
-        mask_alto = pd.Series([True] * (len(df) // 2) + [False] * (len(df) - len(df) // 2))
-    else:
-        mask_alto = df[coluna_grupo].isin(["Elite", "High"])
+    from analise_real import calcular_analise_real, gerar_textos_dashboard
+    from data_loader import carregar_metadados_coleta
 
-    tabela_linhas = []
-
-    for chave_metrica, meta in METRICAS_DISPONIVEIS.items():
-        if chave_metrica not in df.columns:
-            continue
-
-        g1 = df[mask_alto][chave_metrica].dropna().to_numpy()
-        g2 = df[~mask_alto][chave_metrica].dropna().to_numpy()
-
-        if len(g1) < 2 or len(g2) < 2:
-            continue
-
-        n1, n2 = len(g1), len(g2)
-        m1, m2 = float(np.mean(g1)), float(np.mean(g2))
-        med1, med2 = float(np.median(g1)), float(np.median(g2))
-        s1, s2 = float(np.var(g1, ddof=1)), float(np.var(g2, ddof=1))
-
-        # Teste Welch
-        res_welch = stats.ttest_ind(g1, g2, equal_var=False)
-        t_stat = float(res_welch.statistic)
-        p_welch = float(res_welch.pvalue)
-
-        # Cohen's d
-        s_pooled = np.sqrt(((n1 - 1) * s1 + (n2 - 1) * s2) / (n1 + n2 - 2)) if (n1 + n2 > 2) else 1.0
-        cohen_d = float((m1 - m2) / s_pooled) if s_pooled > 0 else 0.0
-
-        # Classificação do efeito de Cohen
-        abs_d = abs(cohen_d)
-        if abs_d < 0.2:
-            class_d = "Desprezível"
-        elif abs_d < 0.5:
-            class_d = "Pequeno"
-        elif abs_d < 0.8:
-            class_d = "Médio"
-        else:
-            class_d = "Grande"
-
-        # Teste Mann-Whitney
-        res_mw = stats.mannwhitneyu(g1, g2, alternative="two-sided")
-        u_stat = float(res_mw.statistic)
-        p_mw = float(res_mw.pvalue)
-
-        # Cliff's Delta
-        cliff_delta = float((2 * u_stat) / (n1 * n2) - 1.0) if (n1 * n2 > 0) else 0.0
-        abs_cd = abs(cliff_delta)
-        if abs_cd < 0.147:
-            class_cd = "Desprezível"
-        elif abs_cd < 0.33:
-            class_cd = "Pequeno"
-        elif abs_cd < 0.474:
-            class_cd = "Médio"
-        else:
-            class_cd = "Grande"
-
-        # Conclusão prática
-        rejeita_welch = p_welch < alpha
-        rejeita_mw = p_mw < alpha
-
-        if rejeita_welch and rejeita_mw:
-            conclusao = "Diferença estatisticamente significante com alto impacto prático entre os tiers."
-        elif rejeita_mw and not rejeita_welch:
-            conclusao = "Detectado por Mann-Whitney; Welch não rejeitou devido à assimetria/outliers."
-        elif not rejeita_welch and not rejeita_mw:
-            conclusao = "Sem evidência estatística de diferença nos grupos comparados."
-        else:
-            conclusao = "Rejeitado apenas por Welch, requer cautela com premissas de normalidade."
-
-        tabela_linhas.append(
-            {
-                "chave": chave_metrica,
-                "metrica": meta["nome"],
-                "unidade": meta["unidade"],
-                "n_elite_high": n1,
-                "n_medium_low": n2,
-                "media_elite_high": round(m1, 2),
-                "media_medium_low": round(m2, 2),
-                "mediana_elite_high": round(med1, 2),
-                "mediana_medium_low": round(med2, 2),
-                "welch": {
-                    "stat_t": round(t_stat, 3),
-                    "p_valor": p_welch,
-                    "p_valor_formatado": f"{p_welch:.2e}" if p_welch < 0.001 else f"{p_welch:.4f}",
-                    "cohen_d": round(cohen_d, 3),
-                    "classificacao_efeito": class_d,
-                    "rejeita": rejeita_welch,
-                },
-                "mann_whitney": {
-                    "stat_u": round(u_stat, 1),
-                    "p_valor": p_mw,
-                    "p_valor_formatado": f"{p_mw:.2e}" if p_mw < 0.001 else f"{p_mw:.4f}",
-                    "cliff_delta": round(cliff_delta, 3),
-                    "classificacao_efeito": class_cd,
-                    "rejeita": rejeita_mw,
-                },
-                "conclusao": conclusao,
-            }
-        )
-
+    analise = calcular_analise_real(df, alpha)
+    linhas = []
+    for row in analise["linhas"]:
+        w, mw = row["welch"], row["mann_whitney"]
+        linhas.append({
+            **row,
+            "media_elite_high": round(row["media_elite_high"], 2),
+            "media_medium_low": round(row["media_medium_low"], 2),
+            "mediana_elite_high": round(row["mediana_elite_high"], 2),
+            "mediana_medium_low": round(row["mediana_medium_low"], 2),
+            "welch": {**w, "stat_t": round(w["estatistica"], 3), "p_valor_formatado": f"{w['p_valor']:.2e}" if w["p_valor"] < .001 else f"{w['p_valor']:.4f}", "cohen_d": round(w["cohen_d"], 3), "rejeita": w["rejeita_h0"]},
+            "mann_whitney": {**mw, "stat_u": round(mw["estatistica_u"], 1), "p_valor_formatado": f"{mw['p_valor']:.2e}" if mw["p_valor"] < .001 else f"{mw['p_valor']:.4f}", "cliff_delta": round(mw["cliffs_delta"], 3), "rejeita": mw["rejeita_h0"]},
+            "conclusao": ("Ambos rejeitam H₀." if w["rejeita_h0"] and mw["rejeita_h0"] else "Somente Welch rejeita H₀." if w["rejeita_h0"] else "Somente Mann–Whitney rejeita H₀." if mw["rejeita_h0"] else "Nenhum teste rejeita H₀.") + " A magnitude do efeito deve ser interpretada junto da unidade e do contexto; associação não implica causalidade.",
+        })
+    metadados = carregar_metadados_coleta()
     return {
         "alpha": alpha,
         "n_total": len(df),
-        "linhas": tabela_linhas,
-        "texto_explicativo": (
-            "Na amostra empírica real de 300 repositórios, ambas as abordagens (Welch e Mann-Whitney) rejeitam H₀ "
-            "com folga para Lead Time e Frequência de Deploy (p < 0,001), evidenciando forte efeito prático (|d| > 0,80). "
-            "O tamanho de efeito expressivo confirma que repositórios de alta performance entregam valor com ciclos "
-            "substancialmente mais rápidos e consistentes."
-        ),
+        "metadados_coleta": metadados,
+        "linhas": linhas,
+        "texto_explicativo": gerar_textos_dashboard(analise, metadados)["secao_6_dados_reais"],
     }
-
 

@@ -10,6 +10,7 @@
   // Estado da aplicação
   const state = {
     dados: null,
+    erroCarregamentoDados: null,
     metricaAtual: "lead_time_commit_mediana_dias",
     distribuicaoAtual: "Lognormal",
     testeAtual: "t-Student",
@@ -109,22 +110,31 @@
 
   async function carregarDados() {
     try {
-      const response = await fetch("data/dados.json");
+      const response = await fetch(`data/dados.json?v=${Date.now()}`, { cache: "no-store" });
       if (!response.ok) throw new Error("Falha ao carregar data/dados.json");
       state.dados = await response.json();
       finalizarCarregamento();
     } catch (err) {
-      console.warn("Fetch falhou ou executando via file://. Usando dados analíticos embutidos:", err);
+      state.erroCarregamentoDados = err?.message || "Não foi possível carregar data/dados.json";
+      console.warn("Falha ao carregar data/dados.json. Abra o dashboard pelo servidor HTTP local:", err);
       state.dados = gerarDadosEmbutidosFallback();
       finalizarCarregamento();
     }
   }
 
   function finalizarCarregamento() {
-    if (dom.sourceStatus) dom.sourceStatus.textContent = "Dados consolidados (Entrega Final)";
+    if (dom.sourceStatus) dom.sourceStatus.textContent = state.erroCarregamentoDados
+      ? "JSON não carregado; exibindo modo de contingência"
+      : "Dados consolidados (Entrega Final)";
     if (dom.sourceDot) dom.sourceDot.classList.add("is-ready");
 
     preencherSelectMetricas();
+    const textos = state.dados.textos_dashboard || {};
+    ["secao_1_cenario", "secao_6_dados_reais", "secao_7_conclusao"].forEach((chave, i) => {
+      const elemento = document.getElementById(`texto-secao-${[1, 6, 7][i]}`);
+      if (elemento && textos[chave]) elemento.textContent = textos[chave];
+    });
+    if (dom.kpiNReais) dom.kpiNReais.textContent = state.dados.metadados_coleta?.n_observacoes_csv ?? state.dados.dados_reais_testes?.n_total ?? "—";
     renderizarTabelaDadosReais();
     renderizarTabelaRepositorios(state.dados.repositorios || []);
     atualizarVisualizacoes();
@@ -655,7 +665,12 @@
   function renderizarTabelaDadosReais() {
     if (!dom.tabelaDadosReaisBody) return;
     const dadosReais = state.dados?.dados_reais_testes?.linhas;
-    if (!dadosReais || dadosReais.length === 0) return;
+    if (!dadosReais || dadosReais.length === 0) {
+      dom.tabelaDadosReaisBody.innerHTML = `<tr><td colspan="9" class="empty-state">${state.erroCarregamentoDados
+        ? "Não foi possível buscar os resultados reais. Abra o dashboard por run_lab04.ps1 (ou run_lab04.bat), em vez de abrir index.html diretamente; depois atualize a página."
+        : "O arquivo data/dados.json não contém resultados para a Seção 6. Gere novamente com python dashboard/gerar_dashboard.py."}</td></tr>`;
+      return;
+    }
 
     dom.tabelaDadosReaisBody.innerHTML = "";
     dadosReais.forEach((row) => {

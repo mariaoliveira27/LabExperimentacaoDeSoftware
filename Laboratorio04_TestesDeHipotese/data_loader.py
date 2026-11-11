@@ -8,6 +8,8 @@ Também pode ser executado diretamente para produzir estatísticas descritivas.
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -21,10 +23,10 @@ REPO_ROOT = HERE.parent
 DEFAULT_DATASET = (
     REPO_ROOT
     / "Laboratorio03_MineracaoDeMetricasDORA"
-    / "data"
-    / "coleta_final"
+    / "data" / "coleta_final"
     / "repositorios_aprovados.csv"
 )
+PROVENIENCIA = DEFAULT_DATASET.parent / "proveniencia.json"
 
 PERGUNTA_PESQUISA = (
     "As métricas de engenharia de software diferem entre repositórios "
@@ -166,6 +168,26 @@ def gerar_relatorio_inicial(df: pd.DataFrame) -> dict[str, Any]:
     return relatorio
 
 
+def carregar_metadados_coleta(caminho_csv: str | Path | None = None) -> dict[str, Any]:
+    """Retorna proveniência e integridade da amostra efetivamente analisada."""
+    caminho = Path(caminho_csv).expanduser().resolve() if caminho_csv else DEFAULT_DATASET.resolve()
+    proveniencia_path = caminho.parent / "proveniencia.json"
+    proveniencia = json.loads(proveniencia_path.read_text(encoding="utf-8")) if proveniencia_path.is_file() else {}
+    digest = hashlib.sha256(caminho.read_bytes()).hexdigest()
+    return {
+        "fonte": proveniencia.get("origem", "arquivo CSV local"),
+        "arquivo": caminho.name,
+        "caminho_relativo": str(caminho.relative_to(REPO_ROOT)) if caminho.is_relative_to(REPO_ROOT) else caminho.name,
+        "metodo_coleta": "Mineração de repositórios públicos via GitHub API; elegibilidade baseada em releases e execuções de CI na janela registrada.",
+        "janela_observacao": proveniencia.get("janela"),
+        "criterios": proveniencia.get("criterios"),
+        "n_aprovados_na_coleta": proveniencia.get("n_aprovados"),
+        "n_observacoes_csv": int(len(carregar_amostra_real(caminho))),
+        "sha256_csv": digest,
+        "gerado_em_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Carrega a amostra real do Lab 03 e calcula estatísticas iniciais do Lab 04."
@@ -179,6 +201,7 @@ def main() -> None:
 
     df = carregar_amostra_real(args.csv)
     relatorio = gerar_relatorio_inicial(df)
+    relatorio["metadados_coleta"] = carregar_metadados_coleta(args.csv)
     if args.csv:
         relatorio["fonte"] = str(args.csv.expanduser().resolve())
     if args.metrica:

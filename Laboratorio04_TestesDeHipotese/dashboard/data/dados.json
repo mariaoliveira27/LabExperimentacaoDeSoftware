@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "gerado_em": "2026-11-10T19:13:24+00:00",
+  "gerado_em": "2026-11-11T12:23:27+00:00",
   "total_repositorios": 300,
   "metricas": [
     "lead_time_commit_mediana_dias",
@@ -50630,6 +50630,25 @@
   "dados_reais_testes": {
     "alpha": 0.05,
     "n_total": 300,
+    "metadados_coleta": {
+      "fonte": "github_api",
+      "arquivo": "repositorios_aprovados.csv",
+      "caminho_relativo": "Laboratorio03_MineracaoDeMetricasDORA\\data\\coleta_final\\repositorios_aprovados.csv",
+      "metodo_coleta": "Mineração de repositórios públicos via GitHub API; elegibilidade baseada em releases e execuções de CI na janela registrada.",
+      "janela_observacao": {
+        "inicio": "2023-10-01T00:00:00Z",
+        "fim": "2024-09-30T23:59:59Z"
+      },
+      "criterios": {
+        "min_stars": 1000,
+        "min_releases": 5,
+        "min_workflow_runs": 50
+      },
+      "n_aprovados_na_coleta": 300,
+      "n_observacoes_csv": 300,
+      "sha256_csv": "766d01fbb52cea4685270c7a215121c9073e21ad216e32a3c004d8b80445bf9d",
+      "gerado_em_utc": "2026-11-11T12:23:27+00:00"
+    },
     "linhas": [
       {
         "chave": "lead_time_commit_mediana_dias",
@@ -50641,23 +50660,30 @@
         "media_medium_low": 6.32,
         "mediana_elite_high": 2.25,
         "mediana_medium_low": 6.0,
+        "assimetria_elite_high": 3.0850056698421073,
+        "assimetria_medium_low": 0.4930776283454079,
         "welch": {
-          "stat_t": -15.939,
+          "estatistica": -15.939252221359842,
           "p_valor": 8.991717751240737e-42,
-          "p_valor_formatado": "8.99e-42",
           "cohen_d": -1.785,
-          "classificacao_efeito": "Grande",
+          "classificacao_efeito": "grande",
+          "rejeita_h0": true,
+          "stat_t": -15.939,
+          "p_valor_formatado": "8.99e-42",
           "rejeita": true
         },
         "mann_whitney": {
-          "stat_u": 1198.5,
+          "estatistica_u": 1198.5,
           "p_valor": 1.0737932998815625e-39,
+          "cliffs_delta": -0.8906677613574165,
+          "classificacao_efeito": "grande",
+          "rejeita_h0": true,
+          "stat_u": 1198.5,
           "p_valor_formatado": "1.07e-39",
           "cliff_delta": -0.891,
-          "classificacao_efeito": "Grande",
           "rejeita": true
         },
-        "conclusao": "Diferença estatisticamente significante com alto impacto prático entre os tiers."
+        "conclusao": "Ambos rejeitam H₀. A magnitude do efeito deve ser interpretada junto da unidade e do contexto; associação não implica causalidade."
       },
       {
         "chave": "tempo_recuperacao_mediana_horas",
@@ -50669,23 +50695,30 @@
         "media_medium_low": 10.3,
         "mediana_elite_high": 6.1,
         "mediana_medium_low": 10.1,
+        "assimetria_elite_high": 0.36728329845010743,
+        "assimetria_medium_low": -0.19057055504355958,
         "welch": {
-          "stat_t": -4.204,
+          "estatistica": -4.2041951665352,
           "p_valor": 3.608016754158945e-05,
-          "p_valor_formatado": "3.61e-05",
           "cohen_d": -0.497,
-          "classificacao_efeito": "Pequeno",
+          "classificacao_efeito": "pequeno",
+          "rejeita_h0": true,
+          "stat_t": -4.204,
+          "p_valor_formatado": "3.61e-05",
           "rejeita": true
         },
         "mann_whitney": {
-          "stat_u": 7840.0,
+          "estatistica_u": 7840.0,
           "p_valor": 2.34461030491651e-05,
+          "cliffs_delta": -0.2848020434227331,
+          "classificacao_efeito": "pequeno",
+          "rejeita_h0": true,
+          "stat_u": 7840.0,
           "p_valor_formatado": "2.34e-05",
           "cliff_delta": -0.285,
-          "classificacao_efeito": "Pequeno",
           "rejeita": true
         },
-        "conclusao": "Diferença estatisticamente significante com alto impacto prático entre os tiers."
+        "conclusao": "Ambos rejeitam H₀. A magnitude do efeito deve ser interpretada junto da unidade e do contexto; associação não implica causalidade."
       },
       {
         "chave": "deployment_frequency_semana",
@@ -50697,110 +50730,64 @@
         "media_medium_low": 0.19,
         "mediana_elite_high": 0.46,
         "mediana_medium_low": 0.17,
+        "assimetria_elite_high": 0.5983052839570627,
+        "assimetria_medium_low": 0.35462087067106746,
         "welch": {
-          "stat_t": 16.463,
+          "estatistica": 16.462659866863373,
           "p_valor": 9.636514246983695e-35,
-          "p_valor_formatado": "9.64e-35",
           "cohen_d": 2.202,
-          "classificacao_efeito": "Grande",
+          "classificacao_efeito": "grande",
+          "rejeita_h0": true,
+          "stat_t": 16.463,
+          "p_valor_formatado": "9.64e-35",
           "rejeita": true
         },
         "mann_whitney": {
-          "stat_u": 20725.5,
+          "estatistica_u": 20725.5,
           "p_valor": 1.0737932998815625e-39,
+          "cliffs_delta": 0.8906677613574165,
+          "classificacao_efeito": "grande",
+          "rejeita_h0": true,
+          "stat_u": 20725.5,
           "p_valor_formatado": "1.07e-39",
           "cliff_delta": 0.891,
-          "classificacao_efeito": "Grande",
           "rejeita": true
         },
-        "conclusao": "Diferença estatisticamente significante com alto impacto prático entre os tiers."
-      },
-      {
-        "chave": "lead_time_release_mediana_dias",
-        "metrica": "Lead Time de Release (dias)",
-        "unidade": "dias",
-        "n_elite_high": 126,
-        "n_medium_low": 174,
-        "media_elite_high": 5.58,
-        "media_medium_low": 14.03,
-        "mediana_elite_high": 5.0,
-        "mediana_medium_low": 13.33,
-        "welch": {
-          "stat_t": -15.93,
-          "p_valor": 9.72488903983685e-42,
-          "p_valor_formatado": "9.72e-42",
-          "cohen_d": -1.784,
-          "classificacao_efeito": "Grande",
-          "rejeita": true
-        },
-        "mann_whitney": {
-          "stat_u": 1198.5,
-          "p_valor": 1.0737932998815625e-39,
-          "p_valor_formatado": "1.07e-39",
-          "cliff_delta": -0.891,
-          "classificacao_efeito": "Grande",
-          "rejeita": true
-        },
-        "conclusao": "Diferença estatisticamente significante com alto impacto prático entre os tiers."
-      },
-      {
-        "chave": "cfr_ci_proxy",
-        "metrica": "Taxa de Falha em CI / CFR Proxy (%)",
-        "unidade": "taxa (0 a 1)",
-        "n_elite_high": 126,
-        "n_medium_low": 174,
-        "media_elite_high": 0.12,
-        "media_medium_low": 0.14,
-        "mediana_elite_high": 0.1,
-        "mediana_medium_low": 0.14,
-        "welch": {
-          "stat_t": -3.388,
-          "p_valor": 0.0008075855290854986,
-          "p_valor_formatado": "8.08e-04",
-          "cohen_d": -0.394,
-          "classificacao_efeito": "Pequeno",
-          "rejeita": true
-        },
-        "mann_whitney": {
-          "stat_u": 8523.5,
-          "p_valor": 0.0009630665972727183,
-          "p_valor_formatado": "9.63e-04",
-          "cliff_delta": -0.222,
-          "classificacao_efeito": "Pequeno",
-          "rejeita": true
-        },
-        "conclusao": "Diferença estatisticamente significante com alto impacto prático entre os tiers."
-      },
-      {
-        "chave": "stars",
-        "metrica": "Estrelas no GitHub",
-        "unidade": "estrelas",
-        "n_elite_high": 126,
-        "n_medium_low": 174,
-        "media_elite_high": 42925.4,
-        "media_medium_low": 23798.12,
-        "mediana_elite_high": 34500.0,
-        "mediana_medium_low": 15900.0,
-        "welch": {
-          "stat_t": 6.001,
-          "p_valor": 6.527664588154242e-09,
-          "p_valor_formatado": "6.53e-09",
-          "cohen_d": 0.707,
-          "classificacao_efeito": "Médio",
-          "rejeita": true
-        },
-        "mann_whitney": {
-          "stat_u": 16367.5,
-          "p_valor": 3.127662755641583e-13,
-          "p_valor_formatado": "3.13e-13",
-          "cliff_delta": 0.493,
-          "classificacao_efeito": "Grande",
-          "rejeita": true
-        },
-        "conclusao": "Diferença estatisticamente significante com alto impacto prático entre os tiers."
+        "conclusao": "Ambos rejeitam H₀. A magnitude do efeito deve ser interpretada junto da unidade e do contexto; associação não implica causalidade."
       }
     ],
-    "texto_explicativo": "Na amostra empírica real de 300 repositórios, ambas as abordagens (Welch e Mann-Whitney) rejeitam H₀ com folga para Lead Time e Frequência de Deploy (p < 0,001), evidenciando forte efeito prático (|d| > 0,80). O tamanho de efeito expressivo confirma que repositórios de alta performance entregam valor com ciclos substancialmente mais rápidos e consistentes."
+    "texto_explicativo": "Nos dados reais, Welch e Mann–Whitney rejeitaram H₀ em 3 de 3 métricas ao nível α=0.05; os efeitos e tamanhos de cada grupo estão discriminados na tabela. Para Frequência de Deploy (deploys/semana), o maior |d| foi 2.20 (grande) e Cliff’s δ foi 0.89; significância estatística não implica causalidade."
+  },
+  "metadados_coleta": {
+    "fonte": "github_api",
+    "arquivo": "repositorios_aprovados.csv",
+    "caminho_relativo": "Laboratorio03_MineracaoDeMetricasDORA\\data\\coleta_final\\repositorios_aprovados.csv",
+    "metodo_coleta": "Mineração de repositórios públicos via GitHub API; elegibilidade baseada em releases e execuções de CI na janela registrada.",
+    "janela_observacao": {
+      "inicio": "2023-10-01T00:00:00Z",
+      "fim": "2024-09-30T23:59:59Z"
+    },
+    "criterios": {
+      "min_stars": 1000,
+      "min_releases": 5,
+      "min_workflow_runs": 50
+    },
+    "n_aprovados_na_coleta": 300,
+    "n_observacoes_csv": 300,
+    "sha256_csv": "766d01fbb52cea4685270c7a215121c9073e21ad216e32a3c004d8b80445bf9d",
+    "gerado_em_utc": "2026-11-11T12:23:27+00:00"
+  },
+  "textos_dashboard": {
+    "secao_1_cenario": "Comparamos Lead Time de Commit, MTTR e frequência de deploy entre repositórios nos tiers DORA Elite/High e Medium/Low; H₀ afirma distribuições iguais, e H₁ afirma distribuições diferentes (teste bicaudal). A amostra contém 300 repositórios aprovados (126 Elite/High e 174 Medium/Low), coletados via GitHub API entre 2023-10-01 e 2024-09-30; Mineração de repositórios públicos via GitHub API; elegibilidade baseada em releases e execuções de CI na janela registrada.",
+    "secao_6_dados_reais": "Nos dados reais, Welch e Mann–Whitney rejeitaram H₀ em 3 de 3 métricas ao nível α=0.05; os efeitos e tamanhos de cada grupo estão discriminados na tabela. Para Frequência de Deploy (deploys/semana), o maior |d| foi 2.20 (grande) e Cliff’s δ foi 0.89; significância estatística não implica causalidade.",
+    "secao_7_conclusao": "Antes das simulações, a expectativa era que Welch mantivesse bom desempenho para médias, mas que Mann–Whitney fosse mais robusto sob assimetria e outliers. Nos dados observacionais de Lead Time de Commit (dias) e Tempo de Recuperação / MTTR (horas) e Frequência de Deploy (deploys/semana), ambos os testes rejeitaram H₀; os efeitos encontrados foram Lead Time de Commit (dias): d=-1.78, δ=-0.89, Tempo de Recuperação / MTTR (horas): d=-0.50, δ=-0.28, Frequência de Deploy (deploys/semana): d=2.20, δ=0.89, sem permitir inferência causal. Para métricas assimétricas e comparação geral de distribuições, recomendamos Mann–Whitney, reportando Cliff’s δ. Se a pergunta for especificamente sobre médias e os dados atenderem às condições do modelo, Welch é a escolha direta; a decisão deve considerar objetivo e formato dos dados, não apenas o menor p-valor.",
+    "respostas_orais_maria_clara": {
+      "01": "Comparamos Lead Time de Commit, MTTR e frequência de deploy entre repositórios nos tiers DORA Elite/High e Medium/Low; H₀ afirma distribuições iguais, e H₁ afirma distribuições diferentes (teste bicaudal). A amostra contém 300 repositórios aprovados (126 Elite/High e 174 Medium/Low), coletados via GitHub API entre 2023-10-01 e 2024-09-30; Mineração de repositórios públicos via GitHub API; elegibilidade baseada em releases e execuções de CI na janela registrada.",
+      "02": "A comparação é bicaudal: antes de olhar os resultados, consideramos relevante uma diferença em qualquer direção entre os tiers. Por isso, H₁ é distribuição diferente, sem especificar qual grupo terá valores maiores.",
+      "03": "A amostra tem 300 repositórios públicos aprovados na coleta via GitHub API, com 126 Elite/High e 174 Medium/Low. A assimetria amostral (skewness Elite/High / Medium/Low) foi: Lead Time de Commit (dias): 3.09/0.49; Tempo de Recuperação / MTTR (horas): 0.37/-0.19; Frequência de Deploy (deploys/semana): 0.60/0.35; as formas variam por métrica e grupo, então não assumimos normalidade geral.",
+      "04": "Para os histogramas comparativos, os parâmetros da Lognormal são ajustados por máxima verossimilhança aos valores reais positivos de cada métrica. Nas simulações de erro tipo I e poder, mediana=10 e sigma=1 (ou sigma=1,6 nos cenários de assimetria) são parâmetros controlados do experimento, não estimativas exatas desta amostra; essa diferença deve ser explicitada ao interpretar os gráficos.",
+      "14": "Nos dados reais, Welch e Mann–Whitney chegaram à mesma decisão em 3 de 3 métricas (α=0.05); as magnitudes são Lead Time de Commit (dias): d=-1.78, δ=-0.89, Tempo de Recuperação / MTTR (horas): d=-0.50, δ=-0.28, Frequência de Deploy (deploys/semana): d=2.20, δ=0.89. Isso mostra por que o p-valor sozinho não basta: MTTR tem efeito menor que Lead Time e Frequência de Deploy, e relevância prática depende também da unidade e do contexto."
+    }
   },
   "repositorios": [
     {

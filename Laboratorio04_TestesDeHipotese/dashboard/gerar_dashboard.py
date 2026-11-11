@@ -11,7 +11,12 @@ import http.server
 import json
 from pathlib import Path
 import socketserver
+import sys
 import webbrowser
+
+LAB04_ROOT = Path(__file__).resolve().parent.parent
+if str(LAB04_ROOT) not in sys.path:
+    sys.path.insert(0, str(LAB04_ROOT))
 
 from dados import (
     METRICAS_DISPONIVEIS,
@@ -22,6 +27,7 @@ from dados import (
     gerar_simulacoes_g4_poder,
     calcular_tabela_dados_reais,
 )
+from analise_real import gerar_textos_dashboard
 from graficos import (
     construir_dados_g1,
     construir_dados_g2,
@@ -131,6 +137,18 @@ def gerar_dados_dashboard() -> dict:
     # Tabela analítica dos dados reais (Seção 6 do edital)
     print("-> Consolidando estatísticas, p-valores e tamanhos de efeito nos dados reais (Seção 6)...")
     dados_reais_testes = calcular_tabela_dados_reais(df, alpha=0.05)
+    metadados_coleta = dados_reais_testes["metadados_coleta"]
+    analise_para_textos = {
+        "alpha": dados_reais_testes["alpha"],
+        "n_total": dados_reais_testes["n_total"],
+        "linhas": [
+            {**linha, "welch": {**linha["welch"], "rejeita_h0": linha["welch"]["rejeita"]},
+             "mann_whitney": {**linha["mann_whitney"], "rejeita_h0": linha["mann_whitney"]["rejeita"],
+                              "cliffs_delta": linha["mann_whitney"]["cliff_delta"]}}
+            for linha in dados_reais_testes["linhas"]
+        ],
+    }
+    textos_dashboard = gerar_textos_dashboard(analise_para_textos, metadados_coleta)
 
     payload = {
         "schema_version": 2,
@@ -141,6 +159,8 @@ def gerar_dados_dashboard() -> dict:
         "g3": g3_spec,
         "g4": g4_spec,
         "dados_reais_testes": dados_reais_testes,
+        "metadados_coleta": metadados_coleta,
+        "textos_dashboard": textos_dashboard,
         "repositorios": tabela_rows,
     }
 

@@ -28,13 +28,15 @@ Conforme exigido pelo edital (semente fixa e reprodutibilidade com comando únic
 
 ### No Windows (PowerShell):
 ```powershell
-.\run_lab04.ps1
+.\Laboratorio04_TestesDeHipotese\run_lab04.ps1
 ```
-*(Ou acesse a pasta `dashboard` e execute `.\run_dashboard.ps1`)*
+Execute esse comando a partir da raiz do repositório (`LabExperimentacaoDeSoftware`). O script abre `http://localhost:8000`; mantenha o PowerShell aberto enquanto usa o dashboard. Não abra `dashboard/index.html` diretamente pelo Explorador de Arquivos, pois o navegador pode bloquear o acesso a `dashboard/data/dados.json`.
+
+Se o PowerShell já estiver na pasta `Laboratorio04_TestesDeHipotese`, use `.\run_lab04.ps1`. A partir da pasta `dashboard`, use `.\run_dashboard.ps1`.
 
 ### No Windows (Prompt de Comando):
 ```cmd
-.\run_lab04.bat
+Laboratorio04_TestesDeHipotese\run_lab04.bat
 ```
 
 ### Execução via Python:

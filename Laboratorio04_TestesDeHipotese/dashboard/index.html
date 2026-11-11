@@ -145,14 +145,14 @@
           <!-- Texto explicativo de 2 a 4 frases (Edital) -->
           <div class="callout-box info" style="margin-top:16px;">
             <strong>📋 Síntese do Cenário (Seção 1):</strong><br>
-            Investigamos se as métricas essenciais de engenharia de software — especificamente Lead Time de Commit, Tempo de Recuperação (MTTR) e Frequência de Deploy — diferem significativamente entre repositórios classificados nos tiers DORA de alto desempenho (Elite/High) e de desempenho moderado/baixo (Medium/Low). A hipótese nula H₀ postula que as distribuições são equivalentes, enquanto H₁ afirma que há diferença sistemática bicaudal. Os dados reais provêm de uma amostra de 300 repositórios de código aberto minerados via GitHub API no Laboratório 03, catalogados após filtragem rigorosa de releases e automação de CI/CD.
+            <span id="texto-secao-1">Carregando pergunta, hipóteses e proveniência da amostra…</span>
           </div>
 
           <!-- Cards de KPIs da Amostra -->
           <div class="kpi-grid" style="margin-top:20px; margin-bottom:0;">
             <div class="kpi-card">
               <span class="kpi-label">Observações Reais</span>
-              <span class="kpi-value" id="kpi-n-reais">300</span>
+              <span class="kpi-value" id="kpi-n-reais">—</span>
               <span class="kpi-foot">Repositórios de software minerados</span>
             </div>
             <div class="kpi-card tone-teal">
@@ -337,12 +337,12 @@
               <p class="eyebrow"><span class="section-badge-num">Seção 6</span>Amostra Empírica</p>
               <h2>Aplicação nos Dados Reais: Estatísticas, p-Valores & Tamanho de Efeito</h2>
             </div>
-            <p>Comparação formal dos testes t de Welch e Mann-Whitney U aplicados aos 300 repositórios reais minerados, acompanhados das medidas padronizadas de Cohen's d e Cliff's Delta.</p>
+            <p>Comparação formal dos testes t de Welch e Mann–Whitney U aplicados à amostra real, com Cohen's d e Cliff's Delta.</p>
           </div>
 
           <div class="panel">
             <div class="panel-header">
-              <span style="font-weight:700; font-size:0.9rem;">Tabela de Resultados Estatísticos na Amostra Real (N = 300)</span>
+              <span style="font-weight:700; font-size:0.9rem;">Tabela de Resultados Estatísticos na Amostra Real</span>
               <span class="badge-decision" style="background:#f0fdf4; color:#166534; border:1px solid #bbf7d0;">Tiers DORA: Elite/High vs. Medium/Low</span>
             </div>
 
@@ -370,7 +370,7 @@
             <!-- Texto explicativo de 2 a 4 frases (Edital) -->
             <div class="callout-box info" style="margin-top:16px;">
               <strong>📋 Síntese dos Dados Reais (Seção 6):</strong><br>
-              Na amostra empírica de 300 repositórios, ambos os testes rejeitaram H₀ com extrema significância estatística para Lead Time de Commit e Frequência de Deploy (p < 0,001), corroborando que repositórios de alto desempenho diferem drasticamente dos demais. O tamanho de efeito medido revelou-se classificado como Grande (|Cohen's d| > 1,7 e |Cliff's δ| > 0,85), confirmando que a diferença não reflete apenas poder amostral em N=300, mas traduz um impacto prático substancial nos fluxos de entrega contínua. Para métricas com maior sobreposição, Mann-Whitney detectou relevância com menor distorção que o Welch.
+              <span id="texto-secao-6">Carregando resultados inferenciais e tamanhos de efeito…</span>
             </div>
           </div>
         </section>
@@ -390,22 +390,22 @@
           <div class="hypo-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
             <div class="hypo-card" style="border-top:3px solid #1677c8;">
               <h4>🤔 Expectativa Prévia vs. Achados</h4>
-              <p>Antes da simulação, esperávamos que o teste t de Welch fosse suficientemente robusto para dados assimétricos apoiado no Teorema Central do Limite em N=30. A simulação revelou que, embora o erro Tipo I seja mantido sob controle, o teste t sofre severa perda de poder estatístico frente a assimetria e outliers, enquanto o Mann-Whitney U supera consistentemente o teste paramétrico.</p>
+              <p>Pré-simulação: esperamos que Welch seja adequado para comparar médias, e que Mann–Whitney tenha vantagem de robustez quando houver assimetria e valores extremos. O resultado deve ser confrontado com as curvas simuladas e com a distribuição empírica exibida neste dashboard.</p>
             </div>
             <div class="hypo-card" style="border-top:3px solid #16a34a;">
               <h4>🏆 Recomendação do Grupo</h4>
-              <p>Recomendamos enfaticamente a adoção do teste <strong>Mann-Whitney U</strong> para hipóteses envolvendo métricas contínuas em Engenharia de Software (Lead Time, MTTR, tempo de revisão de PRs e defeitos). O teste preserva calibração nominal de 5% de Erro Tipo I e alcança 80% de poder com amostras substancialmente menores sob dados assimétricos.</p>
+              <p>Para comparar distribuições assimétricas, recomendamos Mann–Whitney U acompanhado de Cliff's Delta. Quando a pergunta disser respeito especificamente às médias, Welch responde diretamente e acomoda variâncias diferentes.</p>
             </div>
             <div class="hypo-card" style="border-top:3px solid #ec9b24;">
               <h4>🔄 Quando a Escolha Mudaria?</h4>
-              <p>A recomendação mudaria a favor do <strong>teste t de Welch</strong> apenas quando a métrica sob estudo possuir distribuição comprovadamente simétrica e unimodal (gaussiana) sem caudas pesadas ou outliers, ou quando o objetivo primário da pesquisa for estritamente a inferência sobre o parâmetro de média populacional contábil em vez de postos ordenados.</p>
+              <p>A escolha muda conforme a pergunta: Welch é apropriado para diferenças entre médias; Mann–Whitney compara postos/distribuições e não é, em geral, um teste de medianas. Examine forma, valores extremos, tamanho amostral e estimativa de efeito antes de decidir.</p>
             </div>
           </div>
 
           <!-- Texto explicativo de 2 a 4 frases (Edital) -->
           <div class="callout-box success" style="margin-top:16px;">
             <strong>📌 Recomendação Final e Limitações (Seção 7):</strong><br>
-            Constatamos que o teste não-paramétrico de Mann-Whitney U é a escolha metodológica superior para experimentação em engenharia de software, superando o Welch em poder e robustez sob as distribuições empíricas assimétricas da área. A recomendação migraria para o teste t de Welch apenas em variáveis comprovadamente gaussianas e desprovidas de outliers. Como limitação principal, destacamos que nossa amostra real baseou-se em repositórios open-source com histórico contínuo de releases, demandando cautela na generalização direta para projetos de software proprietários com ciclos fechados de publicação.
+            <span id="texto-secao-7">Carregando confronto entre expectativa, evidência empírica e recomendação…</span>
           </div>
         </section>
 
