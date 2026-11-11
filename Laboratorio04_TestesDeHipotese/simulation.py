@@ -16,19 +16,45 @@ Public interface:
         and return each test's rejection_rate, mc_se, ci_low and ci_high.
     power_curve(params, deltas=DEFAULT_DELTAS, n_sims=10_000, alpha=0.05,
         rng=None): return points with delta and summaries for both tests.
+    Scenario(name, description, params): immutable scenario configuration.
+    build_scenarios(base_params): return the seven reference/stress scenarios.
+    run_scenarios(scenarios, deltas=DEFAULT_DELTAS, n_sims=10_000,
+        alpha=0.05, rng=None): return tidy records, including delta=0 for Q1.
+    run_all(n_sims=10_000, alpha=0.05, rng=None): dashboard entrypoint
+        returning one record per (scenario, test, delta), with scenario,
+        test, delta,
+        n_a, n_b, alpha, n_sims, rejection_rate, ci_low and ci_high. Rates and
+        interval bounds are proportions, not percentages. Filter delta=0 for
+        G3; use all rows for G4. This does not modify or launch the dashboard.
+    to_dataframe(records): convert tidy records using the existing pandas
+        dependency, preserving the same columns for an empty record list.
 
 Random functions create a generator seeded with 42 when no generator is given.
-No data from the real sample is loaded or calibrated automatically.
+Scenario streams are spawned from a shared root and keyed by scenario name,
+so reordering or adding scenarios leaves existing results unchanged when the
+root starts in the same state. Delta is a log-location shift for lognormal
+data and a mean shift in original units for normal/contaminated normal data;
+it is not standardized when sigma differs from 1. For contaminated normal,
+sigma is the base component scale; delta is not standardized by the mixture
+standard deviation, even when sigma=1. Confidence intervals are 95% normal
+approximations to Monte Carlo uncertainty, clipped to [0, 1].
+No real sample is loaded or calibrated automatically: run_all retains the
+repository's illustrative lognormal baseline (median=10, sigma=1, n=30).
+Legacy simulate_q1/q2/q3 interfaces and their original scenarios are retained.
 """
 
 from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass, replace
-from typing import Any, Literal
+from hashlib import sha256
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 from scipy import stats
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 # Q1 (#95): Monte Carlo interval configuration.
@@ -37,6 +63,15 @@ NORMAL_95_CRITICAL_VALUE: float = 1.96
 # Q2 (#96): effects retain the Sprint 1 distribution-specific units.
 DEFAULT_DELTAS: tuple[float, ...] = (0.0, 0.2, 0.5, 0.8, 1.2, 1.5)
 
+# Q3 (#97): contamination and dashboard record schema.
+OUTLIER_PROPORTION: float = 0.10
+OUTLIER_SCALE_FACTOR: float = 10.0
+RECORD_COLUMNS: tuple[str, ...] = (
+    "scenario", "test", "delta", "n_a", "n_b", "alpha", "n_sims",
+    "rejection_rate", "ci_low", "ci_high",
+)
+
+
 @dataclass(frozen=True)
 class SimParams:
     """Describe the two synthetic distributions and their sample sizes.
@@ -44,11 +79,15 @@ class SimParams:
     For lognormal groups, median_a is the median of A, sigma is the standard
     deviation on the log scale, and mu_b = log(median_a) + delta. For normal
     groups, median_a is the mean of A, sigma is the standard deviation, and
-    mean_b = median_a + delta. Both groups share sigma. A zero delta makes
-    their distributions equal.
+    mean_b = median_a + delta. Contaminated normal groups share these means,
+    with OUTLIER_PROPORTION drawn at OUTLIER_SCALE_FACTOR times sigma, their
+    base component scale rather than the mixture's standard deviation.
+    Both groups share the same scale/mixture. A zero delta makes their
+    distributions equal. Delta is not standardized when sigma != 1, nor by
+    the contaminated mixture's standard deviation even when sigma=1.
     """
 
-    dist: Literal["lognormal", "normal"] = "lognormal"
+    dist: Literal["lognormal", "normal", "contaminated_normal"] = "lognormal"
     median_a: float = 10.0
     sigma: float = 1.0
     n_a: int = 30
@@ -56,8 +95,10 @@ class SimParams:
     delta: float = 0.0
 
     def __post_init__(self) -> None:
-        if self.dist not in ("lognormal", "normal"):
-            raise ValueError("dist must be 'lognormal' or 'normal'")
+        if self.dist not in ("lognormal", "normal", "contaminated_normal"):
+            raise ValueError(
+                "dist must be 'lognormal', 'normal' or 'contaminated_normal'"
+            )
         values = (self.median_a, self.sigma, self.delta)
         if not all(np.isfinite(value) for value in values):
             raise ValueError("distribution parameters must be finite")
@@ -88,10 +129,32 @@ def _draw_groups(
             rng.lognormal(mu_a, params.sigma, size_a),
             rng.lognormal(mu_a + params.delta, params.sigma, size_b),
         )
+    if params.dist == "contaminated_normal":
+        return (
+            _draw_contaminated_normal(
+                rng, params.median_a, params.sigma, size_a
+            ),
+            _draw_contaminated_normal(
+                rng, params.median_a + params.delta, params.sigma, size_b
+            ),
+        )
     return (
         rng.normal(params.median_a, params.sigma, size_a),
         rng.normal(params.median_a + params.delta, params.sigma, size_b),
     )
+
+
+# Q3 (#97): a symmetric mixture changes tails without shifting the null mean.
+def _draw_contaminated_normal(
+    rng: np.random.Generator,
+    mean: float,
+    sigma: float,
+    size: int | tuple[int, int],
+) -> np.ndarray:
+    """Draw 90% N(mean, sigma) and 10% N(mean, 10*sigma)."""
+    contaminated = rng.random(size) < OUTLIER_PROPORTION
+    scales = np.where(contaminated, sigma * OUTLIER_SCALE_FACTOR, sigma)
+    return rng.normal(mean, scales)
 
 
 def generate_groups(
@@ -301,6 +364,139 @@ def power_curve(
     return points
 
 
+# Q3 (#97): assumption scenarios, stable child streams and tidy results.
+@dataclass(frozen=True)
+class Scenario:
+    """Name, describe and configure one simulation scenario."""
+
+    name: str
+    description: str
+    params: SimParams
+
+
+def build_scenarios(base_params: SimParams) -> list[Scenario]:
+    """Build seven scenarios around the repository's illustrative baseline.
+
+    Normal reference and small-n scenarios share sigma=1 and differ only
+    in sample size. Outliers use the same reference location/base scale.
+    Real-data-like parameters are supplied, not fitted by this function.
+    """
+    base = replace(base_params, n_a=30, n_b=30, delta=0.0)
+    normal = replace(base, dist="normal", sigma=1.0)
+    return [
+        Scenario(
+            "baseline_normal", "Normal reference, n=30, sigma=1.", normal
+        ),
+        Scenario(
+            "real_data_like", "Supplied illustrative baseline, n=30.", base
+        ),
+        Scenario(
+            "skewed_sigma_1_5", "Severe lognormal skewness, sigma=1.5.",
+            replace(base, dist="lognormal", sigma=1.5),
+        ),
+        Scenario(
+            "skewed_sigma_2_0", "Severe lognormal skewness, sigma=2.0.",
+            replace(base, dist="lognormal", sigma=2.0),
+        ),
+        Scenario(
+            "outliers", "Normal mixture: 10% at 10 times the base scale.",
+            replace(normal, dist="contaminated_normal"),
+        ),
+        Scenario(
+            "small_n_10", "Normal reference with only n=10 per group.",
+            replace(normal, n_a=10, n_b=10),
+        ),
+        Scenario(
+            "small_n_15", "Normal reference with only n=15 per group.",
+            replace(normal, n_a=15, n_b=15),
+        ),
+    ]
+
+
+def _scenario_generator(
+    root_entropy: np.ndarray, name: str
+) -> np.random.Generator:
+    """Spawn a child keyed by name, independent of list position or length."""
+    digest = sha256(name.encode("utf-8")).digest()
+    name_key = tuple(int(word) for word in np.frombuffer(digest, dtype="<u4"))
+    sequence = np.random.SeedSequence(root_entropy, spawn_key=name_key)
+    return np.random.default_rng(sequence.spawn(1)[0])
+
+
+def run_scenarios(
+    scenarios: Sequence[Scenario],
+    deltas: Sequence[float] = DEFAULT_DELTAS,
+    n_sims: int = 10_000,
+    alpha: float = 0.05,
+    rng: np.random.Generator | None = None,
+) -> list[dict[str, Any]]:
+    """Run Q1/Q2 per scenario and return one row per scenario/test/delta.
+
+    Prepend delta=0 if omitted, so Q1 is always present without duplicate
+    null simulations. Name-keyed SeedSequence children keep existing
+    scenarios unchanged when others are added or reordered, given the same
+    initial root state. Scenario names must be unique. Delta retains the
+    distribution-specific units documented in power_curve.
+    """
+    _validate_alpha(alpha)
+    if isinstance(n_sims, bool) or not isinstance(n_sims, int) or n_sims < 1:
+        raise ValueError("n_sims must be a positive integer")
+    effects = _validate_deltas(deltas)
+    if 0.0 not in effects:
+        effects = (0.0, *effects)
+    names = [scenario.name for scenario in scenarios]
+    if len(set(names)) != len(names):
+        raise ValueError("scenario names must be unique")
+    generator = rng if rng is not None else np.random.default_rng(42)
+    root_entropy = generator.integers(0, 2**32, size=4, dtype=np.uint32)
+    records = []
+    for scenario in scenarios:
+        points = power_curve(
+            scenario.params, effects, n_sims, alpha,
+            _scenario_generator(root_entropy, scenario.name),
+        )
+        for point in points:
+            for test in ("welch", "mann_whitney"):
+                summary = point[test]
+                records.append({
+                    "scenario": scenario.name,
+                    "test": test,
+                    "delta": point["delta"],
+                    "n_a": scenario.params.n_a,
+                    "n_b": scenario.params.n_b,
+                    "alpha": alpha,
+                    "n_sims": n_sims,
+                    "rejection_rate": summary["rejection_rate"],
+                    "ci_low": summary["ci_low"],
+                    "ci_high": summary["ci_high"],
+                })
+    return records
+
+
+def run_all(
+    n_sims: int = 10_000,
+    alpha: float = 0.05,
+    rng: np.random.Generator | None = None,
+) -> list[dict[str, Any]]:
+    """Return tidy G3/G4 records for all seven scenarios and default effects.
+
+    Keep this dashboard-facing signature stable. The real-data-like base is
+    the repository placeholder, not a fitted empirical model. See the module
+    docstring for record keys and the distribution-specific units of delta.
+    """
+    return run_scenarios(
+        build_scenarios(SimParams()), n_sims=n_sims, alpha=alpha, rng=rng
+    )
+
+
+def to_dataframe(records: list[dict[str, Any]]) -> pd.DataFrame:
+    """Convert records to the dashboard schema using existing pandas."""
+    import pandas as pd
+
+    return pd.DataFrame.from_records(records, columns=RECORD_COLUMNS)
+
+
+# Legacy dashboard-facing helpers: preserve their signatures and results.
 def simulate_q1(
     params: SimParams | None = None,
     n_sims: int = 10_000,
@@ -383,6 +579,7 @@ def simulate_q3(
     2. Outlier contamination (10% extreme multipliers)
     3. Small sample size (N=12)
     """
+    _validate_alpha(alpha)
     rng = np.random.default_rng(seed)
     deltas = [0.0, 0.5, 1.0]
 
@@ -451,24 +648,47 @@ def _draw_with_outliers(
     return a, b
 
 
+# Q3 (#97): plain-text summaries for all scenarios and both alpha levels.
+def _print_summary(records: list[dict[str, Any]]) -> None:
+    """Print Type I error with MC uncertainty, then power at every delta."""
+    if not records:
+        return
+    print(f"\nalpha={records[0]['alpha']:.2f}; n_sims={records[0]['n_sims']}")
+    print("Q1: Type I error (delta=0); MC SE and 95% normal interval")
+    print(f"{'scenario':<20} {'test':<13} {'rate':>7} {'MC SE':>7}  95% CI")
+    for row in records:
+        if row["delta"] == 0:
+            rate = row["rejection_rate"]
+            mc_se = np.sqrt(rate * (1 - rate) / row["n_sims"])
+            print(
+                f"{row['scenario']:<20} {row['test']:<13} {rate:7.2%} "
+                f"{mc_se:7.2%}  [{row['ci_low']:.2%}, {row['ci_high']:.2%}]"
+            )
+    print("Q2/Q3: rejection rates by delta (delta=0 is Type I error)")
+    deltas = tuple(dict.fromkeys(row["delta"] for row in records))
+    groups = tuple(dict.fromkeys(
+        (row["scenario"], row["test"]) for row in records
+    ))
+    rates = {
+        (row["scenario"], row["test"], row["delta"]): row["rejection_rate"]
+        for row in records
+    }
+    columns = " ".join(f"{delta:>7.1f}" for delta in deltas)
+    print(f"{'scenario':<20} {'test':<13} {columns}")
+    for scenario, test in groups:
+        values = " ".join(
+            f"{rates[scenario, test, delta]:7.2%}" for delta in deltas
+        )
+        print(f"{scenario:<20} {test:<13} {values}")
+
+
 if __name__ == "__main__":
-    print("=" * 60)
-    print("RELATÓRIO EXPERIMENTAL DE SIMULAÇÕES (Q1, Q2, Q3) - LAB 04")
-    print("=" * 60)
-
-    print("\n--- Executando Q1: Erro Tipo I (N=10.000 iterações sob H0) ---")
-    q1 = simulate_q1(n_sims=10_000)
-    print(f"Taxa Welch: {q1['rate_welch']:.2%} ± {q1['margin_welch']:.2%}")
-    print(f"Taxa Mann-Whitney: {q1['rate_mw']:.2%} ± {q1['margin_mw']:.2%}")
-
-    print("\n--- Executando Q2: Poder Estatístico vs. Efeito Delta ---")
-    q2 = simulate_q2()
-    for d, pw, pmw in zip(q2["deltas"], q2["power_welch"], q2["power_mw"]):
-        print(f"  δ = {d:.1f} -> Welch: {pw:.1%}, Mann-Whitney: {pmw:.1%}")
-
-    print("\n--- Executando Q3: Violações de Pressupostos ---")
-    q3 = simulate_q3()
-    for k, v in q3["scenarios"].items():
-        print(f"  [{v['nome']}] Erro Tipo I: Welch={v['type1_welch']:.2%}, MW={v['type1_mw']:.2%}")
-    print("=" * 60)
+    print("LAB 04: Q1, Q2 and Q3 Monte Carlo simulations")
+    print("Illustrative baseline: lognormal, median=10, sigma=1, n=30.")
+    print("Delta: log shift for lognormal; mean shift for normal mixtures.")
+    print("Delta is not standardized when sigma != 1.")
+    print("For contaminated normal, delta is not standardized by mixture SD.")
+    print("Small normal samples isolate sample size; normality is preserved.")
+    for significance in (0.05, 0.01):
+        _print_summary(run_all(alpha=significance))
 
