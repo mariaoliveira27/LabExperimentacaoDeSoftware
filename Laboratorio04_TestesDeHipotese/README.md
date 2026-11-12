@@ -8,7 +8,7 @@ Este repositório contém a implementação do **Laboratório 04** da disciplina
 
 * 📂 **Repositório GitHub:** [https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware)
 * 📌 **GitHub Projects:** [https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/projects](https://github.com/mariaoliveira27/LabExperimentacaoDeSoftware/projects)
-* 🌐 **Dashboard:** Disponível localmente em `http://localhost:8000` via comando único de execução.
+* 🌐 **Dashboard:** Disponível localmente em `http://localhost:8000` via comando único de execução ou online em `https://vinisimoesv.github.io/lab04Medicao/`.
 
 ---
 
