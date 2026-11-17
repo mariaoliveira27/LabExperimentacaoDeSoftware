@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
-"""Statistical analysis of the Lighthouse measurements (docs/proposta.md, section 7).
+"""Análise estatística das medições do Lighthouse (docs/proposta.md, seção 7).
 
-Reads data/processed/<phase>.csv and its companion files (_flags, _failures, _lcp_elements) for
-one or more phases and writes CSV tables to --out. Each phase is one collection session, so in
-Sprint 2 each time block is one phase (e.g. full-b1, full-b2, full-b3).
+Lê data/processed/<fase>.csv e os arquivos que o acompanham (_flags, _failures, _lcp_elements)
+de uma ou mais fases e grava tabelas CSV em --out. Cada fase é uma sessão de coleta; na Sprint 2,
+cada bloco de horário é uma fase (ex.: full-b1, full-b2, full-b3).
 
     python analysis/analyze.py --phases full-b1,full-b2,full-b3
-    python analysis/analyze.py --phases pilot --out <dir>     # pilot: checks the script only
+    python analysis/analyze.py --phases pilot --out <pasta>    # piloto: só confere o script
 
-Main analysis vs sensitivity analyses (re-run with options):
-    --exclude-flags SLOW_HOST_CPU      default; runs at or below Lighthouse's slow-CPU threshold
-    --exclude-flags all                drop every run listed in <phase>_flags.csv
-    --exclude-services govbr,svr-bcb   e.g. services whose LCP element is a cookie banner
+Análise principal e análises de sensibilidade (rodar de novo com as opções):
+    --exclude-flags SLOW_HOST_CPU      padrão; execuções no limiar de CPU lenta do Lighthouse ou abaixo
+    --exclude-flags all                tira todas as execuções listadas em <fase>_flags.csv
+    --exclude-services govbr,svr-bcb   ex.: serviços cujo elemento LCP é um banner de cookies
+
+Os nomes das tabelas e das colunas ficam em inglês porque são identificadores lidos por código.
 """
 from __future__ import annotations
 
@@ -38,18 +40,18 @@ URLS_FILE = ROOT / "data" / "urls.json"
 
 FORM_FACTORS = ["mobile", "desktop"]
 METRICS = ["performanceScore", "accessibilityScore", "LCP", "FCP", "TBT", "CLS", "SpeedIndex"]
-# For each metric used to rank services: is a higher value worse?
+# Para cada métrica usada na ordenação dos serviços: valor maior é pior?
 HIGHER_IS_WORSE = {"performanceScore": False, "accessibilityScore": False, "LCP": True}
 KEY = ["block", "service", "formFactor", "run"]
 
 
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--phases", required=True, help="comma-separated phases; each is one block")
-    ap.add_argument("--out", help="output folder (default data/analysis/<phases joined by +>)")
+    ap.add_argument("--phases", required=True, help="fases separadas por vírgula; cada uma é um bloco")
+    ap.add_argument("--out", help="pasta de saída (padrão: data/analysis/<fases unidas por +>)")
     ap.add_argument("--exclude-flags", default="SLOW_HOST_CPU",
-                    help="flag codes from <phase>_flags.csv to exclude, comma-separated, 'all' or 'none'")
-    ap.add_argument("--exclude-services", default="", help="comma-separated service ids to leave out")
+                    help="códigos de <fase>_flags.csv a excluir, separados por vírgula, 'all' ou 'none'")
+    ap.add_argument("--exclude-services", default="", help="ids de serviço a deixar de fora, separados por vírgula")
     ap.add_argument("--alpha", type=float, default=0.05)
     return ap.parse_args()
 
@@ -58,7 +60,7 @@ def read_csv(phase: str, suffix: str, required: bool) -> pd.DataFrame:
     path = PROCESSED / f"{phase}{suffix}.csv"
     if not path.exists():
         if required:
-            sys.exit(f"{path.relative_to(ROOT)} not found; run `node scripts/extract-metrics.mjs --phase {phase}` first")
+            sys.exit(f"{path.relative_to(ROOT)} não encontrado; rode antes `node scripts/extract-metrics.mjs --phase {phase}`")
         return pd.DataFrame()
     df = pd.read_csv(path)
     df.insert(0, "block", phase)
@@ -76,7 +78,7 @@ def load(phases: list[str]) -> dict[str, pd.DataFrame]:
 
 
 def select_runs(data: dict, args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Applies the exclusions and returns (kept runs, excluded runs with reason)."""
+    """Aplica as exclusões e devolve (execuções mantidas, execuções excluídas com o motivo)."""
     runs = data["runs"].copy()
     listed = {s["id"] for s in json.loads(URLS_FILE.read_text(encoding="utf-8"))["services"]}
     reasons = pd.Series("", index=runs.index)
@@ -84,7 +86,7 @@ def select_runs(data: dict, args: argparse.Namespace) -> tuple[pd.DataFrame, pd.
     def mark(mask: pd.Series, reason: str) -> None:
         reasons.loc[mask & (reasons == "")] = reason
 
-    mark(~runs["service"].isin(listed), "service not in data/urls.json (replaced)")
+    mark(~runs["service"].isin(listed), "serviço fora de data/urls.json (trocado)")
     excluded_services = {s for s in args.exclude_services.split(",") if s}
     mark(runs["service"].isin(excluded_services), "--exclude-services")
 
@@ -95,20 +97,20 @@ def select_runs(data: dict, args: argparse.Namespace) -> tuple[pd.DataFrame, pd.
         per_run = selected.groupby(KEY)["flag"].agg(lambda s: "+".join(sorted(set(s)))).rename("flags")
         joined = runs.join(per_run, on=KEY)
         has_flag = joined["flags"].notna()
-        reasons.loc[has_flag & (reasons == "")] = "flag: " + joined.loc[has_flag & (reasons == ""), "flags"]
+        reasons.loc[has_flag & (reasons == "")] = "marcação: " + joined.loc[has_flag & (reasons == ""), "flags"]
 
     excluded = runs[reasons != ""].assign(reason=reasons[reasons != ""])[KEY + ["reason"]]
     return runs[reasons == ""].reset_index(drop=True), excluded
 
 
 def quiet(fn, *a, **kw):
-    """Runs a SciPy test with its warnings silenced; the caller checks for NaN."""
+    """Roda um teste do SciPy sem os avisos; quem chama confere se o resultado é NaN."""
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         return fn(*a, **kw)
 
 
-# ---------------------------------------------------------------- descriptive statistics (7.1)
+# ---------------------------------------------------------------- estatística descritiva (7.1)
 
 def describe(runs: pd.DataFrame) -> pd.DataFrame:
     rows = []
@@ -120,9 +122,9 @@ def describe(runs: pd.DataFrame) -> pd.DataFrame:
                        shapiro_W=math.nan, shapiro_p=math.nan, note="")
             rec["iqr"] = rec["q3"] - rec["q1"]
             if len(v) < 3:
-                rec["note"] = "n < 3: no Shapiro-Wilk"
+                rec["note"] = "n < 3: sem Shapiro-Wilk"
             elif v.max() == v.min():
-                rec["note"] = "constant"
+                rec["note"] = "constante"
             else:
                 w, p = quiet(stats.shapiro, v)
                 rec.update(shapiro_W=w, shapiro_p=p)
@@ -153,7 +155,7 @@ def block_medians(runs: pd.DataFrame) -> pd.DataFrame:
 
 
 def first_run_vs_rest(runs: pd.DataFrame) -> pd.DataFrame:
-    """Cold-CDN check (section 8.2): run 1 of each block against the later runs."""
+    """Verificação de cache de CDN frio (seção 8.2): réplica 1 de cada bloco contra as seguintes."""
     r = runs.assign(position=np.where(runs["run"] == 1, "run1", "later"))
     t = r.groupby(["service", "formFactor", "position"]).agg(
         n=("run", "size"), performanceScore=("performanceScore", "median"), LCP=("LCP", "median"))
@@ -172,11 +174,11 @@ def rq1(runs: pd.DataFrame, alpha: float) -> tuple[pd.DataFrame, pd.DataFrame, p
             rec = dict(formFactor=ff, metric=m, k=len(groups), n=n, H=math.nan, p=math.nan, epsilon2=math.nan, note="")
             tests.append(rec)
             if len(groups) < 2:
-                rec["note"] = "fewer than 2 services"
+                rec["note"] = "menos de 2 serviços"
                 continue
             try:
                 h, p = quiet(stats.kruskal, *groups.values())
-            except ValueError as err:  # e.g. all values identical
+            except ValueError as err:  # ex.: todos os valores iguais
                 rec["note"] = str(err)
                 continue
             rec.update(H=h, p=p, epsilon2=epsilon_squared(h, n))
@@ -189,7 +191,7 @@ def rq1(runs: pd.DataFrame, alpha: float) -> tuple[pd.DataFrame, pd.DataFrame, p
                     dunn_rows.append(dict(formFactor=ff, metric=m, service_a=a, service_b=b,
                                           median_a=medians[a], median_b=medians[b], p_holm=dunn.loc[a, b]))
             worse = (lambda x, y: x > y) if HIGHER_IS_WORSE[m] else (lambda x, y: x < y)
-            ranked = medians.sort_values(ascending=not HIGHER_IS_WORSE[m])  # worst first
+            ranked = medians.sort_values(ascending=not HIGHER_IS_WORSE[m])  # o pior primeiro
             for rank, (s, med) in enumerate(ranked.items(), start=1):
                 sig_worse = sum(1 for o in services if o != s and dunn.loc[s, o] < alpha and worse(med, medians[o]))
                 worst_rows.append(dict(formFactor=ff, metric=m, rank_worst_first=rank, service=s, median=med,
@@ -200,7 +202,7 @@ def rq1(runs: pd.DataFrame, alpha: float) -> tuple[pd.DataFrame, pd.DataFrame, p
     return t, pd.DataFrame(dunn_rows), pd.DataFrame(worst_rows)
 
 
-# ---------------------------------------------------------------- per-service medians (RQ2, RQ3)
+# ---------------------------------------------------------------- medianas por serviço (RQ2, RQ3)
 
 def service_medians(runs: pd.DataFrame) -> pd.DataFrame:
     return (runs.groupby(["service", "formFactor"])
@@ -217,14 +219,14 @@ def rq2(med: pd.DataFrame) -> pd.DataFrame:
                    kendall_tau_b=math.nan, kendall_p=math.nan, note="")
         rows.append(rec)
         if len(d) < 3:
-            rec["note"] = "fewer than 3 services"
+            rec["note"] = "menos de 3 serviços"
             continue
         x, y = d["performanceScore"], d["accessibilityScore"]
         if x.nunique() < 2 or y.nunique() < 2:
-            rec["note"] = "a variable is constant across services"
+            rec["note"] = "uma das variáveis é constante entre os serviços"
             continue
         rho, p = quiet(stats.spearmanr, x, y)
-        tau, p_tau = quiet(stats.kendalltau, x, y)  # tau-b (ties in the accessibility score)
+        tau, p_tau = quiet(stats.kendalltau, x, y)  # tau-b (empates no accessibility score)
         rec.update(spearman_rho=rho, spearman_p=p, kendall_tau_b=tau, kendall_p=p_tau)
     t = pd.DataFrame(rows)
     t["spearman_p_holm"] = holm(t["spearman_p"].tolist())
@@ -237,7 +239,7 @@ def rq3(med: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     wide.columns = [f"{m}_{ff}" for m, ff in wide.columns]
     pairs = wide.dropna().reset_index()
     rows = []
-    for m in ["LCP", "performanceScore"]:  # LCP is the main measure (section 7.4)
+    for m in ["LCP", "performanceScore"]:  # o LCP é a medida principal (seção 7.4)
         mob, desk = pairs[f"{m}_mobile"].to_numpy(float), pairs[f"{m}_desktop"].to_numpy(float)
         diff = mob - desk
         rec = dict(metric=m, n_pairs=len(pairs), median_mobile=np.median(mob) if len(mob) else math.nan,
@@ -249,7 +251,7 @@ def rq3(med: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
         rec["cliffs_magnitude"] = cliffs_magnitude(rec["cliffs_delta"])
         nonzero = int(np.sum(diff != 0))
         if nonzero == 0:
-            rec["note"] = "no pairs or all differences are zero"
+            rec["note"] = "sem pares ou todas as diferenças são zero"
         else:
             w, p = quiet(stats.wilcoxon, mob, desk)
             rec.update(wilcoxon_W=w, wilcoxon_p=p)
@@ -260,7 +262,7 @@ def rq3(med: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     return t, pairs
 
 
-# ---------------------------------------------------------------- main
+# ---------------------------------------------------------------- principal
 
 def main() -> None:
     args = parse_args()
@@ -303,14 +305,14 @@ def main() -> None:
     (out / "analysis-metadata.json").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
 
     if "pilot" in phases:
-        print("NOTE: pilot data (3 runs per cell, few services). The tests only check that the script runs; "
-              "they are not results.\n")
+        print("AVISO: dados do piloto (3 execuções por célula, poucos serviços). Os testes só conferem que o "
+              "script funciona; não são resultados.\n")
     pd.set_option("display.width", 160)
     pd.set_option("display.max_columns", 20)
-    print(f"Runs read {len(data['runs'])}, kept {len(runs)}, excluded {len(excluded)}")
+    print(f"Execuções lidas {len(data['runs'])}, mantidas {len(runs)}, excluídas {len(excluded)}")
     for name in ["excluded_runs", "service_medians", "rq1_kruskal", "rq1_worst", "rq2_correlation", "rq3_wilcoxon"]:
         print(f"\n== {name}\n{tables[name].to_string(index=False, float_format=lambda v: f'{v:.4g}')}")
-    print(f"\nWrote {len(tables)} tables and analysis-metadata.json to {out}")
+    print(f"\n{len(tables)} tabelas e analysis-metadata.json gravados em {out}")
 
 
 if __name__ == "__main__":

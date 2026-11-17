@@ -1,6 +1,6 @@
-"""Effect sizes and corrections used in docs/proposta.md, section 7.
+"""Tamanhos de efeito e correções usados em docs/proposta.md, seção 7.
 
-Kept free of I/O so they can be unit-tested (analysis/test_lab_stats.py).
+Sem leitura ou escrita de arquivos, para poderem ser testados isoladamente (analysis/test_lab_stats.py).
 """
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from scipy.stats import rankdata
 
 
 def holm(pvalues: Sequence[float]) -> list[float]:
-    """Holm (1979) step-down adjusted p-values. NaN entries are ignored and stay NaN."""
+    """p-valores ajustados pelo procedimento sequencial de Holm (1979). NaN é ignorado e continua NaN."""
     p = np.asarray(pvalues, dtype=float)
     adjusted = np.full(p.shape, np.nan)
     idx = np.flatnonzero(~np.isnan(p))
@@ -28,14 +28,14 @@ def holm(pvalues: Sequence[float]) -> list[float]:
 
 
 def epsilon_squared(h: float, n: int) -> float:
-    """Kruskal-Wallis effect size: H / ((n^2 - 1) / (n + 1)) (Tomczak & Tomczak, 2014)."""
+    """Tamanho de efeito do Kruskal-Wallis: H / ((n^2 - 1) / (n + 1)) (Tomczak e Tomczak, 2014)."""
     if n < 2 or h is None or math.isnan(h):
         return float("nan")
     return h / ((n**2 - 1) / (n + 1))
 
 
 def cliffs_delta(x: Sequence[float], y: Sequence[float]) -> float:
-    """Cliff's delta: P(X > Y) - P(X < Y) over all pairs (Cliff, 1993)."""
+    """Delta de Cliff: P(X > Y) - P(X < Y) sobre todos os pares (Cliff, 1993)."""
     x = np.asarray(x, dtype=float)
     y = np.asarray(y, dtype=float)
     if x.size == 0 or y.size == 0:
@@ -45,7 +45,7 @@ def cliffs_delta(x: Sequence[float], y: Sequence[float]) -> float:
 
 
 def cliffs_magnitude(delta: float) -> str:
-    """Thresholds of Romano et al. (2006)."""
+    """Limiares de Romano et al. (2006). Os rótulos ficam em inglês porque são valores de coluna."""
     if delta is None or math.isnan(delta):
         return "n/a"
     d = abs(delta)
@@ -59,11 +59,11 @@ def cliffs_magnitude(delta: float) -> str:
 
 
 def paired_rank_biserial(differences: Sequence[float]) -> float:
-    """Matched-pairs rank-biserial correlation, simple difference formula (Kerby, 2014).
+    """Correlação rank-biserial para dados pareados, pela fórmula da diferença simples (Kerby, 2014).
 
-    r = (sum of ranks of positive differences - sum of ranks of negative differences) / total
-    rank sum. Zero differences are dropped, as in the Wilcoxon signed-rank test; tied absolute
-    differences get average ranks.
+    r = (soma dos postos das diferenças positivas - soma dos postos das negativas) / soma total dos
+    postos. Diferenças zero são descartadas, como no teste de Wilcoxon; diferenças absolutas
+    empatadas recebem o posto médio.
     """
     d = np.asarray(differences, dtype=float)
     d = d[d != 0]
