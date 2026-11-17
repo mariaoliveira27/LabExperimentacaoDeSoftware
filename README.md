@@ -47,6 +47,7 @@ Descreva o propósito das pastas principais.
 │   └── README.md                          # 📘 Documentação geral do Laboratório 04
 │
 ├── /Laboratorio05_MedicaoGovBr            # 📂 Projeto de Laboratório 05 (Lighthouse em serviços gov.br)
+│   ├── /analysis                          # 🐍 Análise estatística das RQs (Python)
 │   ├── /data                              # 🗄️ URLs, robots.txt, JSON bruto do Lighthouse e CSVs
 │   ├── /docs                              # 📘 Proposta da Sprint 1 e verificação de robots.txt
 │   ├── /scripts                           # ⚙️ robots-check, run-lighthouse e extract-metrics (Node.js)

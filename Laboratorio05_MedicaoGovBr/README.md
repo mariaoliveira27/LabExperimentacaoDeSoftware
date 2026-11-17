@@ -61,7 +61,7 @@ node scripts/run-lighthouse.mjs --phase <name> --runs <N> [--services id1,id2] [
 | `--force` | off | Overwrite raw files that already exist. |
 | `--dry-run` | off | Print the planned order and exit. |
 
-A run whose main document is not HTTP 200 (e.g. a bot-protection CAPTCHA served with HTTP 202) is marked `blocked`, and the remaining runs of that service in the session are skipped and logged as `skipped-blocked`.
+A run is marked `blocked` when its main document is not HTTP 200 (e.g. a bot-protection CAPTCHA served with HTTP 202) or when the text of its LCP element is a bot-challenge message (catches challenges served with HTTP 200). The remaining runs of that service in the session are skipped and logged as `skipped-blocked`.
 
 How one session works:
 
@@ -74,8 +74,9 @@ How one session works:
 3. Mobile uses Lighthouse's default preset; desktop uses Lighthouse's `desktop-config`. Both use
    simulated throttling (`throttlingMethod: simulate`).
 4. If three executions in a row fail with a script error (not a page error), the session stops.
-5. Every run is checked for validity: if the main document is not HTTP 200, the run measured a
-   block or challenge page, not the service (see "Pilot status" below).
+5. Every run is checked for validity: if the main document is not HTTP 200, or the LCP element
+   is a challenge message, the run measured a block or challenge page, not the service (see
+   "Pilot status" below).
 
 ## Where the data is
 
@@ -90,17 +91,34 @@ data/
     ├── <phase>.csv           # one row per successful execution
     ├── <phase>_failures.csv  # runtimeError, block/CAPTCHA page (main document not HTTP 200) or missing values
     ├── <phase>_summary.csv   # medians per service and form factor
-    └── <phase>_lcp_elements.csv  # element Lighthouse used as LCP in each valid run
+    ├── <phase>_lcp_elements.csv  # element Lighthouse used as LCP in each valid run
+    └── <phase>_flags.csv     # valid runs to review (see below); they stay in <phase>.csv
 docs/
 ├── robots-check.md           # robots.txt evidence (generated)
 └── proposta.md               # study proposal (Portuguese)
+analysis/
+├── analyze.py                # statistical analysis (RQ1-RQ3)
+├── lab_stats.py              # effect sizes and Holm correction
+└── requirements.txt          # pinned Python dependencies
 ```
+
+Review flags in `<phase>_flags.csv`:
+
+| Flag | Meaning |
+|---|---|
+| `SLOW_HOST_CPU` | `benchmarkIndex` ≤ 1000, Lighthouse's own slow-CPU threshold. Lighthouse only warns about it in the CLI, never through the Node API, so the extractor applies it. |
+| `BENCHMARK_LOW_OUTLIER` | `benchmarkIndex` below Tukey's lower fence (Q1 − 1.5 × IQR) of the phase's valid runs. |
+| `DOM_SIZE_DROP` | Fewer than half the DOM elements of the largest run of the same service and form factor. |
+| `FINAL_HOST_CHANGED` | The final URL's host differs from the requested one. |
+| `CHALLENGE_RESOURCES` | The page loaded resources from known CAPTCHA hosts. |
 
 `data/run-metadata.json` holds, per session: phase, seed, planned order, Lighthouse and
 chrome-launcher versions, Chrome version, Chrome flags, the Lighthouse settings used per form
 factor (throttling, screen emulation, user agent, timeouts), OS, CPU, RAM, Node version,
-time zone, and for every execution its start/end time, duration, status, final URL,
-`runtimeError`, `runWarnings` and Lighthouse's `benchmarkIndex` for the host.
+time zone, the active power plan and the network adapter of the default route (media type, link
+speed, physical or virtual; no IP, MAC, SSID or provider is read), and for every execution its
+start/end time, duration, status, final URL, `runtimeError`, `runWarnings` and Lighthouse's
+`benchmarkIndex` for the host.
 
 ### CSV columns (`data/processed/<phase>.csv`)
 
@@ -118,6 +136,29 @@ time zone, and for every execution its start/end time, duration, status, final U
 | `CLS` | unitless | `audits["cumulative-layout-shift"].numericValue` |
 | `SpeedIndex` | ms | `audits["speed-index"].numericValue` |
 | `timestamp` | ISO 8601, UTC | `fetchTime` |
+
+## Statistical analysis
+
+Python 3.12 with the pinned packages in `analysis/requirements.txt`:
+
+```bash
+python -m venv .venv
+.venv/Scripts/python -m pip install -r analysis/requirements.txt   # Linux/macOS: .venv/bin/python
+.venv/Scripts/python -m unittest discover -s analysis
+.venv/Scripts/python analysis/analyze.py --phases full-b1,full-b2,full-b3
+```
+
+Each phase is read as one time block. Tables go to `data/analysis/<phases>/` (or `--out`):
+descriptives, invalid and excluded runs, LCP elements, block medians, run 1 vs later runs,
+Kruskal–Wallis + ε² + Dunn (RQ1), Spearman + Kendall τ-b (RQ2), paired Wilcoxon + Cliff's δ +
+paired rank-biserial + sign test (RQ3), and `analysis-metadata.json` with options and versions.
+Services no longer in `data/urls.json` are left out.
+
+The main analysis excludes runs flagged `SLOW_HOST_CPU`. Sensitivity analyses are reruns:
+`--exclude-flags all` drops every flagged run, and `--exclude-services govbr,svr-bcb` drops
+services (e.g. those whose LCP element is a cookie banner).
+
+On the pilot data the script runs, but with 3 runs per cell its tests are not results.
 
 ## Replacing a service
 
