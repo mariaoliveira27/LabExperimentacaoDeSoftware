@@ -33,6 +33,7 @@ import {
 import { newSeed } from './lib/random.mjs';
 import { FORM_FACTORS, buildPlan } from './lib/plan.mjs';
 import { pageValidity } from './lib/metrics.mjs';
+import { hostConditions } from './lib/environment.mjs';
 
 const require = createRequire(import.meta.url);
 const LIGHTHOUSE_VERSION = require('lighthouse/package.json').version;
@@ -239,6 +240,8 @@ async function main() {
     lighthouseFlags: LIGHTHOUSE_FLAGS,
     configByFormFactor: {},
     machine: machineInfo(),
+    // Power plan and the adapter of the default route, read once at the start of the session.
+    hostConditions: await hostConditions(),
     plannedOrder: plan.map((t) => `${t.serviceId}_${t.formFactor}_${t.run}`),
     executions: [],
   };
