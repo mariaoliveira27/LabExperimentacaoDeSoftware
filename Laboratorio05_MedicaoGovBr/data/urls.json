@@ -31,11 +31,11 @@
       "notes": "Web channel of CTPS Digital, served by the Portal Emprega Brasil SPA. The gov.br service page (https://www.gov.br/pt-br/servicos/obter-a-carteira-de-trabalho) links to this URL. https://servicos.mte.gov.br/ redirects here."
     },
     {
-      "id": "transparencia",
-      "name": "Portal da Transparência",
-      "url": "https://portaldatransparencia.gov.br/",
+      "id": "svr-bcb",
+      "name": "Valores a Receber (Banco Central)",
+      "url": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
       "pilot": true,
-      "notes": "CGU transparency portal. Fully public content."
+      "notes": "Replacement for Portal da Transparência (see 'replaced'). The official address https://valoresareceber.bcb.gov.br/ redirects here (1 redirect on 2026-11-17, including the query string that opens an anti-scam notice). The final URL is measured directly. Querying balances needs CPF and date of birth; that form is never filled."
     },
     {
       "id": "meususdigital",
@@ -94,6 +94,20 @@
       "replacedBy": "portal-mg",
       "date": "2026-11-17",
       "reason": "robots.txt request got no HTTP response (curl status 000), i.e. unreachable; RFC 9309 says assume full disallow, so it was not used."
+    },
+    {
+      "candidate": "Portal da Transparência",
+      "url": "https://portaldatransparencia.gov.br/",
+      "replacedBy": "svr-bcb",
+      "date": "2026-11-17",
+      "reason": "robots.txt allows '/', but in the pilot 4 of 6 Lighthouse runs received an AWS WAF CAPTCHA ('Let's confirm you are human', main document HTTP 202) instead of the portal. Only the first visit and one later visit got the real page. Bypassing the CAPTCHA is out of scope, so the service cannot be measured reliably. Raw files kept in data/raw/pilot/transparencia_*.json."
+    },
+    {
+      "candidate": "IBGE (considered as Portal da Transparência replacement)",
+      "url": "https://www.ibge.gov.br/",
+      "replacedBy": "svr-bcb",
+      "date": "2026-11-17",
+      "reason": "Home page returned HTTP 403 to a single curl request with a browser User-Agent (bot protection), so it was not used."
     }
   ]
 }

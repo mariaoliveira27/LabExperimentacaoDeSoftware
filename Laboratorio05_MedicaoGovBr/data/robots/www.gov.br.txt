@@ -1,4 +1,4 @@
-# Downloaded from https://www.gov.br/robots.txt on 2026-11-17T15:44:28-03:00 (HTTP 200, final URL https://www.gov.br/robots.txt)
+# Downloaded from https://www.gov.br/robots.txt on 2026-11-17T16:00:19-03:00 (HTTP 200, final URL https://www.gov.br/robots.txt)
 Sitemap: https://www.gov.br/sitemap.xml.gz
 
 # Define access-restrictions for robots/spiders

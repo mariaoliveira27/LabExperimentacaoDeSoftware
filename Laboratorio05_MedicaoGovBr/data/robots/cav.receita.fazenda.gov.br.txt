@@ -1,4 +1,4 @@
-# Downloaded from https://cav.receita.fazenda.gov.br/robots.txt on 2026-11-17T15:44:36-03:00 (HTTP 200, final URL https://cav.receita.fazenda.gov.br/autenticacao/login)
+# Downloaded from https://cav.receita.fazenda.gov.br/robots.txt on 2026-11-17T16:00:36-03:00 (HTTP 200, final URL https://cav.receita.fazenda.gov.br/autenticacao/login)
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +12,7 @@
 <body>
     
 
-<div id="body" class="">
+<div id="body" class="chrome webkit">
     <script defer="defer" async="async" src="//barra.brasil.gov.br/barra.js" type="text/javascript"></script>
     <div id="barra-brasil" style="background: #7F7F7F; height: 20px; padding: 0 0 0 10px; display: block;">
         <ul id="menu-barra-temp" style="list-style: none;">
