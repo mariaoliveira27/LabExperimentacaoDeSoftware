@@ -2,7 +2,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mulberry32, shuffle } from '../scripts/lib/random.mjs';
 import { buildPlan } from '../scripts/lib/plan.mjs';
-import { median, parseRawFileName, rowFromLhr, summarize, toCsv, CSV_COLUMNS } from '../scripts/lib/metrics.mjs';
+import {
+  median, pageValidity, parseRawFileName, rowFromLhr, summarize, toCsv, CSV_COLUMNS,
+} from '../scripts/lib/metrics.mjs';
 
 const services = [
   { id: 'a', url: 'https://a.example/' },
@@ -76,6 +78,40 @@ test('rowFromLhr reports runtime errors and null scores as failures', () => {
     { service: 'a', formFactor: 'mobile', run: 1 });
   assert.equal(nul.ok, false);
   assert.equal(nul.failure.reasonCode, 'MISSING_VALUES');
+});
+
+test('pageValidity flags a bot-challenge page served with a non-200 status', () => {
+  const challenge = fakeLhr({
+    mainDocumentUrl: 'https://a.example/',
+    audits: {
+      ...fakeLhr().audits,
+      'network-requests': { details: { items: [
+        { url: 'https://a.example/', resourceType: 'Document', statusCode: 202 },
+        { url: 'https://x.sa-east-1.captcha.awswaf.com/captcha.js', resourceType: 'Script', statusCode: 200 },
+      ] } },
+    },
+  });
+  const v = pageValidity(challenge);
+  assert.equal(v.valid, false);
+  assert.equal(v.mainDocumentStatus, 202);
+  assert.match(v.reason, /HTTP 202.*captcha\.awswaf\.com/);
+  const r = rowFromLhr(challenge, { service: 'a', formFactor: 'mobile', run: 1 });
+  assert.equal(r.ok, false);
+  assert.equal(r.failure.reasonCode, 'BLOCKED_OR_NOT_200');
+});
+
+test('pageValidity accepts a 200 page even if it loads a WAF SDK script', () => {
+  const real = fakeLhr({
+    mainDocumentUrl: 'https://a.example/',
+    audits: {
+      ...fakeLhr().audits,
+      'network-requests': { details: { items: [
+        { url: 'https://a.example/', resourceType: 'Document', statusCode: 200 },
+        { url: 'https://x.edge.sdk.awswaf.com/challenge.js', resourceType: 'Script', statusCode: 200 },
+      ] } },
+    },
+  });
+  assert.deepEqual(pageValidity(real), { valid: true, mainDocumentStatus: 200 });
 });
 
 test('rowFromLhr rejects a file whose name does not match its form factor', () => {

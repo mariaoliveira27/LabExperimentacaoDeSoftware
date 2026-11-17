@@ -32,6 +32,7 @@ import {
 } from './lib/common.mjs';
 import { newSeed } from './lib/random.mjs';
 import { FORM_FACTORS, buildPlan } from './lib/plan.mjs';
+import { pageValidity } from './lib/metrics.mjs';
 
 const require = createRequire(import.meta.url);
 const LIGHTHOUSE_VERSION = require('lighthouse/package.json').version;
@@ -146,7 +147,7 @@ async function runOnce(task, outFile) {
     startedAt: localIsoTimestamp(startedAt), startedAtUtc: startedAt.toISOString(),
     finishedAt: null, durationMs: null, status: 'error', file: null,
     chrome: null, lighthouseVersion: null, finalDisplayedUrl: null, mainDocumentUrl: null,
-    runtimeError: null, runWarnings: [], benchmarkIndex: null,
+    mainDocumentStatus: null, runtimeError: null, blockReason: null, runWarnings: [], benchmarkIndex: null,
     performanceScore: null, accessibilityScore: null, error: null,
   };
   let chrome;
@@ -168,9 +169,14 @@ async function runOnce(task, outFile) {
     record.benchmarkIndex = lhr.environment?.benchmarkIndex ?? null;
     record.performanceScore = lhr.categories.performance?.score ?? null;
     record.accessibilityScore = lhr.categories.accessibility?.score ?? null;
+    const validity = pageValidity(lhr);
+    record.mainDocumentStatus = validity.mainDocumentStatus;
     if (lhr.runtimeError) {
       record.runtimeError = { code: lhr.runtimeError.code, message: lhr.runtimeError.message };
       record.status = 'runtime-error';
+    } else if (!validity.valid) {
+      record.blockReason = validity.reason;
+      record.status = 'blocked';
     } else {
       record.status = 'ok';
     }
@@ -241,19 +247,41 @@ async function main() {
   await save();
 
   let consecutiveErrors = 0;
+  let executedAny = false;
+  const blockedServices = new Map(); // serviceId -> reason
   for (const task of plan) {
     const label = `[${task.order}/${plan.length}] ${task.serviceId} ${task.formFactor} #${task.run}`;
+
+    // A service that answered with a block/challenge page is not measured again in this
+    // session: repeating the request would only add traffic the site has asked us not to send.
+    if (blockedServices.has(task.serviceId)) {
+      session.executions.push({
+        order: task.order, serviceId: task.serviceId, url: task.url, formFactor: task.formFactor, run: task.run,
+        status: 'skipped-blocked', blockReason: blockedServices.get(task.serviceId),
+      });
+      await save();
+      console.log(`${localIsoTimestamp()} ${label} skipped (service blocked earlier in this session)`);
+      continue;
+    }
+
+    if (executedAny) await sleep(Math.max(opts.pauseMs, (robots.crawlDelays[task.serviceId] ?? 0) * 1000));
+    executedAny = true;
+
     console.log(`${localIsoTimestamp()} ${label} ...`);
     const { record, settings } = await runOnce(task, outFileOf(task));
     session.executions.push(record);
     if (settings && !session.configByFormFactor[task.formFactor]) session.configByFormFactor[task.formFactor] = settings;
     if (record.chrome && !session.tools.chrome) session.tools.chrome = record.chrome.browser;
+    if (record.status === 'blocked') blockedServices.set(task.serviceId, record.blockReason);
     await save();
 
     const score = (v) => (v === null ? '—' : Math.round(v * 100));
-    const detail = record.status === 'ok'
-      ? `perf ${score(record.performanceScore)} a11y ${score(record.accessibilityScore)}`
-      : (record.runtimeError ? `${record.runtimeError.code}: ${record.runtimeError.message}` : record.error);
+    const detail = {
+      ok: () => `perf ${score(record.performanceScore)} a11y ${score(record.accessibilityScore)}`,
+      'runtime-error': () => `${record.runtimeError.code}: ${record.runtimeError.message}`,
+      blocked: () => `${record.blockReason}; remaining runs of ${task.serviceId} will be skipped`,
+      error: () => record.error,
+    }[record.status]();
     console.log(`${localIsoTimestamp()} ${label} ${record.status} in ${(record.durationMs / 1000).toFixed(1)}s — ${detail}`);
 
     // Script-level errors (not page errors) usually mean a broken setup; stop instead of
@@ -264,12 +292,10 @@ async function main() {
       session.abortReason = `${MAX_CONSECUTIVE_ERRORS} consecutive script errors; last: ${record.error}`;
       break;
     }
-
-    if (task.order < plan.length) {
-      const next = plan[task.order];
-      const pause = Math.max(opts.pauseMs, (robots.crawlDelays[next.serviceId] ?? 0) * 1000);
-      await sleep(pause);
-    }
+  }
+  if (blockedServices.size) {
+    session.blockedServices = Object.fromEntries(blockedServices);
+    console.log(`Blocked services (replace them in data/urls.json): ${[...blockedServices.keys()].join(', ')}`);
   }
 
   if (session.status === 'running') session.status = 'finished';

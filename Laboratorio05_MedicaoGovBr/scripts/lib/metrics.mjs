@@ -26,6 +26,57 @@ const DIGITS = { LCP: 1, FCP: 1, TBT: 1, SpeedIndex: 1, CLS: 4 };
 const round = (v, digits) => (typeof v === 'number' && Number.isFinite(v) ? Number(v.toFixed(digits)) : null);
 const toScore = (s) => (typeof s === 'number' ? Math.round(s * 100) : null);
 
+// Hosts that serve bot-protection CAPTCHA/challenge pages. Only used as supporting evidence:
+// a real page may also load WAF SDK scripts (e.g. *.edge.sdk.awswaf.com), so the decision is
+// based on the main document's HTTP status.
+const CHALLENGE_HOST_PATTERNS = [/\.captcha\.awswaf\.com$/i, /\.token\.awswaf\.com$/i, /^challenges\.cloudflare\.com$/i];
+
+/**
+ * Checks that the run measured the target page and not a block or challenge page.
+ * Bot-protection challenges are often served with a non-200 2xx status (AWS WAF uses 202), which
+ * Lighthouse does not treat as an error, so a "successful" run can describe the wrong page.
+ * @returns {{valid: boolean, mainDocumentStatus: number|null, code?: string, reason?: string}}
+ */
+export function pageValidity(lhr) {
+  const items = lhr.audits?.['network-requests']?.details?.items ?? [];
+  const mainUrl = lhr.mainDocumentUrl ?? lhr.finalDisplayedUrl;
+  const main = items.find((r) => r.url === mainUrl) ?? items.find((r) => r.resourceType === 'Document');
+  const mainDocumentStatus = main?.statusCode ?? null;
+  const challengeHosts = [...new Set(items.map((r) => {
+    try {
+      return new URL(r.url).host;
+    } catch {
+      return null;
+    }
+  }).filter((h) => h && CHALLENGE_HOST_PATTERNS.some((p) => p.test(h))))];
+  if (mainDocumentStatus !== null && mainDocumentStatus !== 200) {
+    const extra = challengeHosts.length ? `; challenge resources from ${challengeHosts.join(', ')}` : '';
+    return { valid: false, mainDocumentStatus, code: 'BLOCKED_OR_NOT_200', reason: `main document returned HTTP ${mainDocumentStatus}${extra}` };
+  }
+  return { valid: true, mainDocumentStatus };
+}
+
+export const LCP_ELEMENT_COLUMNS = ['service', 'formFactor', 'run', 'lcpSelector', 'lcpNodeLabel'];
+
+/**
+ * Element Lighthouse used as the Largest Contentful Paint. Recorded because the pilot showed that
+ * on some pages the LCP element is a cookie-consent modal, not the main content.
+ */
+export function lcpElement(lhr) {
+  const findNode = (v) => {
+    if (!v || typeof v !== 'object') return null;
+    if (v.type === 'node' && (v.selector || v.nodeLabel)) return v;
+    for (const child of Object.values(v)) {
+      const found = findNode(child);
+      if (found) return found;
+    }
+    return null;
+  };
+  const node = findNode(lhr.audits?.['lcp-breakdown-insight']?.details)
+    ?? findNode(lhr.audits?.['largest-contentful-paint-element']?.details);
+  return { lcpSelector: node?.selector ?? null, lcpNodeLabel: node?.nodeLabel ?? null };
+}
+
 /** Parses "<service>_<formFactor>_<n>.json". Service ids never contain "_". */
 export function parseRawFileName(name) {
   const m = /^([a-z0-9-]+)_(mobile|desktop)_(\d+)\.json$/.exec(name);
@@ -43,6 +94,10 @@ export function rowFromLhr(lhr, { service, formFactor, run }) {
   const base = { service, url: lhr.requestedUrl, formFactor, run, timestamp: lhr.fetchTime };
   if (lhr.runtimeError) {
     return { ok: false, failure: { ...base, reasonCode: lhr.runtimeError.code, reason: lhr.runtimeError.message } };
+  }
+  const validity = pageValidity(lhr);
+  if (!validity.valid) {
+    return { ok: false, failure: { ...base, reasonCode: validity.code, reason: validity.reason } };
   }
   const performanceScore = toScore(lhr.categories?.performance?.score);
   const accessibilityScore = toScore(lhr.categories?.accessibility?.score);
