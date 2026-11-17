@@ -1,0 +1,99 @@
+{
+  "description": "Public entry pages of gov.br digital services measured with Lighthouse. Only public pages are listed: no login is performed, no form is submitted, no personal data is sent.",
+  "checkedAt": "2026-11-17",
+  "services": [
+    {
+      "id": "govbr",
+      "name": "Portal gov.br",
+      "url": "https://www.gov.br/pt-br",
+      "pilot": true,
+      "notes": "Federal government single portal (Plone-based)."
+    },
+    {
+      "id": "meuinss",
+      "name": "Meu INSS",
+      "url": "https://meu.inss.gov.br/",
+      "pilot": true,
+      "notes": "Public landing page of the INSS self-service SPA. Login is not performed."
+    },
+    {
+      "id": "receita-ecac",
+      "name": "Receita Federal (e-CAC)",
+      "url": "https://cav.receita.fazenda.gov.br/autenticacao/login",
+      "pilot": false,
+      "notes": "Public entry page of e-CAC. Only the page load is measured; credentials are never entered. First curl probe on 2026-11-17 timed out (HTTP 000); second probe returned 200."
+    },
+    {
+      "id": "ctps-digital",
+      "name": "Carteira de Trabalho Digital (web)",
+      "url": "https://servicos.mte.gov.br/spme-v2/",
+      "pilot": false,
+      "notes": "Web channel of CTPS Digital, served by the Portal Emprega Brasil SPA. The gov.br service page (https://www.gov.br/pt-br/servicos/obter-a-carteira-de-trabalho) links to this URL. https://servicos.mte.gov.br/ redirects here."
+    },
+    {
+      "id": "transparencia",
+      "name": "Portal da Transparência",
+      "url": "https://portaldatransparencia.gov.br/",
+      "pilot": true,
+      "notes": "CGU transparency portal. Fully public content."
+    },
+    {
+      "id": "meususdigital",
+      "name": "Meu SUS Digital",
+      "url": "https://meususdigital.saude.gov.br/",
+      "pilot": false,
+      "notes": "Public landing page of Meu SUS Digital (Ministério da Saúde). Login is not performed."
+    },
+    {
+      "id": "portal-mg",
+      "name": "Portal MG (serviços do Governo de Minas)",
+      "url": "https://www.mg.gov.br/",
+      "pilot": false,
+      "notes": "Replacement for Detran-MG (see 'replaced'). Web channel of Minas Gerais state services, the web counterpart of the MG App."
+    },
+    {
+      "id": "portal-servidor",
+      "name": "Portal do Servidor",
+      "url": "https://www.gov.br/servidor/pt-br",
+      "pilot": false,
+      "notes": "Federal civil servant portal (Plone-based, same platform as Portal gov.br)."
+    },
+    {
+      "id": "consumidor",
+      "name": "Consumidor.gov.br",
+      "url": "https://www.consumidor.gov.br/",
+      "pilot": false,
+      "notes": "Replacement for Conecte SUS (see 'replaced')."
+    },
+    {
+      "id": "enem-inep",
+      "name": "ENEM (Inep)",
+      "url": "https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enem",
+      "pilot": false,
+      "notes": "https://enem.inep.gov.br/ redirects here (1 redirect on 2026-11-17). The final URL is measured directly so the redirect does not add time to the metrics."
+    }
+  ],
+  "replaced": [
+    {
+      "candidate": "Conecte SUS",
+      "url": "https://conectesus-paciente.saude.gov.br/",
+      "replacedBy": "consumidor",
+      "date": "2026-11-17",
+      "reason": "The URL redirects to https://meususdigital.saude.gov.br/ (Conecte SUS was succeeded by Meu SUS Digital). Keeping it would measure the same page twice."
+    },
+    {
+      "candidate": "Detran-MG",
+      "url": "https://www.detran.mg.gov.br/",
+      "replacedBy": "portal-mg",
+      "date": "2026-11-17",
+      "reason": "robots.txt (HTTP 200) has 'User-agent: *' + 'Disallow: /' (only Googlebot and bedrockbot are allowed). Raw copy kept in data/robots/www.detran.mg.gov.br.txt. https://transito.mg.gov.br/ redirects to the same host."
+    },
+    {
+      "candidate": "Senatran - Portal de Serviços (considered as Detran-MG replacement)",
+      "url": "https://portalservicos.senatran.serpro.gov.br/",
+      "replacedBy": "portal-mg",
+      "date": "2026-11-17",
+      "reason": "robots.txt request got no HTTP response (curl status 000), i.e. unreachable; RFC 9309 says assume full disallow, so it was not used."
+    }
+  ]
+}
