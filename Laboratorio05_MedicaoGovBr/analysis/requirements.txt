@@ -1,0 +1,5 @@
+# Direct dependencies of analysis/analyze.py, pinned to the versions it was tested with (Python 3.12).
+numpy==2.5.5
+pandas==3.1.1
+scipy==1.18.1
+scikit-posthocs==0.18.0
