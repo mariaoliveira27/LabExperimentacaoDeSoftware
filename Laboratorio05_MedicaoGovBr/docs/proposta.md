@@ -180,7 +180,7 @@ O tamanho da página e a validade não entram nas RQs. São registrados para ver
 | Independente (fator) | Serviço | Nominal, 10 níveis |
 | Independente (fator, tratamento) | Form factor | Nominal, 2 níveis: `mobile`, `desktop` |
 | Dependente | Performance score, LCP, FCP, TBT, CLS, Speed Index, accessibility score | Ver seção 3.3 |
-| Registrada (controle) | Data/hora, ordem de execução, número da réplica, `benchmarkIndex`, status HTTP do documento principal, URL final, avisos do Lighthouse, elemento LCP | Ver [`data/run-metadata.json`](../data/run-metadata.json) e [`data/processed/`](../data/processed/) |
+| Registrada (controle) | Data/hora, ordem de execução, número da réplica, `benchmarkIndex`, status HTTP do documento principal, URL final, avisos do Lighthouse, elemento LCP, número de elementos DOM; por sessão, plano de energia e adaptador de rede da rota padrão | Ver [`data/run-metadata.json`](../data/run-metadata.json) e [`data/processed/`](../data/processed/) |
 | Fixada | Versão do Lighthouse, do Chrome e do chrome-launcher; flags do Chrome; configuração de cada form factor; máquina | Ver 6.6 |
 
 ### 6.2 Tratamentos
@@ -215,7 +215,7 @@ O script monta todas as combinações (serviço × form factor × réplica) e as
 | Regra | Como é cumprida |
 |---|---|
 | Ler o `robots.txt` antes de medir | `scripts/robots-check.mjs` baixa o `robots.txt` de cada host, aplica a RFC 9309 (4xx = sem restrição; 429, 5xx ou erro de rede = proibido) para os agentes `*`, `Lighthouse` e `Chrome-Lighthouse`, e grava o resultado em [`docs/robots-check.md`](robots-check.md). O script de medição recusa URLs não liberadas e recusa rodar se a verificação tiver mais de 7 dias. |
-| Respeitar bloqueios ativos | Uma execução cujo documento principal não volta com HTTP 200 (por exemplo, um CAPTCHA servido com HTTP 202) é marcada como `blocked`; as execuções restantes daquele serviço na sessão são puladas. O serviço é trocado. |
+| Respeitar bloqueios ativos | Uma execução é marcada como `blocked` se o documento principal não volta com HTTP 200 (por exemplo, um CAPTCHA servido com HTTP 202) ou se o texto do elemento LCP é uma mensagem de desafio anti-bot (para desafios servidos com HTTP 200). As execuções restantes daquele serviço na sessão são puladas. O serviço é trocado. |
 | Sequencial, sem paralelismo | Um Chrome e uma execução do Lighthouse por vez. |
 | Pausa mínima de 10 s | Valor padrão e mínimo do script; `Crawl-delay` maior no `robots.txt` seria respeitado (nenhum host define). Cada execução já dispara várias requisições, e a pausa mantém o ritmo bem abaixo de 1 requisição por segundo em média. |
 | Só páginas públicas | Sem login, sem formulário, sem dados pessoais. A página de login do e-CAC e o formulário do Valores a Receber são apenas carregados, nunca preenchidos. |
@@ -233,9 +233,11 @@ O script monta todas as combinações (serviço × form factor × réplica) e as
 | Lighthouse / chrome-launcher | 13.6.0 / 1.2.3 (versões fixas no `package.json`) |
 | Fuso horário | America/Sao_Paulo |
 | `benchmarkIndex` no piloto | 2582 a 3273 |
-| Conexão de rede | **TODO:** registrar tipo de conexão, provedor e cidade antes da Sprint 2 |
+| Conexão de rede (lida em 17/11/2026, depois do piloto) | Cabeada: Ethernet (802.3), Realtek PCIe GbE, link de 1 Gbps; o adaptador da rota padrão é físico, ou seja, sem VPN. Provedor e cidade: **TODO** |
+| Plano de energia (lido em 17/11/2026, depois do piloto) | Windows "Ultimate Performance" (GUID `423c2439-a4a4-4031-9403-18ddc8ffd859`) |
+| Bateria | Nenhuma (desktop), então a máquina está sempre na tomada |
 
-Protocolo para as coletas da Sprint 2: máquina ligada na tomada, sem outros programas pesados abertos e sem VPN. No piloto esse protocolo não foi registrado. **TODO:** registrar o plano de energia do Windows usado.
+Protocolo para as coletas da Sprint 2: sem outros programas pesados abertos e sem VPN. As sessões do piloto não gravaram plano de energia nem rede; os valores acima foram lidos no mesmo dia, depois do piloto. A partir da Sprint 2 o script grava os dois em cada sessão (`hostConditions` em `run-metadata.json`), sem ler IP, MAC, nome da rede ou provedor.
 
 ### 6.7 Artefatos
 
@@ -247,16 +249,19 @@ Protocolo para as coletas da Sprint 2: máquina ligada na tomada, sem outros pro
 | `scripts/extract-metrics.mjs` | Geração dos CSVs a partir dos JSONs brutos |
 | `data/raw/<fase>/<servico>_<formfactor>_<n>.json` | Resultado bruto de cada execução |
 | `data/processed/<fase>.csv` | Uma linha por execução válida |
+| `data/processed/<fase>_failures.csv` | Execuções inválidas (erro do Lighthouse, bloqueio, valores ausentes) e o motivo |
+| `data/processed/<fase>_flags.csv` | Execuções válidas marcadas para revisão (seção 7.6) |
+| `analysis/analyze.py` | Análise estatística da seção 7 |
 
 ---
 
 ## 7. Plano de análise
 
-Ferramentas propostas: Python 3 com pandas, SciPy (`kruskal`, `spearmanr`, `kendalltau`, `wilcoxon`) e scikit-posthocs (`posthoc_dunn`). Nível de significância α = 0,05. Dentro de cada RQ, os p-valores são corrigidos por Holm (1979).
+Implementado em [`analysis/analyze.py`](../analysis/analyze.py): Python 3.12 com pandas, SciPy (`kruskal`, `spearmanr`, `kendalltau`, `wilcoxon`, `binomtest`) e scikit-posthocs (`posthoc_dunn`), versões fixas em `analysis/requirements.txt`. Tamanhos de efeito e correção de Holm estão em `analysis/lab_stats.py`, com testes unitários. Nível de significância α = 0,05. Dentro de cada RQ, os p-valores são corrigidos por Holm (1979). O script foi executado nos dados do piloto só para conferir que funciona; com n = 3 os testes não respondem às RQs.
 
 ### 7.1 Estatística descritiva
 
-Para cada serviço × form factor: n de execuções válidas, mediana, IQR, mínimo e máximo de todas as métricas; boxplots por serviço; contagem de execuções inválidas (bloqueio, erro) por serviço; tabela do elemento LCP de cada serviço. Teste de Shapiro–Wilk por grupo apenas para documentar a forma das distribuições (a escolha dos testes não depende dele, ver 7.5).
+Para cada serviço × form factor: n de execuções válidas, mediana, IQR, mínimo e máximo de todas as métricas; boxplots por serviço (**TODO**: o script ainda não gera gráficos); contagem de execuções inválidas (bloqueio, erro) por serviço; tabela do elemento LCP de cada serviço; medianas por bloco de horário; réplica 1 contra as seguintes (efeito de cache de CDN, seção 8.2). Teste de Shapiro–Wilk por grupo apenas para documentar a forma das distribuições (a escolha dos testes não depende dele, ver 7.5).
 
 ### 7.2 RQ1 — Kruskal–Wallis entre serviços
 
@@ -289,6 +294,20 @@ Para cada serviço × form factor: n de execuções válidas, mediana, IQR, mín
 | Tamanho dos grupos | 12 execuções por célula (RQ1) e 10 serviços (RQ2, RQ3). | Com amostras pequenas, testes de normalidade têm pouco poder; testes não paramétricos não dependem desse pressuposto. |
 | Estrutura | RQ1: k = 10 grupos independentes. RQ2: associação monotônica entre duas medidas ordinais. RQ3: duas medidas do mesmo serviço. | Kruskal–Wallis (k grupos), Spearman (associação monotônica), Wilcoxon pareado (amostras dependentes). |
 
+### 7.6 Exclusões e análises de sensibilidade
+
+Proposta; o grupo precisa confirmar (pendência 5 da seção 10).
+
+| Situação | Como é detectada | Tratamento |
+|---|---|---|
+| Página de bloqueio ou desafio | Documento principal com status diferente de 200, ou texto do elemento LCP igual a uma mensagem de desafio anti-bot | Execução inválida: sai de `<fase>.csv` e vai para `<fase>_failures.csv`. |
+| CPU do host abaixo do limiar do Lighthouse | `benchmarkIndex` ≤ 1000 (`SLOW_HOST_CPU`). É o limiar que o Lighthouse usa para avisar que a CPU é mais lenta do que ele espera (`SLOW_CPU_BENCHMARK_INDEX_THRESHOLD` no código-fonte). O aviso só aparece na CLI e nunca em execuções pela API Node, por isso o script aplica o limiar. | Excluída da análise principal (padrão do `analyze.py`). |
+| CPU do host abaixo do resto do bloco | `benchmarkIndex` abaixo da cerca inferior de Tukey (Q1 − 1,5 × IQR) das execuções válidas da fase (`BENCHMARK_LOW_OUTLIER`) | Mantida na análise principal. Análise de sensibilidade sem ela (`--exclude-flags all`). No piloto, as duas execuções marcadas não destoaram: a do gov.br mobile teve score 58, igual à mediana da célula. |
+| Possível desafio que as regras não reconhecem | DOM com menos da metade dos elementos da maior execução da mesma célula (`DOM_SIZE_DROP`), host final diferente do pedido (`FINAL_HOST_CHANGED`) ou recursos de CAPTCHA carregados (`CHALLENGE_RESOURCES`) | Revisão manual do JSON bruto antes da análise. Se for desafio, o serviço é tratado como bloqueado. |
+| Elemento LCP é banner ou modal | `<fase>_lcp_elements.csv` | Análise de sensibilidade sem esses serviços (`--exclude-services`). |
+
+As outras análises de sensibilidade (τ-b de Kendall na RQ2, teste do sinal na RQ3) saem sempre junto com a análise principal.
+
 ---
 
 ## 8. Ameaças à validade
@@ -310,9 +329,9 @@ Classificação de Wohlin et al. (2012).
 |---|---|
 | **Variação por horário**: carga do servidor e da rede muda ao longo do dia. | Coleta em 3 blocos de horário; ordem aleatória dentro de cada bloco; timestamp de cada execução gravado; testar o efeito do bloco na análise descritiva. |
 | **Cache e CDN**: o Chrome começa sem cache a cada execução, mas o cache da CDN e do servidor não é controlado. A primeira visita pode encontrar a borda da CDN fria, e as seguintes não. | `run` registra a ordem de cada réplica; comparar `run = 1` com as demais; ordem aleatória espalha esse efeito entre serviços e form factors. |
-| **Bloqueio por WAF / anti-bot**: o serviço pode servir uma página de desafio (CAPTCHA) e o Lighthouse pontua essa página como se fosse o serviço. Isso aconteceu no piloto. | Verificação do status HTTP do documento principal em cada execução; execuções inválidas vão para `<fase>_failures.csv`; o serviço deixa de ser medido na sessão e é trocado. |
+| **Bloqueio por WAF / anti-bot**: o serviço pode servir uma página de desafio (CAPTCHA) e o Lighthouse pontua essa página como se fosse o serviço. Isso aconteceu no piloto. | Duas regras em cada execução: status HTTP do documento principal e texto do elemento LCP (desafio servido com HTTP 200). Execuções inválidas vão para `<fase>_failures.csv`; o serviço deixa de ser medido na sessão e é trocado. Sinais secundários (queda no DOM, troca de host, recursos de CAPTCHA) vão para `<fase>_flags.csv` para revisão (seção 7.6). |
 | Mudança de conteúdo durante a coleta (banners, campanhas, deploys). | Registrar número de requisições, bytes e elemento LCP por execução; investigar saltos. |
-| Carga da máquina de medição. | Um processo por vez; `benchmarkIndex` gravado em cada execução; descartar execuções com índice muito fora da faixa do bloco (critério a definir na Sprint 2, **TODO**). |
+| Carga da máquina de medição. | Um processo por vez; `benchmarkIndex` gravado em cada execução; plano de energia e adaptador de rede gravados por sessão; critério de exclusão na seção 7.6. |
 | User-Agent emulado (Chrome/136) diferente da versão real (Chrome 157). | Registrado; é o padrão do Lighthouse e igual para todos os serviços. |
 
 ### 8.3 Validade de construto
@@ -376,8 +395,11 @@ Execuções válidas apenas. Tempos em ms, arredondados. Fonte: [`data/processed
 4. **O accessibility score não varia entre execuções** da mesma página e form factor. Por isso a RQ2 usa o serviço como unidade de análise (seção 7.3).
 5. **A variação dentro de cada célula foi pequena**: amplitude do performance score de no máximo 6 pontos nas células com 3 execuções válidas. O piloto não cobre variação por horário (uma janela de 15 minutos).
 6. **A diferença mobile × desktop apareceu nos três serviços válidos** (gov.br 58 × 69; Meu INSS 25 × 53; Valores a Receber 2 × 24). É só uma indicação: n = 3 e nenhum teste foi feito.
-7. **Tamanho dos dados brutos**: cerca de 550 KB por execução (9,8 MB nas 18 primeiras). As 240 execuções da Sprint 2 dariam cerca de 130 MB.
+7. **Tamanho dos dados brutos**: média de 601 KB por execução nas 24 execuções (14,1 MB no total). Se os outros serviços tiverem tamanho parecido, as 240 execuções da Sprint 2 darão cerca de 141 MB. Com gzip (nível 9) o tamanho cai para 20%: média de 122 KB por execução, cerca de 28,5 MB para 240.
 8. **e-CAC tem conexão instável**: a busca do `robots.txt` falhou na primeira tentativa (ECONNRESET) nas duas verificações, e o servidor não envia o certificado intermediário. O serviço não estava no piloto, então o comportamento do Lighthouse nele ainda não foi observado.
+9. **A réplica 1 teve score menor ou igual ao das seguintes.** Em 5 das 6 células válidas, o performance score da primeira execução foi menor que a mediana das seguintes; na sexta (Valores a Receber mobile) foi igual. No LCP não houve padrão (maior em 4 de 6). Com 1 execução contra 2 por célula é só uma indicação, mas reforça a comparação `run = 1` × demais prevista na seção 8.2 (cache de CDN frio).
+10. **A segunda regra de bloqueio funciona nos dados do piloto.** Com o status do documento principal trocado para 200 nos 4 JSONs de CAPTCHA, a regra do texto do LCP ("Complete the security check before continuing…") rejeitou os 4 e nenhuma das 20 execuções válidas. O sinal `DOM_SIZE_DROP` também marcaria os 4 (44 elementos DOM contra 1318 a 1800 na página real do Portal da Transparência).
+11. **`benchmarkIndex`**: nenhuma execução chegou perto do limiar de 1000 do Lighthouse (mínimo 2582). Duas execuções válidas ficaram abaixo da cerca de Tukey (2814,5 no gov.br mobile e 2581,5 no Portal da Transparência mobile), sem diferença visível no resultado (seção 7.6).
 
 ---
 
@@ -387,14 +409,15 @@ Execuções válidas apenas. Tempos em ms, arredondados. Fonte: [`data/processed
 |---|---|---|
 | 1 | Portal do Servidor sem número de uso verificável (NÃO ENCONTRADO; só evidência indireta do SouGov.br): decidir se fica com a ressalva ou se é trocado. O e-CAC foi resolvido (875.268.240 atendimentos em 2023, Relatório de Atividades da RFB). | 1.3 |
 | 2 | Portal MG: o número de acessos do portal mais recente continua sendo de 2021 (nova busca em 17/11/2026 só achou dados do MG App). Decidir se o dado de 2021 basta. | 1.3 |
-| 3 | Registrar tipo de conexão, provedor e cidade da máquina de medição. | 6.6 |
-| 4 | Registrar o plano de energia do Windows usado nas coletas. | 6.6 |
-| 5 | Confirmar com o grupo os horários dos 3 blocos da coleta completa. | 6.3 |
-| 6 | Definir o critério de descarte de execuções com `benchmarkIndex` fora da faixa. | 8.2 |
-| 7 | Decidir onde guardar os ~130 MB de JSON bruto da Sprint 2 (compactar no repositório ou guardar fora do git). | 9.3 |
-| 8 | Serviços fora do piloto (em especial o e-CAC) ainda não foram medidos com o Lighthouse; a primeira sessão da Sprint 2 vai mostrar se algum bloqueia ou falha. | 9.3 |
-| 9 | A detecção de bloqueio usa o status HTTP do documento principal. Um WAF que devolva HTTP 200 com página de desafio não seria detectado; avaliar uma segunda regra (por exemplo, queda brusca no número de requisições ou de elementos DOM em relação à mediana do serviço). | 8.2 |
-| 10 | Escrever os scripts de análise estatística (Python) da seção 7. | 7 |
+| 3 | Registrar provedor de internet e cidade da máquina de medição. O tipo de conexão (cabeada, 1 Gbps, sem VPN) e o plano de energia já estão registrados e passam a ser gravados por sessão. | 6.6 |
+| 4 | Confirmar com o grupo os horários dos 3 blocos da coleta completa. | 6.3 |
+| 5 | Confirmar os critérios de exclusão e de sensibilidade propostos: exclui `benchmarkIndex` ≤ 1000; cerca de Tukey e demais sinais só em sensibilidade ou revisão. | 7.6 |
+| 6 | Decidir onde guardar o JSON bruto da Sprint 2: cerca de 141 MB sem compressão ou 28,5 MB com gzip; no repositório ou fora do git. | 9.3 |
+| 7 | Serviços fora do piloto (em especial o e-CAC) ainda não foram medidos com o Lighthouse; a primeira sessão da Sprint 2 vai mostrar se algum bloqueia ou falha. | 9.3 |
+| 8 | Depois de cada bloco da Sprint 2, revisar `<fase>_flags.csv`. A regra do texto do LCP só foi testada com o CAPTCHA do AWS WAF visto no piloto; um desafio com outro texto e HTTP 200 só aparece nos sinais de revisão. | 7.6 |
+| 9 | O script de análise ainda não gera os boxplots da estatística descritiva. | 7.1 |
+
+Resolvidas depois da primeira versão desta proposta: número de uso do e-CAC (1.3); tipo de conexão e plano de energia (6.6); critério para `benchmarkIndex` (proposto em 7.6); segunda regra de detecção de bloqueio (6.5 e 7.6); script de análise estatística (seção 7).
 
 ---
 
