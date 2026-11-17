@@ -1,4 +1,4 @@
-# Downloaded from https://cav.receita.fazenda.gov.br/robots.txt on 2026-11-17T16:00:36-03:00 (HTTP 200, final URL https://cav.receita.fazenda.gov.br/autenticacao/login)
+# Baixado de https://cav.receita.fazenda.gov.br/robots.txt em 2026-11-17T19:42:08-03:00 (HTTP 200, URL final https://cav.receita.fazenda.gov.br/autenticacao/login)
 <!DOCTYPE html>
 <html>
 <head>

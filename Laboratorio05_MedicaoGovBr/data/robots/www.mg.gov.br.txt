@@ -1,4 +1,4 @@
-# Downloaded from https://www.mg.gov.br/robots.txt on 2026-11-17T16:00:49-03:00 (HTTP 200, final URL https://www.mg.gov.br/robots.txt)
+# Baixado de https://www.mg.gov.br/robots.txt em 2026-11-17T19:42:21-03:00 (HTTP 200, URL final https://www.mg.gov.br/robots.txt)
 #
 # robots.txt
 #
