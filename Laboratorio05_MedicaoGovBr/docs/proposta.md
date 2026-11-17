@@ -41,23 +41,24 @@ Todos os números abaixo foram conferidos na página da fonte em **17/11/2026** 
 |---|---|---|---|---|---|
 | 1 | Portal gov.br | 175 milhões de usuários | Contas gov.br cadastradas em 24/03/2026 | [MGI](https://www.gov.br/gestao/pt-br/assuntos/noticias/2026/marco/gov-br-alcanca-a-marca-de-175-milhoes-de-usuarios) | 24/03/2026 |
 | 2 | Meu INSS | 830,8 milhões de acessos (707,4 mi pelo aplicativo; 123,4 mi pelo site) | Acessos em 2024 | [INSS](https://www.gov.br/inss/pt-br/noticias/meu-inss-bateu-a-marca-de-830-8-milhoes-de-acessos-no-ano-passado) | 08/01/2025 |
-| 3 | Receita Federal (e-CAC) | **NÃO ENCONTRADO** (usuários ou acessos do e-CAC) | — | — | — |
+| 3 | Receita Federal (e-CAC) | 875.268.240 atendimentos pelo canal "Portal e-CAC" (230.356.664 em 2019) | Serviços prestados pelo e-CAC em 2023, tabela "Total de atendimentos na RFB (por canal)", p. 9. Conta atendimentos, não usuários distintos. | [Receita Federal — Relatório de Atividades 2023 (PDF)](https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/relatorios/geral/2023-balanco-anual-de-atividades) | PDF sem data no texto; metadado do arquivo: 11/09/2024 |
 | 3a | (evidência indireta) | 44.393.571 declarações do IRPF 2026 recebidas | Declarações entregues; o texto cita "o portal e-CAC ou o aplicativo Meu Imposto de Renda" como canal para entregas em atraso. **Não é número de uso do e-CAC.** | [Receita Federal](https://www.gov.br/receitafederal/pt-br/assuntos/noticias/2026/junho/irpf-2026-registra-recorde-de-entrega-de-declaracoes) | 01/06/2026 |
 | 4 | CTPS Digital | 685,2 milhões de acessos | Acessos em 2023 | [Agência Gov](https://agenciagov.ebc.com.br/noticias/202401/carteira-de-trabalho-digital-teve-685-milhoes-de-acessos-e-14-milhoes-de-novos-usuarios-em-2023) | 19/01/2024 |
 | 4a | CTPS Digital | 74,3 milhões de trabalhadores habilitados; 185 milhões de acessos no 1º trimestre de 2024 | Habilitados (acumulado) e acessos "tanto pelo aplicativo como pelo portal" | [MTE](https://www.gov.br/trabalho-e-emprego/pt-br/noticias-e-conteudo/2024/Maio/carteira-de-trabalho-digital-alcanca-mais-de-2-bilhoes-de-acessos-e-totaliza-74-3-milhoes-de-trabalhadores-habilitados) | 10/05/2024 |
 | 5 | Valores a Receber | 72 milhões de consultas públicas e 4,3 milhões de solicitações de resgate | Uso em 2024 ("ano passado" em nota de fev/2025) | [MGI](https://www.gov.br/gestao/pt-br/assuntos/noticias/2025/fevereiro/verificacao-em-duas-etapas-vai-aumentar-seguranca-de-servicos-do-banco-central-no-gov.br) | 14/02/2025 |
 | 6 | Meu SUS Digital | Mais de 59 milhões de downloads; 29 milhões de usuários no último mês | Números do **aplicativo** | [Agência Gov](https://agenciagov.ebc.com.br/noticias/202507/ministerio-da-saude-institui-rede-nacional-de-dados-em-saude-como-plataforma-oficial-de-integracao-de-dados-do-sus) | 23/07/2025 |
-| 7 | Portal MG | 21 milhões de acessos | Acessos ao portal em 2021 (dado mais recente encontrado para o portal) | [Agência Minas](https://www.agenciaminas.mg.gov.br/noticia/estado-lanca-novo-portal-mg-para-melhorar-acesso-a-mais-de-1-100-servicos-publicos) | 16/02/2022 |
-| 7a | (contexto) | "oito milhões de usuários" | Usuários do **MG App**, não do portal | [Agência Minas](https://www.agenciaminas.mg.gov.br/noticia/mg-app-lanca-versao-mais-moderna-e-atualizada-e-ultrapassa-oito-milhoes-de-usuarios/) | 24/06/2026 |
+| 7 | Portal MG | 21 milhões de acessos | Acessos ao portal em 2021 (dado mais recente encontrado para o portal; nova busca em 17/11/2026 só achou números do MG App e a contagem de serviços) | [Agência Minas](https://www.agenciaminas.mg.gov.br/noticia/estado-lanca-novo-portal-mg-para-melhorar-acesso-a-mais-de-1-100-servicos-publicos) | 16/02/2022 |
+| 7a | (contexto) | "o MG App superou a marca de 9 milhões de usuários"; "média de 950 mil acessos" por mês; "1.348 [serviços] no portal" | Usuários e acessos são do **MG App**, não do portal. Do portal só há o número de serviços. | [Agência Minas — Balanço 2023-2026](https://www.agenciaminas.mg.gov.br/noticia/balanco-2023-2026-governo-de-minas-amplia-digitalizacao-de-servicos-e-disponibiliza-mais-de-220-funcionalidades-no-mg-app) | 17/11/2026 |
 | 8 | Portal do Servidor | **NÃO ENCONTRADO** | — | — | — |
+| 8a | (evidência indireta) | "a plataforma é utilizada por 87% de seu público-alvo, formado por 1,3 milhão de pessoas" | Uso da plataforma **SouGov.br** por servidores civis federais, aposentados e pensionistas. Mostra o tamanho do público do Portal do Servidor. **Não é número de uso do Portal do Servidor.** | [MGI](https://www.gov.br/gestao/pt-br/assuntos/noticias/2023/maio/sougov-br-completa-dois-anos-e-ja-e-utilizado-por-87-dos-servidores-publicos-federais) | 04/05/2023 |
 | 9 | Consumidor.gov.br | 8,6 milhões de brasileiros cadastrados; mais de 11,4 milhões de atendimentos; 2.328.863 reclamações finalizadas em 2025 | Cadastros e atendimentos acumulados; reclamações de 2025 | [Boletim Consumidor.gov.br 2025 (Senacon)](https://www.gov.br/mj/pt-br/assuntos/seus-direitos/consumidor/defesadoconsumidor/Biblioteca/boletins-1/boletim-consumidor-gov-br-2025-vfinal.pdf) | PDF sem data no texto; metadado do arquivo: 26/06/2026 |
 | 10 | ENEM (Inep) | 5.051.345 inscrições confirmadas | Participantes inscritos no Enem 2026 | [Inep](https://www.gov.br/inep/pt-br/centrais-de-conteudo/noticias/enem/painel-enem-2026-detalha-inscricoes-no-exame) | 20/10/2026 |
 
 Ressalvas:
 
-- Os números descrevem o **serviço como um todo** (aplicativo + web), não a página medida. Só o Meu INSS separa o site (123,4 milhões de acessos em 2024).
-- Os números têm datas e definições diferentes (contas, acessos, downloads, inscrições). Eles servem como evidência de alcance, não para comparar serviços entre si.
-- **TODO:** sem número verificável para e-CAC e Portal do Servidor. Antes da Sprint 2, decidir se ficam (com a ressalva) ou se são trocados por serviços com número público.
+- Os números descrevem o **serviço como um todo** (aplicativo + web), não a página medida. Só o Meu INSS separa o site (123,4 milhões de acessos em 2024). O número do e-CAC é do canal "Portal e-CAC", mas conta serviços prestados, não visitas à página de entrada.
+- Os números têm datas e definições diferentes (contas, acessos, downloads, inscrições, atendimentos). Eles servem como evidência de alcance, não para comparar serviços entre si.
+- **TODO:** o Portal do Servidor continua sem número de uso verificável (só a evidência indireta 8a, de 2023). Antes da Sprint 2, decidir se fica com a ressalva ou se é trocado por um serviço com número público.
 
 ### 1.4 URLs trocadas
 
@@ -384,8 +385,8 @@ Execuções válidas apenas. Tempos em ms, arredondados. Fonte: [`data/processed
 
 | # | Pendência | Seção |
 |---|---|---|
-| 1 | e-CAC e Portal do Servidor sem número de impacto verificável (NÃO ENCONTRADO): decidir se ficam com a ressalva ou se são trocados. | 1.3 |
-| 2 | Portal MG: o número de acessos mais recente encontrado é de 2021; procurar dado mais novo do portal. | 1.3 |
+| 1 | Portal do Servidor sem número de uso verificável (NÃO ENCONTRADO; só evidência indireta do SouGov.br): decidir se fica com a ressalva ou se é trocado. O e-CAC foi resolvido (875.268.240 atendimentos em 2023, Relatório de Atividades da RFB). | 1.3 |
+| 2 | Portal MG: o número de acessos do portal mais recente continua sendo de 2021 (nova busca em 17/11/2026 só achou dados do MG App). Decidir se o dado de 2021 basta. | 1.3 |
 | 3 | Registrar tipo de conexão, provedor e cidade da máquina de medição. | 6.6 |
 | 4 | Registrar o plano de energia do Windows usado nas coletas. | 6.6 |
 | 5 | Confirmar com o grupo os horários dos 3 blocos da coleta completa. | 6.3 |
