@@ -46,6 +46,13 @@ Descreva o propósito das pastas principais.
 │   ├── simulation.py                      # 🎲 Módulo de simulação (Áulus)
 │   └── README.md                          # 📘 Documentação geral do Laboratório 04
 │
+├── /Laboratorio05_MedicaoGovBr            # 📂 Projeto de Laboratório 05 (Lighthouse em serviços gov.br)
+│   ├── /data                              # 🗄️ URLs, robots.txt, JSON bruto do Lighthouse e CSVs
+│   ├── /docs                              # 📘 Proposta da Sprint 1 e verificação de robots.txt
+│   ├── /scripts                           # ⚙️ robots-check, run-lighthouse e extract-metrics (Node.js)
+│   ├── /tests                             # 🧪 Testes do plano de execução e da extração
+│   └── README.md                          # 📘 Instalação, piloto e dados (em inglês)
+│
 └── README.md                              # 📘 Documentação dos projetos
 ```
 
