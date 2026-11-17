@@ -52,7 +52,7 @@ Descreva o propósito das pastas principais.
 │   ├── /docs                              # 📘 Proposta da Sprint 1 e verificação de robots.txt
 │   ├── /scripts                           # ⚙️ robots-check, run-lighthouse e extract-metrics (Node.js)
 │   ├── /tests                             # 🧪 Testes do plano de execução e da extração
-│   └── README.md                          # 📘 Instalação, piloto e dados (em inglês)
+│   └── README.md                          # 📘 Instalação, piloto, dados e análise
 │
 └── README.md                              # 📘 Documentação dos projetos
 ```
