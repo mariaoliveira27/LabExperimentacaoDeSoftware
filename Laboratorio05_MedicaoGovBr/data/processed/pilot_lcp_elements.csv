@@ -1,0 +1,21 @@
+service,formFactor,run,lcpSelector,lcpNodeLabel
+govbr,desktop,1,div.container > div.wrapper > div.br-modal-body > div.info-text,"Para melhorar a sua experiência na plataforma e prover serviços personalizados,…"
+govbr,desktop,2,div.container > div.wrapper > div.br-modal-body > div.info-text,"Para melhorar a sua experiência na plataforma e prover serviços personalizados,…"
+govbr,desktop,3,div.container > div.wrapper > div.br-modal-body > div.info-text,"Para melhorar a sua experiência na plataforma e prover serviços personalizados,…"
+govbr,mobile,1,div.container > div.wrapper > div.br-modal-body > div.info-text,"Para melhorar a sua experiência na plataforma e prover serviços personalizados,…"
+govbr,mobile,2,div.container > div.wrapper > div.br-modal-body > div.info-text,"Para melhorar a sua experiência na plataforma e prover serviços personalizados,…"
+govbr,mobile,3,div.container > div.wrapper > div.br-modal-body > div.info-text,"Para melhorar a sua experiência na plataforma e prover serviços personalizados,…"
+meuinss,desktop,1,div.carousel-page > div.carousel-content > button > img,INSS no ar
+meuinss,desktop,2,div.carousel-page > div.carousel-content > button > img,INSS no ar
+meuinss,desktop,3,div.carousel-page > div.carousel-content > button > img,INSS no ar
+meuinss,mobile,1,div.carousel-page > div.carousel-content > button > img,INSS empresa no ar
+meuinss,mobile,2,div.carousel-page > div.carousel-content > button > img,INSS empresa no ar
+meuinss,mobile,3,div.carousel-page > div.carousel-content > button > img,INSS empresa no ar
+svr-bcb,desktop,1,div#accordion_bwssjvguw > div.card-body > bcb-dynamic-comp-909e4678a7ca2b12059b0d9cae8436f7cc7bc862fd91de2cd00f668ac9d2200a-2 > p,O Sistema de Valores a Receber (SVR) é um serviço do Banco Central que permite …
+svr-bcb,desktop,2,div#accordion_luedk45wn > div.card-body > bcb-dynamic-comp-909e4678a7ca2b12059b0d9cae8436f7cc7bc862fd91de2cd00f668ac9d2200a-2 > p,O Sistema de Valores a Receber (SVR) é um serviço do Banco Central que permite …
+svr-bcb,desktop,3,div#accordion_fqiq6qvqx > div.card-body > bcb-dynamic-comp-909e4678a7ca2b12059b0d9cae8436f7cc7bc862fd91de2cd00f668ac9d2200a-2 > p,O Sistema de Valores a Receber (SVR) é um serviço do Banco Central que permite …
+svr-bcb,mobile,1,div.br-cookiebar > div.container > div.wrapper > p.mb-0,Usamos cookies para melhorar sua experiência e oferecer serviços personalizados…
+svr-bcb,mobile,2,div.br-cookiebar > div.container > div.wrapper > p.mb-0,Usamos cookies para melhorar sua experiência e oferecer serviços personalizados…
+svr-bcb,mobile,3,div.br-cookiebar > div.container > div.wrapper > p.mb-0,Usamos cookies para melhorar sua experiência e oferecer serviços personalizados…
+transparencia,desktop,3,div.carousel-inner > div.item > a > img#id_banner_gas_do_povo,div.carousel-inner > div.item > a > img#id_banner_gas_do_povo
+transparencia,mobile,1,div.carousel-inner > div.item > a > img#id_banner_gas_do_povo,div.carousel-inner > div.item > a > img#id_banner_gas_do_povo
