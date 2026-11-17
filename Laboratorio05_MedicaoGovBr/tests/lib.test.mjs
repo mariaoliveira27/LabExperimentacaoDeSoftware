@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mulberry32, shuffle } from '../scripts/lib/random.mjs';
 import { buildPlan } from '../scripts/lib/plan.mjs';
 import {
-  median, pageValidity, parseRawFileName, rowFromLhr, summarize, toCsv, CSV_COLUMNS,
+  median, pageValidity, parseRawFileName, quantile, reviewFlags, rowFromLhr, summarize, toCsv, CSV_COLUMNS,
 } from '../scripts/lib/metrics.mjs';
 
 const services = [
@@ -134,4 +134,47 @@ test('median, summarize and toCsv', () => {
   const csv = toCsv([{ ...rows[0], url: 'https://x/?a=1,2' }], CSV_COLUMNS);
   assert.match(csv, /^service,url,formFactor,run,performanceScore,accessibilityScore,LCP,FCP,TBT,CLS,SpeedIndex,timestamp\n/);
   assert.match(csv, /"https:\/\/x\/\?a=1,2"/);
+});
+
+function withLcpLabel(nodeLabel, statusCode = 200) {
+  return fakeLhr({
+    mainDocumentUrl: 'https://a.example/',
+    audits: {
+      ...fakeLhr().audits,
+      'network-requests': { details: { items: [{ url: 'https://a.example/', resourceType: 'Document', statusCode }] } },
+      'lcp-breakdown-insight': { details: { type: 'list', items: [{ type: 'node', selector: 'div > p', nodeLabel }] } },
+    },
+  });
+}
+
+test('pageValidity rejects a challenge page served with HTTP 200 by its LCP text', () => {
+  // Text of the AWS WAF CAPTCHA page seen in the pilot (Portal da Transparência).
+  const v = pageValidity(withLcpLabel('Complete the security check before continuing. This step verifies that you are …'));
+  assert.equal(v.valid, false);
+  assert.equal(v.code, 'CHALLENGE_PAGE');
+  assert.equal(pageValidity(withLcpLabel('Verifique se você é humano')).code, 'CHALLENGE_PAGE');
+  // LCP texts of valid pilot runs must pass.
+  for (const label of [
+    'Para melhorar a sua experiência na plataforma e prover serviços personalizados,…',
+    'Usamos cookies para melhorar sua experiência e oferecer serviços personalizados…',
+    'INSS no ar',
+  ]) assert.deepEqual(pageValidity(withLcpLabel(label)), { valid: true, mainDocumentStatus: 200 });
+});
+
+test('quantile uses linear interpolation', () => {
+  assert.equal(quantile([1, 2, 3, 4], 0.25), 1.75);
+  assert.equal(quantile([5], 0.75), 5);
+  assert.equal(quantile([], 0.5), null);
+});
+
+test('reviewFlags marks slow CPU, low benchmark outliers, DOM drops and host changes', () => {
+  const base = { formFactor: 'mobile', timestamp: 't', requestedHost: 'a.example', finalHost: 'a.example', challengeHosts: [] };
+  const facts = [
+    ...[3000, 3050, 3100, 3150, 3200, 3250].map((b, i) => ({ ...base, service: 'a', run: i + 1, benchmarkIndex: b, domElements: 1300 })),
+    { ...base, service: 'a', run: 7, benchmarkIndex: 2500, domElements: 1300 },
+    { ...base, service: 'a', run: 8, benchmarkIndex: 900, domElements: 44 },
+    { ...base, service: 'a', run: 9, benchmarkIndex: 3100, domElements: 1300, finalHost: 'sso.example' },
+  ];
+  const got = reviewFlags(facts).map((f) => `${f.run}:${f.flag}`).sort();
+  assert.deepEqual(got, ['7:BENCHMARK_LOW_OUTLIER', '8:DOM_SIZE_DROP', '8:SLOW_HOST_CPU', '9:FINAL_HOST_CHANGED']);
 });
