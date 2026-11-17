@@ -1,21 +1,21 @@
-// Minimal HTTPS GET used by robots-check.mjs.
+// GET HTTPS mínimo usado pelo robots-check.mjs.
 //
-// Why not fetch(): some gov.br hosts send only their leaf certificate and omit the
-// intermediate. Browsers (and therefore Lighthouse/Chrome) recover by downloading the
-// intermediate from the certificate's AIA "CA Issuers" URL; Node does not, and fails with
-// UNABLE_TO_VERIFY_LEAF_SIGNATURE. fetchMissingIntermediate() reproduces the browser behavior
-// while keeping verification on: the downloaded intermediate is only accepted if its
-// signature verifies against a root in Node's built-in trust store.
+// Por que não fetch(): alguns hosts do gov.br enviam só o certificado final e omitem o
+// intermediário. Navegadores (e portanto o Lighthouse/Chrome) contornam isso baixando o
+// intermediário pela URL "CA Issuers" (AIA) do certificado; o Node não faz isso e falha com
+// UNABLE_TO_VERIFY_LEAF_SIGNATURE. fetchMissingIntermediate() reproduz o comportamento do navegador
+// sem desligar a verificação: o intermediário baixado só é aceito se a assinatura dele for
+// verificada contra uma raiz do repositório de confiança do Node.
 import http from 'node:http';
 import https from 'node:https';
 import tls from 'node:tls';
 import { X509Certificate } from 'node:crypto';
 
 const REDIRECT_CODES = new Set([301, 302, 303, 307, 308]);
-const MAX_BODY_BYTES = 512 * 1024; // RFC 9309 asks parsers to handle at least 500 KiB.
+const MAX_BODY_BYTES = 512 * 1024; // A RFC 9309 pede que o parser aceite pelo menos 500 KiB.
 
 /**
- * GET `url`, following up to `maxRedirects` redirects (RFC 9309 asks for at least five).
+ * GET em `url`, seguindo até `maxRedirects` redirecionamentos (a RFC 9309 pede pelo menos cinco).
  * @returns {Promise<{status:number, finalUrl:string, body:string}>}
  */
 export function httpGet(url, { userAgent, ca, timeoutMs = 20_000, maxRedirects = 5 } = {}) {
@@ -40,7 +40,7 @@ export function httpGet(url, { userAgent, ca, timeoutMs = 20_000, maxRedirects =
       res.on('end', () => resolve({ status: statusCode, finalUrl: url, body: Buffer.concat(chunks).toString('utf8') }));
       res.on('error', reject);
     });
-    req.on('timeout', () => req.destroy(Object.assign(new Error(`timeout after ${timeoutMs} ms`), { code: 'ETIMEDOUT' })));
+    req.on('timeout', () => req.destroy(Object.assign(new Error(`tempo esgotado após ${timeoutMs} ms`), { code: 'ETIMEDOUT' })));
     req.on('error', reject);
   });
 }
@@ -51,7 +51,7 @@ function getBuffer(url, timeoutMs = 15_000) {
     const req = mod.get(url, { timeout: timeoutMs }, (res) => {
       if (res.statusCode !== 200) {
         res.resume();
-        reject(new Error(`AIA download returned HTTP ${res.statusCode}`));
+        reject(new Error(`download do certificado (AIA) devolveu HTTP ${res.statusCode}`));
         return;
       }
       const chunks = [];
@@ -59,12 +59,12 @@ function getBuffer(url, timeoutMs = 15_000) {
       res.on('end', () => resolve(Buffer.concat(chunks)));
       res.on('error', reject);
     });
-    req.on('timeout', () => req.destroy(new Error('AIA download timeout')));
+    req.on('timeout', () => req.destroy(new Error('tempo esgotado no download do certificado (AIA)')));
     req.on('error', reject);
   });
 }
 
-/** Reads the server's leaf certificate. No application data is sent on this connection. */
+/** Lê o certificado final do servidor. Nenhum dado da aplicação é enviado nesta conexão. */
 function readLeafCertificate(host) {
   return new Promise((resolve, reject) => {
     const sock = tls.connect({ host, port: 443, servername: host, rejectUnauthorized: false }, () => {
@@ -72,28 +72,28 @@ function readLeafCertificate(host) {
       sock.end();
       resolve(cert);
     });
-    sock.setTimeout(15_000, () => sock.destroy(new Error('TLS handshake timeout')));
+    sock.setTimeout(15_000, () => sock.destroy(new Error('tempo esgotado no handshake TLS')));
     sock.on('error', reject);
   });
 }
 
 /**
- * Downloads the intermediate certificate the server failed to send and checks that a root
- * in Node's trust store signed it.
- * @returns {Promise<{ca:string[], note:string}>} CA list to retry the request with.
+ * Baixa o certificado intermediário que o servidor deixou de enviar e confere que ele foi
+ * assinado por uma raiz do repositório de confiança do Node.
+ * @returns {Promise<{ca:string[], note:string}>} Lista de CAs para repetir a requisição.
  */
 export async function fetchMissingIntermediate(host) {
   const leaf = await readLeafCertificate(host);
   const issuerUrl = leaf.infoAccess?.['CA Issuers - URI']?.[0];
-  if (!issuerUrl) throw new Error('leaf certificate has no AIA CA Issuers URL');
+  if (!issuerUrl) throw new Error('o certificado final não tem URL "CA Issuers" (AIA)');
   const raw = await getBuffer(issuerUrl);
-  const intermediate = new X509Certificate(raw); // accepts DER or PEM
+  const intermediate = new X509Certificate(raw); // aceita DER ou PEM
   const roots = tls.rootCertificates.map((pem) => new X509Certificate(pem));
   const root = roots.find((r) => intermediate.checkIssued(r) && intermediate.verify(r.publicKey));
-  if (!root) throw new Error(`intermediate "${intermediate.subject}" is not signed by a trusted root`);
+  if (!root) throw new Error(`o intermediário "${intermediate.subject}" não foi assinado por uma raiz confiável`);
   const cn = (dn) => dn.split('\n').find((l) => l.startsWith('CN='))?.slice(3) ?? dn;
   return {
     ca: [...tls.rootCertificates, intermediate.toString()],
-    note: `server omitted intermediate; "${cn(intermediate.subject)}" downloaded from ${issuerUrl} and verified against root "${cn(root.subject)}"`,
+    note: `servidor não enviou o intermediário; "${cn(intermediate.subject)}" baixado de ${issuerUrl} e verificado contra a raiz "${cn(root.subject)}"`,
   };
 }

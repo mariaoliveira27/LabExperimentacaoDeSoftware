@@ -1,12 +1,12 @@
-// Builds the randomized execution plan for run-lighthouse.mjs.
+// Monta o plano de execução aleatorizado do run-lighthouse.mjs.
 import { mulberry32, shuffle } from './random.mjs';
 
 export const FORM_FACTORS = ['mobile', 'desktop'];
 
 /**
- * Shuffles all (service, formFactor) slots with the seeded PRNG. Run numbers are assigned
- * after shuffling, so `run` is the chronological replicate index within a service and form
- * factor (run 1 is the first time that combination was measured in the session).
+ * Embaralha todas as combinações (serviço, form factor) com o gerador com seed. O número da
+ * réplica é atribuído depois do embaralhamento, então `run` é a ordem cronológica dentro de um
+ * serviço e form factor (run 1 é a primeira vez que aquela combinação foi medida na sessão).
  */
 export function buildPlan(services, runs, seed) {
   const slots = [];

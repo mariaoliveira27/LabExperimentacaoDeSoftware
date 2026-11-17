@@ -2,7 +2,7 @@
   "name": "lab05-medicao-govbr",
   "version": "0.1.0",
   "private": true,
-  "description": "Outside-in Lighthouse measurement of public gov.br digital services (performance and accessibility).",
+  "description": "Medição externa, com Lighthouse, de serviços digitais públicos do gov.br (desempenho e acessibilidade).",
   "type": "module",
   "engines": {
     "node": ">=22.19"

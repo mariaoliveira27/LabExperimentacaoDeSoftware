@@ -1,23 +1,23 @@
 #!/usr/bin/env node
-// Runs Lighthouse against each service, N times per form factor (mobile and desktop),
-// sequentially and in a seeded random order, with a pause of at least 10 s between runs.
+// Roda o Lighthouse em cada serviço, N vezes por form factor (mobile e desktop), em sequência,
+// em ordem aleatória com seed e com pausa de pelo menos 10 s entre execuções.
 //
 //   node scripts/run-lighthouse.mjs --phase pilot --runs 3
 //   node scripts/run-lighthouse.mjs --phase full --runs 10 --seed 12345
 //
-// Options:
-//   --phase <name>      output folder under data/raw/ (default: pilot)
-//   --runs <N>          executions per service and form factor (default: 3)
-//   --services <ids>    comma-separated ids from data/urls.json
-//                       (default: services with "pilot": true for --phase pilot, all otherwise)
-//   --seed <int>        seed for the execution order (default: random, always logged)
-//   --pause <seconds>   pause between executions, minimum 10 (default: 10)
-//   --force             overwrite raw files that already exist
-//   --dry-run           print the planned order and exit without running Lighthouse
+// Opções:
+//   --phase <nome>      pasta de saída dentro de data/raw/ (padrão: pilot)
+//   --runs <N>          execuções por serviço e por form factor (padrão: 3)
+//   --services <ids>    ids de data/urls.json separados por vírgula
+//                       (padrão: serviços com "pilot": true na fase pilot; todos nas outras)
+//   --seed <inteiro>    seed da ordem de execução (padrão: sorteada, sempre gravada)
+//   --pause <segundos>  pausa entre execuções, mínimo 10 (padrão: 10)
+//   --force             sobrescreve arquivos brutos que já existem
+//   --dry-run           mostra a ordem planejada e sai sem rodar o Lighthouse
 //
-// Outputs:
-//   data/raw/<phase>/<service>_<formFactor>_<n>.json   raw Lighthouse result (LHR)
-//   data/run-metadata.json                             one entry per session (appended)
+// Saídas:
+//   data/raw/<fase>/<servico>_<formFactor>_<n>.json   resultado bruto do Lighthouse (LHR)
+//   data/run-metadata.json                            uma entrada por sessão (acrescentada ao fim)
 import { parseArgs } from 'node:util';
 import { existsSync } from 'node:fs';
 import { writeFile, mkdir } from 'node:fs/promises';
@@ -44,9 +44,9 @@ const ROBOTS_MAX_AGE_DAYS = 7;
 const MAX_CONSECUTIVE_ERRORS = 3;
 const CHROME_FLAGS = ['--headless=new', '--no-first-run', '--no-default-browser-check', '--disable-extensions'];
 
-// Settings passed as Lighthouse flags for every run. Everything else is Lighthouse's default
-// (mobile) or desktop preset. disableFullPageScreenshot only skips a screenshot captured after
-// the page load; it does not change metrics, and it keeps each raw JSON much smaller.
+// Configurações passadas como flags do Lighthouse em toda execução. O resto é o padrão do
+// Lighthouse (mobile) ou o preset desktop. disableFullPageScreenshot só pula uma captura de tela
+// feita depois do carregamento; não muda as métricas e deixa cada JSON bruto bem menor.
 const LIGHTHOUSE_FLAGS = {
   output: 'json',
   logLevel: 'error',
@@ -67,19 +67,19 @@ const { values: args } = parseArgs({
 });
 
 function fail(message) {
-  console.error(`ERROR: ${message}`);
+  console.error(`ERRO: ${message}`);
   process.exit(1);
 }
 
 function parseOptions() {
   const phase = args.phase;
-  if (!/^[a-z0-9-]+$/.test(phase)) fail('--phase must match [a-z0-9-]+');
+  if (!/^[a-z0-9-]+$/.test(phase)) fail('--phase precisa seguir o padrão [a-z0-9-]+');
   const runs = Number(args.runs);
-  if (!Number.isInteger(runs) || runs < 1) fail('--runs must be a positive integer');
+  if (!Number.isInteger(runs) || runs < 1) fail('--runs precisa ser um inteiro positivo');
   const pauseMs = Number(args.pause) * 1000;
-  if (!Number.isFinite(pauseMs) || pauseMs < MIN_PAUSE_MS) fail(`--pause must be at least ${MIN_PAUSE_MS / 1000} seconds (ethics rule)`);
+  if (!Number.isFinite(pauseMs) || pauseMs < MIN_PAUSE_MS) fail(`--pause precisa ser de pelo menos ${MIN_PAUSE_MS / 1000} segundos (regra de ética)`);
   const seed = args.seed === undefined ? newSeed() : Number(args.seed);
-  if (!Number.isInteger(seed) || seed < 0 || seed > 2 ** 32 - 1) fail('--seed must be an integer in [0, 2^32-1]');
+  if (!Number.isInteger(seed) || seed < 0 || seed > 2 ** 32 - 1) fail('--seed precisa ser um inteiro em [0, 2^32-1]');
   return { phase, runs, pauseMs, seed, force: args.force, dryRun: args['dry-run'] };
 }
 
@@ -88,25 +88,25 @@ async function selectServices(phase) {
   if (args.services) {
     const ids = args.services.split(',').map((s) => s.trim());
     const unknown = ids.filter((id) => !all.some((s) => s.id === id));
-    if (unknown.length) fail(`unknown service id(s): ${unknown.join(', ')}`);
+    if (unknown.length) fail(`id(s) de serviço desconhecido(s): ${unknown.join(', ')}`);
     return all.filter((s) => ids.includes(s.id));
   }
   return phase === 'pilot' ? all.filter((s) => s.pilot) : all;
 }
 
-/** Ethics gate: every URL must have been checked against robots.txt recently and be allowed. */
+/** Trava de ética: toda URL precisa ter sido verificada no robots.txt há pouco tempo e estar liberada. */
 async function robotsGate(services) {
-  if (!existsSync(ROBOTS_JSON)) fail('data/robots-check.json not found; run `npm run robots` first');
+  if (!existsSync(ROBOTS_JSON)) fail('data/robots-check.json não encontrado; rode antes `npm run robots`');
   const robots = await readJson(ROBOTS_JSON);
   const ageDays = (Date.now() - new Date(robots.generatedAt).getTime()) / 86_400_000;
   if (!(ageDays <= ROBOTS_MAX_AGE_DAYS)) {
-    fail(`robots check is ${ageDays.toFixed(1)} days old (max ${ROBOTS_MAX_AGE_DAYS}); run \`npm run robots\` again`);
+    fail(`a verificação do robots.txt tem ${ageDays.toFixed(1)} dias (máximo ${ROBOTS_MAX_AGE_DAYS}); rode \`npm run robots\` de novo`);
   }
   const crawlDelays = {};
   for (const s of services) {
     const r = robots.results.find((x) => x.id === s.id && x.url === s.url);
-    if (!r) fail(`${s.id} (${s.url}) is not in the robots check; run \`npm run robots\` again`);
-    if (!r.allowed) fail(`${s.id} is not allowed by robots.txt (${r.reason}); replace it in data/urls.json`);
+    if (!r) fail(`${s.id} (${s.url}) não está na verificação do robots.txt; rode \`npm run robots\` de novo`);
+    if (!r.allowed) fail(`${s.id} não é liberado pelo robots.txt (${r.reason}); troque o serviço em data/urls.json`);
     crawlDelays[s.id] = r.crawlDelay ?? 0;
   }
   return { generatedAt: robots.generatedAt, crawlDelays };
@@ -116,7 +116,7 @@ function machineInfo() {
   const cpus = os.cpus();
   return {
     os: { type: os.type(), release: os.release(), version: os.version(), platform: os.platform(), arch: os.arch() },
-    cpu: { model: cpus[0]?.model?.trim() ?? 'unknown', logicalCores: cpus.length, speedMHz: cpus[0]?.speed ?? null },
+    cpu: { model: cpus[0]?.model?.trim() ?? 'desconhecido', logicalCores: cpus.length, speedMHz: cpus[0]?.speed ?? null },
     ramGB: Math.round((os.totalmem() / 1024 ** 3) * 10) / 10,
     node: process.version,
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -133,7 +133,7 @@ async function browserVersion(port) {
   }
 }
 
-/** Keeps only the settings that define the measurement conditions. */
+/** Guarda só as configurações que definem as condições da medição. */
 function pickSettings(cs) {
   const keys = ['formFactor', 'throttlingMethod', 'throttling', 'screenEmulation', 'emulatedUserAgent',
     'onlyCategories', 'maxWaitForFcp', 'maxWaitForLoad', 'disableStorageReset', 'clearStorageTypes',
@@ -158,7 +158,7 @@ async function runOnce(task, outFile) {
     record.chrome = await browserVersion(chrome.port);
     const config = task.formFactor === 'desktop' ? desktopConfig : undefined;
     const result = await lighthouse(task.url, { ...LIGHTHOUSE_FLAGS, port: chrome.port }, config);
-    if (!result) throw new Error('Lighthouse returned no result');
+    if (!result) throw new Error('o Lighthouse não devolveu resultado');
     lhr = result.lhr;
     await mkdir(join(outFile, '..'), { recursive: true });
     await writeFile(outFile, result.report, 'utf8');
@@ -188,7 +188,7 @@ async function runOnce(task, outFile) {
       try {
         await chrome.kill();
       } catch {
-        // On Windows the temporary profile folder is sometimes still locked; not a measurement problem.
+        // No Windows a pasta temporária do perfil às vezes continua travada; não afeta a medição.
       }
     }
     const finishedAt = new Date();
@@ -208,20 +208,20 @@ async function loadMetadata() {
 async function main() {
   const opts = parseOptions();
   const services = await selectServices(opts.phase);
-  if (!services.length) fail('no services selected');
+  if (!services.length) fail('nenhum serviço selecionado');
   const robots = await robotsGate(services);
   const plan = buildPlan(services, opts.runs, opts.seed);
   const rawDir = join(DATA_DIR, 'raw', opts.phase);
   const outFileOf = (t) => join(rawDir, `${t.serviceId}_${t.formFactor}_${t.run}.json`);
 
-  console.log(`Phase "${opts.phase}": ${services.length} service(s) x ${FORM_FACTORS.length} form factors x ${opts.runs} run(s) = ${plan.length} executions`);
-  console.log(`Seed ${opts.seed}; pause ${opts.pauseMs / 1000}s; Lighthouse ${LIGHTHOUSE_VERSION}`);
+  console.log(`Fase "${opts.phase}": ${services.length} serviço(s) x ${FORM_FACTORS.length} form factors x ${opts.runs} execução(ões) = ${plan.length} execuções`);
+  console.log(`Seed ${opts.seed}; pausa ${opts.pauseMs / 1000}s; Lighthouse ${LIGHTHOUSE_VERSION}`);
   for (const t of plan) console.log(`  ${String(t.order).padStart(3)}. ${t.serviceId} ${t.formFactor} #${t.run}`);
   if (opts.dryRun) return;
 
   const existing = plan.map(outFileOf).filter((f) => existsSync(f));
   if (existing.length && !opts.force) {
-    fail(`${existing.length} raw file(s) already exist in ${relative(ROOT, rawDir)}; use --force to overwrite`);
+    fail(`${existing.length} arquivo(s) bruto(s) já existe(m) em ${relative(ROOT, rawDir)}; use --force para sobrescrever`);
   }
 
   const meta = await loadMetadata();
@@ -240,7 +240,7 @@ async function main() {
     lighthouseFlags: LIGHTHOUSE_FLAGS,
     configByFormFactor: {},
     machine: machineInfo(),
-    // Power plan and the adapter of the default route, read once at the start of the session.
+    // Plano de energia e adaptador da rota padrão, lidos uma vez no início da sessão.
     hostConditions: await hostConditions(),
     plannedOrder: plan.map((t) => `${t.serviceId}_${t.formFactor}_${t.run}`),
     executions: [],
@@ -251,19 +251,19 @@ async function main() {
 
   let consecutiveErrors = 0;
   let executedAny = false;
-  const blockedServices = new Map(); // serviceId -> reason
+  const blockedServices = new Map(); // serviceId -> motivo
   for (const task of plan) {
     const label = `[${task.order}/${plan.length}] ${task.serviceId} ${task.formFactor} #${task.run}`;
 
-    // A service that answered with a block/challenge page is not measured again in this
-    // session: repeating the request would only add traffic the site has asked us not to send.
+    // Um serviço que respondeu com página de bloqueio ou desafio não é medido de novo nesta
+    // sessão: repetir a requisição só aumentaria um tráfego que o site pediu para não receber.
     if (blockedServices.has(task.serviceId)) {
       session.executions.push({
         order: task.order, serviceId: task.serviceId, url: task.url, formFactor: task.formFactor, run: task.run,
         status: 'skipped-blocked', blockReason: blockedServices.get(task.serviceId),
       });
       await save();
-      console.log(`${localIsoTimestamp()} ${label} skipped (service blocked earlier in this session)`);
+      console.log(`${localIsoTimestamp()} ${label} pulada (serviço bloqueado antes nesta sessão)`);
       continue;
     }
 
@@ -282,23 +282,23 @@ async function main() {
     const detail = {
       ok: () => `perf ${score(record.performanceScore)} a11y ${score(record.accessibilityScore)}`,
       'runtime-error': () => `${record.runtimeError.code}: ${record.runtimeError.message}`,
-      blocked: () => `${record.blockReason}; remaining runs of ${task.serviceId} will be skipped`,
+      blocked: () => `${record.blockReason}; as próximas execuções de ${task.serviceId} serão puladas`,
       error: () => record.error,
     }[record.status]();
-    console.log(`${localIsoTimestamp()} ${label} ${record.status} in ${(record.durationMs / 1000).toFixed(1)}s — ${detail}`);
+    console.log(`${localIsoTimestamp()} ${label} ${record.status} em ${(record.durationMs / 1000).toFixed(1)}s — ${detail}`);
 
-    // Script-level errors (not page errors) usually mean a broken setup; stop instead of
-    // sending more traffic that cannot produce data.
+    // Erros do script (e não da página) costumam indicar ambiente quebrado; a sessão para em vez
+    // de mandar mais tráfego que não vai gerar dados.
     consecutiveErrors = record.status === 'error' ? consecutiveErrors + 1 : 0;
     if (consecutiveErrors >= MAX_CONSECUTIVE_ERRORS) {
       session.status = 'aborted';
-      session.abortReason = `${MAX_CONSECUTIVE_ERRORS} consecutive script errors; last: ${record.error}`;
+      session.abortReason = `${MAX_CONSECUTIVE_ERRORS} erros seguidos do script; último: ${record.error}`;
       break;
     }
   }
   if (blockedServices.size) {
     session.blockedServices = Object.fromEntries(blockedServices);
-    console.log(`Blocked services (replace them in data/urls.json): ${[...blockedServices.keys()].join(', ')}`);
+    console.log(`Serviços bloqueados (troque-os em data/urls.json): ${[...blockedServices.keys()].join(', ')}`);
   }
 
   if (session.status === 'running') session.status = 'finished';
@@ -306,10 +306,10 @@ async function main() {
   await save();
   const counts = session.executions.reduce((acc, e) => ({ ...acc, [e.status]: (acc[e.status] ?? 0) + 1 }), {});
   if (session.status === 'aborted') {
-    console.error(`ABORTED: ${session.abortReason}`);
+    console.error(`INTERROMPIDA: ${session.abortReason}`);
     process.exitCode = 1;
   }
-  console.log(`Session ${session.status}. ${JSON.stringify(counts)}. Metadata in data/run-metadata.json`);
+  console.log(`Sessão ${session.status}. ${JSON.stringify(counts)}. Metadados em data/run-metadata.json`);
 }
 
 main().catch((err) => {

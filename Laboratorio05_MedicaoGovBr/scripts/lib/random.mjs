@@ -1,7 +1,8 @@
-// Seeded pseudo-random helpers so the execution order can be reproduced from the logged seed.
+// Gerador pseudoaleatório com seed, para que a ordem das execuções possa ser reproduzida a partir
+// da seed gravada.
 import { randomInt } from 'node:crypto';
 
-/** mulberry32: small, fast 32-bit PRNG. Returns a function producing floats in [0, 1). */
+/** mulberry32: gerador de 32 bits pequeno e rápido. Devolve uma função que gera números em [0, 1). */
 export function mulberry32(seed) {
   let a = seed >>> 0;
   return function next() {
@@ -13,7 +14,7 @@ export function mulberry32(seed) {
   };
 }
 
-/** Fisher-Yates shuffle driven by `rng`. Returns a new array; the input is not modified. */
+/** Embaralhamento de Fisher-Yates guiado por `rng`. Devolve um novo array; a entrada não é alterada. */
 export function shuffle(items, rng) {
   const out = [...items];
   for (let i = out.length - 1; i > 0; i--) {
@@ -23,7 +24,7 @@ export function shuffle(items, rng) {
   return out;
 }
 
-/** New random 32-bit seed, used when none is given on the command line. */
+/** Nova seed aleatória de 32 bits, usada quando nenhuma é passada na linha de comando. */
 export function newSeed() {
   return randomInt(0, 2 ** 32 - 1);
 }

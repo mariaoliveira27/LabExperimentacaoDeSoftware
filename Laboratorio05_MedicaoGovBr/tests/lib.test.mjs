@@ -11,7 +11,7 @@ const services = [
   { id: 'b-c', url: 'https://b.example/' },
 ];
 
-test('shuffle is deterministic for a given seed and keeps all items', () => {
+test('shuffle é determinístico para uma seed e mantém todos os itens', () => {
   const items = [...Array(20).keys()];
   const s1 = shuffle(items, mulberry32(7));
   const s2 = shuffle(items, mulberry32(7));
@@ -20,7 +20,7 @@ test('shuffle is deterministic for a given seed and keeps all items', () => {
   assert.deepEqual([...s1].sort((x, y) => x - y), items);
 });
 
-test('buildPlan covers every service x formFactor x run once, with chronological run numbers', () => {
+test('buildPlan cobre cada serviço x formFactor x réplica uma vez, com réplicas em ordem cronológica', () => {
   const plan = buildPlan(services, 3, 123);
   assert.equal(plan.length, 2 * 2 * 3);
   assert.deepEqual(plan.map((t) => t.order), [...Array(12).keys()].map((i) => i + 1));
@@ -36,7 +36,7 @@ test('buildPlan covers every service x formFactor x run once, with chronological
   assert.notDeepEqual(buildPlan(services, 3, 124), plan);
 });
 
-test('parseRawFileName accepts ids with hyphens and rejects other names', () => {
+test('parseRawFileName aceita ids com hífen e rejeita outros nomes', () => {
   assert.deepEqual(parseRawFileName('receita-ecac_mobile_2.json'), { service: 'receita-ecac', formFactor: 'mobile', run: 2 });
   assert.equal(parseRawFileName('notes.json'), null);
   assert.equal(parseRawFileName('x_tablet_1.json'), null);
@@ -60,7 +60,7 @@ function fakeLhr(overrides = {}) {
   };
 }
 
-test('rowFromLhr maps scores to 0-100 and metrics to rounded numbers', () => {
+test('rowFromLhr converte scores para 0-100 e arredonda as métricas', () => {
   const r = rowFromLhr(fakeLhr(), { service: 'a', formFactor: 'mobile', run: 1 });
   assert.equal(r.ok, true);
   assert.deepEqual(r.row, {
@@ -69,7 +69,7 @@ test('rowFromLhr maps scores to 0-100 and metrics to rounded numbers', () => {
   });
 });
 
-test('rowFromLhr reports runtime errors and null scores as failures', () => {
+test('rowFromLhr registra runtimeError e scores nulos como falhas', () => {
   const err = rowFromLhr(fakeLhr({ runtimeError: { code: 'ERRORED_DOCUMENT_REQUEST', message: 'status 403' } }),
     { service: 'a', formFactor: 'mobile', run: 1 });
   assert.equal(err.ok, false);
@@ -80,7 +80,7 @@ test('rowFromLhr reports runtime errors and null scores as failures', () => {
   assert.equal(nul.failure.reasonCode, 'MISSING_VALUES');
 });
 
-test('pageValidity flags a bot-challenge page served with a non-200 status', () => {
+test('pageValidity rejeita página de desafio anti-bot servida com status diferente de 200', () => {
   const challenge = fakeLhr({
     mainDocumentUrl: 'https://a.example/',
     audits: {
@@ -100,7 +100,7 @@ test('pageValidity flags a bot-challenge page served with a non-200 status', () 
   assert.equal(r.failure.reasonCode, 'BLOCKED_OR_NOT_200');
 });
 
-test('pageValidity accepts a 200 page even if it loads a WAF SDK script', () => {
+test('pageValidity aceita página com 200 mesmo se ela carrega o SDK do WAF', () => {
   const real = fakeLhr({
     mainDocumentUrl: 'https://a.example/',
     audits: {
@@ -114,11 +114,11 @@ test('pageValidity accepts a 200 page even if it loads a WAF SDK script', () => 
   assert.deepEqual(pageValidity(real), { valid: true, mainDocumentStatus: 200 });
 });
 
-test('rowFromLhr rejects a file whose name does not match its form factor', () => {
+test('rowFromLhr rejeita arquivo cujo nome não bate com o form factor', () => {
   assert.throws(() => rowFromLhr(fakeLhr(), { service: 'a', formFactor: 'desktop', run: 1 }));
 });
 
-test('median, summarize and toCsv', () => {
+test('median, summarize e toCsv', () => {
   assert.equal(median([3, 1, 2]), 2);
   assert.equal(median([4, 1, 2, 3]), 2.5);
   assert.equal(median([]), null);
@@ -147,13 +147,13 @@ function withLcpLabel(nodeLabel, statusCode = 200) {
   });
 }
 
-test('pageValidity rejects a challenge page served with HTTP 200 by its LCP text', () => {
-  // Text of the AWS WAF CAPTCHA page seen in the pilot (Portal da Transparência).
+test('pageValidity rejeita página de desafio servida com HTTP 200 pelo texto do LCP', () => {
+  // Texto da página de CAPTCHA do AWS WAF vista no piloto (Portal da Transparência).
   const v = pageValidity(withLcpLabel('Complete the security check before continuing. This step verifies that you are …'));
   assert.equal(v.valid, false);
   assert.equal(v.code, 'CHALLENGE_PAGE');
   assert.equal(pageValidity(withLcpLabel('Verifique se você é humano')).code, 'CHALLENGE_PAGE');
-  // LCP texts of valid pilot runs must pass.
+  // Textos de LCP de execuções válidas do piloto precisam passar.
   for (const label of [
     'Para melhorar a sua experiência na plataforma e prover serviços personalizados,…',
     'Usamos cookies para melhorar sua experiência e oferecer serviços personalizados…',
@@ -161,13 +161,13 @@ test('pageValidity rejects a challenge page served with HTTP 200 by its LCP text
   ]) assert.deepEqual(pageValidity(withLcpLabel(label)), { valid: true, mainDocumentStatus: 200 });
 });
 
-test('quantile uses linear interpolation', () => {
+test('quantile usa interpolação linear', () => {
   assert.equal(quantile([1, 2, 3, 4], 0.25), 1.75);
   assert.equal(quantile([5], 0.75), 5);
   assert.equal(quantile([], 0.5), null);
 });
 
-test('reviewFlags marks slow CPU, low benchmark outliers, DOM drops and host changes', () => {
+test('reviewFlags marca CPU lenta, benchmark abaixo da cerca, queda no DOM e troca de host', () => {
   const base = { formFactor: 'mobile', timestamp: 't', requestedHost: 'a.example', finalHost: 'a.example', challengeHosts: [] };
   const facts = [
     ...[3000, 3050, 3100, 3150, 3200, 3250].map((b, i) => ({ ...base, service: 'a', run: i + 1, benchmarkIndex: b, domElements: 1300 })),

@@ -1,10 +1,10 @@
-// Turns raw Lighthouse results (LHR) into flat rows for CSV export.
+// Converte os resultados brutos do Lighthouse (LHR) em linhas para exportar em CSV.
 //
-// Units in the CSV:
-//   performanceScore, accessibilityScore  0-100 (Lighthouse category score x 100)
-//   LCP, FCP, TBT, SpeedIndex             milliseconds
-//   CLS                                   unitless
-//   timestamp                             LHR fetchTime (ISO 8601, UTC)
+// Unidades no CSV:
+//   performanceScore, accessibilityScore  0-100 (score da categoria no Lighthouse x 100)
+//   LCP, FCP, TBT, SpeedIndex             milissegundos
+//   CLS                                   sem unidade
+//   timestamp                             fetchTime do LHR (ISO 8601, UTC)
 
 export const CSV_COLUMNS = [
   'service', 'url', 'formFactor', 'run', 'performanceScore', 'accessibilityScore',
@@ -26,16 +26,16 @@ const DIGITS = { LCP: 1, FCP: 1, TBT: 1, SpeedIndex: 1, CLS: 4 };
 const round = (v, digits) => (typeof v === 'number' && Number.isFinite(v) ? Number(v.toFixed(digits)) : null);
 const toScore = (s) => (typeof s === 'number' ? Math.round(s * 100) : null);
 
-// Hosts that serve bot-protection CAPTCHA/challenge pages. Only used as supporting evidence:
-// a real page may also load WAF SDK scripts (e.g. *.edge.sdk.awswaf.com), so the decision is
-// based on the main document's HTTP status.
+// Hosts que servem páginas de CAPTCHA/desafio anti-bot. Usados só como evidência de apoio: uma
+// página real também pode carregar scripts do SDK do WAF (ex.: *.edge.sdk.awswaf.com), então a
+// decisão se baseia no status HTTP do documento principal.
 const CHALLENGE_HOST_PATTERNS = [/\.captcha\.awswaf\.com$/i, /\.token\.awswaf\.com$/i, /^challenges\.cloudflare\.com$/i];
 
-// Wording of bot-protection interstitials, matched against the text of the LCP element. On a
-// challenge page the largest text is the challenge message. Only the AWS WAF wording was observed
-// in this study (pilot, Portal da Transparência: "Complete the security check before
-// continuing..."); the others are common interstitial wordings. All are multi-word phrases so that
-// ordinary page text (e.g. a cookie banner) does not match.
+// Textos de páginas de desafio anti-bot, comparados com o texto do elemento LCP. Numa página de
+// desafio, o maior texto é a mensagem do desafio. Só o texto do AWS WAF foi visto neste estudo
+// (piloto, Portal da Transparência: "Complete the security check before continuing..."); os
+// outros são textos comuns desse tipo de página. Todos são frases de várias palavras, para que o
+// texto normal de uma página (ex.: um banner de cookies) não case com eles.
 const CHALLENGE_TEXT_PATTERNS = [
   /complete the security check/i,
   /\b(confirm|verify) (that )?you are (a )?human\b/i,
@@ -58,11 +58,11 @@ function challengeHostsOf(items) {
 }
 
 /**
- * Checks that the run measured the target page and not a block or challenge page.
- * Rule 1: the main document must be HTTP 200. Bot-protection challenges are often served with a
- * non-200 2xx status (AWS WAF uses 202), which Lighthouse does not treat as an error, so a
- * "successful" run can describe the wrong page.
- * Rule 2: the LCP element must not be a challenge message. Catches challenges served with HTTP 200.
+ * Confere se a execução mediu a página do serviço, e não uma página de bloqueio ou de desafio.
+ * Regra 1: o documento principal precisa voltar com HTTP 200. Desafios anti-bot costumam vir com
+ * um status 2xx diferente de 200 (o AWS WAF usa 202), que o Lighthouse não trata como erro; assim
+ * uma execução "bem-sucedida" pode descrever a página errada.
+ * Regra 2: o elemento LCP não pode ser uma mensagem de desafio. Pega desafios servidos com HTTP 200.
  * @returns {{valid: boolean, mainDocumentStatus: number|null, code?: string, reason?: string}}
  */
 export function pageValidity(lhr) {
@@ -71,32 +71,32 @@ export function pageValidity(lhr) {
   const main = items.find((r) => r.url === mainUrl) ?? items.find((r) => r.resourceType === 'Document');
   const mainDocumentStatus = main?.statusCode ?? null;
   const challengeHosts = challengeHostsOf(items);
-  const extra = challengeHosts.length ? `; challenge resources from ${challengeHosts.join(', ')}` : '';
+  const extra = challengeHosts.length ? `; recursos de desafio carregados de ${challengeHosts.join(', ')}` : '';
   if (mainDocumentStatus !== null && mainDocumentStatus !== 200) {
-    return { valid: false, mainDocumentStatus, code: 'BLOCKED_OR_NOT_200', reason: `main document returned HTTP ${mainDocumentStatus}${extra}` };
+    return { valid: false, mainDocumentStatus, code: 'BLOCKED_OR_NOT_200', reason: `documento principal devolveu HTTP ${mainDocumentStatus}${extra}` };
   }
   const label = (lcpElement(lhr).lcpNodeLabel ?? '').replace(/\s+/g, ' ');
   const pattern = CHALLENGE_TEXT_PATTERNS.find((p) => p.test(label));
   if (pattern) {
     return {
       valid: false, mainDocumentStatus, code: 'CHALLENGE_PAGE',
-      reason: `LCP element text matches a bot-challenge message (${pattern}): "${label.slice(0, 80)}"${extra}`,
+      reason: `texto do elemento LCP é uma mensagem de desafio anti-bot (${pattern}): "${label.slice(0, 80)}"${extra}`,
     };
   }
   return { valid: true, mainDocumentStatus };
 }
 
-// Lighthouse's own threshold (core/gather/driver/environment.js, SLOW_CPU_BENCHMARK_INDEX_THRESHOLD).
-// Lighthouse only shows its slow-CPU warning in the CLI, so runs through the Node API never get it.
+// Limiar do próprio Lighthouse (core/gather/driver/environment.js, SLOW_CPU_BENCHMARK_INDEX_THRESHOLD).
+// O Lighthouse só mostra o aviso de CPU lenta na CLI, então execuções pela API Node nunca o recebem.
 export const SLOW_CPU_BENCHMARK_INDEX = 1000;
-// A valid run whose DOM has fewer elements than this share of the largest DOM seen for the same
-// service and form factor is flagged. In the pilot the element count varied by less than 0.1%
-// within a cell, while the CAPTCHA page had 44 elements against 1318-1800 for the real page.
+// Uma execução válida cujo DOM tem menos elementos do que esta fração do maior DOM visto no mesmo
+// serviço e form factor é marcada. No piloto, o número de elementos variou menos de 0,1% dentro de
+// uma célula, enquanto a página de CAPTCHA tinha 44 elementos contra 1318 a 1800 da página real.
 export const DOM_DROP_RATIO = 0.5;
 
 export const FLAG_COLUMNS = ['service', 'formFactor', 'run', 'timestamp', 'flag', 'detail'];
 
-/** Per-run values used by reviewFlags(). */
+/** Valores de cada execução usados por reviewFlags(). */
 export function runFacts(lhr, { service, formFactor, run }) {
   const items = lhr.audits?.['network-requests']?.details?.items ?? [];
   return {
@@ -109,7 +109,7 @@ export function runFacts(lhr, { service, formFactor, run }) {
   };
 }
 
-/** Linear-interpolation quantile (same as R type 7 / numpy default). */
+/** Quantil com interpolação linear (igual ao tipo 7 do R e ao padrão do numpy). */
 export function quantile(values, q) {
   const v = values.filter((x) => typeof x === 'number').sort((a, b) => a - b);
   if (!v.length) return null;
@@ -119,15 +119,15 @@ export function quantile(values, q) {
 }
 
 /**
- * Flags valid runs for manual review. Flags do not remove rows from the CSV: the analysis is run
- * with and without flagged runs (sensitivity analysis, docs/proposta.md section 7).
- * @param {ReturnType<typeof runFacts>[]} facts valid runs of one phase
+ * Marca execuções válidas para revisão manual. As marcações não tiram linhas do CSV: a análise é
+ * feita com e sem as execuções marcadas (análise de sensibilidade, docs/proposta.md seção 7.6).
+ * @param {ReturnType<typeof runFacts>[]} facts execuções válidas de uma fase
  */
 export function reviewFlags(facts) {
   const flags = [];
   const add = (f, flag, detail) => flags.push({ service: f.service, formFactor: f.formFactor, run: f.run, timestamp: f.timestamp, flag, detail });
 
-  // Tukey's lower fence over the benchmarkIndex of all valid runs of the phase (one time block).
+  // Cerca inferior de Tukey sobre o benchmarkIndex de todas as execuções válidas da fase (um bloco de horário).
   const bi = facts.map((f) => f.benchmarkIndex);
   const q1 = quantile(bi, 0.25);
   const q3 = quantile(bi, 0.75);
@@ -142,20 +142,20 @@ export function reviewFlags(facts) {
   for (const f of facts) {
     if (typeof f.benchmarkIndex === 'number') {
       if (f.benchmarkIndex <= SLOW_CPU_BENCHMARK_INDEX) {
-        add(f, 'SLOW_HOST_CPU', `benchmarkIndex ${f.benchmarkIndex} <= ${SLOW_CPU_BENCHMARK_INDEX} (Lighthouse slow-CPU threshold)`);
+        add(f, 'SLOW_HOST_CPU', `benchmarkIndex ${f.benchmarkIndex} <= ${SLOW_CPU_BENCHMARK_INDEX} (limiar de CPU lenta do Lighthouse)`);
       } else if (fence !== null && f.benchmarkIndex < fence) {
-        add(f, 'BENCHMARK_LOW_OUTLIER', `benchmarkIndex ${f.benchmarkIndex} < Tukey lower fence ${fence.toFixed(1)} (Q1 ${q1.toFixed(1)}, Q3 ${q3.toFixed(1)})`);
+        add(f, 'BENCHMARK_LOW_OUTLIER', `benchmarkIndex ${f.benchmarkIndex} < cerca inferior de Tukey ${fence.toFixed(1)} (Q1 ${q1.toFixed(1)}, Q3 ${q3.toFixed(1)})`);
       }
     }
     const max = maxDom.get(`${f.service}|${f.formFactor}`);
     if (typeof f.domElements === 'number' && max && f.domElements < DOM_DROP_RATIO * max) {
-      add(f, 'DOM_SIZE_DROP', `${f.domElements} DOM elements < ${DOM_DROP_RATIO * 100}% of the largest run of this cell (${max})`);
+      add(f, 'DOM_SIZE_DROP', `${f.domElements} elementos DOM < ${DOM_DROP_RATIO * 100}% da maior execução desta célula (${max})`);
     }
     if (f.requestedHost && f.finalHost && f.requestedHost !== f.finalHost) {
-      add(f, 'FINAL_HOST_CHANGED', `requested ${f.requestedHost}, final ${f.finalHost}`);
+      add(f, 'FINAL_HOST_CHANGED', `pedido ${f.requestedHost}, final ${f.finalHost}`);
     }
     if (f.challengeHosts.length) {
-      add(f, 'CHALLENGE_RESOURCES', `loaded ${f.challengeHosts.join(', ')}`);
+      add(f, 'CHALLENGE_RESOURCES', `carregou ${f.challengeHosts.join(', ')}`);
     }
   }
   return flags;
@@ -164,8 +164,8 @@ export function reviewFlags(facts) {
 export const LCP_ELEMENT_COLUMNS = ['service', 'formFactor', 'run', 'lcpSelector', 'lcpNodeLabel'];
 
 /**
- * Element Lighthouse used as the Largest Contentful Paint. Recorded because the pilot showed that
- * on some pages the LCP element is a cookie-consent modal, not the main content.
+ * Elemento que o Lighthouse usou como Largest Contentful Paint. Registrado porque o piloto mostrou
+ * que em algumas páginas o elemento LCP é um modal de consentimento de cookies, e não o conteúdo principal.
  */
 export function lcpElement(lhr) {
   const findNode = (v) => {
@@ -182,7 +182,7 @@ export function lcpElement(lhr) {
   return { lcpSelector: node?.selector ?? null, lcpNodeLabel: node?.nodeLabel ?? null };
 }
 
-/** Parses "<service>_<formFactor>_<n>.json". Service ids never contain "_". */
+/** Lê "<servico>_<formFactor>_<n>.json". Ids de serviço nunca têm "_". */
 export function parseRawFileName(name) {
   const m = /^([a-z0-9-]+)_(mobile|desktop)_(\d+)\.json$/.exec(name);
   return m ? { service: m[1], formFactor: m[2], run: Number(m[3]) } : null;
@@ -194,7 +194,7 @@ export function parseRawFileName(name) {
 export function rowFromLhr(lhr, { service, formFactor, run }) {
   const actualFormFactor = lhr.configSettings?.formFactor;
   if (actualFormFactor !== formFactor) {
-    throw new Error(`${service}_${formFactor}_${run}: file name says ${formFactor} but LHR says ${actualFormFactor}`);
+    throw new Error(`${service}_${formFactor}_${run}: o nome do arquivo diz ${formFactor}, mas o LHR diz ${actualFormFactor}`);
   }
   const base = { service, url: lhr.requestedUrl, formFactor, run, timestamp: lhr.fetchTime };
   if (lhr.runtimeError) {
@@ -215,7 +215,7 @@ export function rowFromLhr(lhr, { service, formFactor, run }) {
     ...Object.entries(metrics).filter(([, v]) => v === null).map(([k]) => k),
   ];
   if (missing.length) {
-    return { ok: false, failure: { ...base, reasonCode: 'MISSING_VALUES', reason: `null value(s): ${missing.join(', ')}` } };
+    return { ok: false, failure: { ...base, reasonCode: 'MISSING_VALUES', reason: `valor(es) nulo(s): ${missing.join(', ')}` } };
   }
   return { ok: true, row: { ...base, performanceScore, accessibilityScore, ...metrics } };
 }
@@ -237,7 +237,7 @@ export function median(values) {
   return v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2;
 }
 
-/** Median per (service, formFactor), plus min/max of the performance score. */
+/** Mediana por (serviço, form factor), mais o mínimo e o máximo do performance score. */
 export function summarize(rows) {
   const groups = new Map();
   for (const r of rows) {

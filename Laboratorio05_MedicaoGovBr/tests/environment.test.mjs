@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parsePowercfg } from '../scripts/lib/environment.mjs';
 
-test('parsePowercfg reads GUID and name from English and Portuguese output', () => {
+test('parsePowercfg lê GUID e nome da saída em inglês e em português', () => {
   assert.deepEqual(
     parsePowercfg('Power Scheme GUID: 381B4222-F694-41F0-9685-FF5BB260DF2E  (Balanced)\r\n'),
     { guid: '381b4222-f694-41f0-9685-ff5bb260df2e', name: 'Balanced' },

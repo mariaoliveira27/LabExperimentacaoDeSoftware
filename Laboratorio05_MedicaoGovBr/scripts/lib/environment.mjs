@@ -1,9 +1,9 @@
-// Measurement-host conditions that os.* does not expose: the active power plan and the network
-// adapter that carries the default route (Ethernet vs Wi-Fi, link speed, physical vs virtual,
-// which reveals an active VPN). Recorded once per session in data/run-metadata.json.
+// Condições da máquina de medição que o módulo os do Node não expõe: o plano de energia ativo e o
+// adaptador de rede da rota padrão (Ethernet ou Wi-Fi, velocidade do link, físico ou virtual; um
+// adaptador virtual indica VPN ativa). Gravado uma vez por sessão em data/run-metadata.json.
 //
-// Nothing here identifies the network or the person: no IP address, MAC address, SSID or
-// provider is read. Provider and city are recorded by hand (see docs/proposta.md, section 6.6).
+// Nada aqui identifica a rede ou a pessoa: não se lê endereço IP, MAC, nome da rede (SSID) nem
+// provedor. Provedor e cidade são registrados à mão (docs/proposta.md, seção 6.6).
 import { execFile } from 'node:child_process';
 import { readFile, readdir, access } from 'node:fs/promises';
 import { promisify } from 'node:util';
@@ -11,9 +11,9 @@ import { promisify } from 'node:util';
 const run = promisify(execFile);
 const OPTS = { timeout: 15_000, windowsHide: true };
 
-// Windows: GUID and name of the active power scheme. The surrounding text is localized
-// ("Power Scheme GUID" / "GUID do Esquema de Energia"), so only the GUID and the name in
-// parentheses are parsed.
+// Windows: GUID e nome do esquema de energia ativo. O texto em volta muda com o idioma do sistema
+// ("Power Scheme GUID" / "GUID do Esquema de Energia"), então só o GUID e o nome entre parênteses
+// são lidos.
 export function parsePowercfg(stdout) {
   const m = /([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\s*\(([^)]+)\)/i.exec(stdout);
   return m ? { guid: m[1].toLowerCase(), name: m[2].trim() } : null;
@@ -42,8 +42,8 @@ async function windowsInfo() {
   try {
     const { stdout } = await run('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', WINDOWS_NETWORK_PS], OPTS);
     const parsed = JSON.parse(stdout.trim());
-    out.network = parsed.defaultRouteAdapter ?? { error: 'no IPv4 default route found' };
-    // A desktop without a battery is always on mains power; a laptop must be checked by hand.
+    out.network = parsed.defaultRouteAdapter ?? { error: 'nenhuma rota padrão IPv4 encontrada' };
+    // Um desktop sem bateria está sempre na tomada; em notebook isso precisa ser conferido à mão.
     out.batteries = parsed.batteries;
   } catch (err) {
     out.network = { error: err.message };
@@ -59,17 +59,17 @@ async function linuxInfo() {
     try {
       profile = (await readFile('/sys/firmware/acpi/platform_profile', 'utf8')).trim();
     } catch {
-      // not exposed on every machine
+      // nem toda máquina expõe esse arquivo
     }
     out.powerPlan = { cpuGovernor: governor, platformProfile: profile };
   } catch (err) {
     out.powerPlan = { error: err.message };
   }
   try {
-    // /proc/net/route: the default route has Destination 00000000; pick the lowest metric.
+    // /proc/net/route: a rota padrão tem Destination 00000000; escolhe a de menor métrica.
     const rows = (await readFile('/proc/net/route', 'utf8')).trim().split('\n').slice(1).map((l) => l.trim().split(/\s+/));
     const def = rows.filter((c) => c[1] === '00000000').sort((a, b) => Number(a[6]) - Number(b[6]))[0];
-    if (!def) throw new Error('no IPv4 default route found');
+    if (!def) throw new Error('nenhuma rota padrão IPv4 encontrada');
     const iface = def[0];
     const exists = (p) => access(p).then(() => true, () => false);
     const wireless = await exists(`/sys/class/net/${iface}/wireless`);
@@ -78,7 +78,7 @@ async function linuxInfo() {
     try {
       speed = Number((await readFile(`/sys/class/net/${iface}/speed`, 'utf8')).trim());
     } catch {
-      // Wi-Fi adapters usually do not report a speed here
+      // adaptadores Wi-Fi em geral não informam a velocidade aqui
     }
     out.network = { interface: iface, type: wireless ? 'wifi' : 'wired-or-other', virtual: !physical, linkSpeedMbps: speed };
     const ps = await readdir('/sys/class/power_supply').catch(() => []);
@@ -92,5 +92,5 @@ async function linuxInfo() {
 export async function hostConditions(platform = process.platform) {
   if (platform === 'win32') return windowsInfo();
   if (platform === 'linux') return linuxInfo();
-  return { powerPlan: null, network: null, note: `not captured automatically on ${platform}; record by hand` };
+  return { powerPlan: null, network: null, note: `não capturado automaticamente em ${platform}; registrar à mão` };
 }

@@ -1,13 +1,14 @@
 #!/usr/bin/env node
-// Reads data/raw/<phase>/*.json (raw Lighthouse results) and writes:
-//   data/processed/<phase>.csv           one row per successful execution (columns in CSV_COLUMNS)
-//   data/processed/<phase>_failures.csv  executions with a Lighthouse runtimeError, a block/challenge page
-//                                        (main document not HTTP 200) or missing values
-//   data/processed/<phase>_summary.csv   medians per service and form factor
-//   data/processed/<phase>_lcp_elements.csv  element used as LCP in each successful execution
-//   data/processed/<phase>_flags.csv     successful executions to review (slow or outlier host CPU,
-//                                        DOM much smaller than the cell's largest, final host changed,
-//                                        challenge resources loaded); they stay in <phase>.csv
+// Lê data/raw/<fase>/*.json (resultados brutos do Lighthouse) e grava:
+//   data/processed/<fase>.csv           uma linha por execução válida (colunas em CSV_COLUMNS)
+//   data/processed/<fase>_failures.csv  execuções com runtimeError do Lighthouse, página de bloqueio
+//                                       ou desafio, ou valores ausentes
+//   data/processed/<fase>_summary.csv   medianas por serviço e form factor
+//   data/processed/<fase>_lcp_elements.csv  elemento usado como LCP em cada execução válida
+//   data/processed/<fase>_flags.csv     execuções válidas para revisar (CPU do host lenta ou fora da
+//                                       faixa, DOM muito menor que o maior da célula, host final
+//                                       diferente, recursos de desafio carregados); elas continuam
+//                                       em <fase>.csv
 //
 //   node scripts/extract-metrics.mjs --phase pilot
 import { parseArgs } from 'node:util';
@@ -24,9 +25,9 @@ const { values: args } = parseArgs({ options: { phase: { type: 'string', default
 
 async function main() {
   const phase = args.phase;
-  if (!/^[a-z0-9-]+$/.test(phase)) throw new Error('--phase must match [a-z0-9-]+');
+  if (!/^[a-z0-9-]+$/.test(phase)) throw new Error('--phase precisa seguir o padrão [a-z0-9-]+');
   const rawDir = join(DATA_DIR, 'raw', phase);
-  if (!existsSync(rawDir)) throw new Error(`${relative(ROOT, rawDir)} does not exist; run the Lighthouse script first`);
+  if (!existsSync(rawDir)) throw new Error(`${relative(ROOT, rawDir)} não existe; rode antes o script do Lighthouse`);
 
   const files = (await readdir(rawDir)).filter((f) => f.endsWith('.json'));
   const rows = [];
@@ -64,17 +65,17 @@ async function main() {
   await writeText(join(outDir, `${phase}_lcp_elements.csv`), toCsv(lcpElements, LCP_ELEMENT_COLUMNS));
   await writeText(join(outDir, `${phase}_flags.csv`), toCsv(flags, FLAG_COLUMNS));
 
-  console.log(`${files.length} raw file(s): ${rows.length} ok, ${failures.length} failed, ${skipped.length} skipped (unexpected name)`);
-  for (const f of skipped) console.log(`  skipped: ${f}`);
-  for (const f of failures) console.log(`  failed: ${f.service} ${f.formFactor} #${f.run} — ${f.reasonCode}: ${f.reason}`);
-  console.log(`${flags.length} review flag(s) on successful executions`);
-  for (const f of flags) console.log(`  flag: ${f.service} ${f.formFactor} #${f.run} — ${f.flag}: ${f.detail}`);
+  console.log(`${files.length} arquivo(s) bruto(s): ${rows.length} válido(s), ${failures.length} inválido(s), ${skipped.length} ignorado(s) (nome fora do padrão)`);
+  for (const f of skipped) console.log(`  ignorado: ${f}`);
+  for (const f of failures) console.log(`  inválido: ${f.service} ${f.formFactor} #${f.run} — ${f.reasonCode}: ${f.reason}`);
+  console.log(`${flags.length} marcação(ões) para revisão em execuções válidas`);
+  for (const f of flags) console.log(`  revisar: ${f.service} ${f.formFactor} #${f.run} — ${f.flag}: ${f.detail}`);
   console.table(summary.map((s) => ({
-    service: s.service, formFactor: s.formFactor, n: s.n,
-    perf: s.performanceScore_median, 'perf range': `${s.performanceScore_min}-${s.performanceScore_max}`,
+    serviço: s.service, formFactor: s.formFactor, n: s.n,
+    perf: s.performanceScore_median, 'perf mín-máx': `${s.performanceScore_min}-${s.performanceScore_max}`,
     a11y: s.accessibilityScore_median, 'LCP ms': s.LCP_median, 'TBT ms': s.TBT_median, CLS: s.CLS_median,
   })));
-  console.log(`Wrote data/processed/${phase}.csv, ${phase}_failures.csv, ${phase}_summary.csv, ${phase}_lcp_elements.csv and ${phase}_flags.csv`);
+  console.log(`Gravados data/processed/${phase}.csv, ${phase}_failures.csv, ${phase}_summary.csv, ${phase}_lcp_elements.csv e ${phase}_flags.csv`);
 }
 
 main().catch((err) => {
