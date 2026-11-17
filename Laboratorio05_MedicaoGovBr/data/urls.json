@@ -1,5 +1,5 @@
 {
-  "description": "Public entry pages of gov.br digital services measured with Lighthouse. Only public pages are listed: no login is performed, no form is submitted, no personal data is sent.",
+  "description": "Páginas públicas de entrada de serviços digitais do gov.br medidas com o Lighthouse. Só páginas públicas: nenhum login é feito, nenhum formulário é enviado, nenhum dado pessoal é enviado.",
   "checkedAt": "2026-11-17",
   "services": [
     {
@@ -7,70 +7,70 @@
       "name": "Portal gov.br",
       "url": "https://www.gov.br/pt-br",
       "pilot": true,
-      "notes": "Federal government single portal (Plone-based)."
+      "notes": "Portal único do governo federal (feito em Plone)."
     },
     {
       "id": "meuinss",
       "name": "Meu INSS",
       "url": "https://meu.inss.gov.br/",
       "pilot": true,
-      "notes": "Public landing page of the INSS self-service SPA. Login is not performed."
+      "notes": "Página pública de entrada do SPA de autoatendimento do INSS. Login não é feito."
     },
     {
       "id": "receita-ecac",
       "name": "Receita Federal (e-CAC)",
       "url": "https://cav.receita.fazenda.gov.br/autenticacao/login",
       "pilot": false,
-      "notes": "Public entry page of e-CAC. Only the page load is measured; credentials are never entered. First curl probe on 2026-11-17 timed out (HTTP 000); second probe returned 200."
+      "notes": "Página pública de entrada do e-CAC. Só o carregamento da página é medido; credenciais nunca são digitadas. A primeira sondagem com curl em 17/11/2026 estourou o tempo (HTTP 000); a segunda devolveu 200."
     },
     {
       "id": "ctps-digital",
       "name": "Carteira de Trabalho Digital (web)",
       "url": "https://servicos.mte.gov.br/spme-v2/",
       "pilot": false,
-      "notes": "Web channel of CTPS Digital, served by the Portal Emprega Brasil SPA. The gov.br service page (https://www.gov.br/pt-br/servicos/obter-a-carteira-de-trabalho) links to this URL. https://servicos.mte.gov.br/ redirects here."
+      "notes": "Canal web da CTPS Digital, servido pelo SPA do Portal Emprega Brasil. A página de serviço do gov.br (https://www.gov.br/pt-br/servicos/obter-a-carteira-de-trabalho) aponta para esta URL. https://servicos.mte.gov.br/ redireciona para cá."
     },
     {
       "id": "svr-bcb",
       "name": "Valores a Receber (Banco Central)",
       "url": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
       "pilot": true,
-      "notes": "Replacement for Portal da Transparência (see 'replaced'). The official address https://valoresareceber.bcb.gov.br/ redirects here (1 redirect on 2026-11-17, including the query string that opens an anti-scam notice). The final URL is measured directly. Querying balances needs CPF and date of birth; that form is never filled."
+      "notes": "Substituto do Portal da Transparência (ver \"replaced\"). O endereço oficial https://valoresareceber.bcb.gov.br/ redireciona para cá (1 redirecionamento em 17/11/2026, com a query string que abre um aviso contra golpes). A URL final é medida diretamente. Consultar valores exige CPF e data de nascimento; esse formulário nunca é preenchido."
     },
     {
       "id": "meususdigital",
       "name": "Meu SUS Digital",
       "url": "https://meususdigital.saude.gov.br/",
       "pilot": false,
-      "notes": "Public landing page of Meu SUS Digital (Ministério da Saúde). Login is not performed."
+      "notes": "Página pública de entrada do Meu SUS Digital (Ministério da Saúde). Login não é feito."
     },
     {
       "id": "portal-mg",
       "name": "Portal MG (serviços do Governo de Minas)",
       "url": "https://www.mg.gov.br/",
       "pilot": false,
-      "notes": "Replacement for Detran-MG (see 'replaced'). Web channel of Minas Gerais state services, the web counterpart of the MG App."
+      "notes": "Substituto do Detran-MG (ver \"replaced\"). Canal web dos serviços do estado de Minas Gerais, a versão web do MG App."
     },
     {
       "id": "portal-servidor",
       "name": "Portal do Servidor",
       "url": "https://www.gov.br/servidor/pt-br",
       "pilot": false,
-      "notes": "Federal civil servant portal (Plone-based, same platform as Portal gov.br)."
+      "notes": "Portal do servidor público federal (feito em Plone, mesma plataforma do Portal gov.br)."
     },
     {
       "id": "consumidor",
       "name": "Consumidor.gov.br",
       "url": "https://www.consumidor.gov.br/",
       "pilot": false,
-      "notes": "Replacement for Conecte SUS (see 'replaced')."
+      "notes": "Substituto do Conecte SUS (ver \"replaced\")."
     },
     {
       "id": "enem-inep",
       "name": "ENEM (Inep)",
       "url": "https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enem",
       "pilot": false,
-      "notes": "https://enem.inep.gov.br/ redirects here (1 redirect on 2026-11-17). The final URL is measured directly so the redirect does not add time to the metrics."
+      "notes": "https://enem.inep.gov.br/ redireciona para cá (1 redirecionamento em 17/11/2026). A URL final é medida diretamente, para que o redirecionamento não entre no tempo das métricas."
     }
   ],
   "replaced": [
@@ -79,35 +79,35 @@
       "url": "https://conectesus-paciente.saude.gov.br/",
       "replacedBy": "consumidor",
       "date": "2026-11-17",
-      "reason": "The URL redirects to https://meususdigital.saude.gov.br/ (Conecte SUS was succeeded by Meu SUS Digital). Keeping it would measure the same page twice."
+      "reason": "A URL redireciona para https://meususdigital.saude.gov.br/ (o Meu SUS Digital substituiu o Conecte SUS). Mantê-la mediria a mesma página duas vezes."
     },
     {
       "candidate": "Detran-MG",
       "url": "https://www.detran.mg.gov.br/",
       "replacedBy": "portal-mg",
       "date": "2026-11-17",
-      "reason": "robots.txt (HTTP 200) has 'User-agent: *' + 'Disallow: /' (only Googlebot and bedrockbot are allowed). Raw copy kept in data/robots/www.detran.mg.gov.br.txt. https://transito.mg.gov.br/ redirects to the same host."
+      "reason": "O robots.txt (HTTP 200) tem \"User-agent: *\" + \"Disallow: /\" (só Googlebot e bedrockbot são liberados). Cópia mantida em data/robots/www.detran.mg.gov.br.txt. https://transito.mg.gov.br/ redireciona para o mesmo host."
     },
     {
-      "candidate": "Senatran - Portal de Serviços (considered as Detran-MG replacement)",
+      "candidate": "Senatran - Portal de Serviços (considerado para substituir o Detran-MG)",
       "url": "https://portalservicos.senatran.serpro.gov.br/",
       "replacedBy": "portal-mg",
       "date": "2026-11-17",
-      "reason": "robots.txt request got no HTTP response (curl status 000), i.e. unreachable; RFC 9309 says assume full disallow, so it was not used."
+      "reason": "A requisição do robots.txt não teve resposta HTTP (status 000 no curl), ou seja, inacessível; pela RFC 9309 assume-se proibição total, então não foi usado."
     },
     {
       "candidate": "Portal da Transparência",
       "url": "https://portaldatransparencia.gov.br/",
       "replacedBy": "svr-bcb",
       "date": "2026-11-17",
-      "reason": "robots.txt allows '/', but in the pilot 4 of 6 Lighthouse runs received an AWS WAF CAPTCHA ('Let's confirm you are human', main document HTTP 202) instead of the portal. Only the first visit and one later visit got the real page. Bypassing the CAPTCHA is out of scope, so the service cannot be measured reliably. Raw files kept in data/raw/pilot/transparencia_*.json."
+      "reason": "O robots.txt libera \"/\", mas no piloto 4 de 6 execuções do Lighthouse receberam um CAPTCHA do AWS WAF (\"Let's confirm you are human\", documento principal com HTTP 202) em vez do portal. Só a primeira visita e uma visita depois receberam a página real. Contornar o CAPTCHA está fora do escopo, então o serviço não pode ser medido de forma confiável. Arquivos brutos mantidos em data/raw/pilot/transparencia_*.json."
     },
     {
-      "candidate": "IBGE (considered as Portal da Transparência replacement)",
+      "candidate": "IBGE (considerado para substituir o Portal da Transparência)",
       "url": "https://www.ibge.gov.br/",
       "replacedBy": "svr-bcb",
       "date": "2026-11-17",
-      "reason": "Home page returned HTTP 403 to a single curl request with a browser User-Agent (bot protection), so it was not used."
+      "reason": "A página inicial devolveu HTTP 403 a uma única requisição com curl e User-Agent de navegador (proteção anti-bot), então não foi usado."
     }
   ]
 }
