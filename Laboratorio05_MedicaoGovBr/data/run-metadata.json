@@ -645,6 +645,318 @@
           "error": null
         }
       ]
+    },
+    {
+      "sessionId": "pilot-2026-11-17T160105-0300",
+      "phase": "pilot",
+      "status": "finished",
+      "startedAt": "2026-11-17T16:01:05-03:00",
+      "finishedAt": "2026-11-17T16:03:36-03:00",
+      "seed": 484856555,
+      "runsPerFormFactor": 3,
+      "pauseBetweenRunsMs": 10000,
+      "services": [
+        {
+          "id": "svr-bcb",
+          "url": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal"
+        }
+      ],
+      "robotsCheckGeneratedAt": "2026-11-17T16:00:51-03:00",
+      "tools": {
+        "lighthouse": "13.6.0",
+        "chromeLauncher": "1.2.3",
+        "chromeFlags": [
+          "--headless=new",
+          "--no-first-run",
+          "--no-default-browser-check",
+          "--disable-extensions"
+        ],
+        "chrome": "Chrome/157.0.8103.79"
+      },
+      "lighthouseFlags": {
+        "output": "json",
+        "logLevel": "error",
+        "onlyCategories": [
+          "performance",
+          "accessibility"
+        ],
+        "disableFullPageScreenshot": true
+      },
+      "configByFormFactor": {
+        "mobile": {
+          "formFactor": "mobile",
+          "throttlingMethod": "simulate",
+          "throttling": {
+            "rttMs": 150,
+            "throughputKbps": 1638.4,
+            "requestLatencyMs": 562.5,
+            "downloadThroughputKbps": 1474.5600000000002,
+            "uploadThroughputKbps": 675,
+            "cpuSlowdownMultiplier": 4
+          },
+          "screenEmulation": {
+            "mobile": true,
+            "width": 412,
+            "height": 823,
+            "deviceScaleFactor": 1.75,
+            "disabled": false
+          },
+          "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+          "onlyCategories": [
+            "performance",
+            "accessibility"
+          ],
+          "maxWaitForFcp": 30000,
+          "maxWaitForLoad": 45000,
+          "disableStorageReset": false,
+          "clearStorageTypes": [
+            "file_systems",
+            "shader_cache",
+            "service_workers",
+            "cache_storage"
+          ],
+          "disableFullPageScreenshot": true,
+          "locale": "en-US",
+          "channel": "node"
+        },
+        "desktop": {
+          "formFactor": "desktop",
+          "throttlingMethod": "simulate",
+          "throttling": {
+            "rttMs": 40,
+            "throughputKbps": 10240,
+            "requestLatencyMs": 0,
+            "downloadThroughputKbps": 0,
+            "uploadThroughputKbps": 0,
+            "cpuSlowdownMultiplier": 1
+          },
+          "screenEmulation": {
+            "mobile": false,
+            "width": 1350,
+            "height": 940,
+            "deviceScaleFactor": 1,
+            "disabled": false
+          },
+          "emulatedUserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+          "onlyCategories": [
+            "performance",
+            "accessibility"
+          ],
+          "maxWaitForFcp": 30000,
+          "maxWaitForLoad": 45000,
+          "disableStorageReset": false,
+          "clearStorageTypes": [
+            "file_systems",
+            "shader_cache",
+            "service_workers",
+            "cache_storage"
+          ],
+          "disableFullPageScreenshot": true,
+          "locale": "en-US",
+          "channel": "node"
+        }
+      },
+      "machine": {
+        "os": {
+          "type": "Windows_NT",
+          "release": "10.0.26300",
+          "version": "Windows 11 Pro",
+          "platform": "win32",
+          "arch": "x64"
+        },
+        "cpu": {
+          "model": "AMD Ryzen 5 5500",
+          "logicalCores": 12,
+          "speedMHz": 3600
+        },
+        "ramGB": 15.8,
+        "node": "v24.18.0",
+        "timezone": "America/Sao_Paulo"
+      },
+      "plannedOrder": [
+        "svr-bcb_mobile_1",
+        "svr-bcb_mobile_2",
+        "svr-bcb_desktop_1",
+        "svr-bcb_desktop_2",
+        "svr-bcb_desktop_3",
+        "svr-bcb_mobile_3"
+      ],
+      "executions": [
+        {
+          "order": 1,
+          "serviceId": "svr-bcb",
+          "url": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "formFactor": "mobile",
+          "run": 1,
+          "startedAt": "2026-11-17T16:01:05-03:00",
+          "startedAtUtc": "2026-11-17T19:01:05.357Z",
+          "finishedAt": "2026-11-17T16:01:23-03:00",
+          "durationMs": 17920,
+          "status": "ok",
+          "file": "data/raw/pilot/svr-bcb_mobile_1.json",
+          "chrome": {
+            "browser": "Chrome/157.0.8103.79",
+            "protocolVersion": "1.3",
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+          },
+          "lighthouseVersion": "13.6.0",
+          "finalDisplayedUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentStatus": 200,
+          "runtimeError": null,
+          "blockReason": null,
+          "runWarnings": [],
+          "benchmarkIndex": 3015.5,
+          "performanceScore": 0.02,
+          "accessibilityScore": 0.89,
+          "error": null
+        },
+        {
+          "order": 2,
+          "serviceId": "svr-bcb",
+          "url": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "formFactor": "mobile",
+          "run": 2,
+          "startedAt": "2026-11-17T16:01:33-03:00",
+          "startedAtUtc": "2026-11-17T19:01:33.285Z",
+          "finishedAt": "2026-11-17T16:01:51-03:00",
+          "durationMs": 18244,
+          "status": "ok",
+          "file": "data/raw/pilot/svr-bcb_mobile_2.json",
+          "chrome": {
+            "browser": "Chrome/157.0.8103.79",
+            "protocolVersion": "1.3",
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+          },
+          "lighthouseVersion": "13.6.0",
+          "finalDisplayedUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentStatus": 200,
+          "runtimeError": null,
+          "blockReason": null,
+          "runWarnings": [],
+          "benchmarkIndex": 3199,
+          "performanceScore": 0.02,
+          "accessibilityScore": 0.89,
+          "error": null
+        },
+        {
+          "order": 3,
+          "serviceId": "svr-bcb",
+          "url": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "formFactor": "desktop",
+          "run": 1,
+          "startedAt": "2026-11-17T16:02:01-03:00",
+          "startedAtUtc": "2026-11-17T19:02:01.536Z",
+          "finishedAt": "2026-11-17T16:02:18-03:00",
+          "durationMs": 16840,
+          "status": "ok",
+          "file": "data/raw/pilot/svr-bcb_desktop_1.json",
+          "chrome": {
+            "browser": "Chrome/157.0.8103.79",
+            "protocolVersion": "1.3",
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+          },
+          "lighthouseVersion": "13.6.0",
+          "finalDisplayedUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentStatus": 200,
+          "runtimeError": null,
+          "blockReason": null,
+          "runWarnings": [],
+          "benchmarkIndex": 3263.5,
+          "performanceScore": 0.24,
+          "accessibilityScore": 0.85,
+          "error": null
+        },
+        {
+          "order": 4,
+          "serviceId": "svr-bcb",
+          "url": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "formFactor": "desktop",
+          "run": 2,
+          "startedAt": "2026-11-17T16:02:28-03:00",
+          "startedAtUtc": "2026-11-17T19:02:28.392Z",
+          "finishedAt": "2026-11-17T16:02:43-03:00",
+          "durationMs": 15457,
+          "status": "ok",
+          "file": "data/raw/pilot/svr-bcb_desktop_2.json",
+          "chrome": {
+            "browser": "Chrome/157.0.8103.79",
+            "protocolVersion": "1.3",
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+          },
+          "lighthouseVersion": "13.6.0",
+          "finalDisplayedUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentStatus": 200,
+          "runtimeError": null,
+          "blockReason": null,
+          "runWarnings": [],
+          "benchmarkIndex": 3215,
+          "performanceScore": 0.25,
+          "accessibilityScore": 0.85,
+          "error": null
+        },
+        {
+          "order": 5,
+          "serviceId": "svr-bcb",
+          "url": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "formFactor": "desktop",
+          "run": 3,
+          "startedAt": "2026-11-17T16:02:53-03:00",
+          "startedAtUtc": "2026-11-17T19:02:53.873Z",
+          "finishedAt": "2026-11-17T16:03:09-03:00",
+          "durationMs": 16034,
+          "status": "ok",
+          "file": "data/raw/pilot/svr-bcb_desktop_3.json",
+          "chrome": {
+            "browser": "Chrome/157.0.8103.79",
+            "protocolVersion": "1.3",
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+          },
+          "lighthouseVersion": "13.6.0",
+          "finalDisplayedUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentStatus": 200,
+          "runtimeError": null,
+          "blockReason": null,
+          "runWarnings": [],
+          "benchmarkIndex": 3110.5,
+          "performanceScore": 0.24,
+          "accessibilityScore": 0.85,
+          "error": null
+        },
+        {
+          "order": 6,
+          "serviceId": "svr-bcb",
+          "url": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "formFactor": "mobile",
+          "run": 3,
+          "startedAt": "2026-11-17T16:03:19-03:00",
+          "startedAtUtc": "2026-11-17T19:03:19.913Z",
+          "finishedAt": "2026-11-17T16:03:36-03:00",
+          "durationMs": 17048,
+          "status": "ok",
+          "file": "data/raw/pilot/svr-bcb_mobile_3.json",
+          "chrome": {
+            "browser": "Chrome/157.0.8103.79",
+            "protocolVersion": "1.3",
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+          },
+          "lighthouseVersion": "13.6.0",
+          "finalDisplayedUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentUrl": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
+          "mainDocumentStatus": 200,
+          "runtimeError": null,
+          "blockReason": null,
+          "runWarnings": [],
+          "benchmarkIndex": 3241,
+          "performanceScore": 0.02,
+          "accessibilityScore": 0.89,
+          "error": null
+        }
+      ]
     }
   ]
 }
