@@ -1,0 +1,9 @@
+# Downloaded from https://www.detran.mg.gov.br/robots.txt on 2026-11-17T15:37:54-03:00 (HTTP 200, final URL https://www.detran.mg.gov.br/robots.txt)
+User-agent: bedrockbot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: *
+Disallow: /

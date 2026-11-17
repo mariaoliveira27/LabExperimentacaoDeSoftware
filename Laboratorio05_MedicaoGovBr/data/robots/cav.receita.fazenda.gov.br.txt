@@ -1,0 +1,155 @@
+# Downloaded from https://cav.receita.fazenda.gov.br/robots.txt on 2026-11-17T15:44:36-03:00 (HTTP 200, final URL https://cav.receita.fazenda.gov.br/autenticacao/login)
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>eCAC - Centro Virtual de Atendimento</title>
+    <link href="/autenticacao/content/ecac?v=yVMSNae5NO3Zx4EthFfMazlMdLGy0JJulb3D3TUVhyc1" rel="stylesheet"/>
+
+
+</head>
+<body>
+    
+
+<div id="body" class="">
+    <script defer="defer" async="async" src="//barra.brasil.gov.br/barra.js" type="text/javascript"></script>
+    <div id="barra-brasil" style="background: #7F7F7F; height: 20px; padding: 0 0 0 10px; display: block;">
+        <ul id="menu-barra-temp" style="list-style: none;">
+            <li style="display: inline; float: left; padding-right: 10px; margin-right: 10px; border-right: 1px solid #EDEDED"><a href="http://brasil.gov.br" style="font-family: sans,sans-serif; text-decoration: none; color: white;">Portal do Governo Brasileiro</a></li>
+            <li><a style="font-family: sans,sans-serif; text-decoration: none; color: white;" href="http://epwg.governoeletronico.gov.br/barra/atualize.html">Atualize sua Barra de Governo</a></li>
+        </ul>
+    </div>
+</div>
+
+<a class="screenreader" href="#form1">Formulário de login.</a>
+<a class="screenreader" href="#login-lado-esquerdo">Instruções.</a>
+
+<div id="conteudo">
+
+    <div id="conteudo-login">
+
+        <div id="login-lado-esquerdo">
+            <h1 id="logo-ecac" class="png_bg">
+                eCAC - Centro Virtual de Atendimento
+            </h1>
+
+            <h2>Para cadastrar um procurador, o contribuinte pode utilizar:</h2>
+            <ul class="lista-destaque">
+                <li>a opção "Procuração Eletrônica", disponível no Portal e-CAC (o contribuinte e seu procurador precisam ter Conta GovBr com nível de confiabilidade Prata ou Ouro);</li>
+                <li>
+                    a opção <a href="https://www.gov.br/pt-br/servicos/cadastrar-ou-cancelar-procuracao-para-acesso-ao-e-cac">
+                        "Solicitação de Procuração para a Receita Federal"
+                    </a>, disponível fora do Portal e-CAC (apenas o procurador precisa ter Conta GovBr com nível de confiabilidade Prata ou Ouro).
+                </li>
+            </ul>
+            
+            <div>
+                <h2>Restrições de Acesso: </h2>
+                <p style="margin-top:10px">Visando maior estabilidade do sistema, foram adotadas medidas de controle de acesso ao e-CAC:</p>
+                <ul class="lista-destaque">
+                    <li>durante o período das 8:00 às 00:00, serão permitidos acessos realizados por aplicações robotizadas que realizem volume de acesso considerados aceitável, ou seja, 500 requisições por segundo, da mesma origem;</li>
+                    <li>após as 00 horas, serão liberados os acessos robotizados de grande volume;</li>
+                    <li>acessos por humanos podem ser efetuados sem restrição de horário.</li>
+                </ul>
+            </div>
+
+        </div>
+        <div id="login-lado-direito">            
+            <div id="login-certificado-digital" class="box-laranja fieldset-login fieldset-metade">
+                <form method="post" action="/autenticacao/Login/IndexGovBr" id="frmLoginCert" name="loginCert">
+                    <div id="hcaptcha-govbr"
+                         class="h-captcha"
+                         data-sitekey="903db64c-2422-4230-a22e-5645634d893f"
+                         data-size="invisible"
+                         data-callback="submitGovBr"></div>
+
+                    <input type="hidden" id="TokenLabel" name="TokenLabel" />
+                    <input type="hidden" name="id" value="-1" />
+
+                    <input id="GoogleCaptchaTokenLoginGovBR" name="GoogleCaptchaTokenLoginGovBR" type="hidden" value="" />
+
+                    <h2 class="titulo-caixa-login fieldset-metade">Acesso GovBR</h2>
+
+                    <div id="login-dados-certificado" class="fieldset-metade">
+                        <p>
+                            O GovBR é um serviço online de identificação e autenticação digital do cidadão em único meio, para acesso
+                            aos diversos serviços públicos digitais.
+                        </p>
+
+                        <p>
+                            <input type="image" 
+                                   style="width: 40%; height: auto; cursor: pointer;" 
+                                   src="/autenticacao/Content/imagens/gov-br.png" 
+                                   alt="Acesso Gov BR" 
+                                   onclick="validarHcaptcha('govBr')"/>
+                        </p>
+
+                        <p>
+                            <a href="https://www.gov.br/receitafederal/pt-br/canais_atendimento/atendimento-virtual/acesso-govbr">
+                                Saiba mais sobre GOV.BR
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="observacao">
+            <h2>Atenção:</h2>
+            <p>
+                As informações contidas nos sistemas informatizados da Administração Pública estão protegidas por sigilo.
+                Todo acesso é monitorado e controlado. Ao dar continuidade à navegação neste serviço o usuário declara-se ciente das
+                responsabilidades penais, civis e administrativas descritas na
+                <a target="_blank" href="https://www.gov.br/receitafederal/pt-br/acesso-a-informacao/lgpd">Política de Privacidade e Uso</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div id="rodape">
+    <!--<a id="marca-receita" class="png_bg" href="http://www.receita.fazenda.gov.br">Receita Federal do Brasil</a>-->
+    This site is protected by hCaptcha and its
+    <a href="https://hcaptcha.com/privacy">Privacy Policy</a> and
+    <a href="https://hcaptcha.com/terms">Terms of Service</a> apply.
+</div>
+
+
+    <script src="/autenticacao/bundles/jquery?v=c6X8uPe3-VWgpBzbpa0wDQ5Y0MbX9Lur3dw3cn_iF3M1"></script>
+
+    <script src="/autenticacao/bundles/jqueryui?v=LbkSPNq9VjlkN5YtUeu4-iiPVDLoAT7YyBcVqHCi1Ds1"></script>
+
+    <script src="/autenticacao/bundles/jquerytipsy?v=Xcy0HVWn9dwBEdg_FNY4V7c8GV7K9eYrb5cWS1F42K41"></script>
+
+    <script src="/autenticacao/bundles/serpro.ecac?v=pU0lOI_vUvYvCghg1heqzsOd2XRPLWTSWcZyYW5LxYI1"></script>
+
+    
+
+    <script src="https://hcaptcha.com/1/api.js?recaptchacompat=off&hl=pt-BR" async defer></script>
+
+    <script>
+        function submitCodAcesso(token) {
+            document.getElementById("frmLogin").submit();
+        }
+
+        function submitGovBr(token) {
+            document.getElementById("frmLoginCert").submit();
+        }
+
+        function validarHcaptcha(formId) {
+            event.preventDefault();
+
+            if (formId == "codigoAcesso") {
+                var idCodigoAcesso = $("#hcaptcha-codacesso iframe").attr('data-hcaptcha-widget-id');
+                hcaptcha.execute(idCodigoAcesso);
+            } else if (formId == "govBr") {
+                var idGovBr = $("#hcaptcha-govbr iframe").attr('data-hcaptcha-widget-id');
+                hcaptcha.execute(idGovBr);
+            }
+        }
+    </script>
+
+    <script type="text/javascript" src="https://www.receita.fazenda.gov.br/estatistica/estatistica.js"></script>
+
+
+</body>
+</html>
