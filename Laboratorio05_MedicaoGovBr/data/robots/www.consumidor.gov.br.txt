@@ -1,6 +1,0 @@
-# Baixado de https://www.consumidor.gov.br/robots.txt em 2026-11-17T19:42:23-03:00 (HTTP 200, URL final https://www.consumidor.gov.br/robots.txt)
-User-agent: *
-Disallow: /pages/usuario/
-Disallow: /pages/ticket/
-Disallow: /pages/administrativo/
-Disallow: /pages/reclamacao/
