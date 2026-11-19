@@ -1,0 +1,9 @@
+# Downloaded from https://portaldatransparencia.gov.br/robots.txt on 2026-11-17T15:44:52-03:00 (HTTP 200, final URL https://portaldatransparencia.gov.br/robots.txt)
+User-agent: *
+Disallow: /servidores/
+Disallow: /sancoes/ceaf/
+Disallow: /beneficiados/
+Disallow: /*busca?termo*
+Disallow: /*404*
+
+Sitemap: https://portaldatransparencia.gov.br/sitemap.xml

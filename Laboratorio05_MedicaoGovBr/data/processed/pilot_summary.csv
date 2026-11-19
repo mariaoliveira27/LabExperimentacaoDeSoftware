@@ -1,0 +1,9 @@
+service,formFactor,n,performanceScore_median,performanceScore_min,performanceScore_max,accessibilityScore_median,LCP_median,FCP_median,TBT_median,CLS_median,SpeedIndex_median
+govbr,desktop,3,69,66,71,92,4901,1435.4,0,0.0711,1886.1
+govbr,mobile,3,58,57,59,92,30641.2,5977.3,142,0,5977.3
+meuinss,desktop,3,53,51,55,92,3229.4,1139.6,34,0.6364,2295.6
+meuinss,mobile,3,25,23,29,92,16238.6,5977.9,488.5,0.6164,7564.5
+svr-bcb,desktop,3,24,24,25,85,5950.7,2492.3,250,0.9174,4752.2
+svr-bcb,mobile,3,2,2,2,89,13313.7,13313.7,2527.5,1.0609,17690.6
+transparencia,desktop,1,89,89,89,66,1842.6,1132.6,49.5,0.0015,1132.6
+transparencia,mobile,1,27,27,27,75,8565.5,5447,1280.5,0.2108,5447

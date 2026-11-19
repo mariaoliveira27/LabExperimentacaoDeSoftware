@@ -1,0 +1,74 @@
+# Baixado de https://www.gov.br/robots.txt em 2026-11-17T19:41:51-03:00 (HTTP 200, URL final https://www.gov.br/robots.txt)
+Sitemap: https://www.gov.br/sitemap.xml.gz
+
+# Define access-restrictions for robots/spiders
+# http://www.robotstxt.org/wc/norobots.html
+
+# By default we allow robots to access all areas of our site 
+# already accessible to anonymous users
+
+User-agent: Yandex
+Disallow: /ebserh
+Disallow: /mre
+
+# Add Googlebot-specific syntax extension to exclude forms 
+# that are repeated for each piece of content in the site 
+# the wildcard is only supported by Googlebot
+# http://www.google.com/support/webmasters/bin/answer.py?answer=40367&ctx=sibling
+
+# User-Agent: Googlebot
+
+User-Agent: *
+Disallow: /economia/pt-br/internet/*
+Disallow: /*sendto_form$
+Disallow: /*folder_factories$
+Disallow: /ebserh/*?
+Disallow: /ebserh/*atct_album_view$
+Disallow: /ebserh/*folder_summary_view$
+Disallow: /ebserh/*login_form$
+Disallow: /ebserh/*mail_password_form$
+Disallow: /ebserh/@@search
+Disallow: /ebserh/*search_rss$
+Disallow: /ebserh/*summary_view$
+Disallow: /ebserh/*thumbnail_view$
+Disallow: /ebserh/*view$
+Disallow: /ebserh/*@@download/file$
+Disallow: /ebserh/*portal_javascripts*
+Disallow: /ebserh/*portal_css*
+Disallow: /ebserh/*++theme++*
+Disallow: /ebserh/*++resource++*
+Disallow: /ebserh/*@@configuracoes_view*
+Disallow: /ebserh/*.css$
+Disallow: /ebserh/*.gif$
+Disallow: /ebserh/*.jpeg$
+Disallow: /ebserh/*.jpg$
+Disallow: /ebserh/*.JPG$
+Disallow: /ebserh/*.js$
+Disallow: /ebserh/*.pdf$
+Disallow: /ebserh/*.png$
+Disallow: /ebserh/*.zip$
+Disallow: /mre/*?
+Disallow: /mre/*atct_album_view$
+Disallow: /mre/*folder_summary_view$
+Disallow: /mre/*login_form$
+Disallow: /mre/*mail_password_form$
+Disallow: /mre/@@search
+Disallow: /mre/*search_rss$
+Disallow: /mre/*summary_view$
+Disallow: /mre/*thumbnail_view$
+Disallow: /mre/*view$
+Disallow: /mre/*@@download/file$
+Disallow: /mre/*portal_javascripts*
+Disallow: /mre/*portal_css*
+Disallow: /mre/*++theme++*
+Disallow: /mre/*++resource++*
+Disallow: /mre/*@@configuracoes_view*
+Disallow: /mre/*.css$
+Disallow: /mre/*.gif$
+Disallow: /mre/*.jpeg$
+Disallow: /mre/*.jpg$
+Disallow: /mre/*.JPG$
+Disallow: /mre/*.js$
+Disallow: /mre/*.pdf$
+Disallow: /mre/*.png$
+Disallow: /mre/*.zip$
