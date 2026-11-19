@@ -1,0 +1,103 @@
+# Baixado de https://meususdigital.saude.gov.br/robots.txt em 2026-11-17T19:42:19-03:00 (HTTP 200, URL final https://meususdigital.saude.gov.br/robots.txt)
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Meu SUS Digital</title>
+
+    <base href="/"/>
+
+    <meta name="color-scheme" content="light dark"/>
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+
+    <link rel="icon" type="image/png" href="assets/icon/favicon.png"/>
+
+    <!-- add to homescreen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+
+    <script>
+        var global = global || window;
+        var Buffer = Buffer || [];
+        var process = process || {
+            env: {
+                DEBUG: undefined
+            },
+            version: ''
+        };
+    </script>
+    <script type="module" src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.js">
+    </script>
+<link rel="stylesheet" href="styles.css"></head>
+
+<body>
+<div id="msd-handoff" style="display:none;position:fixed;inset:0;z-index:99999;background:#fff;font-family:Inter,system-ui,sans-serif;padding:72px 24px 48px;text-align:center;color:#003771;box-sizing:border-box">
+    <h1 style="font-size:20px;margin-bottom:12px">Abrir no aplicativo?</h1>
+    <p style="margin-bottom:24px">Você autenticou no Gov.br. Abra o Meu SUS Digital para entrar no app.</p>
+    <a id="msd-open-app" style="display:block;margin:12px auto;max-width:280px;padding:14px 16px;border-radius:24px;background:#003771;color:#fff;text-decoration:none">Abrir aplicativo</a>
+    <a id="msd-stay-web" href="#" style="display:block;margin:12px auto;max-width:280px;padding:14px 16px;color:#003771;text-decoration:none">Continuar no navegador</a>
+</div>
+<app-root></app-root>
+<script>
+    (function () {
+        try {
+            var params = new URLSearchParams(window.location.search || '');
+            var code = params.get('code');
+            if (!code || params.get('app') === '0') {
+                return;
+            }
+            var proto = window.location.protocol;
+            var host = window.location.hostname || '';
+            if (proto === 'capacitor:' || proto === 'ionic:' || host === 'localhost' || host === 'capacitor') {
+                return;
+            }
+            if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) {
+                return;
+            }
+            var fromApp = false;
+            try {
+                fromApp = !!JSON.parse(atob(params.get('state') || '')).native;
+            } catch (err) {}
+            if (!fromApp) {
+                return;
+            }
+
+            var search = window.location.search || '';
+            var box = document.getElementById('msd-handoff');
+            var openApp = document.getElementById('msd-open-app');
+            var stayWeb = document.getElementById('msd-stay-web');
+            window.__MSD_OAUTH_HANDOFF__ = true;
+            if (box) {
+                box.style.display = 'block';
+            }
+            if (openApp) {
+                openApp.href = 'meususdigital://login' + search;
+            }
+            if (stayWeb) {
+                stayWeb.onclick = function (event) {
+                    event.preventDefault();
+                    var url = new URL(window.location.href);
+                    url.searchParams.set('app', '0');
+                    window.location.replace(url.toString());
+                };
+            }
+
+            var ua = navigator.userAgent || '';
+            if (/iPhone|iPad|iPod/i.test(ua)) {
+                window.location.href = 'meususdigital://login' + search;
+                return;
+            }
+            if (/android/i.test(ua)) {
+                var fallback = encodeURIComponent(window.location.origin + '/login' + search + '&app=0');
+                window.location.href = 'intent://login' + search + '#Intent;scheme=meususdigital;package=br.gov.datasus.cnsdigital;S.browser_fallback_url=' + fallback + ';end';
+            }
+        } catch (e) {}
+    })();
+</script>
+<script src="runtime.js" type="module"></script><script src="polyfills.js" type="module"></script><script src="vendor.js" type="module"></script><script src="main.js" type="module"></script></body>
+
+</html>

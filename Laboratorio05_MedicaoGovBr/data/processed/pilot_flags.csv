@@ -1,0 +1,3 @@
+service,formFactor,run,timestamp,flag,detail
+govbr,mobile,2,2026-11-17T18:55:09.829Z,BENCHMARK_LOW_OUTLIER,"benchmarkIndex 2814.5 < cerca inferior de Tukey 2892.9 (Q1 3086.4, Q3 3215.4)"
+transparencia,mobile,1,2026-11-17T18:51:00.294Z,BENCHMARK_LOW_OUTLIER,"benchmarkIndex 2581.5 < cerca inferior de Tukey 2892.9 (Q1 3086.4, Q3 3215.4)"

@@ -1,0 +1,65 @@
+# Baixado de https://www.bcb.gov.br/robots.txt em 2026-11-17T19:42:16-03:00 (HTTP 200, URL final https://www.bcb.gov.br/robots.txt)
+User-agent: *
+Allow: /
+Disallow: /*/_catalogs
+Disallow: /*/Lists/
+Disallow: /*/lists/
+Disallow: /*/Forms/
+Disallow: /*/forms/
+Disallow:/*/_layouts/
+
+# Buscador do Google:
+User-agent: Googlebot
+Allow: /
+Disallow: /*/_catalogs
+Disallow: /*/Lists/
+Disallow: /*/lists/
+Disallow: /*/Forms/
+Disallow: /*/forms/
+Disallow:/*/_layouts/
+
+# Google Imagens:
+User-agent: Googlebot-Image
+Allow: /
+Disallow: /*/_catalogs
+Disallow: /*/Lists/
+Disallow: /*/lists/
+Disallow: /*/Forms/
+Disallow: /*/forms/
+Disallow:/*/_layouts/
+
+# Sites Parceiros do Google:
+User-agent: Mediapartners-Google
+Disallow: /
+
+# Google Ads:
+User-agent: Adsbot-Google
+Disallow: /
+
+# Google Ads para Aplicativos Mobile:
+User-agent: AdsBot-Google-Mobile-Apps
+Disallow: /
+
+# Google Notícias:
+User-agent: Googlebot-News
+Allow: /
+Disallow: /*/_catalogs
+Disallow: /*/Lists/
+Disallow: /*/lists/
+Disallow: /*/Forms/
+Disallow: /*/forms/
+Disallow:/*/_layouts/
+
+# Youtube:
+User-agent: Googlebot-Video
+Allow: /
+Disallow: /*/_catalogs
+Disallow: /*/Lists/
+Disallow: /*/lists/
+Disallow: /*/Forms/
+Disallow: /*/forms/
+Disallow:/*/_layouts/
+
+# Google Ads Mobile:
+User-agent: AdsBot-Google-Mobile
+Disallow: /

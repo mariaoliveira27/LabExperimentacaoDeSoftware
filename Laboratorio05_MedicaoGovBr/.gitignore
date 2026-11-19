@@ -1,0 +1,5 @@
+node_modules/
+*.log
+.chrome-profile*/
+.venv/
+__pycache__/
