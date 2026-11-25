@@ -72,3 +72,28 @@ def paired_rank_biserial(differences: Sequence[float]) -> float:
     ranks = rankdata(np.abs(d))
     total = ranks.sum()
     return float((ranks[d > 0].sum() - ranks[d < 0].sum()) / total)
+
+
+def bootstrap_ci(stat, n: int, rng: np.random.Generator, reps: int = 10_000, level: float = 0.95,
+                 groups: Sequence | None = None) -> tuple[float, float, int]:
+    """Intervalo percentil por bootstrap de `stat(idx)`, em que idx são índices reamostrados com reposição.
+
+    Com `groups`, reamostra grupos inteiros (bootstrap por cluster): sorteia grupos com reposição e
+    junta todos os índices de cada grupo sorteado. Reamostras em que a estatística dá NaN (por exemplo,
+    uma variável constante) são descartadas; o terceiro valor devolvido é quantas foram descartadas.
+    """
+    if groups is None:
+        draws = (rng.integers(0, n, n) for _ in range(reps))
+    else:
+        g = np.asarray(groups)
+        labels = np.unique(g)
+        members = [np.flatnonzero(g == lab) for lab in labels]
+        draws = (np.concatenate([members[i] for i in rng.integers(0, len(labels), len(labels))]) for _ in range(reps))
+    values = np.array([stat(idx) for idx in draws], dtype=float)
+    dropped = int(np.isnan(values).sum())
+    values = values[~np.isnan(values)]
+    if values.size == 0:
+        return float("nan"), float("nan"), dropped
+    tail = (1 - level) / 2 * 100
+    lo, hi = np.percentile(values, [tail, 100 - tail])
+    return float(lo), float(hi), dropped

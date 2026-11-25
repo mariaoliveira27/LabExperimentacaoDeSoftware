@@ -1,4 +1,4 @@
-# Baixado de https://www.bcb.gov.br/robots.txt em 2026-11-17T19:42:16-03:00 (HTTP 200, URL final https://www.bcb.gov.br/robots.txt)
+# Baixado de https://www.bcb.gov.br/robots.txt em 2026-11-25T11:37:32-03:00 (HTTP 200, URL final https://www.bcb.gov.br/robots.txt)
 User-agent: *
 Allow: /
 Disallow: /*/_catalogs

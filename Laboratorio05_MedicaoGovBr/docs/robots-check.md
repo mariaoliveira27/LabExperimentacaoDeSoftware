@@ -1,6 +1,6 @@
 # Verificação do robots.txt
 
-Gerado por `scripts/robots-check.mjs` em 2026-11-17T19:42:23-03:00.
+Gerado por `scripts/robots-check.mjs` em 2026-11-25T11:37:39-03:00.
 
 User agents verificados: `*`, `Lighthouse`, `Chrome-Lighthouse`. Uma URL só conta como liberada se todos eles forem liberados.
 As regras seguem a RFC 9309: robots.txt com 4xx significa sem restrições; 429, 5xx ou erro de rede significa proibição total.
@@ -9,16 +9,16 @@ As cópias de cada robots.txt estão em `data/robots/`. O registro completo das 
 
 | Serviço | URL | robots.txt | Baixado em | HTTP | UA | Liberado? | Crawl-delay | Observações |
 |---|---|---|---|---|---|---|---|---|
-| Portal gov.br | https://www.gov.br/pt-br | https://www.gov.br/robots.txt | 2026-11-17T19:41:51-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
-| Meu INSS | https://meu.inss.gov.br/ | https://meu.inss.gov.br/robots.txt | 2026-11-17T19:41:53-03:00 | 403 | identificado | sim | — | robots.txt devolveu HTTP 403; pela RFC 9309, não há restrições |
-| Receita Federal (e-CAC) | https://cav.receita.fazenda.gov.br/autenticacao/login | https://cav.receita.fazenda.gov.br/robots.txt | 2026-11-17T19:42:08-03:00 | 200 | navegador (2ª tentativa) | sim | — | a URL do robots.txt devolveu uma página HTML (sem regras válidas); liberado (TLS: servidor não enviou o intermediário; "AC SERPRO AR46 OV TLS CA 2025" baixado de http://secure.globalsign.com/cacert/acserproar46ovtlsca2025.crt e verificado contra a raiz "GlobalSign Root R46") |
-| Carteira de Trabalho Digital (web) | https://servicos.mte.gov.br/spme-v2/ | https://servicos.mte.gov.br/robots.txt | 2026-11-17T19:42:10-03:00 | 404 | identificado | sim | — | robots.txt devolveu HTTP 404; pela RFC 9309, não há restrições |
-| Valores a Receber (Banco Central) | https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal | https://www.bcb.gov.br/robots.txt | 2026-11-17T19:42:16-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
-| Meu SUS Digital | https://meususdigital.saude.gov.br/ | https://meususdigital.saude.gov.br/robots.txt | 2026-11-17T19:42:19-03:00 | 200 | identificado | sim | — | a URL do robots.txt devolveu uma página HTML (sem regras válidas); liberado |
-| Portal MG (serviços do Governo de Minas) | https://www.mg.gov.br/ | https://www.mg.gov.br/robots.txt | 2026-11-17T19:42:21-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
-| Portal do Servidor | https://www.gov.br/servidor/pt-br | https://www.gov.br/robots.txt | 2026-11-17T19:41:51-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
-| Consumidor.gov.br | https://www.consumidor.gov.br/ | https://www.consumidor.gov.br/robots.txt | 2026-11-17T19:42:23-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
-| ENEM (Inep) | https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enem | https://www.gov.br/robots.txt | 2026-11-17T19:41:51-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
+| Portal gov.br | https://www.gov.br/pt-br | https://www.gov.br/robots.txt | 2026-11-25T11:37:16-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
+| Meu INSS | https://meu.inss.gov.br/ | https://meu.inss.gov.br/robots.txt | 2026-11-25T11:37:18-03:00 | 403 | identificado | sim | — | robots.txt devolveu HTTP 403; pela RFC 9309, não há restrições |
+| Receita Federal (e-CAC) | https://cav.receita.fazenda.gov.br/autenticacao/login | https://cav.receita.fazenda.gov.br/robots.txt | 2026-11-25T11:37:23-03:00 | 200 | identificado | sim | — | a URL do robots.txt devolveu uma página HTML (sem regras válidas); liberado (TLS: servidor não enviou o intermediário; "AC SERPRO AR46 OV TLS CA 2025" baixado de http://secure.globalsign.com/cacert/acserproar46ovtlsca2025.crt e verificado contra a raiz "GlobalSign Root R46") |
+| Carteira de Trabalho Digital (web) | https://servicos.mte.gov.br/spme-v2/ | https://servicos.mte.gov.br/robots.txt | 2026-11-25T11:37:26-03:00 | 404 | identificado | sim | — | robots.txt devolveu HTTP 404; pela RFC 9309, não há restrições |
+| Valores a Receber (Banco Central) | https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal | https://www.bcb.gov.br/robots.txt | 2026-11-25T11:37:32-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
+| Meu SUS Digital | https://meususdigital.saude.gov.br/ | https://meususdigital.saude.gov.br/robots.txt | 2026-11-25T11:37:34-03:00 | 200 | identificado | sim | — | a URL do robots.txt devolveu uma página HTML (sem regras válidas); liberado |
+| Portal MG (serviços do Governo de Minas) | https://www.mg.gov.br/ | https://www.mg.gov.br/robots.txt | 2026-11-25T11:37:37-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
+| Portal do Servidor | https://www.gov.br/servidor/pt-br | https://www.gov.br/robots.txt | 2026-11-25T11:37:16-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
+| Consumidor.gov.br | https://www.consumidor.gov.br/ | https://www.consumidor.gov.br/robots.txt | 2026-11-25T11:37:39-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
+| ENEM (Inep) | https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enem | https://www.gov.br/robots.txt | 2026-11-25T11:37:16-03:00 | 200 | identificado | sim | — | caminho liberado para todos os user agents verificados |
 
 Todas as URLs da lista estão liberadas.
 

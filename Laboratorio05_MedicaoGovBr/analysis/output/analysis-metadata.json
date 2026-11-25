@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-11-25T18:43:22+00:00",
+  "phases": [
+    "full"
+  ],
+  "alpha": 0.05,
+  "bootstrapSeed": 20261125,
+  "bootstrapReps": 10000,
+  "excludeFlags": "SLOW_HOST_CPU",
+  "excludeServices": "",
+  "runsRead": 200,
+  "runsKept": 200,
+  "runsExcluded": 0,
+  "valuesRemovedAsOutliers": 105,
+  "figures": [
+    "lcp_boxplot.png",
+    "perf_vs_a11y.png",
+    "mobile_vs_desktop.png",
+    "performance_boxplot.png"
+  ],
+  "versions": {
+    "python": "3.12.10",
+    "numpy": "2.5.5",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "scikit-posthocs": "0.18.0",
+    "matplotlib": "3.11.2"
+  }
+}

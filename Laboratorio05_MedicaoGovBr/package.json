@@ -11,6 +11,10 @@
     "robots": "node scripts/robots-check.mjs",
     "pilot": "node scripts/run-lighthouse.mjs --phase pilot --runs 3",
     "extract:pilot": "node scripts/extract-metrics.mjs --phase pilot",
+    "full:morning": "node scripts/run-lighthouse.mjs --phase full --block 1 --session-label morning",
+    "full:afternoon": "node scripts/run-lighthouse.mjs --phase full --block 2 --session-label afternoon",
+    "extract:full": "node scripts/extract-metrics.mjs --phase full",
+    "validate": "node scripts/validate-data.mjs --phase full",
     "lighthouse": "node scripts/run-lighthouse.mjs",
     "extract": "node scripts/extract-metrics.mjs",
     "test": "node --test \"tests/*.test.mjs\""

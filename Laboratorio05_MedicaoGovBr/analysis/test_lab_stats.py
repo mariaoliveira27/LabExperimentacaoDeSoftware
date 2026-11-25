@@ -45,3 +45,23 @@ class TamanhoDeEfeitoTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class BootstrapTest(unittest.TestCase):
+    def test_reprodutivel_e_contem_a_media(self):
+        import numpy as np
+        from lab_stats import bootstrap_ci
+        x = np.arange(50, dtype=float)
+        a = bootstrap_ci(lambda i: x[i].mean(), len(x), np.random.default_rng(1), reps=2000)
+        b = bootstrap_ci(lambda i: x[i].mean(), len(x), np.random.default_rng(1), reps=2000)
+        self.assertEqual(a, b)
+        self.assertLess(a[0], 24.5)
+        self.assertGreater(a[1], 24.5)
+
+    def test_cluster_reamostra_grupos_inteiros(self):
+        import numpy as np
+        from lab_stats import bootstrap_ci
+        groups = np.repeat([0, 1, 2], 4)
+        sizes = []
+        bootstrap_ci(lambda i: sizes.append(len(i)) or 0.0, 12, np.random.default_rng(3), reps=50, groups=groups)
+        self.assertTrue(all(s == 12 for s in sizes))
