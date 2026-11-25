@@ -1,0 +1,5 @@
+formFactor,metric,k,n,H,df,p,epsilon2,note,p_holm
+mobile,performanceScore,10,94,89.9664,9,1.65351e-15,0.967381,,6.61403e-15
+mobile,LCP,10,84,80.0018,9,1.61483e-13,0.963877,,1.61483e-13
+desktop,performanceScore,10,90,87.0464,9,6.36065e-15,0.978049,,1.90819e-14
+desktop,LCP,10,87,84.1235,9,2.44082e-14,0.97818,,4.88164e-14

@@ -9,6 +9,7 @@ export const DOCS_DIR = join(ROOT, 'docs');
 export const URLS_FILE = join(DATA_DIR, 'urls.json');
 export const ROBOTS_JSON = join(DATA_DIR, 'robots-check.json');
 export const RUN_METADATA_FILE = join(DATA_DIR, 'run-metadata.json');
+export const FAILED_RUNS_FILE = join(DATA_DIR, 'failed-runs.csv');
 
 /** Pausa mínima entre duas execuções do Lighthouse, exigida pelas regras de ética do estudo. */
 export const MIN_PAUSE_MS = 10_000;

@@ -1,4 +1,4 @@
-# Baixado de https://meususdigital.saude.gov.br/robots.txt em 2026-11-17T19:42:19-03:00 (HTTP 200, URL final https://meususdigital.saude.gov.br/robots.txt)
+# Baixado de https://meususdigital.saude.gov.br/robots.txt em 2026-11-25T11:37:34-03:00 (HTTP 200, URL final https://meususdigital.saude.gov.br/robots.txt)
 <!DOCTYPE html>
 <html lang="pt-BR">
 

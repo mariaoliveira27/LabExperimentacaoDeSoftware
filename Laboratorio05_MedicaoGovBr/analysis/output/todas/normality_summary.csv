@@ -1,0 +1,8 @@
+metric,groups,tested,rejected_normality,constant
+performanceScore,20,19,11,1
+accessibilityScore,20,2,2,18
+LCP,20,20,10,0
+FCP,20,20,8,0
+TBT,20,16,7,4
+CLS,20,19,16,1
+SpeedIndex,20,20,10,0

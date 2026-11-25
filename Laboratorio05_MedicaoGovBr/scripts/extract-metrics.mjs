@@ -9,16 +9,20 @@
 //                                       faixa, DOM muito menor que o maior da célula, host final
 //                                       diferente, recursos de desafio carregados); elas continuam
 //                                       em <fase>.csv
+//   data/processed/<fase>_executions.csv registro de cada tentativa em data/run-metadata.json
+//                                       (sessão, rótulo de horário, bloco, horários em UTC com ms,
+//                                       status), usado pela validação e pela análise
 //
 //   node scripts/extract-metrics.mjs --phase pilot
 import { parseArgs } from 'node:util';
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { DATA_DIR, ROOT, writeText } from './lib/common.mjs';
+import { DATA_DIR, ROOT, RUN_METADATA_FILE, readJson, writeText } from './lib/common.mjs';
+import { readLhrFile } from './lib/rawfiles.mjs';
 import {
-  CSV_COLUMNS, FAILURE_COLUMNS, FLAG_COLUMNS, LCP_ELEMENT_COLUMNS, SUMMARY_COLUMNS,
-  lcpElement, parseRawFileName, reviewFlags, rowFromLhr, runFacts, summarize, toCsv,
+  CSV_COLUMNS, EXECUTION_COLUMNS, FAILURE_COLUMNS, FLAG_COLUMNS, LCP_ELEMENT_COLUMNS, SUMMARY_COLUMNS,
+  executionRows, lcpElement, parseRawFileName, reviewFlags, rowFromLhr, runFacts, summarize, toCsv,
 } from './lib/metrics.mjs';
 
 const { values: args } = parseArgs({ options: { phase: { type: 'string', default: 'pilot' } } });
@@ -29,7 +33,7 @@ async function main() {
   const rawDir = join(DATA_DIR, 'raw', phase);
   if (!existsSync(rawDir)) throw new Error(`${relative(ROOT, rawDir)} não existe; rode antes o script do Lighthouse`);
 
-  const files = (await readdir(rawDir)).filter((f) => f.endsWith('.json'));
+  const files = (await readdir(rawDir)).filter((f) => /\.json(\.gz)?$/.test(f) && f !== 'plan.json');
   const rows = [];
   const failures = [];
   const skipped = [];
@@ -41,7 +45,7 @@ async function main() {
       skipped.push(file);
       continue;
     }
-    const lhr = JSON.parse(await readFile(join(rawDir, file), 'utf8'));
+    const lhr = await readLhrFile(join(rawDir, file));
     const result = rowFromLhr(lhr, key);
     if (result.ok) {
       rows.push(result.row);
@@ -64,6 +68,9 @@ async function main() {
   await writeText(join(outDir, `${phase}_summary.csv`), toCsv(summary, SUMMARY_COLUMNS));
   await writeText(join(outDir, `${phase}_lcp_elements.csv`), toCsv(lcpElements, LCP_ELEMENT_COLUMNS));
   await writeText(join(outDir, `${phase}_flags.csv`), toCsv(flags, FLAG_COLUMNS));
+  const meta = existsSync(RUN_METADATA_FILE) ? await readJson(RUN_METADATA_FILE) : { sessions: [] };
+  const executions = executionRows(meta, phase);
+  await writeText(join(outDir, `${phase}_executions.csv`), toCsv(executions, EXECUTION_COLUMNS));
 
   console.log(`${files.length} arquivo(s) bruto(s): ${rows.length} válido(s), ${failures.length} inválido(s), ${skipped.length} ignorado(s) (nome fora do padrão)`);
   for (const f of skipped) console.log(`  ignorado: ${f}`);
@@ -75,7 +82,7 @@ async function main() {
     perf: s.performanceScore_median, 'perf mín-máx': `${s.performanceScore_min}-${s.performanceScore_max}`,
     a11y: s.accessibilityScore_median, 'LCP ms': s.LCP_median, 'TBT ms': s.TBT_median, CLS: s.CLS_median,
   })));
-  console.log(`Gravados data/processed/${phase}.csv, ${phase}_failures.csv, ${phase}_summary.csv, ${phase}_lcp_elements.csv e ${phase}_flags.csv`);
+  console.log(`Gravados data/processed/${phase}.csv, ${phase}_failures.csv, ${phase}_summary.csv, ${phase}_lcp_elements.csv, ${phase}_flags.csv e ${phase}_executions.csv (${executions.length} tentativas)`);
 }
 
 main().catch((err) => {

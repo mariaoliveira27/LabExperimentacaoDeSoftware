@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T19:42:23-03:00",
+  "generatedAt": "2026-11-25T11:37:39-03:00",
   "userAgents": [
     "*",
     "Lighthouse",
@@ -11,13 +11,13 @@
       "name": "Portal gov.br",
       "url": "https://www.gov.br/pt-br",
       "robotsUrl": "https://www.gov.br/robots.txt",
-      "fetchedAt": "2026-11-17T19:41:51-03:00",
+      "fetchedAt": "2026-11-25T11:37:16-03:00",
       "status": 200,
       "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
       "attempts": [
         {
           "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
-          "fetchedAt": "2026-11-17T19:41:51-03:00",
+          "fetchedAt": "2026-11-25T11:37:16-03:00",
           "status": 200,
           "error": null,
           "tlsNote": null
@@ -38,20 +38,20 @@
       "name": "Meu INSS",
       "url": "https://meu.inss.gov.br/",
       "robotsUrl": "https://meu.inss.gov.br/robots.txt",
-      "fetchedAt": "2026-11-17T19:41:53-03:00",
+      "fetchedAt": "2026-11-25T11:37:18-03:00",
       "status": 403,
       "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
       "attempts": [
         {
           "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
-          "fetchedAt": "2026-11-17T19:41:53-03:00",
+          "fetchedAt": "2026-11-25T11:37:18-03:00",
           "status": 403,
           "error": null,
           "tlsNote": null
         },
         {
           "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
-          "fetchedAt": "2026-11-17T19:41:57-03:00",
+          "fetchedAt": "2026-11-25T11:37:21-03:00",
           "status": 403,
           "error": null,
           "tlsNote": null
@@ -68,20 +68,13 @@
       "name": "Receita Federal (e-CAC)",
       "url": "https://cav.receita.fazenda.gov.br/autenticacao/login",
       "robotsUrl": "https://cav.receita.fazenda.gov.br/robots.txt",
-      "fetchedAt": "2026-11-17T19:42:08-03:00",
+      "fetchedAt": "2026-11-25T11:37:23-03:00",
       "status": 200,
-      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+      "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
       "attempts": [
         {
           "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
-          "fetchedAt": "2026-11-17T19:41:59-03:00",
-          "status": null,
-          "error": "ECONNRESET: read ECONNRESET",
-          "tlsNote": null
-        },
-        {
-          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
-          "fetchedAt": "2026-11-17T19:42:08-03:00",
+          "fetchedAt": "2026-11-25T11:37:23-03:00",
           "status": 200,
           "error": null,
           "tlsNote": "servidor não enviou o intermediário; \"AC SERPRO AR46 OV TLS CA 2025\" baixado de http://secure.globalsign.com/cacert/acserproar46ovtlsca2025.crt e verificado contra a raiz \"GlobalSign Root R46\""
@@ -102,20 +95,20 @@
       "name": "Carteira de Trabalho Digital (web)",
       "url": "https://servicos.mte.gov.br/spme-v2/",
       "robotsUrl": "https://servicos.mte.gov.br/robots.txt",
-      "fetchedAt": "2026-11-17T19:42:10-03:00",
+      "fetchedAt": "2026-11-25T11:37:26-03:00",
       "status": 404,
       "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
       "attempts": [
         {
           "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
-          "fetchedAt": "2026-11-17T19:42:10-03:00",
+          "fetchedAt": "2026-11-25T11:37:26-03:00",
           "status": 404,
           "error": null,
           "tlsNote": null
         },
         {
           "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
-          "fetchedAt": "2026-11-17T19:42:14-03:00",
+          "fetchedAt": "2026-11-25T11:37:29-03:00",
           "status": 404,
           "error": null,
           "tlsNote": null
@@ -132,13 +125,13 @@
       "name": "Valores a Receber (Banco Central)",
       "url": "https://www.bcb.gov.br/meubc/valores-a-receber?modalAberto=cuidado-com-golpes-modal",
       "robotsUrl": "https://www.bcb.gov.br/robots.txt",
-      "fetchedAt": "2026-11-17T19:42:16-03:00",
+      "fetchedAt": "2026-11-25T11:37:32-03:00",
       "status": 200,
       "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
       "attempts": [
         {
           "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
-          "fetchedAt": "2026-11-17T19:42:16-03:00",
+          "fetchedAt": "2026-11-25T11:37:32-03:00",
           "status": 200,
           "error": null,
           "tlsNote": null
@@ -159,13 +152,13 @@
       "name": "Meu SUS Digital",
       "url": "https://meususdigital.saude.gov.br/",
       "robotsUrl": "https://meususdigital.saude.gov.br/robots.txt",
-      "fetchedAt": "2026-11-17T19:42:19-03:00",
+      "fetchedAt": "2026-11-25T11:37:34-03:00",
       "status": 200,
       "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
       "attempts": [
         {
           "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
-          "fetchedAt": "2026-11-17T19:42:19-03:00",
+          "fetchedAt": "2026-11-25T11:37:34-03:00",
           "status": 200,
           "error": null,
           "tlsNote": null
@@ -186,13 +179,13 @@
       "name": "Portal MG (serviços do Governo de Minas)",
       "url": "https://www.mg.gov.br/",
       "robotsUrl": "https://www.mg.gov.br/robots.txt",
-      "fetchedAt": "2026-11-17T19:42:21-03:00",
+      "fetchedAt": "2026-11-25T11:37:37-03:00",
       "status": 200,
       "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
       "attempts": [
         {
           "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
-          "fetchedAt": "2026-11-17T19:42:21-03:00",
+          "fetchedAt": "2026-11-25T11:37:37-03:00",
           "status": 200,
           "error": null,
           "tlsNote": null
@@ -213,13 +206,13 @@
       "name": "Portal do Servidor",
       "url": "https://www.gov.br/servidor/pt-br",
       "robotsUrl": "https://www.gov.br/robots.txt",
-      "fetchedAt": "2026-11-17T19:41:51-03:00",
+      "fetchedAt": "2026-11-25T11:37:16-03:00",
       "status": 200,
       "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
       "attempts": [
         {
           "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
-          "fetchedAt": "2026-11-17T19:41:51-03:00",
+          "fetchedAt": "2026-11-25T11:37:16-03:00",
           "status": 200,
           "error": null,
           "tlsNote": null
@@ -240,13 +233,13 @@
       "name": "Consumidor.gov.br",
       "url": "https://www.consumidor.gov.br/",
       "robotsUrl": "https://www.consumidor.gov.br/robots.txt",
-      "fetchedAt": "2026-11-17T19:42:23-03:00",
+      "fetchedAt": "2026-11-25T11:37:39-03:00",
       "status": 200,
       "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
       "attempts": [
         {
           "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
-          "fetchedAt": "2026-11-17T19:42:23-03:00",
+          "fetchedAt": "2026-11-25T11:37:39-03:00",
           "status": 200,
           "error": null,
           "tlsNote": null
@@ -267,13 +260,13 @@
       "name": "ENEM (Inep)",
       "url": "https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enem",
       "robotsUrl": "https://www.gov.br/robots.txt",
-      "fetchedAt": "2026-11-17T19:41:51-03:00",
+      "fetchedAt": "2026-11-25T11:37:16-03:00",
       "status": 200,
       "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
       "attempts": [
         {
           "userAgent": "Mozilla/5.0 (compatible; Lab05-robots-check; academic study, PUC Minas)",
-          "fetchedAt": "2026-11-17T19:41:51-03:00",
+          "fetchedAt": "2026-11-25T11:37:16-03:00",
           "status": 200,
           "error": null,
           "tlsNote": null

@@ -1,0 +1,5 @@
+formFactor,unit,n,n_services,spearman_rho,spearman_p,ci_low,ci_high,ci_method,boot_dropped,kendall_tau_b,kendall_p,note,spearman_p_holm
+mobile,service-median,10,10,0.411051,0.237971,-0.302844,0.880797,"bootstrap percentil 95%, reamostrando serviços",0,0.302407,0.237407,,0.330216
+mobile,run,100,10,0.420706,1.31134e-05,-0.272163,0.847828,"bootstrap percentil 95%, por cluster (serviço inteiro)",0,0.298234,5.77944e-05,,1.31134e-05
+desktop,service-median,10,10,0.475232,0.165108,-0.371818,0.980835,"bootstrap percentil 95%, reamostrando serviços",1,0.453539,0.0781409,,0.330216
+desktop,run,100,10,0.496276,1.51385e-07,-0.280816,0.917108,"bootstrap percentil 95%, por cluster (serviço inteiro)",0,0.440407,3.26968e-09,,3.0277e-07

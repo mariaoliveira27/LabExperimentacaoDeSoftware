@@ -1,6 +1,8 @@
 # Lab05 — Medição externa de serviços digitais do gov.br com Lighthouse
 
-**Sprint 1 — Proposta e piloto** · Laboratório de Experimentação de Software · PUC Minas · 17/11/2026
+**Sprint 1 — Proposta e piloto** (17/11/2026) · **atualizada na Sprint 2** (25/11/2026: coleta completa e análise) · Laboratório de Experimentação de Software · PUC Minas
+
+As mudanças da Sprint 2 estão listadas no [changelog](#changelog) no fim deste documento. Resultados: [`analysis/results.md`](../analysis/results.md).
 
 O estudo mede, de fora, as páginas públicas de entrada de dez serviços digitais de governo, como faria um usuário comum que abre a página pela primeira vez. A ferramenta é o Lighthouse 13.6.0. Não é teste de carga: as execuções são sequenciais, uma URL por vez, com pausa mínima de 10 s. Não há login, preenchimento de formulário nem envio de dados pessoais. Nenhum repositório é minerado.
 
@@ -58,7 +60,7 @@ Ressalvas:
 
 - Os números descrevem o **serviço como um todo** (aplicativo + web), não a página medida. Só o Meu INSS separa o site (123,4 milhões de acessos em 2024). O número do e-CAC é do canal "Portal e-CAC", mas conta serviços prestados, não visitas à página de entrada.
 - Os números têm datas e definições diferentes (contas, acessos, downloads, inscrições, atendimentos). Eles servem como evidência de alcance, não para comparar serviços entre si.
-- **TODO:** o Portal do Servidor continua sem número de uso verificável (só a evidência indireta 8a, de 2023). Antes da Sprint 2, decidir se fica com a ressalva ou se é trocado por um serviço com número público.
+- **TODO:** o Portal do Servidor continua sem número de uso verificável (só a evidência indireta 8a, de 2023). Decisão da Sprint 2 (25/11/2026): o serviço **fica, com a ressalva**, porque cumpre os critérios técnicos e éticos; o número continua **NÃO ENCONTRADO** e não foi estimado ([`url-changes.md`](url-changes.md)).
 
 ### 1.4 URLs trocadas
 
@@ -202,9 +204,9 @@ Em todas as execuções: categorias `performance` e `accessibility` apenas, `max
 ### 6.3 Número de execuções
 
 - **Piloto (Sprint 1):** 3 serviços × 2 form factors × 3 execuções = 18 execuções, mais 6 execuções do serviço substituto (seção 9).
-- **Coleta completa (Sprint 2), proposta:** N = 12 por serviço e form factor, em **3 blocos de horário** (manhã, tarde, noite) com 4 execuções cada, em dias úteis. Total: 10 × 2 × 12 = 240 execuções. Com a duração mediana observada no piloto (13,5 s) mais a pausa de 10 s, cada bloco de 80 execuções leva cerca de 31 minutos.
+- **Coleta completa (Sprint 2), executada:** N = 10 por serviço e form factor, em **2 blocos de horário** (manhã e tarde de 25/11/2026, quarta-feira) com 5 execuções cada. Total: 10 × 2 × 10 = 200 execuções. Estimativa feita pelo script antes de começar: cerca de 39 min por bloco de 100 execuções (mediana de 13,6 s por execução mais 10 s de pausa). Duração real: 36 min (manhã, 11:38–12:14) e 38 min (tarde, 15:01–15:39, com 105 tentativas). *Plano original da Sprint 1: N = 12 em 3 blocos (manhã, tarde, noite) de 4, 240 execuções; ver o changelog no fim.*
 - Justificativa: a documentação do Lighthouse afirma que "the median Lighthouse score of 5 runs is twice as stable as 1 run" ([variability.md](https://github.com/GoogleChrome/lighthouse/blob/main/docs/variability.md), acessado em 17/11/2026). Doze execuções por célula dão mais de 5 por mediana e permitem ver variação por horário. No piloto, a amplitude do performance score dentro de cada célula foi de no máximo 6 pontos.
-- Cada bloco é uma sessão do script com `--phase` próprio (por exemplo `full-b1`, `full-b2`, `full-b3`), seed própria e o bloco registrado como variável. **TODO:** confirmar os horários dos blocos com o grupo.
+- Todas as sessões usam a mesma fase (`--phase full`) e o mesmo plano, guardado em `data/raw/full/plan.json` (seed 3118576651). O plano embaralha o bloco 1 (réplicas 1 a 5 de cada célula) e depois o bloco 2 (réplicas 6 a 10). Cada sessão grava `--session-label` (`morning`, `afternoon`); a análise usa o rótulo da sessão que gerou cada execução como bloco. A sessão pode ser interrompida e retomada: execuções com JSON válido são puladas.
 
 ### 6.4 Ordem aleatória
 
@@ -251,7 +253,10 @@ Protocolo para as coletas da Sprint 2: sem outros programas pesados abertos e se
 | `data/processed/<fase>.csv` | Uma linha por execução válida |
 | `data/processed/<fase>_failures.csv` | Execuções inválidas (erro do Lighthouse, bloqueio, valores ausentes) e o motivo |
 | `data/processed/<fase>_flags.csv` | Execuções válidas marcadas para revisão (seção 7.6) |
-| `analysis/analyze.py` | Análise estatística da seção 7 |
+| `data/processed/<fase>_executions.csv` | Cada tentativa: sessão, rótulo de horário, horários UTC com ms, status |
+| `data/failed-runs.csv` | Cada tentativa que falhou ou foi pulada, com o motivo |
+| `scripts/validate-data.mjs` | Validação dos dados e marcação de outliers → `docs/data-validation.md` |
+| `analysis/analyze.py`, `analysis/run_all.py` | Análise estatística da seção 7 e gráficos; `run_all.py` refaz tudo com um comando |
 
 ---
 
@@ -261,7 +266,7 @@ Implementado em [`analysis/analyze.py`](../analysis/analyze.py): Python 3.12 com
 
 ### 7.1 Estatística descritiva
 
-Para cada serviço × form factor: n de execuções válidas, mediana, IQR, mínimo e máximo de todas as métricas; boxplots por serviço (**TODO**: o script ainda não gera gráficos); contagem de execuções inválidas (bloqueio, erro) por serviço; tabela do elemento LCP de cada serviço; medianas por bloco de horário; réplica 1 contra as seguintes (efeito de cache de CDN, seção 8.2). Teste de Shapiro–Wilk por grupo apenas para documentar a forma das distribuições (a escolha dos testes não depende dele, ver 7.5).
+Para cada serviço × form factor: n de execuções válidas, mediana, IQR, média, desvio padrão, mínimo e máximo de todas as métricas; boxplots por serviço (`analysis/figures/`); contagem de execuções inválidas (bloqueio, erro) por serviço; tabela do elemento LCP de cada serviço; medianas por bloco de horário; réplica 1 contra as seguintes (efeito de cache de CDN, seção 8.2). Teste de Shapiro–Wilk por grupo apenas para documentar a forma das distribuições (a escolha dos testes não depende dele, ver 7.5).
 
 ### 7.2 RQ1 — Kruskal–Wallis entre serviços
 
@@ -275,6 +280,7 @@ Para cada serviço × form factor: n de execuções válidas, mediana, IQR, mín
 - Unidade de análise: o **serviço** (n = 10). Para cada serviço e form factor, usa-se a mediana do performance score e a mediana do accessibility score.
 - Motivo: no piloto, o accessibility score foi idêntico em todas as execuções de uma mesma página e form factor (92 nas 12 execuções de gov.br e Meu INSS; 89 em mobile e 85 em desktop nas 6 do Valores a Receber). Dentro de um serviço ele não varia, então uma correlação por execução dentro do serviço não é definida.
 - Correlação de Spearman (ρₛ) por form factor (2 testes, Holm). Como o accessibility score tem muitos empates, o τ-b de Kendall é calculado como análise de sensibilidade.
+- Sprint 2: IC de 95% por bootstrap percentil (10 000 reamostras, seed fixa) reamostrando serviços. Também se calcula ρₛ com todas as execuções; nesse caso o IC reamostra serviços inteiros (bootstrap por cluster), porque as execuções de um mesmo serviço não são independentes.
 
 ### 7.4 RQ3 — Wilcoxon pareado mobile × desktop
 
@@ -284,6 +290,7 @@ Para cada serviço × form factor: n de execuções válidas, mediana, IQR, mín
 - Magnitude: mediana das diferenças (pontos e ms) e mediana da razão LCP mobile/desktop.
 - O LCP é a medida principal da RQ3. O score é secundário porque o Lighthouse usa curvas de pontuação diferentes para mobile e desktop (tabela da seção 6.2): uma diferença de score mistura "condição pior" com "régua diferente".
 - Para o score, como o Wilcoxon pressupõe que as diferenças possam ser ordenadas, o teste do sinal é reportado como análise de sensibilidade.
+- Sprint 2: além do teste entre serviços, um Wilcoxon pareado **dentro de cada serviço**, com pares = execuções mobile e desktop de mesmo número de réplica (`run`), que caem no mesmo bloco de horário; Holm entre os 10 serviços. Delta de Cliff (mobile × desktop, sem pareamento) ao lado.
 
 ### 7.5 Por que esses testes
 
@@ -291,7 +298,7 @@ Para cada serviço × form factor: n de execuções válidas, mediana, IQR, mín
 |---|---|---|
 | Escala | Scores são composições limitadas a 0–100, não lineares em relação aos tempos: tratados como ordinais. Tempos (ms) são de razão. | Testes baseados em postos servem para ambos sem supor intervalos iguais entre scores. |
 | Distribuição | Tempos são positivos e assimétricos, com cauda longa: no piloto, as medianas de LCP foram de 3,2 s (Meu INSS, desktop) a 30,6 s (gov.br, mobile), e o LCP mobile do gov.br foi ~6 vezes o do desktop. | Não há base para supor normalidade; média e desvio padrão seriam dominados pelos extremos. |
-| Tamanho dos grupos | 12 execuções por célula (RQ1) e 10 serviços (RQ2, RQ3). | Com amostras pequenas, testes de normalidade têm pouco poder; testes não paramétricos não dependem desse pressuposto. |
+| Tamanho dos grupos | 10 execuções por célula (RQ1) e 10 serviços (RQ2, RQ3). | Com amostras pequenas, testes de normalidade têm pouco poder; testes não paramétricos não dependem desse pressuposto. |
 | Estrutura | RQ1: k = 10 grupos independentes. RQ2: associação monotônica entre duas medidas ordinais. RQ3: duas medidas do mesmo serviço. | Kruskal–Wallis (k grupos), Spearman (associação monotônica), Wilcoxon pareado (amostras dependentes). |
 
 ### 7.6 Exclusões e análises de sensibilidade
@@ -305,6 +312,8 @@ Proposta; o grupo precisa confirmar (pendência 5 da seção 10).
 | CPU do host abaixo do resto do bloco | `benchmarkIndex` abaixo da cerca inferior de Tukey (Q1 − 1,5 × IQR) das execuções válidas da fase (`BENCHMARK_LOW_OUTLIER`) | Mantida na análise principal. Análise de sensibilidade sem ela (`--exclude-flags all`). No piloto, as duas execuções marcadas não destoaram: a do gov.br mobile teve score 58, igual à mediana da célula. |
 | Possível desafio que as regras não reconhecem | DOM com menos da metade dos elementos da maior execução da mesma célula (`DOM_SIZE_DROP`), host final diferente do pedido (`FINAL_HOST_CHANGED`) ou recursos de CAPTCHA carregados (`CHALLENGE_RESOURCES`) | Revisão manual do JSON bruto antes da análise. Se for desafio, o serviço é tratado como bloqueado. |
 | Elemento LCP é banner ou modal | `<fase>_lcp_elements.csv` | Análise de sensibilidade sem esses serviços (`--exclude-services`). |
+| Outlier de uma métrica (Sprint 2) | Fora da cerca de Tukey (Q1 − 1,5 × IQR, Q3 + 1,5 × IQR) dentro do serviço × form factor × métrica (`scripts/validate-data.mjs` → `full_outliers.csv`) | Não é apagado. A análise sai duas vezes: com todas as execuções e sem os valores marcados (só naquela métrica). |
+| Métrica nula sem `runtimeError` (Sprint 2) | Ex.: `NO_FCP` dentro das auditorias; visto no Consumidor.gov.br | Execução inválida (`MISSING_VALUES`), registrada em `data/failed-runs.csv` e refeita. |
 
 As outras análises de sensibilidade (τ-b de Kendall na RQ2, teste do sinal na RQ3) saem sempre junto com a análise principal.
 
@@ -327,7 +336,7 @@ Classificação de Wohlin et al. (2012).
 
 | Ameaça | Mitigação |
 |---|---|
-| **Variação por horário**: carga do servidor e da rede muda ao longo do dia. | Coleta em 3 blocos de horário; ordem aleatória dentro de cada bloco; timestamp de cada execução gravado; testar o efeito do bloco na análise descritiva. |
+| **Variação por horário**: carga do servidor e da rede muda ao longo do dia. | Coleta em 2 blocos de horário (manhã e tarde; o plano da Sprint 1 previa 3); ordem aleatória dentro de cada bloco; timestamp e rótulo da sessão gravados em cada execução; efeito do bloco testado por serviço (`block_effect.csv`). Sem bloco à noite: limitação ([`ameacas-validade.md`](ameacas-validade.md)). |
 | **Cache e CDN**: o Chrome começa sem cache a cada execução, mas o cache da CDN e do servidor não é controlado. A primeira visita pode encontrar a borda da CDN fria, e as seguintes não. | `run` registra a ordem de cada réplica; comparar `run = 1` com as demais; ordem aleatória espalha esse efeito entre serviços e form factors. |
 | **Bloqueio por WAF / anti-bot**: o serviço pode servir uma página de desafio (CAPTCHA) e o Lighthouse pontua essa página como se fosse o serviço. Isso aconteceu no piloto. | Duas regras em cada execução: status HTTP do documento principal e texto do elemento LCP (desafio servido com HTTP 200). Execuções inválidas vão para `<fase>_failures.csv`; o serviço deixa de ser medido na sessão e é trocado. Sinais secundários (queda no DOM, troca de host, recursos de CAPTCHA) vão para `<fase>_flags.csv` para revisão (seção 7.6). |
 | Mudança de conteúdo durante a coleta (banners, campanhas, deploys). | Registrar número de requisições, bytes e elemento LCP por execução; investigar saltos. |
@@ -405,19 +414,25 @@ Execuções válidas apenas. Tempos em ms, arredondados. Fonte: [`data/processed
 
 ## 10. Pendências (TODO)
 
+Situação em 25/11/2026, depois da coleta completa.
+
 | # | Pendência | Seção |
 |---|---|---|
-| 1 | Portal do Servidor sem número de uso verificável (NÃO ENCONTRADO; só evidência indireta do SouGov.br): decidir se fica com a ressalva ou se é trocado. O e-CAC foi resolvido (875.268.240 atendimentos em 2023, Relatório de Atividades da RFB). | 1.3 |
-| 2 | Portal MG: o número de acessos do portal mais recente continua sendo de 2021 (nova busca em 17/11/2026 só achou dados do MG App). Decidir se o dado de 2021 basta. | 1.3 |
-| 3 | Registrar provedor de internet e cidade da máquina de medição. O tipo de conexão (cabeada, 1 Gbps, sem VPN) e o plano de energia já estão registrados e passam a ser gravados por sessão. | 6.6 |
-| 4 | Confirmar com o grupo os horários dos 3 blocos da coleta completa. | 6.3 |
-| 5 | Confirmar os critérios de exclusão e de sensibilidade propostos: exclui `benchmarkIndex` ≤ 1000; cerca de Tukey e demais sinais só em sensibilidade ou revisão. | 7.6 |
-| 6 | Decidir onde guardar o JSON bruto da Sprint 2: cerca de 141 MB sem compressão ou 28,5 MB com gzip; no repositório ou fora do git. | 9.3 |
-| 7 | Serviços fora do piloto (em especial o e-CAC) ainda não foram medidos com o Lighthouse; a primeira sessão da Sprint 2 vai mostrar se algum bloqueia ou falha. | 9.3 |
-| 8 | Depois de cada bloco da Sprint 2, revisar `<fase>_flags.csv`. A regra do texto do LCP só foi testada com o CAPTCHA do AWS WAF visto no piloto; um desafio com outro texto e HTTP 200 só aparece nos sinais de revisão. | 7.6 |
-| 9 | O script de análise ainda não gera os boxplots da estatística descritiva. | 7.1 |
+| 1 | Portal do Servidor sem número de uso verificável: **NÃO ENCONTRADO** (só a evidência indireta do SouGov.br). Decidido na Sprint 2: fica, com a ressalva. Se aparecer uma fonte verificável, atualizar a seção 1.3. | 1.3 |
+| 2 | Portal MG: o número de acessos do portal mais recente continua sendo de 2021 (a busca de 17/11/2026 só achou dados do MG App). Falta decidir se o dado de 2021 basta. | 1.3 |
+| 3 | Registrar provedor de internet e cidade da máquina de medição. Tipo de conexão (cabeada, 1 Gbps, sem VPN) e plano de energia estão gravados em cada sessão. | 6.6 |
+| 4 | Nenhum bloco à noite: a coleta teve manhã e tarde de um só dia. Se o grupo quiser cobrir a noite, é preciso uma nova fase (com outra seed e outro `plan.json`), porque a fase `full` já está completa. | 6.3, 8.2 |
+| 5 | Confirmar com o grupo e o professor os critérios de exclusão e de sensibilidade: exclui `benchmarkIndex` ≤ 1000 (nenhuma execução excluída); cerca de Tukey só em sensibilidade; execuções com métrica nula refeitas. | 7.6 |
 
-Resolvidas depois da primeira versão desta proposta: número de uso do e-CAC (1.3); tipo de conexão e plano de energia (6.6); critério para `benchmarkIndex` (proposto em 7.6); segunda regra de detecção de bloqueio (6.5 e 7.6); script de análise estatística (seção 7).
+Resolvidas na Sprint 2:
+
+- Horários dos blocos: 2 blocos, manhã e tarde de 25/11/2026 (N = 10; ver changelog).
+- JSON bruto: guardado no repositório com gzip nível 9 (23 MB para as 200 execuções e as 5 tentativas inválidas).
+- Serviços fora do piloto: todos medidos. Nenhum bloqueio; o e-CAC não falhou.
+- Marcações de revisão: só 2 `BENCHMARK_LOW_OUTLIER`, nenhuma de bloqueio (`full_flags.csv`; [`data-validation.md`](data-validation.md)).
+- Boxplots: gerados em `analysis/figures/`.
+
+Resolvidas na Sprint 1, depois da primeira versão desta proposta: número de uso do e-CAC (1.3); tipo de conexão e plano de energia (6.6); critério para `benchmarkIndex` (proposto em 7.6); segunda regra de detecção de bloqueio (6.5 e 7.6); script de análise estatística (seção 7).
 
 ---
 
@@ -438,3 +453,30 @@ Resolvidas depois da primeira versão desta proposta: número de uso do e-CAC (1
 - Wohlin, C. et al. (2012). *Experimentation in Software Engineering*. Springer.
 - Koster, M.; Illyes, G.; Zeller, H.; Sassman, L. (2022). *RFC 9309: Robots Exclusion Protocol*. IETF.
 - Google. Lighthouse — *Lighthouse Variability*. https://github.com/GoogleChrome/lighthouse/blob/main/docs/variability.md (acessado em 17/11/2026).
+
+---
+
+## Changelog
+
+### Sprint 2 (25/11/2026)
+
+Desvios do plano da Sprint 1 e o que mudou neste documento:
+
+| Mudança | Antes (Sprint 1) | Depois (Sprint 2) | Motivo |
+|---|---|---|---|
+| Número de execuções | N = 12 por serviço e form factor, 240 no total | N = 10, 200 no total | Pedido da Sprint 2 (seção 6.3). |
+| Blocos de horário | 3 (manhã, tarde, noite), 4 execuções cada | 2 (manhã e tarde de 25/11/2026), 5 execuções cada | 10 não se divide em 3 blocos iguais. A noite fica como limitação (seção 10, item 4). |
+| Fases | Uma fase por bloco (`full-b1`, `full-b2`, …) | Uma fase `full`, com o plano salvo em `data/raw/full/plan.json` (seed 3118576651) | O executor retoma de onde parou e confere se o plano bate com as opções. |
+| Rótulo da sessão | — | `--session-label morning\|afternoon\|night` gravado em cada execução | A análise do efeito de horário usa o rótulo. |
+| Falhas | Só em `run-metadata.json` | Também em `data/failed-runs.csv`, com motivo; o JSON inválido vai para `data/raw/full/invalid/` | Pedido da Sprint 2. |
+| Métrica nula | Não tratada | Execução inválida (`MISSING_VALUES`), registrada e refeita uma vez na sessão | Visto no Consumidor.gov.br (`NO_FCP`): 5 de 205 tentativas (seção 7.6). |
+| JSON bruto | Sem compressão | gzip nível 9 (`*.json.gz`), no repositório | 23 MB em vez de ~120 MB (seção 10). |
+| Validação | — | `scripts/validate-data.mjs` → [`data-validation.md`](data-validation.md) | Completude, NaN, faixas, duplicatas, pausa ≥ 10 s e sobreposição de sessões. |
+| Outliers | Tukey só no `benchmarkIndex` | Tukey também em cada métrica, por serviço × form factor; análise com e sem os valores marcados | Pedido da Sprint 2 (seção 7.6). |
+| RQ2 | Spearman nas medianas | Mais: IC 95% por bootstrap e Spearman com todas as execuções (bootstrap por cluster) | Seção 7.3. |
+| RQ3 | Wilcoxon entre serviços | Mais: Wilcoxon por serviço, pareado por réplica, com Holm | Seção 7.4. |
+| Estatística descritiva | Mediana e IQR | Mais: média, DP, mín., máx. e boxplots | Pedido da Sprint 2 (seção 7.1). |
+| Consumidor.gov.br | URL sem observação | Redirecionamento no cliente para `/pages/principal/?<número>` registrado; URL mantida | [`url-changes.md`](url-changes.md); ameaça de construto. |
+| Portal do Servidor | TODO: decidir | Fica, com a ressalva; número NÃO ENCONTRADO | Seção 1.3. |
+
+Seções alteradas: cabeçalho, 1.3 (TODO do Portal do Servidor), 6.3, 6.7, 7.1, 7.3, 7.4, 7.5, 7.6, 8.2 (horário), 10 e este changelog. As seções 2 a 5 (perguntas, hipóteses, GQM, entidades e classificação) e 9 (piloto) não mudaram.

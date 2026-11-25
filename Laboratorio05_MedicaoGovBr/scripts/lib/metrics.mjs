@@ -182,9 +182,9 @@ export function lcpElement(lhr) {
   return { lcpSelector: node?.selector ?? null, lcpNodeLabel: node?.nodeLabel ?? null };
 }
 
-/** Lê "<servico>_<formFactor>_<n>.json". Ids de serviço nunca têm "_". */
+/** Lê "<servico>_<formFactor>_<n>.json" ou ".json.gz". Ids de serviço nunca têm "_". */
 export function parseRawFileName(name) {
-  const m = /^([a-z0-9-]+)_(mobile|desktop)_(\d+)\.json$/.exec(name);
+  const m = /^([a-z0-9-]+)_(mobile|desktop)_(\d+)\.json(?:\.gz)?$/.exec(name);
   return m ? { service: m[1], formFactor: m[2], run: Number(m[3]) } : null;
 }
 
@@ -268,3 +268,31 @@ export const SUMMARY_COLUMNS = [
   'service', 'formFactor', 'n', 'performanceScore_median', 'performanceScore_min', 'performanceScore_max',
   'accessibilityScore_median', 'LCP_median', 'FCP_median', 'TBT_median', 'CLS_median', 'SpeedIndex_median',
 ];
+
+export const EXECUTION_COLUMNS = [
+  'sessionId', 'sessionLabel', 'block', 'order', 'service', 'formFactor', 'run', 'status',
+  'startedAtUtc', 'finishedAtUtc', 'durationMs', 'benchmarkIndex', 'file',
+];
+
+/**
+ * Uma linha por tentativa registrada em run-metadata.json para a fase, na ordem em que aconteceram.
+ * Sessões antigas (piloto) não têm finishedAtUtc nem rótulo; finishedAtUtc é então derivado de
+ * startedAtUtc + durationMs.
+ */
+export function executionRows(meta, phase) {
+  const rows = [];
+  for (const s of meta.sessions ?? []) {
+    if (s.phase !== phase) continue;
+    for (const e of s.executions ?? []) {
+      const finished = e.finishedAtUtc
+        ?? (e.startedAtUtc && typeof e.durationMs === 'number' ? new Date(new Date(e.startedAtUtc).getTime() + e.durationMs).toISOString() : null);
+      rows.push({
+        sessionId: s.sessionId, sessionLabel: e.sessionLabel ?? s.sessionLabel ?? '', block: e.block ?? s.block ?? '',
+        order: e.order, service: e.serviceId, formFactor: e.formFactor, run: e.run, status: e.status,
+        startedAtUtc: e.startedAtUtc ?? '', finishedAtUtc: finished ?? '', durationMs: e.durationMs ?? '',
+        benchmarkIndex: e.benchmarkIndex ?? '', file: e.file ?? '',
+      });
+    }
+  }
+  return rows;
+}
