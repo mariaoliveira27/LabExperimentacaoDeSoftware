@@ -40,7 +40,7 @@ Com 10 execuções quase idênticas, o IQR de uma célula às vezes fica em pouc
 |---|---|---|
 | Performance score (0–100) | Numericamente de razão, mas **tratado como ordinal**: é uma média ponderada de notas que passam por curvas log-normal, limitada a 0–100. A mesma diferença de 10 pontos não representa a mesma diferença de tempo em pontos diferentes da escala. | Mediana, quartis, IQR e testes de postos. Média e DP aparecem na descritiva só porque a entrega pede. |
 | Accessibility score (0–100) | **Tratado como ordinal**: proporção ponderada de regras automáticas do axe-core aprovadas. | Mediana e postos. Quase não varia dentro de um serviço (18 de 20 grupos são constantes). |
-| LCP, FCP, Speed Index, TBT (ms; aqui em s, exceto TBT) | Razão (zero absoluto). | Tudo é permitido, inclusive razões ("mobile 4,8× mais lento"). Como as distribuições são assimétricas e há outliers, o centro é a mediana. |
+| LCP, FCP, Speed Index, TBT (ms; aqui em s, exceto TBT) | Razão (zero absoluto). | Tudo é permitido, inclusive razões ("LCP mobile 3,8× o desktop, na mediana"). Como as distribuições são assimétricas e há outliers, o centro é a mediana. |
 | CLS (adimensional) | Razão. | Só descritiva. |
 
 ## 3. Normalidade
@@ -328,17 +328,19 @@ Wilcoxon pareado sobre as medianas por serviço. As diferenças são **mobile �
 
 Todas as execuções:
 
-| Métrica | Serviços (pares) | Mediana mobile | Mediana desktop | Mediana das diferenças | Razão das medianas | W | p (Holm) | rank-biserial pareada | δ de Cliff |
+| Métrica | Serviços (pares) | Mediana mobile | Mediana desktop | Mediana das diferenças | Mediana das razões por serviço | W | p (Holm) | rank-biserial pareada | δ de Cliff |
 |---|---|---|---|---|---|---|---|---|---|
 | LCP | 10 | 13,65 | 3,61 | 9,39 | 4,76 | 0 | 0,004 | 1,00 | 0,94 |
 | performanceScore | 10 | 56,0 | 71,2 | -19,2 | — | 1 | 0,004 | -0,96 | -0,36 |
 
 Sem outliers:
 
-| Métrica | Serviços (pares) | Mediana mobile | Mediana desktop | Mediana das diferenças | Razão das medianas | W | p (Holm) | rank-biserial pareada | δ de Cliff |
+| Métrica | Serviços (pares) | Mediana mobile | Mediana desktop | Mediana das diferenças | Mediana das razões por serviço | W | p (Holm) | rank-biserial pareada | δ de Cliff |
 |---|---|---|---|---|---|---|---|---|---|
 | LCP | 10 | 13,28 | 3,61 | 9,02 | 4,76 | 0 | 0,004 | 1,00 | 0,94 |
 | performanceScore | 10 | 56,0 | 71,2 | -19,5 | — | 1 | 0,004 | -0,96 | -0,36 |
+
+A coluna "Mediana das razões por serviço" é a mediana das 10 razões LCP mobile/desktop, uma por serviço (proposta, seção 7.4). Ela não é a razão entre as duas medianas da tabela: 13,65 / 3,61 = 3,8×.
 
 Com n = 10 pares, o menor p bilateral possível do Wilcoxon exato é 2/2¹⁰ ≈ 0,002 (0,004 depois de Holm com 2 testes). O LCP chega a esse mínimo: os 10 serviços são mais lentos no mobile.
 
@@ -399,7 +401,8 @@ Em cada serviço, a execução mobile de número *k* forma par com a execução 
 
 - **LCP.** O mobile é mais lento em todos os 10 serviços:
   - mediana das diferenças entre serviços de **9,4 s**;
-  - mediana do LCP de **13,7 s no mobile contra 3,6 s no desktop** (razão 4,8×);
+  - mediana do LCP de **13,7 s no mobile contra 3,6 s no desktop** (3,8× entre as duas medianas);
+  - mediana das razões por serviço de **4,8×**;
   - por serviço, a razão vai de 2,3× (Valores a Receber) a 6,7× (Receita Federal);
   - em segundos, a maior perda é no Meu SUS Digital (+26,0 s) e no Portal gov.br (+24,7 s), e a menor no Consumidor.gov.br (+4,4 s).
 
@@ -479,7 +482,7 @@ Não há um padrão de "primeira execução mais lenta" (cache frio de CDN). O �
 
 - **RQ1.** Sim, o desempenho varia muito entre os serviços: Kruskal–Wallis com p < 0,001 e ε² de 0,85 a 0,98 nos 4 casos. Os piores são o Meu SUS Digital (LCP mobile 33,9 s; desktop 8,0 s), o Portal gov.br e o Portal do Servidor no LCP mobile (29,7 s e 22,0 s), o Valores a Receber no performance score mobile (mediana 1) e o Meu INSS (score mobile 23,5).
 - **RQ2.** Inconclusivo. A correlação entre performance e accessibility score é positiva (ρ = 0,41 no mobile e 0,48 no desktop), mas não é significativa com 10 serviços (p Holm = 0,33), e o IC 95% inclui o zero.
-- **RQ3.** O mobile é pior em todos os 10 serviços no LCP: mediana de 13,7 s contra 3,6 s (4,8×), com mediana das diferenças de 9,4 s (p Holm = 0,004, rank-biserial = 1). No performance score, o mobile perde 19 pontos (p Holm = 0,004). A única inversão de score é o Meu SUS Digital.
+- **RQ3.** O mobile é pior em todos os 10 serviços no LCP: mediana de 13,7 s contra 3,6 s (mediana das razões por serviço: 4,8×), com mediana das diferenças de 9,4 s (p Holm = 0,004, rank-biserial = 1). No performance score, o mobile perde 19 pontos (p Holm = 0,004). A única inversão de score é o Meu SUS Digital.
 
 ---
 
