@@ -1,0 +1,13 @@
+service,unit,period,monthly_events,reference,formFactor,reference_ms,lcp_low_ms,extra_low_s,hours_low,lcp_median_ms,extra_median_s,hours_median,lcp_high_ms,extra_high_s,hours_high
+meuinss,acessos pelo site,2024,1.02833e+07,ref_a_desktop_median,mobile,3187.5,14522.9,11.3354,32379.3,15800.9,12.6134,36029.8,15950.2,12.7627,36456.3
+meuinss,acessos pelo site,2024,1.02833e+07,ref_b_2500ms,mobile,2500,14522.9,12.0229,34343.1,15800.9,13.3009,37993.6,15950.2,13.4502,38420.2
+meuinss,acessos pelo site,2024,1.02833e+07,ref_b_2500ms,desktop,2500,3126.85,0.62685,1790.59,3187.5,0.6875,1963.83,3211.57,0.711575,2032.6
+svr-bcb,consultas públicas,2024,6.08333e+06,ref_a_desktop_median,mobile,5906.05,13254.5,7.34848,12417.6,13398.5,7.4925,12660.9,13509.3,7.60323,12848
+svr-bcb,consultas públicas,2024,6.08333e+06,ref_b_2500ms,mobile,2500,13254.5,10.7545,18173.2,13398.5,10.8985,18416.5,13509.3,11.0093,18603.6
+svr-bcb,consultas públicas,2024,6.08333e+06,ref_b_2500ms,desktop,2500,5853.27,3.35327,5666.41,5906.05,3.40605,5755.59,5991.72,3.49172,5900.37
+portal-mg,acessos ao portal,2021,1.75e+06,ref_a_desktop_median,mobile,2780.2,12641.5,9.8613,4793.69,12683.3,9.9031,4814.01,12722.1,9.9419,4832.87
+portal-mg,acessos ao portal,2021,1.75e+06,ref_b_2500ms,mobile,2500,12641.5,10.1415,4929.9,12683.3,10.1833,4950.22,12722.1,10.2221,4969.08
+portal-mg,acessos ao portal,2021,1.75e+06,ref_b_2500ms,desktop,2500,2765.05,0.26505,128.844,2780.2,0.2802,136.208,2795.6,0.2956,143.694
+TOTAL,,,,ref_a_desktop_median,mobile,,,,49590.5,,,53504.7,,,54137.3
+TOTAL,,,,ref_b_2500ms,mobile,,,,57446.2,,,61360.4,,,61992.9
+TOTAL,,,,ref_b_2500ms,desktop,,,,7585.84,,,7855.63,,,8076.66
