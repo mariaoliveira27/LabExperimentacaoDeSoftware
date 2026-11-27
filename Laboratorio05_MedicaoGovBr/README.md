@@ -109,6 +109,8 @@ python -m venv .venv
 2. `node scripts/validate-data.mjs --phase full` → `docs/data-validation.md` e `data/processed/full_outliers.csv`
 3. `analysis/analyze.py` → tabelas em `analysis/output/todas/` e `analysis/output/sem-outliers/`, e
    gráficos em `analysis/figures/`
+4. `analysis/impact.py` → `analysis/output/impact.csv` e `impact_sensitivity.csv` (estimativa de tempo de espera usada em
+   [`docs/impacto.md`](docs/impacto.md), a partir de `full.csv` e de `data/usage.json`)
 
 O bootstrap usa seed fixa (`--seed 20261125`), então rodar de novo dá os mesmos números. A leitura
 dos resultados está em [`analysis/results.md`](analysis/results.md). Para refazer só os gráficos:
@@ -148,6 +150,7 @@ data/
 ├── robots/<host>.txt         # cópia de cada robots.txt como foi baixado
 ├── run-metadata.json         # uma entrada por sessão (ver abaixo)
 ├── failed-runs.csv           # uma linha por tentativa que falhou ou foi pulada, com o motivo (Sprint 2)
+├── usage.json                # números públicos de uso por serviço, com fonte, link e data de acesso (Sprint 3)
 ├── raw/pilot/<servico>_<formFactor>_<n>.json      # bruto do piloto (LHR)
 ├── raw/full/<servico>_<formFactor>_<n>.json.gz    # bruto da coleta completa, gzip nível 9
 ├── raw/full/plan.json        # seed, blocos e ordem planejada da fase full
@@ -167,10 +170,16 @@ docs/
 ├── url-changes.md            # lista final de URLs e trocas
 ├── data-validation.md        # validação dos dados (gerada)
 ├── ameacas-validade.md       # ameaças à validade
-└── sprint2-entrega.md        # o que foi entregue na Sprint 2 (para o card do GitHub Projects)
+├── sprint2-entrega.md        # o que foi entregue na Sprint 2 (para o card do GitHub Projects)
+├── audit-sprint2.md          # auditoria da Sprint 2, feita na Sprint 3 (em inglês)
+├── impacto.md                # estimativa de impacto em horas de espera por mês (Sprint 3)
+├── categorias-pesquisa.md    # as 7 categorias da pesquisa, revisadas (Sprint 3)
+└── conclusoes.md             # conclusões por RQ e limitações (Sprint 3)
 analysis/
-├── run_all.py                # extração + validação + análise, um comando
+├── run_all.py                # extração + validação + análise + impacto, um comando
 ├── analyze.py                # análise estatística (RQ1-RQ3) e gráficos
+├── impact.py                 # estimativa de impacto (docs/impacto.md) e sensibilidade à parcela mobile
+├── check_results.py          # conferência independente dos números principais (só numpy e pandas)
 ├── lab_stats.py              # tamanhos de efeito, Holm e bootstrap
 ├── test_lab_stats.py         # testes de lab_stats
 ├── requirements.txt          # dependências Python com versão fixa
@@ -265,8 +274,14 @@ Resumo dos resultados (detalhes em [`analysis/results.md`](analysis/results.md))
   0,98). O pior no LCP é o Meu SUS Digital (33,9 s no mobile); o pior no performance score mobile é
   o Valores a Receber (mediana 1).
 - **RQ2**: inconclusivo; ρ = 0,41 (mobile) e 0,48 (desktop), com p Holm = 0,33 e IC 95% incluindo o zero.
-- **RQ3**: o LCP mobile é maior em todos os 10 serviços: mediana de 13,7 s contra 3,6 s (4,8×),
-  p Holm = 0,004.
+- **RQ3**: o LCP mobile é maior em todos os 10 serviços: mediana de 13,7 s contra 3,6 s (mediana
+  das razões por serviço: 4,8×), p Holm = 0,004.
+
+## Impacto (Sprint 3)
+
+Com o LCP mobile e os números públicos de uso de 3 serviços (Meu INSS, Valores a Receber e Portal MG), o modelo dá cerca de 53,5 mil horas de espera por mês no cenário em que todo acesso é mobile (faixa de 49,6 mil a 54,1 mil) e cerca de 26,8 mil se metade dos acessos for mobile. É um piso para esses três serviços, não o tempo de espera do gov.br: os outros 7 não têm número de uso utilizável (**NÃO ENCONTRADO**). Premissas, fontes e limites em [`docs/impacto.md`](docs/impacto.md); conclusões em [`docs/conclusoes.md`](docs/conclusoes.md).
+
+Para conferir os números principais sem rodar a análise inteira: `python analysis/check_results.py` (só numpy e pandas).
 
 ## Situação do piloto (17/11/2026)
 

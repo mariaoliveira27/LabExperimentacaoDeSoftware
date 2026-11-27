@@ -61,6 +61,7 @@ Ressalvas:
 - Os números descrevem o **serviço como um todo** (aplicativo + web), não a página medida. Só o Meu INSS separa o site (123,4 milhões de acessos em 2024). O número do e-CAC é do canal "Portal e-CAC", mas conta serviços prestados, não visitas à página de entrada.
 - Os números têm datas e definições diferentes (contas, acessos, downloads, inscrições, atendimentos). Eles servem como evidência de alcance, não para comparar serviços entre si.
 - **TODO:** o Portal do Servidor continua sem número de uso verificável (só a evidência indireta 8a, de 2023). Decisão da Sprint 2 (25/11/2026): o serviço **fica, com a ressalva**, porque cumpre os critérios técnicos e éticos; o número continua **NÃO ENCONTRADO** e não foi estimado ([`url-changes.md`](url-changes.md)).
+- **Nota da Sprint 3 (26/11/2026):** para o Valores a Receber, a linha 5 traz 72 milhões de consultas (nota do MGI). O cálculo de impacto usa 73 milhões, do próprio Banco Central ([apresentação de 26/05/2025, slide 9](https://www.bcb.gov.br/conteudo/home-ptbr/TextosApresentacoes/IzabelaCorrea_coletiva_26_5_25.pdf), conferida em 26/11/2026). Os números e as fontes usados no impacto estão em `data/usage.json` e em [`impacto.md`](impacto.md).
 
 ### 1.4 URLs trocadas
 
@@ -231,7 +232,7 @@ O script monta todas as combinações (serviço × form factor × réplica) e as
 | CPU | AMD Ryzen 5 5500, 12 threads lógicas, 3600 MHz |
 | RAM | 15,8 GB |
 | Node.js | v24.18.0 |
-| Chrome | 157.0.8103.79, `--headless=new` |
+| Chrome | 158.0.8127.37 na coleta completa (157.0.8103.79 no piloto), `--headless=new` |
 | Lighthouse / chrome-launcher | 13.6.0 / 1.2.3 (versões fixas no `package.json`) |
 | Fuso horário | America/Sao_Paulo |
 | `benchmarkIndex` no piloto | 2582 a 3273 |
@@ -341,7 +342,7 @@ Classificação de Wohlin et al. (2012).
 | **Bloqueio por WAF / anti-bot**: o serviço pode servir uma página de desafio (CAPTCHA) e o Lighthouse pontua essa página como se fosse o serviço. Isso aconteceu no piloto. | Duas regras em cada execução: status HTTP do documento principal e texto do elemento LCP (desafio servido com HTTP 200). Execuções inválidas vão para `<fase>_failures.csv`; o serviço deixa de ser medido na sessão e é trocado. Sinais secundários (queda no DOM, troca de host, recursos de CAPTCHA) vão para `<fase>_flags.csv` para revisão (seção 7.6). |
 | Mudança de conteúdo durante a coleta (banners, campanhas, deploys). | Registrar número de requisições, bytes e elemento LCP por execução; investigar saltos. |
 | Carga da máquina de medição. | Um processo por vez; `benchmarkIndex` gravado em cada execução; plano de energia e adaptador de rede gravados por sessão; critério de exclusão na seção 7.6. |
-| User-Agent emulado (Chrome/136) diferente da versão real (Chrome 157). | Registrado; é o padrão do Lighthouse e igual para todos os serviços. |
+| User-Agent emulado (Chrome/136) diferente da versão real (Chrome 158 na coleta completa). | Registrado; é o padrão do Lighthouse e igual para todos os serviços. |
 
 ### 8.3 Validade de construto
 
@@ -480,3 +481,15 @@ Desvios do plano da Sprint 1 e o que mudou neste documento:
 | Portal do Servidor | TODO: decidir | Fica, com a ressalva; número NÃO ENCONTRADO | Seção 1.3. |
 
 Seções alteradas: cabeçalho, 1.3 (TODO do Portal do Servidor), 6.3, 6.7, 7.1, 7.3, 7.4, 7.5, 7.6, 8.2 (horário), 10 e este changelog. As seções 2 a 5 (perguntas, hipóteses, GQM, entidades e classificação) e 9 (piloto) não mudaram.
+
+### Sprint 3 (26/11/2026)
+
+| Mudança | O que mudou | Onde |
+|---|---|---|
+| Chrome | A seção 6.6 e a ameaça de User-Agent (8.2) passam a citar o Chrome 158 da coleta completa; o 157 era do piloto | 6.6, 8.2 |
+| Valores a Receber | Nota sobre 72 milhões (MGI) contra 73 milhões (Banco Central) | 1.3 |
+| Impacto | Modelo de horas de espera por mês, com sensibilidade à parcela de acessos mobile | [`impacto.md`](impacto.md) |
+| Categorias | As 7 categorias revisadas contra a execução | [`categorias-pesquisa.md`](categorias-pesquisa.md) |
+| Ameaças | Versão final dos 4 tipos, com os resultados das verificações | [`ameacas-validade.md`](ameacas-validade.md) |
+| Conclusões | Resposta a cada RQ, limites e o que foi reaproveitado dos laboratórios anteriores | [`conclusoes.md`](conclusoes.md) |
+| Auditorias e registros | Sprint 1, Sprint 2, URLs finais, validação e entrega da Sprint 2 | [`audit-sprint1.md`](audit-sprint1.md), [`audit-sprint2.md`](audit-sprint2.md), [`url-changes.md`](url-changes.md), [`data-validation.md`](data-validation.md), [`sprint2-entrega.md`](sprint2-entrega.md) |
